@@ -29,7 +29,7 @@ class Bank:
         else:
             self._items[item] = new_quantity
 
-    def contains(self, item: str, quantity: int = None) -> bool:
+    def contains(self, item: str, quantity: int = None, *args, **kwargs) -> bool:
         # TODO: Add bank optional argument instead of single item
         if item not in self._items:
             return False
@@ -48,9 +48,13 @@ class Bank:
         return self._items[item]
 
     def __str__(self) -> str:
-        msg = '  BANK\n'
+        spacing = '  '
+        title = f'{spacing}BANK\n{spacing}'
+
+        items_str = []
         for item, quantity in self._items.items():
-            msg += f'  {item} {quantity}x\n'
+            items_str.append(f'{item} ({quantity}x)')
+        msg = title + f'\n{spacing}'.join(items_str)
 
         return msg
 

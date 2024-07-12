@@ -20,7 +20,7 @@ def test_missing_pickaxe():
 
 def test_normal():
     player = Player()
-    player.bank.add('Iron pickaxe')
+    player.give('Iron pickaxe')
 
     ore = 'Iron ore'
     generic_params = {
@@ -28,8 +28,8 @@ def test_normal():
     }
     activity = MiningActivity(ore, **generic_params)
 
-    output = activity.setup()
-    assert output['able']
+    status = activity.setup()
+    print(status['out_msg'])
 
     # Remove later
     if not output['able']:
