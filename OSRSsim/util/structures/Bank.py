@@ -49,12 +49,12 @@ class Bank:
 
     def __str__(self) -> str:
         spacing = '  '
-        title = f'{spacing}BANK\n{spacing}'
+        title = f'{spacing}BANK\n{spacing}---\n{spacing}'
 
         items_str = []
         for item, quantity in self._items.items():
             items_str.append(f'{item} ({quantity}x)')
-        msg = title + f'\n{spacing}'.join(items_str)
+        msg = '\n' + title + f'\n{spacing}'.join(items_str) + '\n'
 
         return msg
 

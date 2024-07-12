@@ -1,16 +1,16 @@
 from ....util.structures.Activity import Activity
 from ....util.probability import roll
-from ....util.ticks import seconds_per_tick, Ticks
 
 
 class Ore:
 
     def __init__(self, name: str, xp: int, prob_success: float,
-                 n_per_ore : int=1):
+                 n_per_ore: int = 1):
         self.name = name
         self.xp = xp
         self.prob_success = prob_success
         self.n_per_ore = n_per_ore
+
 
 ores = {
     'iron': Ore(

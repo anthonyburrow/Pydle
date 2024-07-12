@@ -3,7 +3,7 @@ import keyboard
 
 from . import Player
 from .. import Controller
-from ..ticks import seconds_per_tick
+from ..ticks import Ticks
 from ..output import print_output
 from ..commands import KEY_CANCEL
 from ..misc import client_focused
@@ -46,7 +46,7 @@ class Activity:
 
                 msg = f'{self.player} is returning from {self.description}...'
                 print_output(msg)
-                time.sleep(seconds_per_tick * 4.)
+                time.sleep(Ticks(4))
                 break
 
             # TODO: async timing, ditch all the time subtract
@@ -54,7 +54,7 @@ class Activity:
             self.update()
             time_passed = time.time() - start
 
-            time_to_wait = seconds_per_tick - time_passed
+            time_to_wait = Ticks(1) - time_passed
             if time_to_wait > 0:
                 time.sleep(time_to_wait)
 
