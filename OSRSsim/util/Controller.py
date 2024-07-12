@@ -23,6 +23,10 @@ class Controller:
 
         if command['type'] == 'activity':
             self.control_activity(command)
+        elif command['type'] == 'info':
+            self.control_info(command)
+        elif command['type'] == 'testing':
+            self.control_testing(command)
         elif command['type'] == 'exit':
             sys.exit()
         else:
@@ -40,3 +44,11 @@ class Controller:
             return
 
         activity.begin_loop()
+
+    def control_info(self, command: dict):
+        func = command['function']
+        func(self.player)
+
+    def control_testing(self, command: dict):
+        func = command['function']
+        func(self.player)

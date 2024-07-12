@@ -1,5 +1,10 @@
-from ..lib.command_map import map_activity
-from .commands import CMD_EXIT
+from .commands import *
+from ..lib.command_map import map_activity, map_info, map_testing
+
+
+NULL_INPUT = {
+    'type': None
+}
 
 
 def flush_input():
@@ -26,11 +31,23 @@ def parse_command(msg: str) -> dict:
             'activity': map_activity[command],
             'args': tuple(msg[1:]),
         }
+    elif command in map_info:
+        return {
+            'type': 'info',
+            'function': map_info[command],
+        }
+    elif command == CMD_TESTING:
+        try:
+            func = map_testing[msg[1]]
+        except IndexError:
+            return NULL_INPUT
+        return {
+            'type': 'testing',
+            'function': func,
+        }
     elif command == CMD_EXIT:
         return {
             'type': 'exit',
         }
-    else:
-        return {
-            'type': None,
-        }
+
+    return NULL_INPUT

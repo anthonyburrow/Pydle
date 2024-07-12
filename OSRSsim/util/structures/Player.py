@@ -21,9 +21,9 @@ class Player:
     def is_busy(self) -> bool:
         return self._status == 'activity'
 
-    # @property
-    # def bank(self) -> Bank:
-    #     return self._bank
+    @property
+    def bank(self) -> Bank:
+        return self._bank
 
     def __str__(self):
         return f'{self.name}'

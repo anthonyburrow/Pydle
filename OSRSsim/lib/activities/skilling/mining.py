@@ -3,13 +3,21 @@ from ....util.probability import roll
 from ....util.ticks import seconds_per_tick, Ticks
 
 
+class Ore:
+
+    def __init__(self, name: str, xp: int, prob_success: float,
+                 n_per_ore : int=1):
+        self.name = name
+        self.xp = xp
+        self.prob_success = prob_success
+        self.n_per_ore = n_per_ore
+
 ores = {
-    'iron': {
-        'name': 'Iron ore',
-        'xp': 35,
-        'prob_success': 0.5,
-        'n_per_ore': 1
-    }
+    'iron': Ore(
+        name='Iron ore',
+        xp=35,
+        prob_success=0.5,
+    ),
 }
 
 pickaxes = {
@@ -34,15 +42,15 @@ class MiningActivity(Activity):
             mine 'ore'
         '''
         try:
-            self.ore: str = args[0]
-        except IndexError:
-            self.ore: str = ''
+            self.ore: Ore = ores[args[0]]
+        except (IndexError, KeyError):
+            self.ore: Ore = None
 
     def setup_inherited(self, status: dict) -> dict:
-        if self.ore not in ores:
+        if self.ore is None:
             status['success'] = False
             status['status_msg'] = \
-                f'{self.ore} is not a valid ore.'
+                'A valid ore was not given.'
             return status
 
         # Check if player has a pickaxe
@@ -63,17 +71,17 @@ class MiningActivity(Activity):
                 'status_msg': self.standby_text,
             }
 
-        prob_success = ores[self.ore]['prob_success']
+        prob_success = self.ore.prob_success
         if not roll(prob_success):
             return {
                 'status': 'standby',
                 'status_msg': self.standby_text,
             }
 
-        quantity = ores[self.ore]['n_per_ore']
-        self.player.give({self.ore: quantity})
+        quantity = self.ore.n_per_ore
+        self.player.give({self.ore.name: quantity})
 
-        msg = f'Mined {quantity}x {self.ore}!'
+        msg = f'Mined {quantity}x {self.ore.name}!'
         return {
             'status': 'action',
             'status_msg': msg,
@@ -84,7 +92,7 @@ class MiningActivity(Activity):
 
     @property
     def startup_text(self) -> str:
-        return f'{self.player} is now mining {self.ore}.'
+        return f'{self.player} is now mining {self.ore.name}.'
 
     @property
     def standby_text(self) -> str:
@@ -95,23 +103,8 @@ class MiningActivity(Activity):
         return f'{self.player} finished {self.description}.'
 
     def _get_user_pickaxe(self) -> str:
-        # TEST
-        self.player.give('Iron pickaxe')
-
         for pickaxe in reversed(pickaxes):
             if self.player.has(pickaxe):
                 return pickaxe
 
         return None
-
-    def _calc_max_ore(self) -> int:
-        prob_success = ores[self.ore]['prob_success']
-        n_per_ore = ores[self.ore]['n_per_ore']
-        pickaxe = self._get_user_pickaxe()
-        ticks_per_mine = pickaxes[pickaxe]['ticks_per_mine']
-        max_trip_time = self.player.max_trip_time
-
-        n_ore = max_trip_time * seconds_per_tick * prob_success / ticks_per_mine
-        n_ore = int(n_ore) * n_per_ore
-
-        return n_ore
