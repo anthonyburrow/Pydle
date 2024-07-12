@@ -2,15 +2,19 @@ import time
 import keyboard
 
 from . import Player
+from .. import Controller
 from ..ticks import seconds_per_tick
 from ..output import print_output
 from ..commands import KEY_CANCEL
+from ..misc import client_focused
 
 
 class Activity:
 
-    def __init__(self, player: Player, *args):
-        self.player: Player = player
+    def __init__(self, controller: Controller, *args):
+        self.player: Player = controller.player
+        self.client_ID = controller.client_ID
+
         self.tick_count: int = 0
 
     def setup(self) -> dict:
@@ -36,7 +40,7 @@ class Activity:
         print_output(self.startup_text)
 
         while True:
-            if keyboard.is_pressed(KEY_CANCEL):
+            if keyboard.is_pressed(KEY_CANCEL) and client_focused(self.client_ID):
                 self.finish()
 
                 msg = f'{self.player} is returning from {self.description}...'

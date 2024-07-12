@@ -3,12 +3,14 @@ import sys
 from .structures import Player, Activity
 from .output import print_output
 from .input import parse_command, flush_input
+from .misc import get_client_ID
 
 
 class Controller:
 
     def __init__(self, player: Player):
         self.player: Player = player
+        self.client_ID = get_client_ID()
 
     def loop(self):
         while True:
@@ -30,7 +32,7 @@ class Controller:
         _activity: Activity = command['activity']
         _activity_args: tuple = command['args']
 
-        activity = _activity(self.player, *_activity_args)
+        activity = _activity(self, *_activity_args)
 
         setup = activity.setup()
         if not setup['success']:
