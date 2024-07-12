@@ -1,8 +1,12 @@
 import time
+import keyboard
 
 from . import Player
 from ..ticks import seconds_per_tick
 from ..output import print_output
+
+
+KEY_CANCEL = 'c'
 
 
 class Activity:
@@ -34,6 +38,14 @@ class Activity:
         print_output(self.startup_text)
 
         while True:
+            if keyboard.is_pressed(KEY_CANCEL):
+                self.finish()
+
+                msg = f'{self.player} is returning from {self.description}...'
+                print_output(msg)
+                time.sleep(seconds_per_tick * 4.)
+                break
+
             # TODO: async timing, ditch all the time subtract
             start = time.time()
             self.update()
@@ -57,11 +69,3 @@ class Activity:
         self.finish_inherited()
 
         return ''
-
-    @property
-    def startup_text(self) -> str:
-        return 'STARTED ACTIVITY'
-
-    @property
-    def finish_text(self) -> str:
-        return 'FINISHED ACTIVITY'

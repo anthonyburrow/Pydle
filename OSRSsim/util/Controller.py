@@ -1,6 +1,6 @@
 from .structures import Player, Activity
 from .output import print_output
-from .input import parse_command
+from .input import parse_command, flush_input
 
 
 class Controller:
@@ -13,6 +13,7 @@ class Controller:
             self.listen()
 
     def listen(self):
+        flush_input()
         command: str = input('> ')
         command: dict = parse_command(command)
 
@@ -33,4 +34,3 @@ class Controller:
             return
 
         activity.begin_loop()
-        activity.finish()

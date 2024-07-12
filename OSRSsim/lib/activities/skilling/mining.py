@@ -25,6 +25,7 @@ class MiningActivity(Activity):
         super().__init__(*args)
         self.parse_args(*args[1:])
 
+        self.description = 'mining'
         self.ticks_per_action: int = 3
 
     def parse_args(self, *args, **kwargs):
@@ -82,7 +83,7 @@ class MiningActivity(Activity):
 
     @property
     def finish_text(self) -> str:
-        return f'{self.player} finished mining.'
+        return f'{self.player} finished {self.description}.'
 
     def _get_user_pickaxe(self) -> str:
         # TEST
