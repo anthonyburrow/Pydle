@@ -1,3 +1,5 @@
+import sys
+
 from .structures import Player, Activity
 from .output import print_output
 from .input import parse_command, flush_input
@@ -19,6 +21,8 @@ class Controller:
 
         if command['type'] == 'activity':
             self.control_activity(command)
+        elif command['type'] == 'exit':
+            sys.exit()
         else:
             print('Unknown command.')
 

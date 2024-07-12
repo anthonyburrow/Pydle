@@ -1,4 +1,5 @@
 from ..lib.command_map import map_activity
+from .commands import CMD_EXIT
 
 
 def flush_input():
@@ -7,7 +8,9 @@ def flush_input():
         while msvcrt.kbhit():
             msvcrt.getch()
     except ImportError:
-        import sys, termios    #for linux/unix
+        # for linux/unix
+        import sys
+        import termios
         termios.tcflush(sys.stdin, termios.TCIOFLUSH)
 
 
@@ -22,6 +25,10 @@ def parse_command(msg: str) -> dict:
             'type': 'activity',
             'activity': map_activity[command],
             'args': tuple(msg[1:]),
+        }
+    elif command == CMD_EXIT:
+        return {
+            'type': 'exit',
         }
     else:
         return {

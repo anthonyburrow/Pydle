@@ -4,9 +4,7 @@ import keyboard
 from . import Player
 from ..ticks import seconds_per_tick
 from ..output import print_output
-
-
-KEY_CANCEL = 'c'
+from ..commands import KEY_CANCEL
 
 
 class Activity:
