@@ -16,6 +16,7 @@ class Activity:
         self.client_ID = controller.client_ID
 
         self.tick_count: int = 0
+        self.in_standby = False
 
     def setup(self) -> dict:
         '''Check to see if requirements are met to perform activity.'''
@@ -59,8 +60,11 @@ class Activity:
 
     def update(self):
         '''Processing during the tick.'''
-        msg = self.update_inherited()
-        print_output(msg)
+        status = self.update_inherited()
+        now_in_standby = status['status'] == 'standby'
+        if now_in_standby != self.in_standby:
+            self.in_standby = now_in_standby
+            print_output(status['status_msg'])
 
         self.tick_count += 1
 
