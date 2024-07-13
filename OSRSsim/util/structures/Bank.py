@@ -1,3 +1,5 @@
+from ..colors import color, COLOR_BANK1
+
 
 class Bank:
 
@@ -49,12 +51,15 @@ class Bank:
 
     def __str__(self) -> str:
         spacing = '  '
-        title = f'{spacing}BANK\n{spacing}---\n{spacing}'
+        title = 'BANK'
+        separator = '---'
+        header = f'{spacing}{title}\n{spacing}{separator}\n{spacing}'
 
         items_str = []
         for item, quantity in self._items.items():
-            items_str.append(f'{item} ({quantity}x)')
-        msg = '\n' + title + f'\n{spacing}'.join(items_str) + '\n'
+            qty = color(f'({quantity}x)', COLOR_BANK1)
+            items_str.append(f'{item} {qty}')
+        msg = '\n' + header + f'\n{spacing}'.join(items_str) + '\n'
 
         return msg
 

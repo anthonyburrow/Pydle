@@ -1,6 +1,7 @@
 import pickle
 
 from .Bank import Bank
+from ..colors import color, COLOR_CHARACTER
 
 
 class Player:
@@ -27,4 +28,5 @@ class Player:
             pickle.dump(self, file)
 
     def __str__(self):
-        return f'{self.name}'
+        text: str = f'{self.name}'
+        return color(text, COLOR_CHARACTER)

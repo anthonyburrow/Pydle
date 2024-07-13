@@ -60,10 +60,11 @@ class Activity:
             self.in_standby = now_in_standby
             print_output(status['status_msg'])
 
-        self.tick_count += 1
-
+        # End of tick
         if not now_in_standby:
             self.player.save()
+
+        self.tick_count += 1
 
     def finish(self) -> str:
         # Return message, add loot to user, etc
