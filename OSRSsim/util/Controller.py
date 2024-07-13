@@ -15,6 +15,7 @@ class Controller:
     def loop(self):
         while True:
             self.listen()
+            self.player.save()
 
     def listen(self):
         flush_input()

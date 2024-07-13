@@ -25,12 +25,6 @@ class Activity:
             'status_msg': '',
         }
 
-        if self.player.is_busy:
-            status['success'] = False
-            status['status_msg'] = \
-                f'{self.player} is busy.'
-            return status
-
         # Setup for inherited classes
         status = self.setup_inherited(status)
 
@@ -67,6 +61,9 @@ class Activity:
             print_output(status['status_msg'])
 
         self.tick_count += 1
+
+        if not now_in_standby:
+            self.player.save()
 
     def finish(self) -> str:
         # Return message, add loot to user, etc
