@@ -1,8 +1,7 @@
 import time
 import keyboard
 
-from . import Player
-from .. import Controller
+from . import Player, Controller
 from ..ticks import Ticks
 from ..output import print_output
 from ..commands import KEY_CANCEL
@@ -16,7 +15,7 @@ class Activity:
         self.client_ID = controller.client_ID
 
         self.tick_count: int = 0
-        self.in_standby = False
+        self.in_standby: bool = False
 
     def setup(self) -> dict:
         '''Check to see if requirements are met to perform activity.'''
@@ -54,8 +53,8 @@ class Activity:
 
     def update(self):
         '''Processing during the tick.'''
-        status = self.update_inherited()
-        now_in_standby = status['status'] == 'standby'
+        status: dict = self.update_inherited()
+        now_in_standby: bool = status['status'] == 'standby'
         if now_in_standby != self.in_standby:
             self.in_standby = now_in_standby
             print_output(status['status_msg'])

@@ -1,9 +1,9 @@
 import sys
 
-from .structures import Player, Activity
-from .output import print_output
-from .input import parse_command, flush_input
-from .misc import get_client_ID
+from . import Player, Activity
+from ..output import print_output
+from ..input import parse_command, flush_input
+from ..misc import get_client_ID
 
 
 class Controller:

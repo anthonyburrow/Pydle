@@ -6,12 +6,12 @@ from ..colors import color, COLOR_CHARACTER
 
 class Player:
 
-    def __init__(self, save_file):
-        self.name = input('Character name?\n> ')
-        self.save_file = save_file
+    def __init__(self, save_file: str):
+        self.name: str = input('Character name?\n> ')
+        self.save_file: str = save_file
 
         # Will probably change to a bank database
-        self._bank = Bank()
+        self._bank: Bank = Bank()
 
     def give(self, *args, **kwargs):
         self._bank.add(*args, **kwargs)

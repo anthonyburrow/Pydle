@@ -1,28 +1,27 @@
 from pathlib import Path
 import pickle
 
-from OSRSsim.util.structures import Player
-from OSRSsim.util import Controller
+from OSRSsim.util.structures import Player, Controller
 
 
-path_save = './profile'
+path_save: str = './profile'
 
 
 def start():
     Path(path_save).mkdir(parents=True, exist_ok=True)
 
     # Setup/load player
-    character_file = f'{path_save}/character.save'
+    character_file: str = f'{path_save}/character.save'
 
     if Path(character_file).is_file():
         with open(character_file, 'rb') as file:
-            player = pickle.load(file)
+            player: Player = pickle.load(file)
     else:
-        player = Player(save_file=character_file)
+        player: Player = Player(save_file=character_file)
         player.save()
 
     # Setup activity control manager
-    controller = Controller(player)
+    controller: Controller = Controller(player)
     controller.loop()
 
 
