@@ -54,6 +54,7 @@ class Activity:
     def update(self):
         '''Processing during the tick.'''
         status: dict = self.update_inherited()
+
         now_in_standby: bool = status['status'] == 'standby'
         if now_in_standby != self.in_standby:
             self.in_standby = now_in_standby

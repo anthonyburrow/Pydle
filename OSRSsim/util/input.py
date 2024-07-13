@@ -35,6 +35,7 @@ def parse_command(msg: str) -> dict:
         return {
             'type': 'info',
             'function': map_info[command],
+            'args': tuple(msg[1:]),
         }
     elif command == CMD_TESTING:
         try:

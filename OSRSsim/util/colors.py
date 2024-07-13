@@ -24,11 +24,24 @@ CROSSED = '\033[9m'
 END = '\033[0m'
 
 
-def color(text: str, color: str):
-    return f'{color}{text}{END}'
+def color(text: str, color: str, justify: int = 0, just_type: str = 'right'):
+    out_text = f'{color}{text}{END}'
+
+    if not justify:
+        return out_text
+
+    just_amount = justify + len(color) + len(END)
+
+    if just_type == 'right':
+        out_text = f'{out_text:>{just_amount}}'
+    elif just_type == 'left':
+        out_text = f'{out_text:<{just_amount}}'
+
+    return out_text
 
 
 # THEME:
 COLOR_CHARACTER = CYAN
+COLOR_STATS = LIGHT_PURPLE
 
 COLOR_BANK1 = LIGHT_PURPLE

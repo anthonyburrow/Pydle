@@ -4,10 +4,10 @@ from ....util.probability import roll
 
 class Ore:
 
-    def __init__(self, name: str, xp: int, prob_success: float,
+    def __init__(self, name: str, XP: int, prob_success: float,
                  n_per_ore: int = 1):
         self.name = name
-        self.xp = xp
+        self.XP = XP
         self.prob_success = prob_success
         self.n_per_ore = n_per_ore
 
@@ -15,7 +15,7 @@ class Ore:
 ores = {
     'iron': Ore(
         name='Iron ore',
-        xp=35,
+        XP=35,
         prob_success=0.5,
     ),
 }
@@ -80,6 +80,8 @@ class MiningActivity(Activity):
 
         quantity = self.ore.n_per_ore
         self.player.give({self.ore.name: quantity})
+
+        self.player.add_XP('mining', self.ore.XP)
 
         msg = f'Mined {quantity}x {self.ore.name}!'
         return {

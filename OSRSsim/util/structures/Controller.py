@@ -48,7 +48,7 @@ class Controller:
 
     def control_info(self, command: dict):
         func = command['function']
-        func(self.player)
+        func(self.player, *command['args'])
 
     def control_testing(self, command: dict):
         func = command['function']
