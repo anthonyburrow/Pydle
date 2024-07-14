@@ -67,26 +67,30 @@ class MiningActivity(Activity):
         '''Processing during each tick.'''
         if self.tick_count % self.ticks_per_action:
             return {
-                'status': 'standby',
-                'status_msg': self.standby_text,
+                'in_standby': True,
+                'msg': self.standby_text,
             }
 
         prob_success = self.ore.prob_success
         if not roll(prob_success):
             return {
-                'status': 'standby',
-                'status_msg': self.standby_text,
+                'in_standby': True,
+                'msg': self.standby_text,
             }
 
         quantity = self.ore.n_per_ore
-        self.player.give({self.ore.name: quantity})
-
-        self.player.add_XP('mining', self.ore.XP)
 
         msg = f'Mined {quantity}x {self.ore.name}!'
+
         return {
-            'status': 'action',
-            'status_msg': msg,
+            'in_standby': False,
+            'msg': msg,
+            'items': {
+                self.ore.name: quantity,
+            },
+            'XP': {
+                'mining': self.ore.XP,
+            },
         }
 
     def finish_inherited(self):

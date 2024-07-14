@@ -15,7 +15,7 @@ class Activity:
         self.client_ID = controller.client_ID
 
         self.tick_count: int = 0
-        self.in_standby: bool = False
+        self.in_standby: bool = True
 
     def setup(self) -> dict:
         '''Check to see if requirements are met to perform activity.'''
@@ -53,15 +53,25 @@ class Activity:
 
     def update(self):
         '''Processing during the tick.'''
-        status: dict = self.update_inherited()
+        # Global update
 
-        now_in_standby: bool = status['status'] == 'standby'
-        if now_in_standby != self.in_standby:
-            self.in_standby = now_in_standby
-            print_output(status['status_msg'])
+        # Activity-specific update
+        process: dict = self.update_inherited()
+
+        if 'items' in process:
+            self.player.give(process['items'])
+
+        if 'XP' in process:
+            for stat, amount in process['XP'].items():
+                self.player.add_XP(stat, amount)
+
+        # Output message
+        if process['in_standby'] != self.in_standby or self.tick_count == 0:
+            self.in_standby = process['in_standby']
+            print_output(process['msg'])
 
         # End of tick
-        if not now_in_standby:
+        if not process['in_standby']:
             self.player.save()
 
         self.tick_count += 1
