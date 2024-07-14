@@ -1,48 +1,27 @@
-import asyncio
+from OSRSsim.util.structures import Player, Controller
+from OSRSsim.util.input import parse_command
 
-from OSRSsim.lib.activities import MiningActivity
-from OSRSsim.util import Player
+from OSRSsim.lib.activities.skilling import MiningActivity
 
 
 def test_missing_pickaxe():
-    player = Player()
+    # Setup
+    player = Player(name='TestPlayer')
+    controller = Controller(player)
 
-    ore = 'Iron ore'
-    generic_params = {
-        'player': player
-    }
-    activity = MiningActivity(ore, **generic_params)
+    command = 'mine iron'
+    command = parse_command(command)
 
-    output = activity.setup()
+    # Test no pickaxe
+    activity = MiningActivity(controller, *command['args'])
+    status = activity.setup()
 
-    assert not output['able']
+    assert not status['success']
 
-
-def test_normal():
-    player = Player()
+    # Test has pickaxe
     player.give('Iron pickaxe')
 
-    ore = 'Iron ore'
-    generic_params = {
-        'player': player
-    }
-    activity = MiningActivity(ore, **generic_params)
-
+    activity = MiningActivity(controller, *command['args'])
     status = activity.setup()
-    print(status['out_msg'])
 
-    # Remove later
-    if not output['able']:
-        return
-
-    loop = asyncio.new_event_loop()
-    asyncio.set_event_loop(loop)
-
-    loop.run_until_complete(activity.begin())
-
-    msg = activity.finish()
-    print(msg)
-
-
-if __name__ == '__main__':
-    test_normal()
+    assert status['success']

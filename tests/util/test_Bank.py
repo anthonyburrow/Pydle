@@ -1,4 +1,4 @@
-from OSRSsim.util import Bank
+from OSRSsim.util.structures import Bank
 
 
 def test_instantiate():

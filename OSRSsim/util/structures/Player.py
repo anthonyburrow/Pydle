@@ -8,8 +8,13 @@ from ...lib import stats
 
 class Player:
 
-    def __init__(self, save_file: str):
-        self.name: str = input('Character name?\n> ')
+    def __init__(self, save_file: str = None, name: str = None):
+        if name is None:
+            name: str = input('Character name?\n> ')
+        self.name = name
+
+        if save_file is None:
+            save_file = 'character.save'
         self.save_file: str = save_file
 
         self._bank: Bank = Bank()

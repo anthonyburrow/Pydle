@@ -1,6 +1,6 @@
 import numpy as np
 
-from OSRSsim.util import LootTable
+from OSRSsim.util.structures import LootTable
 
 
 def test_null_roll():
