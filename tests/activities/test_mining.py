@@ -25,3 +25,20 @@ def test_missing_pickaxe():
     status = activity.setup()
 
     assert status['success']
+
+
+def test_misspelled_ore():
+    # Setup
+    player = Player(name='TestPlayer')
+    controller = Controller(player)
+
+    command = 'mine irn'
+    command = parse_command(command)
+
+    # Test misspelled command
+    player.give('Iron pickaxe')
+
+    activity = MiningActivity(controller, *command['args'])
+    status = activity.setup()
+
+    assert not status['success']

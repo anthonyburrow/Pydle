@@ -12,6 +12,8 @@ class MiningActivity(Activity):
         self.description = 'mining'
         self.ticks_per_action: int = 3
 
+        self.pickaxe = None
+
     def parse_args(self, *args, **kwargs):
         '''
         Accepted command styles:
@@ -29,9 +31,14 @@ class MiningActivity(Activity):
                 'A valid ore was not given.'
             return status
 
-        # Check if player has a pickaxe
-        pickaxe = self._get_user_pickaxe()
-        if pickaxe is None:
+        if self.player.get_level('mining') < self.ore.level:
+            status['success'] = False
+            status['status_msg'] = \
+                f'You must have Level {self.ore.level} Mining to mine {self.ore.name}.'
+            return status
+
+        self.pickaxe = self._get_user_pickaxe()
+        if self.pickaxe is None:
             status['success'] = False
             status['status_msg'] = \
                 f'{self.player} does not have a pickaxe.'
@@ -47,7 +54,11 @@ class MiningActivity(Activity):
                 'msg': self.standby_text,
             }
 
-        prob_success = self.ore.prob_success
+        mining_args = (
+            self.player.get_level('mining'),
+            pickaxes[self.pickaxe]['power'],
+        )
+        prob_success = self.ore.prob_success(*mining_args)
         if not roll(prob_success):
             return {
                 'in_standby': True,

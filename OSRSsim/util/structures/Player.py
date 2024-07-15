@@ -35,6 +35,9 @@ class Player:
     def get_stat(self, stat: str) -> Stat:
         return self._stats[stat]
 
+    def get_level(self, stat: str) -> int:
+        return self.get_stat(stat).level
+
     def _setup_stats(self):
         for stat, stat_name in stats.items():
             self._stats[stat] = Stat(stat_name)
