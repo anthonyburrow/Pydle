@@ -2,6 +2,7 @@ import time
 import keyboard
 
 from . import Player, Controller
+from .Stat import Stat, level_up_msg
 from ..ticks import Ticks
 from ..output import print_output
 from ..commands import KEY_CANCEL
@@ -58,17 +59,19 @@ class Activity:
         # Activity-specific update
         process: dict = self.update_inherited()
 
+        if process['in_standby'] != self.in_standby or self.tick_count == 0:
+            self.in_standby = process['in_standby']
+            print_output(process['msg'])
+
         if 'items' in process:
             self.player.give(process['items'])
 
         if 'XP' in process:
             for stat, amount in process['XP'].items():
-                self.player.add_XP(stat, amount)
+                XP_status = self.player.add_XP(stat, amount)
 
-        # Output message
-        if process['in_standby'] != self.in_standby or self.tick_count == 0:
-            self.in_standby = process['in_standby']
-            print_output(process['msg'])
+                if XP_status['leveled_up']:
+                    print_output(level_up_msg(self.player, stat))
 
         # End of tick
         if not process['in_standby']:

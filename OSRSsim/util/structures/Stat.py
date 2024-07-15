@@ -1,6 +1,7 @@
 import numpy as np
 
 from ..colors import color, COLOR_STATS
+from . import Player
 
 
 MAX_LEVEL: int = 126
@@ -17,6 +18,15 @@ def level_to_XP(level):
 XP_table = {lvl: level_to_XP(lvl) for lvl in range(1, MAX_LEVEL + 1)}
 
 
+def level_up_msg(player: Player, stat: str):
+    _stat = player.get_stat(stat)
+    stat_name = color(_stat.name, COLOR_STATS)
+    lvl = color(f'Level {_stat.level}', COLOR_STATS)
+    msg = f"{player}'s {stat_name} level has increased to {lvl}!"
+
+    return msg
+
+
 class Stat:
 
     def __init__(self, name: str):
@@ -24,7 +34,7 @@ class Stat:
         self.XP: float = 0.
         self.level: int = 1
 
-    def add_XP(self, amount: float):
+    def add_XP(self, amount: float) -> dict:
         if self.XP >= MAX_XP:
             return
 
@@ -34,7 +44,7 @@ class Stat:
         else:
             self.XP = MAX_XP
 
-        self._adjust_level()
+        return self._adjust_level()
 
     def set_XP(self, value):
         self.XP = value
@@ -54,8 +64,9 @@ class Stat:
 
         return msg
 
-    def _adjust_level(self):
+    def _adjust_level(self) -> dict:
         current_lvl = self.level
+        leveled_up = False
         for lvl in range(current_lvl + 1, MAX_LEVEL + 1):
             required_XP = XP_table[lvl]
 
@@ -63,3 +74,9 @@ class Stat:
                 break
 
             self.level = lvl
+
+            leveled_up = True
+
+        return {
+            'leveled_up': leveled_up,
+        }

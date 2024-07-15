@@ -24,7 +24,7 @@ class Player:
 
     # Stats and Experience
     def add_XP(self, stat: str, XP: float):
-        self._stats[stat].add_XP(XP)
+        return self._stats[stat].add_XP(XP)
 
     def set_XP(self, stat: str, XP: float):
         self._stats[stat].set_XP(XP)
