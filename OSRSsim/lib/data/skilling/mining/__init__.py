@@ -1,3 +1,2 @@
-from .ores import ores
-from .ores import Ore
+from .ores import ores, Ore
 from .pickaxes import pickaxes
