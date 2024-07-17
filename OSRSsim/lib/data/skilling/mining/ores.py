@@ -25,7 +25,8 @@ class Ore:
         self.min_prob_factor: float = min_prob_factor
         self.growth_rate: float = growth_rate
 
-    def prob_success(self, level: int, pickaxe_power: float):
+    def prob_success(self, level: int, pickaxe_power: float,
+                     pickaxe_level: int):
         L = pickaxe_power * self.ore_value
         k = self.growth_rate
 
@@ -36,7 +37,10 @@ class Ore:
 
         min_prob = self.min_prob_factor * self.ore_value
         if prob < min_prob:
-            return min_prob
+            prob = min_prob
+
+        if pickaxe_level < self.level:
+            prob *= 0.5
 
         return prob
 
@@ -47,70 +51,70 @@ ores = {
         XP=12.5,
         level=1,
         characteristic_level=10,
-        ore_value=0.95,
+        ore_value=1.00,
     ),
     'iron': Ore(
         name='Iron ore',
-        XP=25.,
+        XP=22.5,
         level=10,
-        characteristic_level=25,
-        ore_value=0.85,
+        characteristic_level=20,
+        ore_value=0.83,
     ),
     'coal': Ore(
         name='Coal',
-        XP=35,
+        XP=35.,
         level=15,
         characteristic_level=30,
-        ore_value=0.75,
+        ore_value=0.69,
     ),
     'mithril': Ore(
         name='Mithril ore',
-        XP=55.,
+        XP=50.,
         level=20,
         characteristic_level=40,
-        ore_value=0.65,
+        ore_value=0.56,
     ),
     'adamant': Ore(
         name='Adamantite ore',
-        XP=70.,
+        XP=65.,
         level=30,
         characteristic_level=50,
-        ore_value=0.55,
+        ore_value=0.46,
     ),
     'rune': Ore(
         name='Runite ore',
-        XP=95.,
+        XP=85.,
         level=40,
         characteristic_level=60,
-        ore_value=0.40,
+        ore_value=0.37,
     ),
     'orikalkum': Ore(
         name='Orikalkum ore',
-        XP=150.,
+        XP=125.,
         level=60,
         characteristic_level=70,
-        ore_value=0.25,
+        ore_value=0.29,
     ),
     'necronium': Ore(
         name='Necronium ore',
-        XP=185.,
+        XP=175.,
         level=70,
         characteristic_level=80,
-        ore_value=0.20,
+        ore_value=0.22,
     ),
     'bane': Ore(
         name='Banite ore',
-        XP=245.,
+        XP=240.,
         level=80,
         characteristic_level=90,
-        ore_value=0.15,
+        ore_value=0.16,
     ),
     'elder': Ore(
         name='Elder ore',
         XP=350.,
         level=90,
         characteristic_level=100,
-        ore_value=0.10,
+        ore_value=0.11,
     ),
 
 }

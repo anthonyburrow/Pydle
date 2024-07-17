@@ -10,7 +10,6 @@ class MiningActivity(Activity):
         self.parse_args(*args[1:])
 
         self.description = 'mining'
-        self.ticks_per_action: int = 3
 
         self.pickaxe = None
 
@@ -48,7 +47,8 @@ class MiningActivity(Activity):
 
     def update_inherited(self) -> dict:
         '''Processing during each tick.'''
-        if self.tick_count % self.ticks_per_action:
+        ticks_per_mine = pickaxes[self.pickaxe]['ticks_per_mine']
+        if self.tick_count % ticks_per_mine:
             return {
                 'in_standby': True,
                 'msg': self.standby_text,
@@ -57,6 +57,7 @@ class MiningActivity(Activity):
         mining_args = (
             self.player.get_level('mining'),
             pickaxes[self.pickaxe]['power'],
+            pickaxes[self.pickaxe]['level'],
         )
         prob_success = self.ore.prob_success(*mining_args)
         if not roll(prob_success):
