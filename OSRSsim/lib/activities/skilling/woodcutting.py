@@ -1,5 +1,6 @@
 from ....util.structures.Activity import Activity
-from ....util.probability import roll
+from ....util.structures.LootTable import LootTable
+from ....util.structures.Bank import Bank
 from ...data.skilling.woodcutting import Log, logs, axes
 
 
@@ -7,11 +8,14 @@ class WoodcuttingActivity(Activity):
 
     def __init__(self, *args):
         super().__init__(*args)
+
+        self.log: Log = None
         self.parse_args(*args[1:])
 
-        self.description = 'woodcutting'
+        self.description: str = 'woodcutting'
 
-        self.axe = None
+        self.axe: str = None
+        self.loot_table: LootTable = None
 
     def parse_args(self, *args, **kwargs):
         '''
@@ -30,18 +34,21 @@ class WoodcuttingActivity(Activity):
                 'A valid log was not given.'
             return status
 
-        if self.player.get_level('woodcutting') < self.log.level:
+        stat_level: int = self.player.get_level('woodcutting')
+        if stat_level < self.log.level:
             status['success'] = False
             status['status_msg'] = \
                 f'You must have Level {self.log.level} Woodcutting to chop {self.log.name}.'
             return status
 
-        self.axe = self._get_user_axe()
+        self.axe: str = self._get_user_axe()
         if self.axe is None:
             status['success'] = False
             status['status_msg'] = \
                 f'{self.player} does not have an axe.'
             return status
+
+        self._setup_loot_table()
 
         return status
 
@@ -54,28 +61,19 @@ class WoodcuttingActivity(Activity):
                 'msg': self.standby_text,
             }
 
-        woodcutting_args = (
-            self.player.get_level('woodcutting'),
-            axes[self.axe]['power'],
-            axes[self.axe]['level'],
-        )
-        prob_success = self.log.prob_success(*woodcutting_args)
-        if not roll(prob_success):
+        items: Bank = self.loot_table.roll()
+        if not items:
             return {
                 'in_standby': True,
                 'msg': self.standby_text,
             }
 
-        quantity = self.log.n_per_gather
-
-        msg = f'Chopped {quantity}x {self.log.name}!'
+        msg = f'Chopped {items.list_concise()}!'
 
         return {
             'in_standby': False,
             'msg': msg,
-            'items': {
-                self.log.name: quantity,
-            },
+            'items': items,
             'XP': {
                 'woodcutting': self.log.XP,
             },
@@ -83,6 +81,9 @@ class WoodcuttingActivity(Activity):
 
     def finish_inherited(self):
         pass
+
+    def reset_on_levelup(self):
+        self._setup_loot_table()
 
     @property
     def startup_text(self) -> str:
@@ -95,6 +96,21 @@ class WoodcuttingActivity(Activity):
     @property
     def finish_text(self) -> str:
         return f'{self.player} finished {self.description}.'
+
+    def _setup_loot_table(self):
+        woodcutting_args = (
+            self.player.get_level('woodcutting'),
+            axes[self.axe]['power'],
+            axes[self.axe]['level'],
+        )
+        prob_success = self.log.prob_success(*woodcutting_args)
+
+        self.loot_table = LootTable()
+        self.loot_table.tertiary(
+            self.log.name, prob_success, self.log.n_per_gather
+        )
+
+        # Add more stuff (pets, etc)
 
     def _get_user_axe(self) -> str:
         for axe in reversed(axes):

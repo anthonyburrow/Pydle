@@ -25,14 +25,6 @@ def test_weighted():
     assert np.array_equal(probabilities, table._weighted_probabilities)
 
 
-# def test_tertiary():
-#     pass
-
-
-# def test_every():
-#     pass
-
-
 def test_sampling():
     print()
 
@@ -42,8 +34,8 @@ def test_sampling():
     table.add('B', 2, 3.)
     table.add('C', 1, 1.)
 
-    table.tertiary(10., 'D')
-    table.tertiary(300., 'E')
+    table.tertiary('D', 1. / 10.)
+    table.tertiary('E', 1. / 300.)
 
     table.every('F')
     table.every('G', 3)

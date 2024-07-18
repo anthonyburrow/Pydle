@@ -21,8 +21,8 @@ class LootTable:
         # Could be optimized to not do it every add...
         self._reset_weights()
 
-    def tertiary(self, one_in: float, item: str, quantity: int = 1) -> None:
-        self._tertiary_items[item] = (1. / one_in, quantity)
+    def tertiary(self, item: str, probability: float, quantity: int = 1) -> None:
+        self._tertiary_items[item] = (probability, quantity)
 
     def every(self, item: str, quantity: int = 1) -> None:
         self._every_items[item] = quantity

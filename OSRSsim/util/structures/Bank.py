@@ -49,6 +49,14 @@ class Bank:
 
         return self._items[item]
 
+    def list_concise(self) -> str:
+        items_str = []
+        for item, quantity in self._items.items():
+            items_str.append(f'{quantity}x {item}')
+        msg = ', '.join(items_str)
+
+        return msg
+
     def __str__(self) -> str:
         spacing = '  '
         title = 'BANK'
@@ -62,6 +70,9 @@ class Bank:
         msg = '\n' + header + f'\n{spacing}'.join(items_str) + '\n'
 
         return msg
+
+    def __bool__(self) -> bool:
+        return bool(self._items)
 
     def _add_item(self, item: str, quantity: int = 1) -> None:
         if quantity < 0:

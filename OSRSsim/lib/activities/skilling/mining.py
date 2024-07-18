@@ -1,5 +1,6 @@
 from ....util.structures.Activity import Activity
-from ....util.probability import roll
+from ....util.structures.LootTable import LootTable
+from ....util.structures.Bank import Bank
 from ...data.skilling.mining import Ore, ores, pickaxes
 
 
@@ -7,11 +8,14 @@ class MiningActivity(Activity):
 
     def __init__(self, *args):
         super().__init__(*args)
+
+        self.ore: Ore = None
         self.parse_args(*args[1:])
 
-        self.description = 'mining'
+        self.description: str = 'mining'
 
-        self.pickaxe = None
+        self.pickaxe: str = None
+        self.loot_table: LootTable = None
 
     def parse_args(self, *args, **kwargs):
         '''
@@ -30,18 +34,21 @@ class MiningActivity(Activity):
                 'A valid ore was not given.'
             return status
 
-        if self.player.get_level('mining') < self.ore.level:
+        stat_level: int = self.player.get_level('mining')
+        if stat_level < self.ore.level:
             status['success'] = False
             status['status_msg'] = \
                 f'You must have Level {self.ore.level} Mining to mine {self.ore.name}.'
             return status
 
-        self.pickaxe = self._get_user_pickaxe()
+        self.pickaxe: str = self._get_user_pickaxe()
         if self.pickaxe is None:
             status['success'] = False
             status['status_msg'] = \
                 f'{self.player} does not have a pickaxe.'
             return status
+
+        self._setup_loot_table()
 
         return status
 
@@ -54,28 +61,19 @@ class MiningActivity(Activity):
                 'msg': self.standby_text,
             }
 
-        mining_args = (
-            self.player.get_level('mining'),
-            pickaxes[self.pickaxe]['power'],
-            pickaxes[self.pickaxe]['level'],
-        )
-        prob_success = self.ore.prob_success(*mining_args)
-        if not roll(prob_success):
+        items: Bank = self.loot_table.roll()
+        if not items:
             return {
                 'in_standby': True,
                 'msg': self.standby_text,
             }
 
-        quantity = self.ore.n_per_gather
-
-        msg = f'Mined {quantity}x {self.ore.name}!'
+        msg = f'Mined {items.list_concise()}!'
 
         return {
             'in_standby': False,
             'msg': msg,
-            'items': {
-                self.ore.name: quantity,
-            },
+            'items': items,
             'XP': {
                 'mining': self.ore.XP,
             },
@@ -83,6 +81,9 @@ class MiningActivity(Activity):
 
     def finish_inherited(self):
         pass
+
+    def reset_on_levelup(self):
+        self._setup_loot_table()
 
     @property
     def startup_text(self) -> str:
@@ -95,6 +96,21 @@ class MiningActivity(Activity):
     @property
     def finish_text(self) -> str:
         return f'{self.player} finished {self.description}.'
+
+    def _setup_loot_table(self):
+        mining_args = (
+            self.player.get_level('mining'),
+            pickaxes[self.pickaxe]['power'],
+            pickaxes[self.pickaxe]['level'],
+        )
+        prob_success = self.ore.prob_success(*mining_args)
+
+        self.loot_table = LootTable()
+        self.loot_table.tertiary(
+            self.ore.name, prob_success, self.ore.n_per_gather
+        )
+
+        # Add more stuff (pets, etc)
 
     def _get_user_pickaxe(self) -> str:
         for pickaxe in reversed(pickaxes):

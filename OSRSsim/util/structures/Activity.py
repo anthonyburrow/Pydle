@@ -2,7 +2,7 @@ import time
 import keyboard
 
 from . import Player, Controller
-from .Stat import Stat, level_up_msg
+from .Stat import level_up_msg
 from ..ticks import Ticks
 from ..output import print_output
 from ..commands import KEY_CANCEL
@@ -72,6 +72,7 @@ class Activity:
 
                 if XP_status['leveled_up']:
                     print_output(level_up_msg(self.player, stat))
+                    self.reset_on_levelup()
 
         # End of tick
         if not process['in_standby']:

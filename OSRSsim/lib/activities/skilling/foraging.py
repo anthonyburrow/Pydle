@@ -1,5 +1,6 @@
 from ....util.structures.Activity import Activity
-from ....util.probability import roll
+from ....util.structures.LootTable import LootTable
+from ....util.structures.Bank import Bank
 from ...data.skilling.foraging import Herb, herbs, secateurs
 
 
@@ -7,11 +8,14 @@ class ForagingActivity(Activity):
 
     def __init__(self, *args):
         super().__init__(*args)
+
+        self.herb: Herb = None
         self.parse_args(*args[1:])
 
-        self.description = 'foraging'
+        self.description: str = 'foraging'
 
-        self.secateurs = None
+        self.secateurs: str = None
+        self.loot_table: LootTable = None
 
     def parse_args(self, *args, **kwargs):
         '''
@@ -30,7 +34,8 @@ class ForagingActivity(Activity):
                 'A valid herb was not given.'
             return status
 
-        if self.player.get_level('foraging') < self.herb.level:
+        stat_level: int = self.player.get_level('foraging')
+        if stat_level < self.herb.level:
             status['success'] = False
             status['status_msg'] = \
                 f'You must have Level {self.herb.level} Foraging to collect {self.herb.name_grimy}.'
@@ -43,6 +48,8 @@ class ForagingActivity(Activity):
                 f'{self.player} does not have any secateurs.'
             return status
 
+        self._setup_loot_table()
+
         return status
 
     def update_inherited(self) -> dict:
@@ -54,28 +61,19 @@ class ForagingActivity(Activity):
                 'msg': self.standby_text,
             }
 
-        foraging_args = (
-            self.player.get_level('foraging'),
-            secateurs[self.secateurs]['power'],
-            secateurs[self.secateurs]['level'],
-        )
-        prob_success = self.herb.prob_success(*foraging_args)
-        if not roll(prob_success):
+        items: Bank = self.loot_table.roll()
+        if not items:
             return {
                 'in_standby': True,
                 'msg': self.standby_text,
             }
 
-        quantity = self.herb.n_per_gather
-
-        msg = f'Collected {quantity}x {self.herb.name_grimy}!'
+        msg = f'Collected {items.list_concise()}!'
 
         return {
             'in_standby': False,
             'msg': msg,
-            'items': {
-                self.herb.name_grimy: quantity,
-            },
+            'items': items,
             'XP': {
                 'foraging': self.herb.XP,
             },
@@ -83,6 +81,9 @@ class ForagingActivity(Activity):
 
     def finish_inherited(self):
         pass
+
+    def reset_on_levelup(self):
+        self._setup_loot_table()
 
     @property
     def startup_text(self) -> str:
@@ -95,6 +96,21 @@ class ForagingActivity(Activity):
     @property
     def finish_text(self) -> str:
         return f'{self.player} finished {self.description}.'
+
+    def _setup_loot_table(self):
+        foraging_args = (
+            self.player.get_level('foraging'),
+            secateurs[self.secateurs]['power'],
+            secateurs[self.secateurs]['level'],
+        )
+        prob_success = self.herb.prob_success(*foraging_args)
+
+        self.loot_table = LootTable()
+        self.loot_table.tertiary(
+            self.herb.name_grimy, prob_success, self.herb.n_per_gather
+        )
+
+        # Add more stuff (pets, etc)
 
     def _get_user_secateurs(self) -> str:
         for secateur in reversed(secateurs):
