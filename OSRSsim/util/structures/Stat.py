@@ -29,10 +29,11 @@ def level_up_msg(player: Player, stat: str):
 
 class Stat:
 
-    def __init__(self, name: str):
+    def __init__(self, name: str, stat_type: str):
         self.name: str = name
         self.XP: float = 0.
         self.level: int = 1
+        self.stat_type: str = stat_type
 
     def add_XP(self, amount: float) -> dict:
         if self.XP >= MAX_XP:

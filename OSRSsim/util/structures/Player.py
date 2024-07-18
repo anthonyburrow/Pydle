@@ -39,8 +39,9 @@ class Player:
         return self.get_stat(stat).level
 
     def _setup_stats(self):
-        for stat, stat_name in stats.items():
-            self._stats[stat] = Stat(stat_name)
+        for stat, stat_info in stats.items():
+            if stat not in self._stats:
+                self._stats[stat] = Stat(*stat_info)
 
     # Items
     def give(self, *args, **kwargs):
@@ -54,6 +55,10 @@ class Player:
         return self._bank
 
     # Management
+    def update(self):
+        '''Done to update the previous player save to new version of code.'''
+        self._setup_stats()
+
     def save(self):
         with open(self.save_file, 'wb') as file:
             pickle.dump(self, file)
@@ -62,4 +67,3 @@ class Player:
     def __str__(self):
         text: str = f'{self.name}'
         return color(text, COLOR_CHARACTER)
-

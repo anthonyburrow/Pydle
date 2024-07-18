@@ -16,6 +16,7 @@ def start():
     if Path(character_file).is_file():
         with open(character_file, 'rb') as file:
             player: Player = pickle.load(file)
+        player.update()
     else:
         player: Player = Player(save_file=character_file)
         player.save()

@@ -5,6 +5,7 @@ def testing_skilling(player: Player):
     items = {
         'Iron pickaxe': 1,
         'Iron axe': 1,
+        'Iron secateurs': 1,
     }
 
     player.give(items)

@@ -10,14 +10,14 @@ class Log:
         level: int,
         characteristic_level: int,
         log_value: float,
-        n_per_log: int = 1,
+        n_per_gather: int = 1,
         min_prob_factor: float = 0.1,
         growth_rate: float = 0.15
     ):
         self.name: str = name
         self.XP: float = XP
         self.level: int = level
-        self.n_per_log: int = n_per_log
+        self.n_per_gather: int = n_per_gather
 
         # Rock quantities
         self.characteristic_level: int = characteristic_level

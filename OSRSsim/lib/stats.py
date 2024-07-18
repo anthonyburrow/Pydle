@@ -1,6 +1,8 @@
 
-# {stat key : Formal (visible) name}
+# { stat key : (Formal name, Stat type) }
 stats = {
-    'mining': 'Mining',
-    'woodcutting': 'Woodcutting',
+    # Gathering skills
+    'mining': ('Mining', 'gathering'),
+    'woodcutting': ('Woodcutting', 'gathering'),
+    'foraging': ('Foraging', 'gathering'),
 }

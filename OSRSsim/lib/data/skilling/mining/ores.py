@@ -10,14 +10,14 @@ class Ore:
         level: int,
         characteristic_level: int,
         ore_value: float,
-        n_per_ore: int = 1,
+        n_per_gather: int = 1,
         min_prob_factor: float = 0.1,
         growth_rate: float = 0.15
     ):
         self.name: str = name
         self.XP: float = XP
         self.level: int = level
-        self.n_per_ore: int = n_per_ore
+        self.n_per_gather: int = n_per_gather
 
         # Rock quantities
         self.characteristic_level: int = characteristic_level

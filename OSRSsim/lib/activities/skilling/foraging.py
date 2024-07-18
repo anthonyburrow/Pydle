@@ -1,83 +1,83 @@
 from ....util.structures.Activity import Activity
 from ....util.probability import roll
-from ...data.skilling.woodcutting import Log, logs, axes
+from ...data.skilling.foraging import Herb, herbs, secateurs
 
 
-class WoodcuttingActivity(Activity):
+class ForagingActivity(Activity):
 
     def __init__(self, *args):
         super().__init__(*args)
         self.parse_args(*args[1:])
 
-        self.description = 'woodcutting'
+        self.description = 'foraging'
 
-        self.axe = None
+        self.secateurs = None
 
     def parse_args(self, *args, **kwargs):
         '''
         Accepted command styles:
-            chop 'log'
+            collect 'herb/item'
         '''
         try:
-            self.log: Log = logs[args[0]]
+            self.herb: Herb = herbs[args[0]]
         except (IndexError, KeyError):
-            self.log: Log = None
+            self.herb: Herb = None
 
     def setup_inherited(self, status: dict) -> dict:
-        if self.log is None:
+        if self.herb is None:
             status['success'] = False
             status['status_msg'] = \
-                'A valid log was not given.'
+                'A valid herb was not given.'
             return status
 
-        if self.player.get_level('woodcutting') < self.log.level:
+        if self.player.get_level('foraging') < self.herb.level:
             status['success'] = False
             status['status_msg'] = \
-                f'You must have Level {self.log.level} Woodcutting to chop {self.log.name}.'
+                f'You must have Level {self.herb.level} Foraging to collect {self.herb.name_grimy}.'
             return status
 
-        self.axe = self._get_user_axe()
-        if self.axe is None:
+        self.secateurs = self._get_user_secateurs()
+        if self.secateurs is None:
             status['success'] = False
             status['status_msg'] = \
-                f'{self.player} does not have an axe.'
+                f'{self.player} does not have any secateurs.'
             return status
 
         return status
 
     def update_inherited(self) -> dict:
         '''Processing during each tick.'''
-        ticks_per_use = axes[self.axe]['ticks_per_use']
+        ticks_per_use = secateurs[self.secateurs]['ticks_per_use']
         if self.tick_count % ticks_per_use:
             return {
                 'in_standby': True,
                 'msg': self.standby_text,
             }
 
-        woodcutting_args = (
-            self.player.get_level('woodcutting'),
-            axes[self.axe]['power'],
-            axes[self.axe]['level'],
+        foraging_args = (
+            self.player.get_level('foraging'),
+            secateurs[self.secateurs]['power'],
+            secateurs[self.secateurs]['level'],
         )
-        prob_success = self.log.prob_success(*woodcutting_args)
+        prob_success = self.herb.prob_success(*foraging_args)
         if not roll(prob_success):
             return {
                 'in_standby': True,
                 'msg': self.standby_text,
             }
 
-        quantity = self.log.n_per_gather
+        quantity = self.herb.n_per_gather
 
-        msg = f'Chopped {quantity}x {self.log.name}!'
+        msg = f'Collected {quantity}x {self.herb.name_grimy}!'
 
         return {
             'in_standby': False,
             'msg': msg,
             'items': {
-                self.log.name: quantity,
+                self.herb.name_grimy: quantity,
             },
             'XP': {
-                'woodcutting': self.log.XP,
+                'foraging': self.herb.XP,
             },
         }
 
@@ -86,19 +86,19 @@ class WoodcuttingActivity(Activity):
 
     @property
     def startup_text(self) -> str:
-        return f'{self.player} is now chopping {self.log.name}.'
+        return f'{self.player} is now collecting {self.herb.name_grimy}.'
 
     @property
     def standby_text(self) -> str:
-        return 'Chopping...'
+        return 'Collecting...'
 
     @property
     def finish_text(self) -> str:
         return f'{self.player} finished {self.description}.'
 
-    def _get_user_axe(self) -> str:
-        for axe in reversed(axes):
-            if self.player.has(axe):
-                return axe
+    def _get_user_secateurs(self) -> str:
+        for secateur in reversed(secateurs):
+            if self.player.has(secateur):
+                return secateur
 
         return None

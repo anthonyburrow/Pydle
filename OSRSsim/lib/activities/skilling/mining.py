@@ -66,7 +66,7 @@ class MiningActivity(Activity):
                 'msg': self.standby_text,
             }
 
-        quantity = self.ore.n_per_ore
+        quantity = self.ore.n_per_gather
 
         msg = f'Mined {quantity}x {self.ore.name}!'
 
