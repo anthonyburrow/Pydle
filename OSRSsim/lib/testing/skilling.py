@@ -3,9 +3,10 @@ from ...util.structures import Player
 
 def testing_skilling(player: Player):
     items = {
-        'Iron pickaxe': 1,
-        'Iron axe': 1,
-        'Iron secateurs': 1,
+        'copper pickaxe': 1,
+        'iron pickaxe': 1,
+        'iron axe': 1,
+        'iron secateurs': 1,
     }
 
     player.give(items)

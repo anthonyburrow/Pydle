@@ -41,7 +41,7 @@ class WoodcuttingActivity(Activity):
                 f'You must have Level {self.log.level} Woodcutting to chop {self.log.name}.'
             return status
 
-        self.axe: str = self._get_user_axe()
+        self.axe: str = self.player.get_tool('axe')
         if self.axe is None:
             status['success'] = False
             status['status_msg'] = \
@@ -111,10 +111,3 @@ class WoodcuttingActivity(Activity):
         )
 
         # Add more stuff (pets, etc)
-
-    def _get_user_axe(self) -> str:
-        for axe in reversed(axes):
-            if self.player.has(axe):
-                return axe
-
-        return None

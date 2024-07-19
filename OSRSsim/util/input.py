@@ -1,5 +1,5 @@
 from .commands import *
-from ..lib.command_map import map_activity, map_info, map_testing
+from ..lib.command_map import map_activity, map_operations, map_testing
 
 
 NULL_INPUT = {
@@ -31,10 +31,10 @@ def parse_command(msg: str) -> dict:
             'activity': map_activity[command],
             'args': tuple(msg[1:]),
         }
-    elif command in map_info:
+    elif command in map_operations:
         return {
-            'type': 'info',
-            'function': map_info[command],
+            'type': 'operation',
+            'function': map_operations[command],
             'args': tuple(msg[1:]),
         }
     elif command == CMD_TESTING:

@@ -33,7 +33,7 @@ class Bank:
 
     def contains(self, item: str, quantity: int = None, *args, **kwargs) -> bool:
         # TODO: Add bank optional argument instead of single item
-        if item not in self._items:
+        if item.lower() not in self._items:
             return False
 
         if quantity is None:
@@ -66,7 +66,7 @@ class Bank:
         items_str = []
         for item, quantity in self._items.items():
             qty = color(f'({quantity}x)', COLOR_BANK1)
-            items_str.append(f'{item} {qty}')
+            items_str.append(f'{item.capitalize()} {qty}')
         msg = '\n' + header + f'\n{spacing}'.join(items_str) + '\n'
 
         return msg
@@ -81,6 +81,7 @@ class Bank:
         if quantity == 0:
             return
 
+        item = item.lower()
         if not self.contains(item):
             self._items[item] = quantity
             return

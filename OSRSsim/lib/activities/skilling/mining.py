@@ -41,7 +41,7 @@ class MiningActivity(Activity):
                 f'You must have Level {self.ore.level} Mining to mine {self.ore.name}.'
             return status
 
-        self.pickaxe: str = self._get_user_pickaxe()
+        self.pickaxe: str = self.player.get_tool('pickaxe')
         if self.pickaxe is None:
             status['success'] = False
             status['status_msg'] = \
@@ -111,10 +111,3 @@ class MiningActivity(Activity):
         )
 
         # Add more stuff (pets, etc)
-
-    def _get_user_pickaxe(self) -> str:
-        for pickaxe in reversed(pickaxes):
-            if self.player.has(pickaxe):
-                return pickaxe
-
-        return None

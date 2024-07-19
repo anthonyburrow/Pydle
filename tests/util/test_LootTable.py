@@ -30,15 +30,15 @@ def test_sampling():
 
     table = LootTable()
 
-    table.add('A', 1, 6.)
-    table.add('B', 2, 3.)
-    table.add('C', 1, 1.)
+    table.add('a', 1, 6.)
+    table.add('b', 2, 3.)
+    table.add('c', 1, 1.)
 
-    table.tertiary('D', 1. / 10.)
-    table.tertiary('E', 1. / 300.)
+    table.tertiary('d', 1. / 10.)
+    table.tertiary('e', 1. / 300.)
 
-    table.every('F')
-    table.every('G', 3)
+    table.every('f')
+    table.every('g', 3)
 
     N = 1000
     loot = table.roll(N)
@@ -46,21 +46,21 @@ def test_sampling():
     print(f'TEST SAMPLING: N = {N}')
     print(f'  EXPECTED:')
     print(f'  [W] A (6/10) ~ {int(N * 6. / 10.)}')
-    print(f'    RECEIVED {loot.quantity("A")}')
+    print(f'    RECEIVED {loot.quantity("a")}')
     print(f'  [W] B 2x (3/10) ~ {2 * int(N * 3. / 10.)}')
-    print(f'    RECEIVED {loot.quantity("B")}')
+    print(f'    RECEIVED {loot.quantity("b")}')
     print(f'  [W] C (1/10) ~ {int(N * 1. / 10.)}')
-    print(f'    RECEIVED {loot.quantity("C")}')
+    print(f'    RECEIVED {loot.quantity("c")}')
     print(f'  [T] D (1/10) ~ {N / 10.:.3f}')
-    print(f'    RECEIVED {loot.quantity("D")}')
+    print(f'    RECEIVED {loot.quantity("d")}')
     print(f'  [T] E (1/300) ~ {N / 300.:.3f}')
-    print(f'    RECEIVED {loot.quantity("E")}')
+    print(f'    RECEIVED {loot.quantity("e")}')
     print(f'  [E] F = {N}')
-    print(f'    RECEIVED {loot.quantity("F")}')
+    print(f'    RECEIVED {loot.quantity("f")}')
     print(f'  [E] G = {N * 3}')
-    print(f'    RECEIVED {loot.quantity("G")}')
+    print(f'    RECEIVED {loot.quantity("g")}')
 
-    assert loot.quantity('A') + int(loot.quantity('B') / 2.) + loot.quantity('C') == N
-    assert loot.quantity('B') % 2 == 0
-    assert loot.quantity('F') == N
-    assert loot.quantity('G') == N * 3
+    assert loot.quantity('a') + int(loot.quantity('b') / 2.) + loot.quantity('c') == N
+    assert loot.quantity('b') % 2 == 0
+    assert loot.quantity('f') == N
+    assert loot.quantity('g') == N * 3

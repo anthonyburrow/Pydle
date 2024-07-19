@@ -1,50 +1,50 @@
 secateurs = {
-    'Copper secateurs': {
+    'copper secateurs': {
         'ticks_per_use': 3,
         'power': 0.50,
         'level': 1,
     },
-    'Iron secateurs': {
+    'iron secateurs': {
         'ticks_per_use': 3,
         'power': 0.55,
         'level': 10,
     },
-    'Steel secateurs': {
+    'steel secateurs': {
         'ticks_per_use': 3,
         'power': 0.60,
         'level': 15,
     },
-    'Mithril secateurs': {
+    'mithril secateurs': {
         'ticks_per_use': 3,
         'power': 0.65,
         'level': 20,
     },
-    'Adamant secateurs': {
+    'adamant secateurs': {
         'ticks_per_use': 3,
         'power': 0.70,
         'level': 30,
     },
-    'Rune secateurs': {
+    'rune secateurs': {
         'ticks_per_use': 3,
         'power': 0.75,
         'level': 40,
     },
-    'Orikalkum secateurs': {
+    'orikalkum secateurs': {
         'ticks_per_use': 3,
         'power': 0.80,
         'level': 60,
     },
-    'Necronium secateurs': {
+    'necronium secateurs': {
         'ticks_per_use': 3,
         'power': 0.85,
         'level': 70,
     },
-    'Bane secateurs': {
+    'bane secateurs': {
         'ticks_per_use': 3,
         'power': 0.90,
         'level': 80,
     },
-    'Elder secateurs': {
+    'elder secateurs': {
         'ticks_per_use': 3,
         'power': 0.95,
         'level': 90,

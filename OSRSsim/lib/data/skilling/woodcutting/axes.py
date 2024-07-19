@@ -1,50 +1,50 @@
 axes = {
-    'Copper axe': {
+    'copper axe': {
         'ticks_per_use': 3,
         'power': 0.50,
         'level': 1,
     },
-    'Iron axe': {
+    'iron axe': {
         'ticks_per_use': 3,
         'power': 0.55,
         'level': 10,
     },
-    'Steel axe': {
+    'steel axe': {
         'ticks_per_use': 3,
         'power': 0.60,
         'level': 15,
     },
-    'Mithril axe': {
+    'mithril axe': {
         'ticks_per_use': 3,
         'power': 0.65,
         'level': 20,
     },
-    'Adamant axe': {
+    'adamant axe': {
         'ticks_per_use': 3,
         'power': 0.70,
         'level': 30,
     },
-    'Rune axe': {
+    'rune axe': {
         'ticks_per_use': 3,
         'power': 0.75,
         'level': 40,
     },
-    'Orikalkum axe': {
+    'orikalkum axe': {
         'ticks_per_use': 3,
         'power': 0.80,
         'level': 60,
     },
-    'Necronium axe': {
+    'necronium axe': {
         'ticks_per_use': 3,
         'power': 0.85,
         'level': 70,
     },
-    'Bane axe': {
+    'bane axe': {
         'ticks_per_use': 3,
         'power': 0.90,
         'level': 80,
     },
-    'Elder axe': {
+    'elder axe': {
         'ticks_per_use': 3,
         'power': 0.95,
         'level': 90,

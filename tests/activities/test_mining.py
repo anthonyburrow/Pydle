@@ -20,7 +20,8 @@ def test_missing_pickaxe():
     assert not status['success']
 
     # Test has pickaxe
-    player.give('Iron pickaxe')
+    player.give('iron pickaxe')
+    player.add_tool('iron pickaxe')
 
     activity = MiningActivity(controller, *command['args'])
     status = activity.setup()
@@ -38,7 +39,8 @@ def test_misspelled_ore():
     command = parse_command(command)
 
     # Test misspelled command
-    player.give('Iron pickaxe')
+    player.give('iron pickaxe')
+    player.add_tool('iron pickaxe')
 
     activity = MiningActivity(controller, *command['args'])
     status = activity.setup()

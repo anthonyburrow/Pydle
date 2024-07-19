@@ -1,50 +1,50 @@
 pickaxes = {
-    'Copper pickaxe': {
+    'copper pickaxe': {
         'ticks_per_use': 3,
         'power': 0.50,
         'level': 1,
     },
-    'Iron pickaxe': {
+    'iron pickaxe': {
         'ticks_per_use': 3,
         'power': 0.55,
         'level': 10,
     },
-    'Steel pickaxe': {
+    'steel pickaxe': {
         'ticks_per_use': 3,
         'power': 0.60,
         'level': 15,
     },
-    'Mithril pickaxe': {
+    'mithril pickaxe': {
         'ticks_per_use': 3,
         'power': 0.65,
         'level': 20,
     },
-    'Adamant pickaxe': {
+    'adamant pickaxe': {
         'ticks_per_use': 3,
         'power': 0.70,
         'level': 30,
     },
-    'Rune pickaxe': {
+    'rune pickaxe': {
         'ticks_per_use': 3,
         'power': 0.75,
         'level': 40,
     },
-    'Orikalkum pickaxe': {
+    'orikalkum pickaxe': {
         'ticks_per_use': 3,
         'power': 0.80,
         'level': 60,
     },
-    'Necronium pickaxe': {
+    'necronium pickaxe': {
         'ticks_per_use': 3,
         'power': 0.85,
         'level': 70,
     },
-    'Bane pickaxe': {
+    'bane pickaxe': {
         'ticks_per_use': 3,
         'power': 0.90,
         'level': 80,
     },
-    'Elder pickaxe': {
+    'elder pickaxe': {
         'ticks_per_use': 3,
         'power': 0.95,
         'level': 90,

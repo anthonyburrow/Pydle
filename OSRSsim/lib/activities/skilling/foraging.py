@@ -41,7 +41,7 @@ class ForagingActivity(Activity):
                 f'You must have Level {self.herb.level} Foraging to collect {self.herb.name_grimy}.'
             return status
 
-        self.secateurs = self._get_user_secateurs()
+        self.secateurs = self.player.get_tool('secateurs')
         if self.secateurs is None:
             status['success'] = False
             status['status_msg'] = \
@@ -111,10 +111,3 @@ class ForagingActivity(Activity):
         )
 
         # Add more stuff (pets, etc)
-
-    def _get_user_secateurs(self) -> str:
-        for secateur in reversed(secateurs):
-            if self.player.has(secateur):
-                return secateur
-
-        return None

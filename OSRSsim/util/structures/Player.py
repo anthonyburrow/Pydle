@@ -2,7 +2,8 @@ import pickle
 
 from .Bank import Bank
 from .Stat import Stat
-from ..colors import color, COLOR_CHARACTER
+from .Tools import Tools
+from ..colors import color, COLOR_CHARACTER, COLOR_STATS
 from ...lib import stats
 
 
@@ -18,6 +19,7 @@ class Player:
         self.save_file: str = save_file
 
         self._bank: Bank = Bank()
+        self._tools: Tools = Tools(self)
 
         self._stats = {}
         self._setup_stats()
@@ -38,6 +40,19 @@ class Player:
     def get_level(self, stat: str) -> int:
         return self.get_stat(stat).level
 
+    def print_stats(self) -> str:
+        msg_out: list = []
+        just_amount: int = max([len(s) for s in stats])
+        for _stat in stats:
+            stat = self.get_stat(_stat)
+            name: str = color(stat.name, COLOR_STATS, justify=just_amount)
+            stat_line: str = f'  {name} | Lvl {stat.level:<2} ({stat.XP:,.0f} EXP)'
+            msg_out.append(stat_line)
+
+        msg = '\n' + '\n'.join(msg_out) + '\n'
+
+        return msg
+
     def _setup_stats(self):
         for stat, stat_info in stats.items():
             if stat not in self._stats:
@@ -47,12 +62,29 @@ class Player:
     def give(self, *args, **kwargs):
         self._bank.add(*args, **kwargs)
 
+    def remove(self, *args, **kwargs):
+        self._bank.remove(*args, **kwargs)
+
     def has(self, *args, **kwargs) -> bool:
         return self._bank.contains(*args, **kwargs)
 
     @property
     def bank(self) -> Bank:
         return self._bank
+
+    # Tools
+    def add_tool(self, *args, **kwargs):
+        return self._tools.add(*args, **kwargs)
+
+    def remove_tool(self, *args, **kwargs):
+        return self._tools.remove(*args, **kwargs)
+
+    def get_tool(self, *args, **kwargs) -> str:
+        return self._tools.get_tool(*args, **kwargs)
+
+    @property
+    def tools(self) -> Tools:
+        return self._tools
 
     # Management
     def update(self):

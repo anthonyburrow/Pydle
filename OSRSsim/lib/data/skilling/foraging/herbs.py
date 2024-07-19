@@ -57,8 +57,8 @@ class Herb:
 
 herbs = {
     'guam': Herb(
-        name_grimy='Grimy guam',
-        name_clean='Clean guam',
+        name_grimy='grimy guam',
+        name_clean='clean guam',
         level=1,
         n_per_gather=1,
         XP=12.5,
@@ -67,8 +67,8 @@ herbs = {
         herb_value=1.00,
     ),
     'marrentill': Herb(
-        name_grimy='Grimy marrentill',
-        name_clean='Clean marrentill',
+        name_grimy='grimy marrentill',
+        name_clean='clean marrentill',
         level=10,
         n_per_gather=1,
         XP=22.5,
@@ -77,8 +77,8 @@ herbs = {
         herb_value=0.83,
     ),
     'harralander': Herb(
-        name_grimy='Grimy harralander',
-        name_clean='Clean harralander',
+        name_grimy='grimy harralander',
+        name_clean='clean harralander',
         level=15,
         n_per_gather=1,
         XP=35.,
@@ -87,8 +87,8 @@ herbs = {
         herb_value=0.69,
     ),
     'ranarr': Herb(
-        name_grimy='Grimy ranarr',
-        name_clean='Clean ranarr',
+        name_grimy='grimy ranarr',
+        name_clean='clean ranarr',
         level=20,
         n_per_gather=1,
         XP=50.,
@@ -97,8 +97,8 @@ herbs = {
         herb_value=0.56,
     ),
     'toadflax': Herb(
-        name_grimy='Grimy toadflax',
-        name_clean='Clean toadflax',
+        name_grimy='grimy toadflax',
+        name_clean='clean toadflax',
         level=30,
         n_per_gather=1,
         XP=65.,
@@ -107,8 +107,8 @@ herbs = {
         herb_value=0.46,
     ),
     'irit': Herb(
-        name_grimy='Grimy irit',
-        name_clean='Clean irit',
+        name_grimy='grimy irit',
+        name_clean='clean irit',
         level=40,
         n_per_gather=1,
         XP=85.,
@@ -117,8 +117,8 @@ herbs = {
         herb_value=0.37,
     ),
     'kwuarm': Herb(
-        name_grimy='Grimy avantoe',
-        name_clean='Clean avantoe',
+        name_grimy='grimy avantoe',
+        name_clean='clean avantoe',
         level=60,
         n_per_gather=1,
         XP=125.,
@@ -127,8 +127,8 @@ herbs = {
         herb_value=0.29,
     ),
     'snapdragon': Herb(
-        name_grimy='Grimy snapdragon',
-        name_clean='Clean snapdragon',
+        name_grimy='grimy snapdragon',
+        name_clean='clean snapdragon',
         level=70,
         n_per_gather=1,
         XP=175.,
@@ -137,8 +137,8 @@ herbs = {
         herb_value=0.22,
     ),
     'torstol': Herb(
-        name_grimy='Grimy torstol',
-        name_clean='Clean torstol',
+        name_grimy='grimy torstol',
+        name_clean='clean torstol',
         level=80,
         n_per_gather=1,
         XP=240.,
@@ -147,8 +147,8 @@ herbs = {
         herb_value=0.16,
     ),
     'fellstalk': Herb(
-        name_grimy='Grimy fellstalk',
-        name_clean='Clean fellstalk',
+        name_grimy='grimy fellstalk',
+        name_clean='clean fellstalk',
         level=90,
         n_per_gather=1,
         XP=350.,
