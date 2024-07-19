@@ -21,8 +21,8 @@ def test_probability_curve():
     levels = np.arange(1, 127)
 
     for ore, pickaxe in zip(ores.values(), pickaxes.values()):
-        probs = np.array([ore.prob_success(lvl, pickaxe['power'], pickaxe['level']) for lvl in levels])
-        xp_rates = np.array([get_XP_rate(p, ore.XP, pickaxe['ticks_per_use']) for p in probs])
+        probs = np.array([ore.prob_success(lvl, pickaxe) for lvl in levels])
+        xp_rates = np.array([get_XP_rate(p, ore.XP, pickaxe.ticks_per_use) for p in probs])
 
         ax[0].plot(levels, probs, '-', ms=1.5, label=ore.name)
         ax[1].plot(levels, xp_rates, '-', ms=1.5)
