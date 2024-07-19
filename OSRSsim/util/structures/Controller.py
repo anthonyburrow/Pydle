@@ -14,7 +14,11 @@ class Controller:
 
     def loop(self):
         while True:
-            self.listen()
+            try:
+                self.listen()
+            except Exception as e:
+                print_output(e)
+                continue
             self.player.save()
 
     def listen(self):
