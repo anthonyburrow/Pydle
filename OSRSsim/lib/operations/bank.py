@@ -4,5 +4,5 @@ from ...util.output import print_output
 
 def interface_bank(player: Player, *args):
     if not args:
-        print_output(player.bank)
+        print_output(str(player.bank))
         return

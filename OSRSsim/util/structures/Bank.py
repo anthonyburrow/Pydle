@@ -63,6 +63,10 @@ class Bank:
         separator = '---'
         header = f'{spacing}{title}\n{spacing}{separator}\n{spacing}'
 
+        if not self._items:
+            msg = f'\n{header}\n'
+            return msg
+
         items_str = []
         for item, quantity in self._items.items():
             qty = color(f'({quantity}x)', COLOR_BANK1)
