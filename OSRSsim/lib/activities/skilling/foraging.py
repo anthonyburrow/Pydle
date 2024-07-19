@@ -1,7 +1,8 @@
 from ....util.structures.Activity import Activity
 from ....util.structures.LootTable import LootTable
 from ....util.structures.Bank import Bank
-from ...data.skilling.foraging import Herb, herbs, secateurs
+from ....util.structures.Tool import Tool
+from ...data.skilling.foraging import Herb, herbs
 
 
 class ForagingActivity(Activity):
@@ -14,7 +15,7 @@ class ForagingActivity(Activity):
 
         self.description: str = 'foraging'
 
-        self.secateurs: str = None
+        self.secateurs: Tool = self.player.get_tool('secateurs')
         self.loot_table: LootTable = None
 
     def parse_args(self, *args, **kwargs):
@@ -41,7 +42,6 @@ class ForagingActivity(Activity):
                 f'You must have Level {self.herb.level} Foraging to collect {self.herb.name_grimy}.'
             return status
 
-        self.secateurs = self.player.get_tool('secateurs')
         if self.secateurs is None:
             status['success'] = False
             status['status_msg'] = \
@@ -54,7 +54,7 @@ class ForagingActivity(Activity):
 
     def update_inherited(self) -> dict:
         '''Processing during each tick.'''
-        ticks_per_use = secateurs[self.secateurs]['ticks_per_use']
+        ticks_per_use = self.secateurs.ticks_per_use
         if self.tick_count % ticks_per_use:
             return {
                 'in_standby': True,
@@ -100,8 +100,7 @@ class ForagingActivity(Activity):
     def _setup_loot_table(self):
         foraging_args = (
             self.player.get_level('foraging'),
-            secateurs[self.secateurs]['power'],
-            secateurs[self.secateurs]['level'],
+            self.secateurs,
         )
         prob_success = self.herb.prob_success(*foraging_args)
 

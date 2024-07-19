@@ -1,4 +1,4 @@
-from . import Player
+from . import Player, Tool
 from ..colors import color, COLOR_TOOLS
 from ...lib.data.skilling import mining, woodcutting, foraging
 
@@ -28,14 +28,15 @@ class Tools:
             if tool not in tool_dict:
                 continue
 
-            old_tool = self._tools[tool_type]
-            if old_tool is not None:
+            if self._tools[tool_type] is not None:
+                old_tool = self._tools[tool_type].name
                 self._player.give(old_tool)
 
             self._player.remove(tool, quantity=1)
-            self._tools[tool_type] = tool
+            tool_obj = tool_dict[tool]
+            self._tools[tool_type] = tool_obj
 
-            msg = f"{tool.capitalize()} was added to {self._player}'s toolbelt."
+            msg = f"{tool_obj} was added to {self._player}'s toolbelt."
             return {
                 'success': True,
                 'msg': msg,
@@ -55,17 +56,17 @@ class Tools:
                 'msg': msg,
             }
 
-        tool = self._tools[tool_type]
+        tool_obj = self._tools[tool_type]
         self._tools[tool_type] = None
-        self._player.give(tool)
+        self._player.give(tool_obj.name)
 
-        msg = f"{tool.capitalize()} was removed {self._player}'s toolbelt."
+        msg = f"{tool_obj} was removed {self._player}'s toolbelt."
         return {
             'success': True,
             'msg': msg,
         }
 
-    def get_tool(self, tool_type: str) -> str:
+    def get_tool(self, tool_type: str) -> Tool:
         return self._tools[tool_type]
 
     def __str__(self) -> str:
@@ -73,7 +74,7 @@ class Tools:
         just_amount: int = max([len(t) for t in tool_types])
         for tool_type, tool in self._tools.items():
             name = color(tool_type.capitalize(), COLOR_TOOLS, justify=just_amount)
-            _tool = tool.capitalize() if tool is not None else '---'
+            _tool = tool if tool is not None else '---'
             tool_line = f'  {name} | {_tool}'
             msg_out.append(tool_line)
 

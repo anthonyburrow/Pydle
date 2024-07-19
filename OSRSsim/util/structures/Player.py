@@ -3,6 +3,7 @@ import pickle
 from .Bank import Bank
 from .Stat import Stat
 from .Tools import Tools
+from .Tool import Tool
 from ..colors import color, COLOR_CHARACTER, COLOR_STATS
 from ...lib import stats
 
@@ -79,7 +80,7 @@ class Player:
     def remove_tool(self, *args, **kwargs):
         return self._tools.remove(*args, **kwargs)
 
-    def get_tool(self, *args, **kwargs) -> str:
+    def get_tool(self, *args, **kwargs) -> Tool:
         return self._tools.get_tool(*args, **kwargs)
 
     @property

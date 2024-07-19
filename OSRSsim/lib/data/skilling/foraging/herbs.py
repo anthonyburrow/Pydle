@@ -1,5 +1,7 @@
 from numpy import exp
 
+from .....util.structures import Tool
+
 
 class Herb:
 
@@ -35,9 +37,8 @@ class Herb:
         self.min_prob_factor: float = min_prob_factor
         self.growth_rate: float = growth_rate
 
-    def prob_success(self, level: int, secateurs_power: float,
-                     secateurs_level: int):
-        L = secateurs_power * self.herb_value
+    def prob_success(self, level: int, secateurs: Tool):
+        L = secateurs.power * self.herb_value
         k = self.growth_rate
 
         if level < self.level:
@@ -49,7 +50,7 @@ class Herb:
         if prob < min_prob:
             prob = min_prob
 
-        if secateurs_level < self.level:
+        if secateurs.level < self.level:
             prob *= 0.5
 
         return prob

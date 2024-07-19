@@ -4,3 +4,4 @@ from .LootTable import LootTable
 from .Player import Player
 from .Controller import Controller
 from .Stat import Stat
+from .Tool import Tool

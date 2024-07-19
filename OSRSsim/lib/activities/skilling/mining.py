@@ -1,7 +1,8 @@
 from ....util.structures.Activity import Activity
 from ....util.structures.LootTable import LootTable
 from ....util.structures.Bank import Bank
-from ...data.skilling.mining import Ore, ores, pickaxes
+from ....util.structures.Tool import Tool
+from ...data.skilling.mining import Ore, ores
 
 
 class MiningActivity(Activity):
@@ -13,8 +14,8 @@ class MiningActivity(Activity):
         self.parse_args(*args[1:])
 
         self.description: str = 'mining'
+        self.pickaxe: Tool = self.player.get_tool('pickaxe')
 
-        self.pickaxe: str = None
         self.loot_table: LootTable = None
 
     def parse_args(self, *args, **kwargs):
@@ -41,7 +42,6 @@ class MiningActivity(Activity):
                 f'You must have Level {self.ore.level} Mining to mine {self.ore.name}.'
             return status
 
-        self.pickaxe: str = self.player.get_tool('pickaxe')
         if self.pickaxe is None:
             status['success'] = False
             status['status_msg'] = \
@@ -54,7 +54,7 @@ class MiningActivity(Activity):
 
     def update_inherited(self) -> dict:
         '''Processing during each tick.'''
-        ticks_per_use = pickaxes[self.pickaxe]['ticks_per_use']
+        ticks_per_use = self.pickaxe.ticks_per_use
         if self.tick_count % ticks_per_use:
             return {
                 'in_standby': True,
@@ -100,8 +100,7 @@ class MiningActivity(Activity):
     def _setup_loot_table(self):
         mining_args = (
             self.player.get_level('mining'),
-            pickaxes[self.pickaxe]['power'],
-            pickaxes[self.pickaxe]['level'],
+            self.pickaxe,
         )
         prob_success = self.ore.prob_success(*mining_args)
 

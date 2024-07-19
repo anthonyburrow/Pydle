@@ -1,5 +1,7 @@
 from numpy import exp
 
+from .....util.structures import Tool
+
 
 class Log:
 
@@ -25,8 +27,8 @@ class Log:
         self.min_prob_factor: float = min_prob_factor
         self.growth_rate: float = growth_rate
 
-    def prob_success(self, level: int, axe_power: float, axe_level: int):
-        L = axe_power * self.log_value
+    def prob_success(self, level: int, axe: Tool):
+        L = axe.power * self.log_value
         k = self.growth_rate
 
         if level < self.level:
@@ -38,7 +40,7 @@ class Log:
         if prob < min_prob:
             prob = min_prob
 
-        if axe_level < self.level:
+        if axe.level < self.level:
             prob *= 0.5
 
         return prob

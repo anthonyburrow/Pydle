@@ -1,5 +1,7 @@
 from numpy import exp
 
+from .....util.structures import Tool
+
 
 class Ore:
 
@@ -25,9 +27,8 @@ class Ore:
         self.min_prob_factor: float = min_prob_factor
         self.growth_rate: float = growth_rate
 
-    def prob_success(self, level: int, pickaxe_power: float,
-                     pickaxe_level: int):
-        L = pickaxe_power * self.ore_value
+    def prob_success(self, level: int, pickaxe: Tool):
+        L = pickaxe.power * self.ore_value
         k = self.growth_rate
 
         if level < self.level:
@@ -39,7 +40,7 @@ class Ore:
         if prob < min_prob:
             prob = min_prob
 
-        if pickaxe_level < self.level:
+        if pickaxe.level < self.level:
             prob *= 0.5
 
         return prob

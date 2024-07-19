@@ -1,7 +1,8 @@
 from ....util.structures.Activity import Activity
 from ....util.structures.LootTable import LootTable
 from ....util.structures.Bank import Bank
-from ...data.skilling.woodcutting import Log, logs, axes
+from ....util.structures.Tool import Tool
+from ...data.skilling.woodcutting import Log, logs
 
 
 class WoodcuttingActivity(Activity):
@@ -14,7 +15,7 @@ class WoodcuttingActivity(Activity):
 
         self.description: str = 'woodcutting'
 
-        self.axe: str = None
+        self.axe: Tool = self.player.get_tool('axe')
         self.loot_table: LootTable = None
 
     def parse_args(self, *args, **kwargs):
@@ -41,7 +42,6 @@ class WoodcuttingActivity(Activity):
                 f'You must have Level {self.log.level} Woodcutting to chop {self.log.name}.'
             return status
 
-        self.axe: str = self.player.get_tool('axe')
         if self.axe is None:
             status['success'] = False
             status['status_msg'] = \
@@ -54,7 +54,7 @@ class WoodcuttingActivity(Activity):
 
     def update_inherited(self) -> dict:
         '''Processing during each tick.'''
-        ticks_per_use = axes[self.axe]['ticks_per_use']
+        ticks_per_use = self.axe.ticks_per_use
         if self.tick_count % ticks_per_use:
             return {
                 'in_standby': True,
@@ -100,8 +100,7 @@ class WoodcuttingActivity(Activity):
     def _setup_loot_table(self):
         woodcutting_args = (
             self.player.get_level('woodcutting'),
-            axes[self.axe]['power'],
-            axes[self.axe]['level'],
+            self.axe,
         )
         prob_success = self.log.prob_success(*woodcutting_args)
 
