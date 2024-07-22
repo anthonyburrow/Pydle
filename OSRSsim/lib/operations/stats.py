@@ -4,7 +4,7 @@ from ...util.output import print_output
 
 def interface_stats(player: Player, *args):
     if not args:
-        print_output(player.print_stats())
+        print_output(player.stats)
         return
 
     stat = args[0]

@@ -57,6 +57,10 @@ class Bank:
 
         return msg
 
+    @property
+    def items(self):
+        return self._items
+
     def __str__(self) -> str:
         spacing = '  '
         title = 'BANK'

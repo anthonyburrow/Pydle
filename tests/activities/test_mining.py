@@ -7,6 +7,7 @@ from OSRSsim.lib.activities.skilling import MiningActivity
 def test_missing_pickaxe():
     # Setup
     player = Player(name='TestPlayer')
+
     player.set_level('mining', 99)
     controller = Controller(player)
 
@@ -32,6 +33,7 @@ def test_missing_pickaxe():
 def test_misspelled_ore():
     # Setup
     player = Player(name='TestPlayer')
+
     player.set_level('mining', 99)
     controller = Controller(player)
 

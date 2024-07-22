@@ -1,5 +1,4 @@
 from pathlib import Path
-import pickle
 
 from OSRSsim.util.structures import Player, Controller
 
@@ -12,14 +11,7 @@ def start():
 
     # Setup/load player
     character_file: str = f'{path_save}/character.save'
-
-    if Path(character_file).is_file():
-        with open(character_file, 'rb') as file:
-            player: Player = pickle.load(file)
-        player.update()
-    else:
-        player: Player = Player(save_file=character_file)
-        player.save()
+    player: Player = Player(save_file=character_file)
 
     # Setup activity control manager
     controller: Controller = Controller(player)

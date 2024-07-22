@@ -1,63 +1,50 @@
 import pickle
+from pathlib import Path
 
 from .Bank import Bank
+from .Stats import Stats
 from .Stat import Stat
 from .Tools import Tools
 from .Tool import Tool
-from ..colors import color, COLOR_CHARACTER, COLOR_STATS
-from ...lib import stats
+from ..colors import color, COLOR_CHARACTER
+
+
+_default_save_file = 'character.save'
 
 
 class Player:
 
-    def __init__(self, save_file: str = None, name: str = None):
-        if name is None:
-            name: str = input('Character name?\n> ')
-        self.name = name
-
+    def __init__(self, save_file: str = None, *args, **kwargs):
         if save_file is None:
-            save_file = 'character.save'
+            save_file = _default_save_file
         self.save_file: str = save_file
 
-        self._bank: Bank = Bank()
-        self._tools: Tools = Tools(self)
+        self.load(*args, **kwargs)
 
-        self._stats = {}
-        self._setup_stats()
+    # Player
+    @property
+    def name(self) -> str:
+        return self._name
 
     # Stats and Experience
-    def add_XP(self, stat: str, XP: float):
-        return self._stats[stat].add_XP(XP)
+    def add_XP(self, *args, **kwargs) -> dict:
+        return self._stats.add_XP(*args, **kwargs)
 
-    def set_XP(self, stat: str, XP: float):
-        self._stats[stat].set_XP(XP)
+    def set_XP(self, *args, **kwargs):
+        return self._stats.set_XP(*args, **kwargs)
 
-    def set_level(self, stat: str, level: int):
-        self._stats[stat].set_level(level)
+    def set_level(self, *args, **kwargs):
+        return self._stats.set_level(*args, **kwargs)
 
-    def get_stat(self, stat: str) -> Stat:
-        return self._stats[stat]
+    def get_stat(self, *args, **kwargs) -> Stat:
+        return self._stats.get_stat(*args, **kwargs)
 
-    def get_level(self, stat: str) -> int:
-        return self.get_stat(stat).level
+    def get_level(self, *args, **kwargs) -> int:
+        return self._stats.get_level(*args, **kwargs)
 
-    def print_stats(self) -> str:
-        msg_out: list = []
-        just_amount: int = max([len(s) for s in stats])
-        for _stat in stats:
-            stat = self.get_stat(_stat)
-            name: str = color(stat.name, COLOR_STATS, justify=just_amount)
-            stat_line: str = f'  {name} | Lvl {stat.level:<2} ({stat.XP:,.0f} EXP)'
-            msg_out.append(stat_line)
-
-        msg = '\n' + '\n'.join(msg_out) + '\n'
-
-        return msg
-
-    def _setup_stats(self):
-        for stat, stat_info in stats.items():
-            if stat not in self._stats:
-                self._stats[stat] = Stat(*stat_info)
+    @property
+    def stats(self) -> Stats:
+        return self._stats
 
     # Items
     def give(self, *args, **kwargs):
@@ -88,15 +75,49 @@ class Player:
         return self._tools
 
     # Management
-    def update(self):
-        '''Done to update the previous player save to new version of code.'''
-        self._setup_stats()
+    def new_load(self, name: str = None, *args, **kwargs):
+        if name is None:
+            self._name: str = input('Character name?\n> ')
+        else:
+            self._name: str = name
+
+        self._bank: Bank = Bank()
+
+        self._stats: Stats = Stats()
+        self._stats.load_stats()
+
+        self._tools: Tools = Tools(self)
+        self._tools.load_tools()
+
+    def load(self, *args, **kwargs):
+        if not Path(self.save_file).is_file():
+            return self.new_load(*args, **kwargs)
+
+        with open(self.save_file, 'rb') as file:
+            save_input: dict = pickle.load(file)
+
+        self._name: str = save_input['name']
+
+        self._bank: Bank = Bank(save_input['items'])
+
+        self._stats: Stats = Stats()
+        self._stats.load_stats(save_input['stats'])
+
+        self._tools: Tools = Tools(self)
+        self._tools.load_tools(save_input['tools'])
 
     def save(self):
+        save_output: dict = {
+            'name': self.name,
+            'items': self._bank.items,
+            'stats': self._stats.get_stats_XP(),
+            'tools': self._tools.get_tools_names(),
+        }
+
         with open(self.save_file, 'wb') as file:
-            pickle.dump(self, file)
+            pickle.dump(save_output, file)
 
     # Misc
     def __str__(self):
-        text: str = f'{self.name}'
+        text: str = f'{self._name}'
         return color(text, COLOR_CHARACTER)

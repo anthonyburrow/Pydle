@@ -19,6 +19,7 @@ class Controller:
             except Exception as e:
                 print_output(e)
                 continue
+
             self.player.save()
 
     def listen(self):
