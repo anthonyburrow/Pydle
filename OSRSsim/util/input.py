@@ -1,5 +1,7 @@
 from .commands import *
-from ..lib.command_map import map_activity, map_operations, map_testing, alias_operations
+from ..lib.command_map import \
+    map_activity, map_operations, map_testing, \
+    alias_activity, alias_operations, alias_testing
 
 
 NULL_INPUT = {
@@ -25,24 +27,28 @@ def parse_command(msg: str) -> dict:
 
     command = msg[0]
 
-    if command in alias_operations:
+    if command in alias_activity:
+        command = alias_activity[command]
+    elif command in alias_operations:
         command = alias_operations[command]
+    elif command in alias_testing:
+        command = alias_testing[command]
 
     if command in map_activity:
         return {
             'type': 'activity',
-            'activity': map_activity[command],
+            'activity': map_activity[command]['function'],
             'args': tuple(msg[1:]),
         }
     elif command in map_operations:
         return {
             'type': 'operation',
-            'function': map_operations[command],
+            'function': map_operations[command]['function'],
             'args': tuple(msg[1:]),
         }
     elif command == CMD_TESTING:
         try:
-            func = map_testing[msg[1]]
+            func = map_testing[msg[1]]['function']
         except IndexError:
             return NULL_INPUT
         return {
