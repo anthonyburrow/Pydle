@@ -1,5 +1,5 @@
 from .commands import *
-from ..lib.command_map import map_activity, map_operations, map_testing
+from ..lib.command_map import map_activity, map_operations, map_testing, alias_operations
 
 
 NULL_INPUT = {
@@ -24,6 +24,9 @@ def parse_command(msg: str) -> dict:
     msg = msg.split(' ')
 
     command = msg[0]
+
+    if command in alias_operations:
+        command = alias_operations[command]
 
     if command in map_activity:
         return {
