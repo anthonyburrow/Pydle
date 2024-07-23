@@ -35,8 +35,8 @@ class MiningActivity(Activity):
                 'A valid ore was not given.'
             return status
 
-        stat_level: int = self.player.get_level('mining')
-        if stat_level < self.ore.level:
+        skill_level: int = self.player.get_level('mining')
+        if skill_level < self.ore.level:
             status['success'] = False
             status['status_msg'] = \
                 f'You must have Level {self.ore.level} Mining to mine {self.ore.name}.'

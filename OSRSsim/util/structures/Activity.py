@@ -2,7 +2,7 @@ import time
 import keyboard
 
 from . import Player, Controller
-from .Stat import level_up_msg
+from .Skill import level_up_msg
 from ..ticks import Ticks
 from ..output import print_output
 from ..commands import KEY_CANCEL
@@ -67,11 +67,11 @@ class Activity:
             self.player.give(process['items'])
 
         if 'XP' in process:
-            for stat, amount in process['XP'].items():
-                XP_status = self.player.add_XP(stat, amount)
+            for skill, amount in process['XP'].items():
+                XP_status = self.player.add_XP(skill, amount)
 
                 if XP_status['leveled_up']:
-                    print_output(level_up_msg(self.player, stat))
+                    print_output(level_up_msg(self.player, skill))
                     self.reset_on_levelup()
 
         # End of tick

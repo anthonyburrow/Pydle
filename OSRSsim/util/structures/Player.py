@@ -2,8 +2,8 @@ import pickle
 from pathlib import Path
 
 from .Bank import Bank
-from .Stats import Stats
-from .Stat import Stat
+from .Skills import Skills
+from .Skill import Skill
 from .Tools import Tools
 from .Tool import Tool
 from ..colors import color, COLOR_CHARACTER
@@ -26,25 +26,25 @@ class Player:
     def name(self) -> str:
         return self._name
 
-    # Stats and Experience
+    # Skills and Experience
     def add_XP(self, *args, **kwargs) -> dict:
-        return self._stats.add_XP(*args, **kwargs)
+        return self._skills.add_XP(*args, **kwargs)
 
     def set_XP(self, *args, **kwargs):
-        return self._stats.set_XP(*args, **kwargs)
+        return self._skills.set_XP(*args, **kwargs)
 
     def set_level(self, *args, **kwargs):
-        return self._stats.set_level(*args, **kwargs)
+        return self._skills.set_level(*args, **kwargs)
 
-    def get_stat(self, *args, **kwargs) -> Stat:
-        return self._stats.get_stat(*args, **kwargs)
+    def get_skill(self, *args, **kwargs) -> Skill:
+        return self._skills.get_skill(*args, **kwargs)
 
     def get_level(self, *args, **kwargs) -> int:
-        return self._stats.get_level(*args, **kwargs)
+        return self._skills.get_level(*args, **kwargs)
 
     @property
-    def stats(self) -> Stats:
-        return self._stats
+    def skills(self) -> Skills:
+        return self._skills
 
     # Items
     def give(self, *args, **kwargs):
@@ -83,8 +83,8 @@ class Player:
 
         self._bank: Bank = Bank()
 
-        self._stats: Stats = Stats()
-        self._stats.load_stats()
+        self._skills: Skills = Skills()
+        self._skills.load_skills()
 
         self._tools: Tools = Tools(self)
         self._tools.load_tools()
@@ -100,8 +100,8 @@ class Player:
 
         self._bank: Bank = Bank(save_input['items'])
 
-        self._stats: Stats = Stats()
-        self._stats.load_stats(save_input['stats'])
+        self._skills: Skills = Skills()
+        self._skills.load_skills(save_input['skills'])
 
         self._tools: Tools = Tools(self)
         self._tools.load_tools(save_input['tools'])
@@ -110,7 +110,7 @@ class Player:
         save_output: dict = {
             'name': self.name,
             'items': self._bank.items,
-            'stats': self._stats.get_stats_XP(),
+            'skills': self._skills.get_skills_XP(),
             'tools': self._tools.get_tools_names(),
         }
 

@@ -35,8 +35,8 @@ class ForagingActivity(Activity):
                 'A valid herb was not given.'
             return status
 
-        stat_level: int = self.player.get_level('foraging')
-        if stat_level < self.herb.level:
+        skill_level: int = self.player.get_level('foraging')
+        if skill_level < self.herb.level:
             status['success'] = False
             status['status_msg'] = \
                 f'You must have Level {self.herb.level} Foraging to collect {self.herb.name_grimy}.'

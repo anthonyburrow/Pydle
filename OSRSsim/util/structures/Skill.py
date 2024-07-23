@@ -1,6 +1,6 @@
 import numpy as np
 
-from ..colors import color, COLOR_STATS
+from ..colors import color, COLOR_SKILLS
 from . import Player
 
 
@@ -18,20 +18,20 @@ def level_to_XP(level):
 XP_table = {lvl: level_to_XP(lvl) for lvl in range(1, MAX_LEVEL + 1)}
 
 
-def level_up_msg(player: Player, stat: str):
-    _stat = player.get_stat(stat)
-    stat_name = color(_stat.name, COLOR_STATS)
-    lvl = color(f'Level {_stat.level}', COLOR_STATS)
-    msg = f"{player}'s {stat_name} level has increased to {lvl}!"
+def level_up_msg(player: Player, skill: str):
+    _skill = player.get_skill(skill)
+    skill_name = color(_skill.name, COLOR_SKILLS)
+    lvl = color(f'Level {_skill.level}', COLOR_SKILLS)
+    msg = f"{player}'s {skill_name} level has increased to {lvl}!"
 
     return msg
 
 
-class Stat:
+class Skill:
 
-    def __init__(self, name: str, stat_type: str, XP: float = None):
+    def __init__(self, name: str, skill_type: str, XP: float = None):
         self.name: str = name
-        self.stat_type: str = stat_type
+        self.skill_type: str = skill_type
 
         self.XP: float = 0.
         self.level: int = 1
@@ -61,7 +61,7 @@ class Stat:
         self.XP = XP_table[level]
 
     def __str__(self):
-        name = color(self.name, COLOR_STATS)
+        name = color(self.name, COLOR_SKILLS)
         level = self.level
         xp_to_next = XP_table[level + 1] - self.XP
 

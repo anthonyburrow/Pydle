@@ -35,8 +35,8 @@ class WoodcuttingActivity(Activity):
                 'A valid log was not given.'
             return status
 
-        stat_level: int = self.player.get_level('woodcutting')
-        if stat_level < self.log.level:
+        skill_level: int = self.player.get_level('woodcutting')
+        if skill_level < self.log.level:
             status['success'] = False
             status['status_msg'] = \
                 f'You must have Level {self.log.level} Woodcutting to chop {self.log.name}.'

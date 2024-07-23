@@ -42,7 +42,7 @@ def color(text: str, color: str, justify: int = 0, just_type: str = 'right'):
 
 # THEME:
 COLOR_CHARACTER = CYAN
-COLOR_STATS = LIGHT_PURPLE
+COLOR_SKILLS = LIGHT_PURPLE
 COLOR_TOOLS = LIGHT_PURPLE
 
 COLOR_BANK1 = LIGHT_PURPLE

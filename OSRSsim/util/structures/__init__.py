@@ -3,5 +3,5 @@ from .Bank import Bank
 from .LootTable import LootTable
 from .Player import Player
 from .Controller import Controller
-from .Stat import Stat
+from .Skill import Skill
 from .Tool import Tool
