@@ -53,3 +53,14 @@ def populate_aliases(map_dict: dict) -> dict:
 
 alias_activity = populate_aliases(map_activity)
 alias_operations = populate_aliases(map_operations)
+
+
+def alias_to_command(alias: str):
+    if alias in alias_activity:
+        command = alias_activity[alias]
+    elif alias in alias_operations:
+        command = alias_operations[alias]
+    else:
+        command = alias
+
+    return command

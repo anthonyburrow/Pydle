@@ -1,7 +1,5 @@
 from .commands import *
-from ..lib.command_map import \
-    map_activity, map_operations, \
-    alias_activity, alias_operations
+from ..lib.command_map import map_activity, map_operations, alias_to_command
 
 
 NULL_INPUT = {
@@ -26,11 +24,7 @@ def parse_command(msg: str) -> dict:
     msg = msg.split(' ')
 
     command = msg[0]
-
-    if command in alias_activity:
-        command = alias_activity[command]
-    elif command in alias_operations:
-        command = alias_operations[command]
+    command = alias_to_command(command)
 
     if command in map_activity:
         return {
