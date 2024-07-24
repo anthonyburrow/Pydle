@@ -5,17 +5,57 @@ from .operations.skills import interface_skills
 from .operations.tools import interface_tools
 from .operations.testing import interface_testing
 
+from ..util.output import print_info
+from ..util.colors import color, COLOR_UI_1
+
+
+def interface_help(*args):
+    msg: list = []
+
+    msg.append('Operations:')
+    for command, command_info in map_operations.items():
+        if command == 'testing':
+            continue
+
+        alias_str = ''
+        if 'aliases' in command_info:
+            alias_str = [color(cmd, COLOR_UI_1)
+                         for cmd in command_info['aliases']]
+            alias_str = ', '.join(alias_str)
+            alias_str = f"({alias_str}) "
+
+        command_str = color(command, COLOR_UI_1)
+        msg.append(f"  {command_str} {alias_str}: {command_info['help_info']}")
+
+    msg.append('')
+    msg.append('Activities:')
+    for command, command_info in map_activity.items():
+        alias_str = ''
+        if 'aliases' in command_info:
+            alias_str = [color(cmd, COLOR_UI_1)
+                         for cmd in command_info['aliases']]
+            alias_str = ', '.join(alias_str)
+            alias_str = f"({alias_str}) "
+
+        command_str = color(command, COLOR_UI_1)
+        msg.append(f"  {command_str} {alias_str}: {command_info['help_info']}")
+
+    print_info('\n'.join(msg), multiline=True)
+
 
 # Mapping
 map_activity = {
     'mine': {
         'function': skilling.MiningActivity,
+        'help_info': 'Begin a mining trip.',
     },
     'chop': {
         'function': skilling.WoodcuttingActivity,
+        'help_info': 'Begin a woodcutting trip.',
     },
     'collect': {
         'function': skilling.ForagingActivity,
+        'help_info': 'Begin a foraging trip.',
     },
 }
 
@@ -23,18 +63,27 @@ map_operations = {
     'bank': {
         'function': interface_bank,
         'aliases': ('b',),
+        'help_info': "Display the player's bank.",
+    },
+    'help': {
+        'function': interface_help,
+        'aliases': ('?', 'h'),
+        'help_info': 'Show the list of available commands.',
     },
     'skills': {
         'function': interface_skills,
         'aliases': ('s', 'skill'),
+        'help_info': "Display the player's skills.",
     },
     'testing': {
         'function': interface_testing,
         'aliases': ('test',),
+        'help_info': 'Non-production testing commands.',
     },
     'tools': {
         'function': interface_tools,
         'aliases': ('t', 'tool'),
+        'help_info': "Display the player's tools.",
     },
 }
 
