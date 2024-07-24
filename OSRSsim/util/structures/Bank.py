@@ -62,20 +62,19 @@ class Bank:
         return self._items
 
     def __str__(self) -> str:
-        spacing = '  '
-        title = 'BANK'
-        separator = '---'
-        header = f'{spacing}{title}\n{spacing}{separator}\n{spacing}'
+        msg: list = []
+
+        msg.append('BANK')
+        msg.append('---')
 
         if not self._items:
-            msg = f'\n{header}\n'
             return msg
 
-        items_str = []
         for item, quantity in self._items.items():
             qty = color(f'({quantity}x)', COLOR_BANK1)
-            items_str.append(f'{item.capitalize()} {qty}')
-        msg = '\n' + header + f'\n{spacing}'.join(items_str) + '\n'
+            msg.append(f'{item.capitalize()} {qty}')
+
+        msg = f'\n'.join(msg)
 
         return msg
 

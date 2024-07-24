@@ -1,8 +1,8 @@
 import sys
 
 from . import Player, Activity
-from ..output import print_output
-from ..input import parse_command, flush_input
+from ..output import print_info, print_error
+from ..input import parse_command, flush_input, COMMAND_PREFIX
 from ..misc import get_client_ID
 
 
@@ -17,14 +17,14 @@ class Controller:
             try:
                 self.listen()
             except Exception as e:
-                print_output(e)
+                print_error(e)
                 continue
 
             self.player.save()
 
     def listen(self):
         flush_input()
-        command: str = input('> ')
+        command: str = input(COMMAND_PREFIX)
         command: dict = parse_command(command)
 
         if command['type'] == 'activity':
@@ -34,7 +34,7 @@ class Controller:
         elif command['type'] == 'exit':
             sys.exit()
         else:
-            print_output('Unknown command.')
+            print_info('Unknown command.')
 
     def control_activity(self, command: dict):
         _activity: Activity = command['activity']
@@ -44,7 +44,7 @@ class Controller:
 
         setup = activity.setup()
         if not setup['success']:
-            print_output(setup['status_msg'])
+            print_info(setup['status_msg'])
             return
 
         activity.begin_loop()

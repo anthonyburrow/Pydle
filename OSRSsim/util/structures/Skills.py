@@ -54,15 +54,15 @@ class Skills:
     def skills(self) -> dict:
         return self._skills
 
-    def __str__(self):
-        msg_out: list = []
+    def __str__(self) -> str:
+        msg: list = []
         just_amount: int = max([len(s) for s in SKILLS])
         for skill_key in SKILLS:
             skill: Skill = self.get_skill(skill_key)
             name: str = color(skill.name, COLOR_SKILLS, justify=just_amount)
-            skill_line: str = f'  {name} | Lvl {skill.level:<2} ({skill.XP:,.0f} EXP)'
-            msg_out.append(skill_line)
+            skill_line: str = f'{name} | Lvl {skill.level:<2} ({skill.XP:,.0f} EXP)'
+            msg.append(skill_line)
 
-        msg = '\n' + '\n'.join(msg_out) + '\n'
+        msg = '\n'.join(msg)
 
         return msg

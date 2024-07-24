@@ -109,14 +109,14 @@ class Tools:
         return self._tools
 
     def __str__(self) -> str:
-        msg_out: list = []
+        msg: list = []
         just_amount: int = max([len(t) for t in TOOLS])
         for tool_type, tool in self._tools.items():
             name = color(tool_type.capitalize(), COLOR_TOOLS, justify=just_amount)
             _tool = tool if tool is not None else '---'
-            tool_line = f'  {name} | {_tool}'
-            msg_out.append(tool_line)
+            tool_line = f'{name} | {_tool}'
+            msg.append(tool_line)
 
-        msg = '\n' + '\n'.join(msg_out) + '\n'
+        msg = '\n'.join(msg)
 
         return msg

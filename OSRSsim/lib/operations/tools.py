@@ -1,10 +1,10 @@
 from ...util.structures import Player
-from ...util.output import print_output
+from ...util.output import print_info
 
 
 def interface_tools(player: Player, *args):
     if not args:
-        print_output(player.tools)
+        print_info(str(player.tools), multiline=True)
         return
 
     subcommand = args[0]
@@ -12,7 +12,7 @@ def interface_tools(player: Player, *args):
 
     if not tool:
         msg = 'A tool argument was not given.'
-        print_output(msg)
+        print_info(msg)
         return
 
     if subcommand == 'add':
@@ -21,7 +21,7 @@ def interface_tools(player: Player, *args):
         operation = player.remove_tool(tool)
     else:
         msg = f'{subcommand} is not a valid argument.'
-        print_output(msg)
+        print_info(msg)
         return
 
-    print_output(operation['msg'])
+    print_info(operation['msg'])

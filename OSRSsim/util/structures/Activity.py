@@ -4,7 +4,7 @@ import keyboard
 from . import Player, Controller
 from .Skill import level_up_msg
 from ..ticks import Ticks
-from ..output import print_output
+from ..output import print_info
 from ..commands import KEY_CANCEL
 from ..misc import client_focused
 
@@ -32,14 +32,14 @@ class Activity:
 
     def begin_loop(self):
         '''Begin activity loop.'''
-        print_output(self.startup_text)
+        print_info(self.startup_text)
 
         while True:
             if keyboard.is_pressed(KEY_CANCEL) and client_focused(self.client_ID):
                 self.finish()
 
                 msg = f'{self.player} is returning from {self.description}...'
-                print_output(msg)
+                print_info(msg)
                 time.sleep(Ticks(4))
                 break
 
@@ -61,7 +61,7 @@ class Activity:
 
         if process['in_standby'] != self.in_standby or self.tick_count == 0:
             self.in_standby = process['in_standby']
-            print_output(process['msg'])
+            print_info(process['msg'])
 
         if 'items' in process:
             self.player.give(process['items'])
@@ -71,7 +71,7 @@ class Activity:
                 XP_status = self.player.add_XP(skill, amount)
 
                 if XP_status['leveled_up']:
-                    print_output(level_up_msg(self.player, skill))
+                    print_info(level_up_msg(self.player, skill))
                     self.reset_on_levelup()
 
         # End of tick
@@ -82,7 +82,7 @@ class Activity:
 
     def finish(self) -> str:
         # Return message, add loot to user, etc
-        print_output(self.finish_text)
+        print_info(self.finish_text)
 
         self.finish_inherited()
 

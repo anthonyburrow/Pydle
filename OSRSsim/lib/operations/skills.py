@@ -1,16 +1,16 @@
 from ...util.structures import Player
-from ...util.output import print_output
+from ...util.output import print_info
 
 
 def interface_skills(player: Player, *args):
     if not args:
-        print_output(player.skills)
+        print_info(str(player.skills), multiline=True)
         return
 
     skill = args[0]
 
     try:
-        print_output(player.get_skill(skill))
+        print_info(player.get_skill(skill))
     except KeyError:
         msg = f'{skill} is not a valid skill.'
-        print_output(msg)
+        print_info(msg)

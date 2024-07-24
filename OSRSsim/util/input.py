@@ -6,6 +6,8 @@ NULL_INPUT = {
     'type': None
 }
 
+COMMAND_PREFIX = '> '
+
 
 def flush_input():
     try:
