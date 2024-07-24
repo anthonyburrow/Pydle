@@ -1,4 +1,4 @@
-from ..colors import color, COLOR_TOOLS
+from ..colors import color, color_theme
 
 
 class Tool:
@@ -18,4 +18,4 @@ class Tool:
         self.ticks_per_use: int = ticks_per_use
 
     def __str__(self):
-        return color(self.name.capitalize(), COLOR_TOOLS)
+        return color(self.name.capitalize(), color_theme['tools'])

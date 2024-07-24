@@ -6,7 +6,7 @@ from .Skills import Skills
 from .Skill import Skill
 from .Tools import Tools
 from .Tool import Tool
-from ..colors import color, COLOR_CHARACTER
+from ..colors import color, color_theme
 
 
 _default_save_file = 'character.save'
@@ -120,4 +120,4 @@ class Player:
     # Misc
     def __str__(self):
         text: str = f'{self._name}'
-        return color(text, COLOR_CHARACTER)
+        return color(text, color_theme['player'])

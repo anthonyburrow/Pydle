@@ -10,7 +10,7 @@ def interface_skills(player: Player, *args):
     skill = args[0]
 
     try:
-        print_info(player.get_skill(skill))
+        print_info(player.get_skill(skill).details())
     except KeyError:
         msg = f'{skill} is not a valid skill.'
         print_info(msg)

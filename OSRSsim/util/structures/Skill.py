@@ -1,6 +1,6 @@
 import numpy as np
 
-from ..colors import color, COLOR_SKILLS
+from ..colors import color, color_theme, skill_to_color
 from . import Player
 
 
@@ -18,11 +18,14 @@ def level_to_XP(level):
 XP_table = {lvl: level_to_XP(lvl) for lvl in range(1, MAX_LEVEL + 1)}
 
 
-def level_up_msg(player: Player, skill: str):
-    _skill = player.get_skill(skill)
-    skill_name = color(_skill.name, COLOR_SKILLS)
-    lvl = color(f'Level {_skill.level}', COLOR_SKILLS)
-    msg = f"{player}'s {skill_name} level has increased to {lvl}!"
+def level_up_msg(player: Player, skill_key: str):
+    skill = player.get_skill(skill_key)
+
+    level = skill.level
+    if level >= 99:
+        level = color(level, color_theme['skill_lvl99'])
+
+    msg = f"{player}'s {skill} level has increased to Level {level}!"
 
     return msg
 
@@ -60,12 +63,23 @@ class Skill:
         self.level = level
         self.XP = XP_table[level]
 
-    def __str__(self):
-        name = color(self.name, COLOR_SKILLS)
+    def details(self) -> str:
         level = self.level
-        xp_to_next = XP_table[level + 1] - self.XP
+        if level >= 99:
+            level = color(level, color_theme['skill_lvl99'])
 
-        msg = f'  {name}: Lvl {level} | {xp_to_next:.0f} EXP to next level'
+        msg = f'{str(self)}: Lvl {level}'
+
+        if level < MAX_LEVEL:
+            xp_to_next = XP_table[level + 1] - self.XP
+            msg = f'{msg} | {xp_to_next:.0f} EXP to next level'
+        else:
+            msg = f'{msg} | {self.XP:.0f} EXP'
+
+        return msg
+
+    def __str__(self):
+        msg = color(self.name, skill_to_color(self.skill_type))
 
         return msg
 

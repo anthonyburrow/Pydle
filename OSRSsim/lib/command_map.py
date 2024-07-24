@@ -6,7 +6,7 @@ from .operations.tools import interface_tools
 from .operations.testing import interface_testing
 
 from ..util.output import print_info
-from ..util.colors import color, COLOR_UI_1
+from ..util.colors import color, color_theme
 
 
 def interface_help(*args):
@@ -19,12 +19,12 @@ def interface_help(*args):
 
         alias_str = ''
         if 'aliases' in command_info:
-            alias_str = [color(cmd, COLOR_UI_1)
+            alias_str = [color(cmd, color_theme['UI_1'])
                          for cmd in command_info['aliases']]
             alias_str = ', '.join(alias_str)
             alias_str = f"({alias_str}) "
 
-        command_str = color(command, COLOR_UI_1)
+        command_str = color(command, color_theme['UI_1'])
         msg.append(f"  {command_str} {alias_str}: {command_info['help_info']}")
 
     msg.append('')
@@ -32,12 +32,12 @@ def interface_help(*args):
     for command, command_info in map_activity.items():
         alias_str = ''
         if 'aliases' in command_info:
-            alias_str = [color(cmd, COLOR_UI_1)
+            alias_str = [color(cmd, color_theme['UI_1'])
                          for cmd in command_info['aliases']]
             alias_str = ', '.join(alias_str)
             alias_str = f"({alias_str}) "
 
-        command_str = color(command, COLOR_UI_1)
+        command_str = color(command, color_theme['UI_1'])
         msg.append(f"  {command_str} {alias_str}: {command_info['help_info']}")
 
     print_info('\n'.join(msg), multiline=True)

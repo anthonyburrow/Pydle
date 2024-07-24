@@ -1,5 +1,5 @@
 from . import Player, Tool
-from ..colors import color, COLOR_TOOLS
+from ..colors import color, color_theme
 from ...lib.data.skilling import mining, woodcutting, foraging
 
 
@@ -111,10 +111,15 @@ class Tools:
     def __str__(self) -> str:
         msg: list = []
         just_amount: int = max([len(t) for t in TOOLS])
-        for tool_type, tool in self._tools.items():
-            name = color(tool_type.capitalize(), COLOR_TOOLS, justify=just_amount)
-            _tool = tool if tool is not None else '---'
-            tool_line = f'{name} | {_tool}'
+        for tool_key in TOOLS:
+            tool: Tool = self.get_tool(tool_key)
+            name = color(
+                tool_key.capitalize(),
+                '',
+                justify=just_amount
+            )
+            tool_str = tool if tool is not None else '---'
+            tool_line = f'{name} | {tool_str}'
             msg.append(tool_line)
 
         msg = '\n'.join(msg)

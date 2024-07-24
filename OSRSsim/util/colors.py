@@ -40,11 +40,22 @@ def color(text: str, color: str, justify: int = 0, just_type: str = 'right'):
     return out_text
 
 
+def skill_to_color(skill_type: str) -> str:
+    return color_theme[f'skill_{skill_type}']
+
+
 # THEME:
-COLOR_CHARACTER = CYAN
-COLOR_SKILLS = LIGHT_PURPLE
-COLOR_TOOLS = LIGHT_PURPLE
-
-COLOR_BANK1 = LIGHT_PURPLE
-
-COLOR_UI_1 = LIGHT_PURPLE
+color_theme = {
+    # UI elements
+    'UI_1': LIGHT_PURPLE,
+    # Player
+    'player': CYAN,
+    # Items
+    'tools': LIGHT_PURPLE,
+    # Skills
+    'skill_gathering': GREEN,
+    'skill_artisan': LIGHT_RED,
+    'skill_combat': LIGHT_CYAN,
+    'skill_support': LIGHT_PURPLE,
+    'skill_lvl99': YELLOW,
+}

@@ -1,4 +1,4 @@
-from ..colors import color, COLOR_BANK1
+from ..colors import color, color_theme
 
 
 class Bank:
@@ -71,7 +71,7 @@ class Bank:
             return msg
 
         for item, quantity in self._items.items():
-            qty = color(f'({quantity}x)', COLOR_BANK1)
+            qty = color(f'({quantity}x)', color_theme['UI_1'])
             msg.append(f'{item.capitalize()} {qty}')
 
         msg = f'\n'.join(msg)

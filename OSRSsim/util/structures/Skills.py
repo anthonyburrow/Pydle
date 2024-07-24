@@ -1,5 +1,5 @@
 from .Skill import Skill
-from ..colors import color, COLOR_SKILLS
+from ..colors import color, skill_to_color
 
 
 # { skill_key : (Formal name, Skill type) }
@@ -59,7 +59,11 @@ class Skills:
         just_amount: int = max([len(s) for s in SKILLS])
         for skill_key in SKILLS:
             skill: Skill = self.get_skill(skill_key)
-            name: str = color(skill.name, COLOR_SKILLS, justify=just_amount)
+            name: str = color(
+                skill.name,
+                skill_to_color(skill.skill_type),
+                justify=just_amount,
+            )
             skill_line: str = f'{name} | Lvl {skill.level:<2} ({skill.XP:,.0f} EXP)'
             msg.append(skill_line)
 
