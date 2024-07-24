@@ -31,12 +31,10 @@ class Controller:
             self.control_activity(command)
         elif command['type'] == 'operation':
             self.control_operation(command)
-        elif command['type'] == 'testing':
-            self.control_testing(command)
         elif command['type'] == 'exit':
             sys.exit()
         else:
-            print('Unknown command.')
+            print_output('Unknown command.')
 
     def control_activity(self, command: dict):
         _activity: Activity = command['activity']
@@ -54,7 +52,3 @@ class Controller:
     def control_operation(self, command: dict):
         func = command['function']
         func(self.player, *command['args'])
-
-    def control_testing(self, command: dict):
-        func = command['function']
-        func(self.player)

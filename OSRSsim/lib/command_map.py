@@ -3,8 +3,7 @@ from .activities import skilling
 from .operations.bank import interface_bank
 from .operations.skills import interface_skills
 from .operations.tools import interface_tools
-
-from .testing.skilling import testing_skilling
+from .operations.testing import interface_testing
 
 
 # Mapping
@@ -29,15 +28,13 @@ map_operations = {
         'function': interface_skills,
         'aliases': ('s', 'skill'),
     },
+    'testing': {
+        'function': interface_testing,
+        'aliases': ('test',),
+    },
     'tools': {
         'function': interface_tools,
         'aliases': ('t', 'tool'),
-    },
-}
-
-map_testing = {
-    'skilling': {
-        'function': testing_skilling,
     },
 }
 
@@ -56,4 +53,3 @@ def populate_aliases(map_dict: dict) -> dict:
 
 alias_activity = populate_aliases(map_activity)
 alias_operations = populate_aliases(map_operations)
-alias_testing = populate_aliases(map_testing)
