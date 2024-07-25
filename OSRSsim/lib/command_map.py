@@ -25,7 +25,10 @@ def interface_help(*args):
             alias_str = f"({alias_str}) "
 
         command_str = color(command, color_theme['UI_1'])
-        msg.append(f"  {command_str} {alias_str}: {command_info['help_info']}")
+        msg.append(f"  - {command_str} {alias_str}: {command_info['help_info']}")
+
+        for use in command_info['use_case']:
+            msg.append(f'    {use}')
 
     msg.append('')
     msg.append('Activities:')
@@ -38,7 +41,10 @@ def interface_help(*args):
             alias_str = f"({alias_str}) "
 
         command_str = color(command, color_theme['UI_1'])
-        msg.append(f"  {command_str} {alias_str}: {command_info['help_info']}")
+        msg.append(f"  - {command_str} {alias_str}: {command_info['help_info']}")
+
+        for use in command_info['use_case']:
+            msg.append(f'    {use}')
 
     print_info('\n'.join(msg), multiline=True)
 
@@ -48,14 +54,17 @@ map_activity = {
     'mine': {
         'function': skilling.MiningActivity,
         'help_info': 'Begin a mining trip.',
+        'use_case': ('mine [ore]',),
     },
     'chop': {
         'function': skilling.WoodcuttingActivity,
         'help_info': 'Begin a woodcutting trip.',
+        'use_case': ('chop [log]',),
     },
     'collect': {
         'function': skilling.ForagingActivity,
         'help_info': 'Begin a foraging trip.',
+        'use_case': ('collect [herb]',),
     },
 }
 
@@ -64,26 +73,31 @@ map_operations = {
         'function': interface_bank,
         'aliases': ('b',),
         'help_info': "Display the player's bank.",
+        'use_case': ('bank',),
     },
     'help': {
         'function': interface_help,
         'aliases': ('?', 'h'),
         'help_info': 'Show the list of available commands.',
+        'use_case': ('help',),
     },
     'skills': {
         'function': interface_skills,
         'aliases': ('s', 'skill'),
         'help_info': "Display the player's skills.",
+        'use_case': ('skills', 'skills [skill]'),
     },
     'testing': {
         'function': interface_testing,
         'aliases': ('test',),
         'help_info': 'Non-production testing commands.',
+        'use_case': ('testing skilling',),
     },
     'tools': {
         'function': interface_tools,
         'aliases': ('t', 'tool'),
         'help_info': "Display the player's tools.",
+        'use_case': ('tools', 'tools add [tool]', 'tools remove [tool]'),
     },
 }
 
