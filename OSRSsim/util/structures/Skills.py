@@ -8,6 +8,7 @@ SKILLS = {
     'mining': ('Mining', 'gathering'),
     'woodcutting': ('Woodcutting', 'gathering'),
     'foraging': ('Foraging', 'gathering'),
+    'fishing': ('Fishing', 'gathering'),
 }
 
 

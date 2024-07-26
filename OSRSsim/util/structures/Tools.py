@@ -1,12 +1,13 @@
 from . import Player, Tool
 from ..colors import color
-from ...lib.data.skilling import mining, woodcutting, foraging
+from ...lib.data.skilling import mining, woodcutting, foraging, fishing
 
 
 TOOLS = {
     'pickaxe': mining.pickaxes,
     'axe': woodcutting.axes,
     'secateurs': foraging.secateurs,
+    'fishing rod': fishing.fishing_rods,
 }
 
 
