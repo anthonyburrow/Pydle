@@ -6,6 +6,8 @@ from .Skills import Skills
 from .Skill import Skill
 from .Tools import Tools
 from .Tool import Tool
+from .Equipment import Equipment
+from .Equippable import Equippable
 from ..colors import color, color_theme
 
 
@@ -74,6 +76,22 @@ class Player:
     def tools(self) -> Tools:
         return self._tools
 
+    # Equipment
+    def equip(self, *args, **kwargs):
+        return self._equipment.equip(*args, **kwargs)
+
+    def unequip(self, *args, **kwargs):
+        return self._equipment.unequip(*args, **kwargs)
+
+    @property
+    def equipment(self) -> Equipment:
+        return self._equipment
+
+    # Equipment stats
+    @property
+    def stats(self):
+        return self._equipment.stats
+
     # Management
     def new_load(self, name: str = None, *args, **kwargs):
         if name is None:
@@ -89,6 +107,9 @@ class Player:
         self._tools: Tools = Tools(self)
         self._tools.load_tools()
 
+        self._equipment: Equipment = Equipment(self)
+        self._equipment.load_equipment()
+
     def load(self, *args, **kwargs):
         if not Path(self.save_file).is_file():
             return self.new_load(*args, **kwargs)
@@ -101,10 +122,22 @@ class Player:
         self._bank: Bank = Bank(save_input['items'])
 
         self._skills: Skills = Skills()
-        self._skills.load_skills(save_input['skills'])
+        if 'skills' in save_input:
+            self._skills.load_skills(save_input['skills'])
+        else:
+            self._skills.load_skills()
 
         self._tools: Tools = Tools(self)
-        self._tools.load_tools(save_input['tools'])
+        if 'tools' in save_input:
+            self._tools.load_tools(save_input['tools'])
+        else:
+            self._tools.load_tools()
+
+        self._equipment: Equipment = Equipment(self)
+        if 'equipment' in save_input:
+            self._equipment.load_equipment(save_input['equipment'])
+        else:
+            self._equipment.load_equipment()
 
     def save(self):
         save_output: dict = {
@@ -112,6 +145,7 @@ class Player:
             'items': self._bank.items,
             'skills': self._skills.get_skills_XP(),
             'tools': self._tools.get_tools_names(),
+            'equipment': self._equipment.get_equipment_names(),
         }
 
         with open(self.save_file, 'wb') as file:

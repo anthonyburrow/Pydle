@@ -1,6 +1,7 @@
 from .activities import skilling
 
 from .operations.bank import interface_bank
+from .operations.equipment import interface_equipment
 from .operations.skills import interface_skills
 from .operations.tools import interface_tools
 from .operations.testing import interface_testing
@@ -75,6 +76,12 @@ map_operations = {
         'help_info': "Display the player's bank.",
         'use_case': ('bank',),
     },
+    'equipment': {
+        'function': interface_equipment,
+        'aliases': ('e', 'equip'),
+        'help_info': "Display and equip the player's equipment.",
+        'use_case': ('equipment', 'equipment equip [item]', 'equipment unequip[item]', 'equipment stats'),
+    },
     'help': {
         'function': interface_help,
         'aliases': ('?', 'h'),
@@ -96,7 +103,7 @@ map_operations = {
     'tools': {
         'function': interface_tools,
         'aliases': ('t', 'tool'),
-        'help_info': "Display the player's tools.",
+        'help_info': "Display and equip the player's tools.",
         'use_case': ('tools', 'tools add [tool]', 'tools remove [tool]'),
     },
 }

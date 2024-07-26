@@ -7,6 +7,7 @@ def testing_skilling(player: Player):
         'iron pickaxe': 1,
         'iron axe': 1,
         'iron secateurs': 1,
+        'copper helm': 1,
     }
 
     player.give(items)

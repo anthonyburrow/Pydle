@@ -10,7 +10,7 @@ class Tool:
         power: float,
         ticks_per_use: int,
     ):
-        self.name = name
+        self.name: str = name
 
         # Use properties
         self.level: int = level

@@ -52,6 +52,7 @@ color_theme = {
     'player': CYAN,
     # Items
     'tools': LIGHT_PURPLE,
+    'equipment': LIGHT_PURPLE,
     # Skills
     'skill_gathering': GREEN,
     'skill_artisan': LIGHT_RED,

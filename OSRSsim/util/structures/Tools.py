@@ -1,5 +1,5 @@
 from . import Player, Tool
-from ..colors import color, color_theme
+from ..colors import color
 from ...lib.data.skilling import mining, woodcutting, foraging
 
 
