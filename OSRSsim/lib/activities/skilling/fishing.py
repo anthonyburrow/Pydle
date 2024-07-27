@@ -39,7 +39,7 @@ class FishingActivity(Activity):
         if skill_level < self.fish.level:
             status['success'] = False
             status['status_msg'] = \
-                f'You must have Level {self.fish.level} Fishing to fish {self.fish.name_cooked}.'
+                f'You must have Level {self.fish.level} Fishing to fish {self.fish.name}.'
             return status
 
         if self.fishing_rod is None:
@@ -87,7 +87,7 @@ class FishingActivity(Activity):
 
     @property
     def startup_text(self) -> str:
-        return f'{self.player} is now fishing {self.fish.name_cooked}.'
+        return f'{self.player} is now fishing {self.fish.name}.'
 
     @property
     def standby_text(self) -> str:
@@ -106,7 +106,7 @@ class FishingActivity(Activity):
 
         self.loot_table = LootTable()
         self.loot_table.tertiary(
-            self.fish.name_raw, prob_success, self.fish.n_per_gather
+            self.fish.name, prob_success, self.fish.n_per_gather
         )
 
         # Add more stuff (pets, etc)

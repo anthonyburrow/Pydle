@@ -45,14 +45,17 @@ class Activity:
 
             # TODO: async timing, ditch all the time subtract
             start = time.time()
-            self.update()
+            process = self.update()
             time_passed = time.time() - start
+
+            if 'success' in process and not process['success']:
+                break
 
             time_to_wait = Ticks(1) - time_passed
             if time_to_wait > 0:
                 time.sleep(time_to_wait)
 
-    def update(self):
+    def update(self) -> dict:
         '''Processing during the tick.'''
         # Global update
 
@@ -79,6 +82,8 @@ class Activity:
             self.player.save()
 
         self.tick_count += 1
+
+        return process
 
     def finish(self) -> str:
         # Return message, add loot to user, etc

@@ -9,6 +9,8 @@ SKILLS = {
     'woodcutting': ('Woodcutting', 'gathering'),
     'foraging': ('Foraging', 'gathering'),
     'fishing': ('Fishing', 'gathering'),
+    # Artisan skills
+    'cooking': ('Cooking', 'artisan'),
 }
 
 
