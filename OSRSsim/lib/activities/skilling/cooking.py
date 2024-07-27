@@ -1,4 +1,4 @@
-from ....util.structures.Activity import Activity
+from ....util.structures.Activity import Activity, Status
 from ....util.structures.LootTable import LootTable
 from ....util.structures.Bank import Bank
 from ...data.skilling.cooking import Cookable, cookables
@@ -29,14 +29,14 @@ class CookingActivity(Activity):
     def setup_inherited(self, status: dict) -> dict:
         if self.cookable is None:
             status['success'] = False
-            status['status_msg'] = \
+            status['msg'] = \
                 'A valid item was not given.'
             return status
 
         skill_level: int = self.player.get_level('cooking')
         if skill_level < self.cookable.level:
             status['success'] = False
-            status['status_msg'] = \
+            status['msg'] = \
                 f'You must have Level {self.cookable.level} Cooking to cook {self.cookable.name}.'
             return status
 
@@ -49,7 +49,7 @@ class CookingActivity(Activity):
             msg = f'{self.player} does not have {quantity}x {item}.'
 
             status['success'] = False
-            status['status_msg'] = msg
+            status['msg'] = msg
 
             return status
 
@@ -62,7 +62,7 @@ class CookingActivity(Activity):
         ticks_per_action = self.cookable.ticks_per_action
         if self.tick_count % ticks_per_action:
             return {
-                'in_standby': True,
+                'status': Status.STANDBY,
                 'msg': self.standby_text,
             }
 
@@ -70,10 +70,9 @@ class CookingActivity(Activity):
         if not check_items['success']:
             item = check_items['item']
             quantity = check_items['quantity']
-            msg = f'{self.player} does not have {quantity}x {item}.'
+            msg = f'{self.player} ran out of {item}.'
             return {
-                'success': False,
-                'in_standby': False,
+                'status': Status.EXIT,
                 'msg': msg,
             }
 
@@ -84,14 +83,17 @@ class CookingActivity(Activity):
         if not items:
             msg = f'Burned {self.cookable.name}...'
             return {
-                'in_standby': False,
+                'status': Status.ACTIVE,
                 'msg': msg,
+                'XP': {
+                    'cooking': self.cookable.XP * 0.5,
+                },
             }
 
         msg = f'Cooked {self.cookable.name}!'
 
         return {
-            'in_standby': False,
+            'status': Status.ACTIVE,
             'msg': msg,
             'items': items,
             'XP': {

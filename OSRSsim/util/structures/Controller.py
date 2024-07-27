@@ -44,8 +44,7 @@ class Controller:
 
         setup = activity.setup()
         if not setup['success']:
-            print_info(setup['status_msg'])
-            return
+            return print_info(setup['msg'])
 
         activity.begin_loop()
 

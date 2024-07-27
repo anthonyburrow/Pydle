@@ -1,4 +1,4 @@
-from ....util.structures.Activity import Activity
+from ....util.structures.Activity import Activity, Status
 from ....util.structures.LootTable import LootTable
 from ....util.structures.Bank import Bank
 from ....util.structures.Tool import Tool
@@ -31,20 +31,20 @@ class ForagingActivity(Activity):
     def setup_inherited(self, status: dict) -> dict:
         if self.herb is None:
             status['success'] = False
-            status['status_msg'] = \
+            status['msg'] = \
                 'A valid herb was not given.'
             return status
 
         skill_level: int = self.player.get_level('foraging')
         if skill_level < self.herb.level:
             status['success'] = False
-            status['status_msg'] = \
+            status['msg'] = \
                 f'You must have Level {self.herb.level} Foraging to collect {self.herb.name_grimy}.'
             return status
 
         if self.secateurs is None:
             status['success'] = False
-            status['status_msg'] = \
+            status['msg'] = \
                 f'{self.player} does not have any secateurs.'
             return status
 
@@ -57,21 +57,21 @@ class ForagingActivity(Activity):
         ticks_per_use = self.secateurs.ticks_per_use
         if self.tick_count % ticks_per_use:
             return {
-                'in_standby': True,
+                'status': Status.STANDBY,
                 'msg': self.standby_text,
             }
 
         items: Bank = self.loot_table.roll()
         if not items:
             return {
-                'in_standby': True,
+                'status': Status.STANDBY,
                 'msg': self.standby_text,
             }
 
         msg = f'Collected {items.list_concise()}!'
 
         return {
-            'in_standby': False,
+            'status': Status.ACTIVE,
             'msg': msg,
             'items': items,
             'XP': {
