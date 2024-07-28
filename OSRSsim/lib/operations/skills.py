@@ -1,4 +1,4 @@
-from ...util.structures import Player
+from ...util.structures.Player import Player
 from ...util.output import print_info
 
 

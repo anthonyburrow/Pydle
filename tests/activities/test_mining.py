@@ -1,4 +1,5 @@
-from OSRSsim.util.structures import Player, Controller
+from OSRSsim.util.structures.Player import Player
+from OSRSsim.util.structures.Controller import Controller
 from OSRSsim.util.input import parse_command
 
 from OSRSsim.lib.activities.skilling import MiningActivity

@@ -1,4 +1,4 @@
-from ...util.structures import Player
+from ...util.structures.Player import Player
 
 
 def testing_skilling(player: Player):

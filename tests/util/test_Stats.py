@@ -1,4 +1,4 @@
-from OSRSsim.util.structures import Stats
+from OSRSsim.util.structures.Stats import Stats
 
 
 def test_stats_add():

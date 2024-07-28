@@ -1,6 +1,6 @@
 from numpy import exp
 
-from .....util.structures import Tool
+from .....util.structures.Tool import Tool
 
 
 class Herb:
