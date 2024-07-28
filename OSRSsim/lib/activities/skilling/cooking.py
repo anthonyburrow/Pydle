@@ -42,15 +42,13 @@ class CookingActivity(Activity):
 
         # Logs?
 
-        check_items = self.has_items(self.cookable.items_required)
-        if not check_items['success']:
-            item = check_items['item']
-            quantity = check_items['quantity']
-            msg = f'{self.player} does not have {quantity}x {item}.'
+        for item, quantity in self.cookable.items_required.items():
+            if self.player.has(item, quantity):
+                continue
 
+            msg = f'{self.player} does not have {quantity}x {item}.'
             status['success'] = False
             status['msg'] = msg
-
             return status
 
         self._setup_loot_table()
@@ -66,10 +64,10 @@ class CookingActivity(Activity):
                 'msg': self.standby_text,
             }
 
-        check_items = self.has_items(self.cookable.items_required)
-        if not check_items['success']:
-            item = check_items['item']
-            quantity = check_items['quantity']
+        for item, quantity in self.cookable.items_required.items():
+            if self.player.has(item, quantity):
+                continue
+
             msg = f'{self.player} ran out of {item}.'
             return {
                 'status': Status.EXIT,
@@ -131,16 +129,3 @@ class CookingActivity(Activity):
         )
 
         # Add more stuff (pets, etc)
-
-    def has_items(self, items: dict) -> dict:
-        for item, quantity in items.items():
-            if not self.player.has(item, quantity):
-                return {
-                    'success': False,
-                    'item': item,
-                    'quantity': quantity,
-                }
-
-        return {
-            'success': True,
-        }
