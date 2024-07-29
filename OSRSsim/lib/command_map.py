@@ -1,6 +1,7 @@
 from .activities import skilling
 
 from .operations.bank import interface_bank
+from .operations.effects import interface_effects
 from .operations.equipment import interface_equipment
 from .operations.skills import interface_skills
 from .operations.tools import interface_tools
@@ -85,6 +86,12 @@ map_operations = {
         'aliases': ('b',),
         'help_info': "Display the player's bank.",
         'use_case': ('bank',),
+    },
+    'effects': {
+        'function': interface_effects,
+        'aliases': ('effect',),
+        'help_info': "Display and equip the player's ongoing effects.",
+        'use_case': ('effects',),
     },
     'equipment': {
         'function': interface_equipment,

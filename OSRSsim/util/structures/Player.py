@@ -7,7 +7,8 @@ from .Skill import Skill
 from .Tools import Tools
 from .Tool import Tool
 from .Equipment import Equipment
-from .Equippable import Equippable
+from .Stats import Stats
+from .UpdatedEffects import UpdatedEffects
 from ..colors import color, color_theme
 
 
@@ -89,8 +90,25 @@ class Player:
 
     # Equipment stats
     @property
-    def stats(self):
+    def stats(self) -> Stats:
         return self._equipment.stats
+
+    # Updated effects
+    def add_effect(self, *args, **kwargs):
+        return self._updated_effects.add_effect(*args, **kwargs)
+
+    def remove_effect(self, *args, **kwargs):
+        return self._updated_effects.remove_effect(*args, **kwargs)
+
+    def has_effect(self, *args, **kwargs) -> bool:
+        return self._updated_effects.has_effect(*args, **kwargs)
+
+    def update_effects(self, *args, **kwargs):
+        return self._updated_effects.update_effects(*args, **kwargs)
+
+    @property
+    def updated_effects(self) -> UpdatedEffects:
+        return self._updated_effects
 
     # Management
     def new_load(self, name: str = None, *args, **kwargs):
@@ -109,6 +127,8 @@ class Player:
 
         self._equipment: Equipment = Equipment(self)
         self._equipment.load_equipment()
+
+        self._updated_effects: UpdatedEffects = UpdatedEffects()
 
     def load(self, *args, **kwargs):
         if not Path(self.save_file).is_file():
@@ -139,6 +159,10 @@ class Player:
         else:
             self._equipment.load_equipment()
 
+        self._updated_effects: UpdatedEffects = UpdatedEffects()
+        if 'updated_effects' in save_input:
+            self._updated_effects.load_effects(save_input['updated_effects'])
+
     def save(self):
         save_output: dict = {
             'name': self.name,
@@ -146,6 +170,7 @@ class Player:
             'skills': self._skills.get_skills_XP(),
             'tools': self._tools.get_tools_names(),
             'equipment': self._equipment.get_equipment_names(),
+            'updated_effects': self._updated_effects.get_effects(),
         }
 
         with open(self.save_file, 'wb') as file:

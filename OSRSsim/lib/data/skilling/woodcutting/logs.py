@@ -10,6 +10,7 @@ class Log:
         name: str,
         XP: float,
         level: int,
+        ticks_per_fire: int,
         characteristic_level: int,
         log_value: float,
         n_per_gather: int = 1,
@@ -20,6 +21,7 @@ class Log:
         self.XP: float = XP
         self.level: int = level
         self.n_per_gather: int = n_per_gather
+        self.ticks_per_fire: int = ticks_per_fire
 
         # Rock quantities
         self.characteristic_level: int = characteristic_level
@@ -51,6 +53,7 @@ logs = {
         name='logs',
         XP=12.5,
         level=1,
+        ticks_per_fire=30,
         characteristic_level=10,
         log_value=1.00,
     ),
@@ -58,6 +61,7 @@ logs = {
         name='oak logs',
         XP=22.5,
         level=10,
+        ticks_per_fire=30,
         characteristic_level=20,
         log_value=0.83,
     ),
@@ -65,6 +69,7 @@ logs = {
         name='willow logs',
         XP=35.,
         level=15,
+        ticks_per_fire=30,
         characteristic_level=30,
         log_value=0.69,
     ),
@@ -72,6 +77,7 @@ logs = {
         name='teak logs',
         XP=50.,
         level=20,
+        ticks_per_fire=30,
         characteristic_level=40,
         log_value=0.56,
     ),
@@ -79,6 +85,7 @@ logs = {
         name='maple logs',
         XP=65.,
         level=30,
+        ticks_per_fire=30,
         characteristic_level=50,
         log_value=0.46,
     ),
@@ -86,6 +93,7 @@ logs = {
         name='acadia logs',
         XP=85.,
         level=40,
+        ticks_per_fire=30,
         characteristic_level=60,
         log_value=0.37,
     ),
@@ -93,6 +101,7 @@ logs = {
         name='mahogany logs',
         XP=125.,
         level=60,
+        ticks_per_fire=30,
         characteristic_level=70,
         log_value=0.29,
     ),
@@ -100,6 +109,7 @@ logs = {
         name='yew logs',
         XP=175.,
         level=70,
+        ticks_per_fire=30,
         characteristic_level=80,
         log_value=0.22,
     ),
@@ -107,6 +117,7 @@ logs = {
         name='magic logs',
         XP=240.,
         level=80,
+        ticks_per_fire=30,
         characteristic_level=90,
         log_value=0.16,
     ),
@@ -114,6 +125,7 @@ logs = {
         name='elder logs',
         XP=350.,
         level=90,
+        ticks_per_fire=30,
         characteristic_level=100,
         log_value=0.11,
     ),

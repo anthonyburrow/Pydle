@@ -2,6 +2,10 @@ from ....util.structures.Activity import Activity, Status
 from ....util.structures.LootTable import LootTable
 from ....util.structures.Bank import Bank
 from ...data.skilling.cooking import Cookable, cookables
+from ...data.skilling.woodcutting import logs, Log
+
+
+fire_effect = 'cooking fire'
 
 
 class CookingActivity(Activity):
@@ -37,10 +41,18 @@ class CookingActivity(Activity):
         if skill_level < self.cookable.level:
             status['success'] = False
             status['msg'] = \
-                f'You must have Level {self.cookable.level} Cooking to cook {self.cookable.name}.'
+                f'{self.player} must have Level {self.cookable.level} Cooking to cook {self.cookable.name}.'
             return status
 
-        # Logs?
+        if not self.player.has_effect(fire_effect):
+            for log_key, log in logs.items():
+                if self.player.has(log.name):
+                    break
+            else:
+                status['success'] = False
+                status['msg'] = \
+                    f'{self.player} has no logs to make a fire.'
+                return status
 
         for item, quantity in self.cookable.items_required.items():
             if self.player.has(item, quantity):
@@ -57,6 +69,7 @@ class CookingActivity(Activity):
 
     def update_inherited(self) -> dict:
         '''Processing during each tick.'''
+        # Do checks
         ticks_per_action = self.cookable.ticks_per_action
         if self.tick_count % ticks_per_action:
             return {
@@ -74,6 +87,20 @@ class CookingActivity(Activity):
                 'msg': msg,
             }
 
+        if not self.player.has_effect(fire_effect):
+            for log_key, log in logs.items():
+                if self.player.has(log.name):
+                    self.player.remove(log.name, 1)
+                    self.player.add_effect(fire_effect, log.ticks_per_fire)
+                    break
+            else:
+                msg = f'{self.player} ran out of logs.'
+                return {
+                    'status': Status.EXIT,
+                    'msg': msg,
+                }
+
+        # Process the item
         for item, quantity in self.cookable.items_required.items():
             self.player.remove(item, quantity)
 

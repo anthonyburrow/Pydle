@@ -62,7 +62,6 @@ class Activity:
 
     def update(self) -> dict:
         '''Processing during the tick.'''
-        # Global update
 
         # Activity-specific update
         process: dict = self.update_inherited()
@@ -81,6 +80,9 @@ class Activity:
                 if XP_status['leveled_up']:
                     print_info(level_up_msg(self.player, skill))
                     self.reset_on_levelup()
+
+        # Global update
+        self.player.update_effects()
 
         # End of tick
         if process['status'] == Status.ACTIVE:
