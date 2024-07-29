@@ -65,10 +65,10 @@ class Player:
 
     # Tools
     def equip_tool(self, *args, **kwargs):
-        return self._tools.add(*args, **kwargs)
+        return self._tools.equip(*args, **kwargs)
 
     def unequip_tool(self, *args, **kwargs):
-        return self._tools.remove(*args, **kwargs)
+        return self._tools.unequip(*args, **kwargs)
 
     def get_tool(self, *args, **kwargs) -> Tool:
         return self._tools.get_tool(*args, **kwargs)

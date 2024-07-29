@@ -18,7 +18,7 @@ class Tools:
 
         self._tools: dict = {}
 
-    def add(self, tool: str) -> dict:
+    def equip(self, tool: str) -> dict:
         if not self._player.has(tool):
             msg = f'{self._player} does not have a {tool}.'
             return {
@@ -38,7 +38,7 @@ class Tools:
             tool_obj = tool_dict[tool]
             self._tools[tool_type] = tool_obj
 
-            msg = f"{tool_obj} was added to {self._player}'s toolbelt."
+            msg = f"{tool_obj} was equipped to {self._player}'s toolbelt."
             return {
                 'success': True,
                 'msg': msg,
@@ -50,7 +50,7 @@ class Tools:
             'msg': msg,
         }
 
-    def remove(self, tool_type: str) -> dict:
+    def unequip(self, tool_type: str) -> dict:
         old_tool: Tool = self.get_tool(tool_type)
         if old_tool is None:
             msg: str = f'{self._player} has no {tool_type} equipped.'
@@ -62,7 +62,7 @@ class Tools:
         self._tools[tool_type] = None
         self._player.give(old_tool.name)
 
-        msg: str = f"{old_tool} was removed {self._player}'s toolbelt."
+        msg: str = f"{old_tool} was unequipped from {self._player}'s toolbelt."
         return {
             'success': True,
             'msg': msg,
