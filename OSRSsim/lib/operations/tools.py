@@ -15,10 +15,10 @@ def interface_tools(player: Player, *args):
         print_info(msg)
         return
 
-    if subcommand == 'add':
-        operation = player.add_tool(tool)
-    elif subcommand == 'remove':
-        operation = player.remove_tool(tool)
+    if subcommand == 'equip':
+        operation = player.equip_tool(tool)
+    elif subcommand == 'unequip':
+        operation = player.unequip_tool(tool)
     else:
         msg = f'{subcommand} is not a valid argument.'
         print_info(msg)

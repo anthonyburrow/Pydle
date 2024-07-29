@@ -64,10 +64,10 @@ class Player:
         return self._bank
 
     # Tools
-    def add_tool(self, *args, **kwargs):
+    def equip_tool(self, *args, **kwargs):
         return self._tools.add(*args, **kwargs)
 
-    def remove_tool(self, *args, **kwargs):
+    def unequip_tool(self, *args, **kwargs):
         return self._tools.remove(*args, **kwargs)
 
     def get_tool(self, *args, **kwargs) -> Tool:

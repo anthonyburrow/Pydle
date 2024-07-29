@@ -23,7 +23,7 @@ def test_missing_pickaxe():
 
     # Test has pickaxe
     player.give('iron pickaxe')
-    player.add_tool('iron pickaxe')
+    player.equip_tool('iron pickaxe')
 
     activity = MiningActivity(controller, *command['args'])
     status = activity.setup()
@@ -43,7 +43,7 @@ def test_misspelled_ore():
 
     # Test misspelled command
     player.give('iron pickaxe')
-    player.add_tool('iron pickaxe')
+    player.equip_tool('iron pickaxe')
 
     activity = MiningActivity(controller, *command['args'])
     status = activity.setup()

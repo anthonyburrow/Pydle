@@ -121,7 +121,7 @@ map_operations = {
         'function': interface_tools,
         'aliases': ('t', 'tool'),
         'help_info': "Display and equip the player's tools.",
-        'use_case': ('tools', 'tools add [tool]', 'tools remove [tool]'),
+        'use_case': ('tools', 'tools equip [tool]', 'tools unequip [tool]'),
     },
 }
 
