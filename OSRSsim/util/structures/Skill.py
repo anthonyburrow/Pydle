@@ -32,15 +32,14 @@ def level_up_msg(player: Player, skill_key: str):
 
 class Skill:
 
-    def __init__(self, name: str, skill_type: str, XP: float = None):
+    def __init__(self, name: str, skill_type: str, XP: float = 0.):
         self.name: str = name
         self.skill_type: str = skill_type
 
         self.XP: float = 0.
         self.level: int = 1
-        if XP is not None:
-            self.XP = XP
-            self._adjust_level()
+        if XP > 0.:
+            self.set_XP(XP)
 
     def add_XP(self, amount: float) -> dict:
         if self.XP >= MAX_XP:
@@ -54,7 +53,9 @@ class Skill:
 
         return self._adjust_level()
 
-    def set_XP(self, value):
+    def set_XP(self, value: float):
+        if value > MAX_XP:
+            value = MAX_XP
         self.XP = value
 
         self._adjust_level()
