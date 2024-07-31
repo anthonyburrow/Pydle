@@ -88,6 +88,11 @@ map_activity = {
         'help_info': 'Begin to mix a potion.',
         'use_case': ('mix [potion]',),
     },
+    'smelt': {
+        'function': skilling.SmeltingActivity,
+        'help_info': 'Begin to smelt an ore.',
+        'use_case': ('smelt [ore]',),
+    },
 }
 
 map_operations = {

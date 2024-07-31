@@ -12,6 +12,7 @@ SKILLS = {
     # Artisan skills
     'cooking': ('Cooking', 'artisan'),
     'herblore': ('Herblore', 'artisan'),
+    'smithing': ('Smithing', 'artisan'),
 }
 
 
