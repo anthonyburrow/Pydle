@@ -6,3 +6,4 @@ from .cooking import CookingActivity
 from .cleaning import CleaningActivity
 from .mixing import MixingActivity
 from .smelting import SmeltingActivity
+from .smithing import SmithingActivity

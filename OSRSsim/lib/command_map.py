@@ -93,6 +93,11 @@ map_activity = {
         'help_info': 'Begin to smelt an ore.',
         'use_case': ('smelt [ore]',),
     },
+    'smith': {
+        'function': skilling.SmithingActivity,
+        'help_info': 'Begin to smith a metal item.',
+        'use_case': ('smith [item]',),
+    },
 }
 
 map_operations = {
