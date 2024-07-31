@@ -55,7 +55,7 @@ def interface_help(*args):
 map_activity = {
     'mine': {
         'function': skilling.MiningActivity,
-        'help_info': 'Begin a mining trip.',
+        'help_info': 'Begin to mine ore.',
         'use_case': ('mine [ore]',),
     },
     'chop': {
@@ -63,19 +63,24 @@ map_activity = {
         'help_info': 'Begin a woodcutting trip.',
         'use_case': ('chop [log]',),
     },
+    'clean': {
+        'function': skilling.CleaningActivity,
+        'help_info': 'Begin to clean herbs.',
+        'use_case': ('clean [herb]',),
+    },
     'collect': {
         'function': skilling.ForagingActivity,
-        'help_info': 'Begin a foraging trip.',
+        'help_info': 'Begin to forage for herbs.',
         'use_case': ('collect [herb]',),
     },
     'cook': {
         'function': skilling.CookingActivity,
-        'help_info': 'Begin a cooking trip.',
+        'help_info': 'Begin to cook food.',
         'use_case': ('cook [food]',),
     },
     'fish': {
         'function': skilling.FishingActivity,
-        'help_info': 'Begin a fishing trip.',
+        'help_info': 'Begin to fish.',
         'use_case': ('fish [fish]',),
     },
 }

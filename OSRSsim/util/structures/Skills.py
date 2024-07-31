@@ -11,6 +11,7 @@ SKILLS = {
     'fishing': ('Fishing', 'gathering'),
     # Artisan skills
     'cooking': ('Cooking', 'artisan'),
+    'herblore': ('Herblore', 'artisan'),
 }
 
 
