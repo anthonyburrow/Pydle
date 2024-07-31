@@ -10,6 +10,8 @@ def testing_skilling(player: Player):
         'copper fishing rod': 1,
         'iron fishing rod': 1,
         'copper helm': 1,
+        'vial': 1000,
+        'eye of newt': 1000,
     }
 
     player.give(items)

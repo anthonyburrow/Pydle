@@ -83,6 +83,11 @@ map_activity = {
         'help_info': 'Begin to fish.',
         'use_case': ('fish [fish]',),
     },
+    'mix': {
+        'function': skilling.MixingActivity,
+        'help_info': 'Begin to mix a potion.',
+        'use_case': ('mix [potion]',),
+    },
 }
 
 map_operations = {
