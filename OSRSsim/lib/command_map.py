@@ -1,11 +1,11 @@
 from .activities import skilling
 
-from .operations.bank import interface_bank
-from .operations.effects import interface_effects
-from .operations.equipment import interface_equipment
-from .operations.skills import interface_skills
-from .operations.tools import interface_tools
-from .operations.testing import interface_testing
+from .operations import interface_bank
+from .operations import interface_effects
+from .operations import interface_equipment
+from .operations import interface_skills
+from .operations import interface_tools
+from .operations import interface_testing
 
 from ..util.output import print_info
 from ..util.colors import color, color_theme
