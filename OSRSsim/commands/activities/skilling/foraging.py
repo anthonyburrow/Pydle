@@ -2,50 +2,50 @@ from ....util.structures.Activity import Activity, Status
 from ....util.structures.LootTable import LootTable
 from ....util.structures.Bank import Bank
 from ....util.structures.Tool import Tool
-from ...data.skilling.woodcutting import Log, logs
+from ....lib.skilling.foraging import Herb, herbs
 
 
-class WoodcuttingActivity(Activity):
+class ForagingActivity(Activity):
 
     def __init__(self, *args):
         super().__init__(*args)
 
-        self.log: Log = None
+        self.herb: Herb = None
         self.parse_args(*args[1:])
 
-        self.description: str = 'woodcutting'
+        self.description: str = 'foraging'
 
-        self.axe: Tool = self.player.get_tool('axe')
+        self.secateurs: Tool = self.player.get_tool('secateurs')
         self.loot_table: LootTable = None
 
     def parse_args(self, *args, **kwargs):
         '''
         Accepted command styles:
-            chop 'log'
+            collect 'herb/item'
         '''
         try:
-            self.log: Log = logs[args[0]]
+            self.herb: Herb = herbs[args[0]]
         except (IndexError, KeyError):
-            self.log: Log = None
+            self.herb: Herb = None
 
     def setup_inherited(self, status: dict) -> dict:
-        if self.log is None:
+        if self.herb is None:
             status['success'] = False
             status['msg'] = \
-                'A valid log was not given.'
+                'A valid herb was not given.'
             return status
 
-        skill_level: int = self.player.get_level('woodcutting')
-        if skill_level < self.log.level:
+        skill_level: int = self.player.get_level('foraging')
+        if skill_level < self.herb.level:
             status['success'] = False
             status['msg'] = \
-                f'You must have Level {self.log.level} Woodcutting to chop {self.log.name}.'
+                f'You must have Level {self.herb.level} Foraging to collect {self.herb.name_grimy}.'
             return status
 
-        if self.axe is None:
+        if self.secateurs is None:
             status['success'] = False
             status['msg'] = \
-                f'{self.player} does not have an axe.'
+                f'{self.player} does not have any secateurs.'
             return status
 
         self._setup_loot_table()
@@ -54,7 +54,7 @@ class WoodcuttingActivity(Activity):
 
     def update_inherited(self) -> dict:
         '''Processing during each tick.'''
-        ticks_per_use = self.axe.ticks_per_use
+        ticks_per_use = self.secateurs.ticks_per_use
         if self.tick_count % ticks_per_use:
             return {
                 'status': Status.STANDBY,
@@ -68,14 +68,14 @@ class WoodcuttingActivity(Activity):
                 'msg': self.standby_text,
             }
 
-        msg = f'Chopped {items.list_concise()}!'
+        msg = f'Collected {items.list_concise()}!'
 
         return {
             'status': Status.ACTIVE,
             'msg': msg,
             'items': items,
             'XP': {
-                'woodcutting': self.log.XP,
+                'foraging': self.herb.XP,
             },
         }
 
@@ -87,26 +87,26 @@ class WoodcuttingActivity(Activity):
 
     @property
     def startup_text(self) -> str:
-        return f'{self.player} is now chopping {self.log.name}.'
+        return f'{self.player} is now collecting {self.herb.name_grimy}.'
 
     @property
     def standby_text(self) -> str:
-        return 'Chopping...'
+        return 'Collecting...'
 
     @property
     def finish_text(self) -> str:
         return f'{self.player} finished {self.description}.'
 
     def _setup_loot_table(self):
-        woodcutting_args = (
-            self.player.get_level('woodcutting'),
-            self.axe,
+        foraging_args = (
+            self.player.get_level('foraging'),
+            self.secateurs,
         )
-        prob_success = self.log.prob_success(*woodcutting_args)
+        prob_success = self.herb.prob_success(*foraging_args)
 
         self.loot_table = LootTable()
         self.loot_table.tertiary(
-            self.log.name, prob_success, self.log.n_per_gather
+            self.herb.name_grimy, prob_success, self.herb.n_per_gather
         )
 
         # Add more stuff (pets, etc)

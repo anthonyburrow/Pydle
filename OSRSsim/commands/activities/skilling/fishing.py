@@ -1,52 +1,51 @@
 from ....util.structures.Activity import Activity, Status
 from ....util.structures.LootTable import LootTable
 from ....util.structures.Bank import Bank
-from ...data.skilling.foraging import herbs, Herb
+from ....util.structures.Tool import Tool
+from ....lib.skilling.fishing import Fish, fish
 
 
-ticks_per_clean = 2
-
-
-class CleaningActivity(Activity):
+class FishingActivity(Activity):
 
     def __init__(self, *args):
         super().__init__(*args)
 
-        self.herb: Herb = None
+        self.fish: Fish = None
         self.parse_args(*args[1:])
 
-        self.description: str = 'cleaning'
+        self.description: str = 'fishing'
 
+        self.fishing_rod: Tool = self.player.get_tool('fishing rod')
         self.loot_table: LootTable = None
 
     def parse_args(self, *args, **kwargs):
         '''
         Accepted command styles:
-            clean 'herb'
+            fish 'fish'
         '''
         try:
-            self.herb: Herb = herbs[args[0]]
+            self.fish: Fish = fish[args[0]]
         except (IndexError, KeyError):
-            self.herb: Herb = None
+            self.fish: Fish = None
 
     def setup_inherited(self, status: dict) -> dict:
-        if self.herb is None:
+        if self.fish is None:
             status['success'] = False
             status['msg'] = \
-                'A valid item was not given.'
+                'A valid fish was not given.'
             return status
 
-        skill_level: int = self.player.get_level('herblore')
-        if skill_level < self.herb.level:
+        skill_level: int = self.player.get_level('fishing')
+        if skill_level < self.fish.level:
             status['success'] = False
             status['msg'] = \
-                f'{self.player} must have Level {self.herb.level} Herblore to clean a {self.herb.name_clean}.'
+                f'You must have Level {self.fish.level} Fishing to fish {self.fish.name}.'
             return status
 
-        if not self.player.has(self.herb.name_grimy):
-            msg = f'{self.player} does not have any {self.herb.name_grimy}.'
+        if self.fishing_rod is None:
             status['success'] = False
-            status['msg'] = msg
+            status['msg'] = \
+                f'{self.player} does not have a fishing rod.'
             return status
 
         self._setup_loot_table()
@@ -55,33 +54,28 @@ class CleaningActivity(Activity):
 
     def update_inherited(self) -> dict:
         '''Processing during each tick.'''
-        # Do checks
-        if self.tick_count % ticks_per_clean:
+        ticks_per_use = self.fishing_rod.ticks_per_use
+        if self.tick_count % ticks_per_use:
             return {
                 'status': Status.STANDBY,
                 'msg': self.standby_text,
             }
 
-        if not self.player.has(self.herb.name_grimy):
-            msg = f'{self.player} ran out of {self.herb.name_grimy} to clean.'
+        items: Bank = self.loot_table.roll()
+        if not items:
             return {
-                'status': Status.EXIT,
-                'msg': msg,
+                'status': Status.STANDBY,
+                'msg': self.standby_text,
             }
 
-        # Process the item
-        self.player.remove(self.herb.name_grimy, 1)
-
-        items: Bank = self.loot_table.roll()
-
-        msg = f'Cleaned {self.herb.name_clean}!'
+        msg = f'Fished {items.list_concise()}!'
 
         return {
             'status': Status.ACTIVE,
             'msg': msg,
             'items': items,
             'XP': {
-                'herblore': self.herb.XP_clean,
+                'fishing': self.fish.XP,
             },
         }
 
@@ -93,20 +87,26 @@ class CleaningActivity(Activity):
 
     @property
     def startup_text(self) -> str:
-        return f'{self.player} is now cleaning {self.herb.name_clean}.'
+        return f'{self.player} is now fishing {self.fish.name}.'
 
     @property
     def standby_text(self) -> str:
-        return 'Cleaning...'
+        return 'Fishing...'
 
     @property
     def finish_text(self) -> str:
         return f'{self.player} finished {self.description}.'
 
     def _setup_loot_table(self):
+        fishing_args = (
+            self.player.get_level('fishing'),
+            self.fishing_rod,
+        )
+        prob_success = self.fish.prob_success(*fishing_args)
+
         self.loot_table = LootTable()
-        self.loot_table.every(
-            self.herb.name_clean, 1
+        self.loot_table.tertiary(
+            self.fish.name, prob_success, self.fish.n_per_gather
         )
 
         # Add more stuff (pets, etc)

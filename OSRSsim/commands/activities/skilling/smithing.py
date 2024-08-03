@@ -1,50 +1,64 @@
 from ....util.structures.Activity import Activity, Status
 from ....util.structures.LootTable import LootTable
 from ....util.structures.Bank import Bank
-from ...data.skilling.herblore import mixables, Mixable
+from ....lib.skilling.smithing import smithables, Smithable
+from ....lib.skilling.woodcutting import logs
 
 
-class MixingActivity(Activity):
+fire_effect = 'smithing fire'
+
+
+class SmithingActivity(Activity):
 
     def __init__(self, *args):
         super().__init__(*args)
 
-        self.mixable: Mixable = None
+        self.smithable: Smithable = None
         self.parse_args(*args[1:])
 
-        self.description: str = 'mixing'
+        self.description: str = 'smithing'
 
         self.loot_table: LootTable = None
 
     def parse_args(self, *args, **kwargs):
         '''
         Accepted command styles:
-            mix 'potion'
+            smith 'item'
         '''
         try:
-            self.mixable: Mixable = mixables[args[0]]
+            self.smithable: Smithable = smithables[' '.join(args)]
         except (IndexError, KeyError):
-            self.mixable: Mixable = None
+            self.smithable: Smithable = None
 
     def setup_inherited(self, status: dict) -> dict:
-        if self.mixable is None:
+        if self.smithable is None:
             status['success'] = False
             status['msg'] = \
                 'A valid item was not given.'
             return status
 
-        skill_level: int = self.player.get_level('herblore')
-        if skill_level < self.mixable.level:
+        skill_level: int = self.player.get_level('smithing')
+        if skill_level < self.smithable.level:
             status['success'] = False
             status['msg'] = \
-                f'{self.player} must have Level {self.mixable.level} Herblore to mix a {self.mixable.name}.'
+                f'{self.player} must have Level {self.smithable.level} Smithing to smith a {self.smithable.name}.'
             return status
 
-        for item, quantity in self.mixable.items_required.items():
+        if not self.player.has_effect(fire_effect):
+            for log_key, log in logs.items():
+                if self.player.has(log.name):
+                    break
+            else:
+                status['success'] = False
+                status['msg'] = \
+                    f'{self.player} has no logs to fuel a furnace.'
+                return status
+
+        for item, quantity in self.smithable.items_required.items():
             if self.player.has(item, quantity):
                 continue
 
-            msg = f'{self.player} does not have any {item}.'
+            msg = f'{self.player} does not have {quantity}x {item}.'
             status['success'] = False
             status['msg'] = msg
             return status
@@ -56,14 +70,14 @@ class MixingActivity(Activity):
     def update_inherited(self) -> dict:
         '''Processing during each tick.'''
         # Do checks
-        ticks_per_action = self.mixable.ticks_per_action
+        ticks_per_action = self.smithable.ticks_per_action
         if self.tick_count % ticks_per_action:
             return {
                 'status': Status.STANDBY,
                 'msg': self.standby_text,
             }
 
-        for item, quantity in self.mixable.items_required.items():
+        for item, quantity in self.smithable.items_required.items():
             if self.player.has(item, quantity):
                 continue
 
@@ -73,20 +87,33 @@ class MixingActivity(Activity):
                 'msg': msg,
             }
 
+        if not self.player.has_effect(fire_effect):
+            for log_key, log in logs.items():
+                if self.player.has(log.name):
+                    self.player.remove(log.name, 1)
+                    self.player.add_effect(fire_effect, log.ticks_per_fire)
+                    break
+            else:
+                msg = f'{self.player} ran out of logs.'
+                return {
+                    'status': Status.EXIT,
+                    'msg': msg,
+                }
+
         # Process the item
-        for item, quantity in self.mixable.items_required.items():
+        for item, quantity in self.smithable.items_required.items():
             self.player.remove(item, quantity)
 
         items: Bank = self.loot_table.roll()
 
-        msg = f'Mixed a {self.mixable.name}!'
+        msg = f'Smithed a {self.smithable.name}!'
 
         return {
             'status': Status.ACTIVE,
             'msg': msg,
             'items': items,
             'XP': {
-                'herblore': self.mixable.XP,
+                'smithing': self.smithable.XP,
             },
         }
 
@@ -98,11 +125,11 @@ class MixingActivity(Activity):
 
     @property
     def startup_text(self) -> str:
-        return f'{self.player} is now mixing {self.mixable.name}s.'
+        return f'{self.player} is now smithing a {self.smithable.name}.'
 
     @property
     def standby_text(self) -> str:
-        return 'Mixing...'
+        return 'Smithing...'
 
     @property
     def finish_text(self) -> str:
@@ -111,7 +138,7 @@ class MixingActivity(Activity):
     def _setup_loot_table(self):
         self.loot_table = LootTable()
         self.loot_table.every(
-            self.mixable.name, self.mixable.n_doses
+            self.smithable.name, 1
         )
 
         # Add more stuff (pets, etc)

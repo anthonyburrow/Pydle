@@ -1,4 +1,4 @@
-from .....util.structures.Tool import Tool
+from ....util.structures.Tool import Tool
 
 
 secateurs = {

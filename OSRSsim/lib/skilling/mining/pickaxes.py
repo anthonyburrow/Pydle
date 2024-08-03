@@ -1,63 +1,63 @@
-from .....util.structures.Tool import Tool
+from ....util.structures.Tool import Tool
 
 
-axes = {
-    'copper axe': Tool(
-        name='copper axe',
+pickaxes = {
+    'copper pickaxe': Tool(
+        name='copper pickaxe',
         level=1,
         power=0.50,
         ticks_per_use=3,
     ),
-    'iron axe': Tool(
-        name='iron axe',
+    'iron pickaxe': Tool(
+        name='iron pickaxe',
         level=10,
         power=0.55,
         ticks_per_use=3,
     ),
-    'steel axe': Tool(
-        name='steel axe',
+    'steel pickaxe': Tool(
+        name='steel pickaxe',
         level=15,
         power=0.60,
         ticks_per_use=3,
     ),
-    'mithril axe': Tool(
-        name='mithril axe',
+    'mithril pickaxe': Tool(
+        name='mithril pickaxe',
         level=20,
         power=0.65,
         ticks_per_use=3,
     ),
-    'adamant axe': Tool(
-        name='adamant axe',
+    'adamant pickaxe': Tool(
+        name='adamant pickaxe',
         level=30,
         power=0.70,
         ticks_per_use=3,
     ),
-    'rune axe': Tool(
-        name='rune axe',
+    'rune pickaxe': Tool(
+        name='rune pickaxe',
         level=40,
         power=0.75,
         ticks_per_use=3,
     ),
-    'orikalkum axe': Tool(
-        name='orikalkum axe',
+    'orikalkum pickaxe': Tool(
+        name='orikalkum pickaxe',
         level=60,
         power=0.80,
         ticks_per_use=3,
     ),
-    'necronium axe': Tool(
-        name='necronium axe',
+    'necronium pickaxe': Tool(
+        name='necronium pickaxe',
         level=70,
         power=0.85,
         ticks_per_use=3,
     ),
-    'bane axe': Tool(
-        name='bane axe',
+    'bane pickaxe': Tool(
+        name='bane pickaxe',
         level=80,
         power=0.90,
         ticks_per_use=3,
     ),
-    'elder axe': Tool(
-        name='elder axe',
+    'elder pickaxe': Tool(
+        name='elder pickaxe',
         level=90,
         power=0.95,
         ticks_per_use=3,

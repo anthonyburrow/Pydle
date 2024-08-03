@@ -1,47 +1,47 @@
 from ....util.structures.Activity import Activity, Status
 from ....util.structures.LootTable import LootTable
 from ....util.structures.Bank import Bank
-from ...data.skilling.cooking import Cookable, cookables
-from ...data.skilling.woodcutting import logs, Log
+from ....lib.skilling.smithing import smeltables, Smeltable
+from ....lib.skilling.woodcutting import logs
 
 
-fire_effect = 'cooking fire'
+fire_effect = 'smithing fire'
 
 
-class CookingActivity(Activity):
+class SmeltingActivity(Activity):
 
     def __init__(self, *args):
         super().__init__(*args)
 
-        self.cookable: Cookable = None
+        self.smeltable: Smeltable = None
         self.parse_args(*args[1:])
 
-        self.description: str = 'cooking'
+        self.description: str = 'smelting'
 
         self.loot_table: LootTable = None
 
     def parse_args(self, *args, **kwargs):
         '''
         Accepted command styles:
-            cook 'food'
+            smelt 'ore'
         '''
         try:
-            self.cookable: Cookable = cookables[args[0]]
+            self.smeltable: Smeltable = smeltables[args[0]]
         except (IndexError, KeyError):
-            self.cookable: Cookable = None
+            self.smeltable: Smeltable = None
 
     def setup_inherited(self, status: dict) -> dict:
-        if self.cookable is None:
+        if self.smeltable is None:
             status['success'] = False
             status['msg'] = \
                 'A valid item was not given.'
             return status
 
-        skill_level: int = self.player.get_level('cooking')
-        if skill_level < self.cookable.level:
+        skill_level: int = self.player.get_level('smithing')
+        if skill_level < self.smeltable.level:
             status['success'] = False
             status['msg'] = \
-                f'{self.player} must have Level {self.cookable.level} Cooking to cook {self.cookable.name}.'
+                f'{self.player} must have Level {self.smeltable.level} Smithing to smelt a {self.smeltable.name}.'
             return status
 
         if not self.player.has_effect(fire_effect):
@@ -51,10 +51,10 @@ class CookingActivity(Activity):
             else:
                 status['success'] = False
                 status['msg'] = \
-                    f'{self.player} has no logs to make a fire.'
+                    f'{self.player} has no logs to fuel a furnace.'
                 return status
 
-        for item, quantity in self.cookable.items_required.items():
+        for item, quantity in self.smeltable.items_required.items():
             if self.player.has(item, quantity):
                 continue
 
@@ -70,14 +70,14 @@ class CookingActivity(Activity):
     def update_inherited(self) -> dict:
         '''Processing during each tick.'''
         # Do checks
-        ticks_per_action = self.cookable.ticks_per_action
+        ticks_per_action = self.smeltable.ticks_per_action
         if self.tick_count % ticks_per_action:
             return {
                 'status': Status.STANDBY,
                 'msg': self.standby_text,
             }
 
-        for item, quantity in self.cookable.items_required.items():
+        for item, quantity in self.smeltable.items_required.items():
             if self.player.has(item, quantity):
                 continue
 
@@ -101,28 +101,19 @@ class CookingActivity(Activity):
                 }
 
         # Process the item
-        for item, quantity in self.cookable.items_required.items():
+        for item, quantity in self.smeltable.items_required.items():
             self.player.remove(item, quantity)
 
         items: Bank = self.loot_table.roll()
-        if not items:
-            msg = f'Burned {self.cookable.name}...'
-            return {
-                'status': Status.ACTIVE,
-                'msg': msg,
-                'XP': {
-                    'cooking': self.cookable.XP * 0.5,
-                },
-            }
 
-        msg = f'Cooked {self.cookable.name}!'
+        msg = f'Smelted a {self.smeltable.name}!'
 
         return {
             'status': Status.ACTIVE,
             'msg': msg,
             'items': items,
             'XP': {
-                'cooking': self.cookable.XP,
+                'smithing': self.smeltable.XP,
             },
         }
 
@@ -134,25 +125,20 @@ class CookingActivity(Activity):
 
     @property
     def startup_text(self) -> str:
-        return f'{self.player} is now cooking {self.cookable.name}.'
+        return f'{self.player} is now smelting a {self.smeltable.name}.'
 
     @property
     def standby_text(self) -> str:
-        return 'Cooking...'
+        return 'Smelting...'
 
     @property
     def finish_text(self) -> str:
         return f'{self.player} finished {self.description}.'
 
     def _setup_loot_table(self):
-        cooking_args = (
-            self.player.get_level('cooking'),
-        )
-        prob_success = self.cookable.prob_success(*cooking_args)
-
         self.loot_table = LootTable()
-        self.loot_table.tertiary(
-            self.cookable.name, prob_success, 1
+        self.loot_table.every(
+            self.smeltable.name, 1
         )
 
         # Add more stuff (pets, etc)

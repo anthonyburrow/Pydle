@@ -1,5 +1,5 @@
-from ....util.structures.Equippable import Equippable
-from ....util.structures.Stats import Stats
+from ...util.structures.Equippable import Equippable
+from ...util.structures.Stats import Stats
 
 
 helms = {

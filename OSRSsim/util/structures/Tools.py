@@ -1,6 +1,6 @@
 from . import Player, Tool
 from ..colors import color
-from ...lib.data.skilling import mining, woodcutting, foraging, fishing
+from ...lib.skilling import mining, woodcutting, foraging, fishing
 
 
 TOOLS = {

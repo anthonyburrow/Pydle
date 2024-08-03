@@ -1,7 +1,7 @@
 from . import Player, Equippable
 from .Stats import Stats
 from ..colors import color
-from ...lib.data.equipment import helms, bodies, legs
+from ...lib.equipment import helms, bodies, legs
 
 
 EQUIPMENT = {

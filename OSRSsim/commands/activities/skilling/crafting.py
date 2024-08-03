@@ -1,7 +1,7 @@
 from ....util.structures.Activity import Activity, Status
 from ....util.structures.LootTable import LootTable
 from ....util.structures.Bank import Bank
-from ...data.skilling.crafting import craftables, Craftable
+from ....lib.skilling.crafting import craftables, Craftable
 
 
 class CraftingActivity(Activity):

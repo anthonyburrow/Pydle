@@ -1,5 +1,5 @@
 from .commands import *
-from ..lib.command_map import map_activity, map_operations, alias_to_command
+from ..commands.command_map import map_activity, map_operations, alias_to_command
 
 
 NULL_INPUT = {
