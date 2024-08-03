@@ -12,6 +12,7 @@ def testing_skilling(player: Player):
         'copper helm': 1,
         'vial': 1000,
         'eye of newt': 1000,
+        'raw hide': 1000,
     }
 
     player.give(items)

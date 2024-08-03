@@ -5,12 +5,13 @@ from ..colors import color, skill_to_color
 # { skill_key : (Formal name, Skill type) }
 SKILLS = {
     # Gathering skills
+    'fishing': ('Fishing', 'gathering'),
+    'foraging': ('Foraging', 'gathering'),
     'mining': ('Mining', 'gathering'),
     'woodcutting': ('Woodcutting', 'gathering'),
-    'foraging': ('Foraging', 'gathering'),
-    'fishing': ('Fishing', 'gathering'),
     # Artisan skills
     'cooking': ('Cooking', 'artisan'),
+    'crafting': ('Crafting', 'artisan'),
     'herblore': ('Herblore', 'artisan'),
     'smithing': ('Smithing', 'artisan'),
 }

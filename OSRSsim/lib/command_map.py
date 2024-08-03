@@ -78,6 +78,11 @@ map_activity = {
         'help_info': 'Begin to cook food.',
         'use_case': ('cook [food]',),
     },
+    'craft': {
+        'function': skilling.CraftingActivity,
+        'help_info': 'Begin to craft items.',
+        'use_case': ('craft [item]',),
+    },
     'fish': {
         'function': skilling.FishingActivity,
         'help_info': 'Begin to fish.',
