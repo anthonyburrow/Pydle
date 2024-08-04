@@ -110,3 +110,19 @@ class ForagingActivity(Activity):
         )
 
         # Add more stuff (pets, etc)
+
+
+def detailed_info():
+    msg: list = []
+
+    msg.append('Use cases:')
+    msg.append('- collect [item]')
+
+    msg.append('')
+
+    msg.append('Available items:')
+    for herb in herbs:
+        name = str(herb).capitalize()
+        msg.append(f'- {name}')
+
+    return '\n'.join(msg)

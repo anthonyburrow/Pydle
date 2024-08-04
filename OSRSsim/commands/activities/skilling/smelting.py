@@ -142,3 +142,19 @@ class SmeltingActivity(Activity):
         )
 
         # Add more stuff (pets, etc)
+
+
+def detailed_info():
+    msg: list = []
+
+    msg.append('Use cases:')
+    msg.append('- smelt [ore]')
+
+    msg.append('')
+
+    msg.append('Available ores:')
+    for smeltable in smeltables:
+        name = str(smeltable).capitalize()
+        msg.append(f'- {name}')
+
+    return '\n'.join(msg)

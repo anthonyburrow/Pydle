@@ -142,3 +142,19 @@ class SmithingActivity(Activity):
         )
 
         # Add more stuff (pets, etc)
+
+
+def detailed_info():
+    msg: list = []
+
+    msg.append('Use cases:')
+    msg.append('- smith [item]')
+
+    msg.append('')
+
+    msg.append('Available items:')
+    for smithable in smithables:
+        name = str(smithable).capitalize()
+        msg.append(f'- {name}')
+
+    return '\n'.join(msg)

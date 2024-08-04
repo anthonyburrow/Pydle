@@ -156,3 +156,19 @@ class CookingActivity(Activity):
         )
 
         # Add more stuff (pets, etc)
+
+
+def detailed_info():
+    msg: list = []
+
+    msg.append('Use cases:')
+    msg.append('- cook [food]')
+
+    msg.append('')
+
+    msg.append('Available foods:')
+    for cookable in cookables:
+        name = str(cookable).capitalize()
+        msg.append(f'- {name}')
+
+    return '\n'.join(msg)

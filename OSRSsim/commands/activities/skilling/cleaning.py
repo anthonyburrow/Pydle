@@ -110,3 +110,19 @@ class CleaningActivity(Activity):
         )
 
         # Add more stuff (pets, etc)
+
+
+def detailed_info():
+    msg: list = []
+
+    msg.append('Use cases:')
+    msg.append('- clean [herb]')
+
+    msg.append('')
+
+    msg.append('Available herbs:')
+    for herb in herbs:
+        name = str(herb).capitalize()
+        msg.append(f'- {name}')
+
+    return '\n'.join(msg)

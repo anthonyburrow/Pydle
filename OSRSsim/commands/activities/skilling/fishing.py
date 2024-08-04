@@ -110,3 +110,19 @@ class FishingActivity(Activity):
         )
 
         # Add more stuff (pets, etc)
+
+
+def detailed_info():
+    msg: list = []
+
+    msg.append('Use cases:')
+    msg.append('- fish [fish]')
+
+    msg.append('')
+
+    msg.append('Available fish:')
+    for _fish in fish:
+        name = str(_fish).capitalize()
+        msg.append(f'- {name}')
+
+    return '\n'.join(msg)

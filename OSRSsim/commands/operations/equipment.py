@@ -26,3 +26,15 @@ def interface_equipment(player: Player, *args):
         return print_info(msg)
 
     print_info(operation['msg'])
+
+
+def detailed_info():
+    msg: list = []
+
+    msg.append('Use cases:')
+    msg.append('- equipment')
+    msg.append('- equipment equip [item]')
+    msg.append('- equipment unequip[item]')
+    msg.append('- equipment stats')
+
+    return '\n'.join(msg)

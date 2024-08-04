@@ -115,3 +115,19 @@ class MixingActivity(Activity):
         )
 
         # Add more stuff (pets, etc)
+
+
+def detailed_info():
+    msg: list = []
+
+    msg.append('Use cases:')
+    msg.append('- mix [potion]')
+
+    msg.append('')
+
+    msg.append('Available potions:')
+    for mixable in mixables:
+        name = str(mixable).capitalize()
+        msg.append(f'- {name}')
+
+    return '\n'.join(msg)

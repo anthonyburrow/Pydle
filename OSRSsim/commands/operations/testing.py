@@ -16,3 +16,12 @@ def interface_testing(player: Player, *args):
     else:
         msg = f'Unknown subcommand `{subcommand}`'
         print_info(msg)
+
+
+def detailed_info():
+    msg: list = []
+
+    msg.append('Use cases:')
+    msg.append('- testing skilling')
+
+    return '\n'.join(msg)

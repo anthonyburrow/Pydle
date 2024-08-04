@@ -110,3 +110,19 @@ class MiningActivity(Activity):
         )
 
         # Add more stuff (pets, etc)
+
+
+def detailed_info():
+    msg: list = []
+
+    msg.append('Use cases:')
+    msg.append('- mine [ore]')
+
+    msg.append('')
+
+    msg.append('Available ores:')
+    for ore in ores:
+        name = str(ore).capitalize()
+        msg.append(f'- {name}')
+
+    return '\n'.join(msg)

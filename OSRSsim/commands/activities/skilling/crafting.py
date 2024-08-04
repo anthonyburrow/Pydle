@@ -115,3 +115,19 @@ class CraftingActivity(Activity):
         )
 
         # Add more stuff (pets, etc)
+
+
+def detailed_info():
+    msg: list = []
+
+    msg.append('Use cases:')
+    msg.append('- craft [item]')
+
+    msg.append('')
+
+    msg.append('Available items:')
+    for craftable in craftables:
+        name = str(craftable).capitalize()
+        msg.append(f'- {name}')
+
+    return '\n'.join(msg)

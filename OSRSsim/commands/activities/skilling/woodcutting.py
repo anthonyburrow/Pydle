@@ -110,3 +110,19 @@ class WoodcuttingActivity(Activity):
         )
 
         # Add more stuff (pets, etc)
+
+
+def detailed_info():
+    msg: list = []
+
+    msg.append('Use cases:')
+    msg.append('- chop [log]')
+
+    msg.append('')
+
+    msg.append('Available logs:')
+    for log in logs:
+        name = str(log).capitalize()
+        msg.append(f'- {name}')
+
+    return '\n'.join(msg)

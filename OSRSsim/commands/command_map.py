@@ -1,19 +1,44 @@
 from .activities import skilling
 
-from .operations import interface_bank
-from .operations import interface_effects
-from .operations import interface_equipment
-from .operations import interface_skills
-from .operations import interface_tools
-from .operations import interface_testing
+from .operations import bank
+from .operations import effects
+from .operations import equipment
+from .operations import skills
+from .operations import tools
+from .operations import testing
 
 from ..util.output import print_info
 from ..util.colors import color, color_theme
+from ..util.structures.Player import Player
 
 
-def interface_help(*args):
+def interface_help(player: Player, *args):
+    if args:
+        subcommand = args[0]
+        if subcommand in map_activity:
+            msg_func = map_activity[subcommand]['detailed_info']
+            msg = msg_func()
+            print_info(msg, multiline=True)
+        elif subcommand in map_operations:
+            msg_func = map_operations[subcommand]['detailed_info']
+            msg = msg_func()
+            print_info(msg, multiline=True)
+        elif subcommand == 'help':
+            command_str = color('help', color_theme['UI_1'])
+            msg = f'Use `{command_str} [command]` for more detail on a command.'
+            print_info(msg)
+        else:
+            msg = f'Invalid argument {subcommand}.'
+            print_info(msg)
+
+        return
+
     msg: list = []
 
+    command_str = color('help', color_theme['UI_1'])
+    msg.append(f'Use `{command_str} [command]` for more detail on a command.')
+
+    msg.append('')
     msg.append('Operations:')
     for command, command_info in map_operations.items():
         if command == 'testing':
@@ -29,9 +54,6 @@ def interface_help(*args):
         command_str = color(command, color_theme['UI_1'])
         msg.append(f"  - {command_str} {alias_str}: {command_info['help_info']}")
 
-        for use in command_info['use_case']:
-            msg.append(f'    {use}')
-
     msg.append('')
     msg.append('Activities:')
     for command, command_info in map_activity.items():
@@ -45,108 +67,104 @@ def interface_help(*args):
         command_str = color(command, color_theme['UI_1'])
         msg.append(f"  - {command_str} {alias_str}: {command_info['help_info']}")
 
-        for use in command_info['use_case']:
-            msg.append(f'    {use}')
-
     print_info('\n'.join(msg), multiline=True)
 
 
 # Mapping
 map_activity = {
-    'mine': {
-        'function': skilling.MiningActivity,
-        'help_info': 'Begin to mine ore.',
-        'use_case': ('mine [ore]',),
-    },
     'chop': {
         'function': skilling.WoodcuttingActivity,
         'help_info': 'Begin a woodcutting trip.',
-        'use_case': ('chop [log]',),
+        'detailed_info': skilling.woodcutting.detailed_info,
     },
     'clean': {
         'function': skilling.CleaningActivity,
         'help_info': 'Begin to clean herbs.',
-        'use_case': ('clean [herb]',),
+        'detailed_info': skilling.cleaning.detailed_info,
     },
     'collect': {
         'function': skilling.ForagingActivity,
         'help_info': 'Begin to forage for herbs.',
-        'use_case': ('collect [herb]',),
+        'detailed_info': skilling.foraging.detailed_info,
     },
     'cook': {
         'function': skilling.CookingActivity,
         'help_info': 'Begin to cook food.',
-        'use_case': ('cook [food]',),
+        'detailed_info': skilling.cooking.detailed_info,
     },
     'craft': {
         'function': skilling.CraftingActivity,
         'help_info': 'Begin to craft items.',
-        'use_case': ('craft [item]',),
+        'detailed_info': skilling.crafting.detailed_info,
     },
     'fish': {
         'function': skilling.FishingActivity,
         'help_info': 'Begin to fish.',
-        'use_case': ('fish [fish]',),
+        'detailed_info': skilling.fishing.detailed_info,
+    },
+    'mine': {
+        'function': skilling.MiningActivity,
+        'help_info': 'Begin to mine ore.',
+        'detailed_info': skilling.mining.detailed_info,
     },
     'mix': {
         'function': skilling.MixingActivity,
         'help_info': 'Begin to mix a potion.',
-        'use_case': ('mix [potion]',),
+        'detailed_info': skilling.mixing.detailed_info,
     },
     'smelt': {
         'function': skilling.SmeltingActivity,
         'help_info': 'Begin to smelt an ore.',
-        'use_case': ('smelt [ore]',),
+        'detailed_info': skilling.smelting.detailed_info,
     },
     'smith': {
         'function': skilling.SmithingActivity,
         'help_info': 'Begin to smith a metal item.',
-        'use_case': ('smith [item]',),
+        'detailed_info': skilling.smithing.detailed_info,
     },
 }
 
 map_operations = {
     'bank': {
-        'function': interface_bank,
+        'function': bank.interface_bank,
         'aliases': ('b',),
         'help_info': "Display the player's bank.",
-        'use_case': ('bank',),
+        'detailed_info': bank.detailed_info,
     },
     'effects': {
-        'function': interface_effects,
+        'function': effects.interface_effects,
         'aliases': ('effect',),
         'help_info': "Display and equip the player's ongoing effects.",
-        'use_case': ('effects',),
+        'detailed_info': effects.detailed_info,
     },
     'equipment': {
-        'function': interface_equipment,
+        'function': equipment.interface_equipment,
         'aliases': ('e', 'equip'),
         'help_info': "Display and equip the player's equipment.",
-        'use_case': ('equipment', 'equipment equip [item]', 'equipment unequip[item]', 'equipment stats'),
+        'detailed_info': equipment.detailed_info,
     },
     'help': {
         'function': interface_help,
         'aliases': ('?', 'h'),
         'help_info': 'Show the list of available commands.',
-        'use_case': ('help',),
     },
     'skills': {
-        'function': interface_skills,
+        'function': skills.interface_skills,
         'aliases': ('s', 'skill'),
         'help_info': "Display the player's skills.",
-        'use_case': ('skills', 'skills [skill]'),
+        'detailed_info': skills.detailed_info,
     },
     'testing': {
-        'function': interface_testing,
+        'function': testing.interface_testing,
         'aliases': ('test',),
         'help_info': 'Non-production testing commands.',
-        'use_case': ('testing skilling',),
+        'detailed_info': testing.detailed_info,
     },
     'tools': {
-        'function': interface_tools,
+        'function': tools.interface_tools,
         'aliases': ('t', 'tool'),
         'help_info': "Display and equip the player's tools.",
-        'use_case': ('tools', 'tools equip [tool]', 'tools unequip [tool]'),
+        'detailed_info': tools.detailed_info,
     },
 }
 

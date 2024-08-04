@@ -25,3 +25,14 @@ def interface_tools(player: Player, *args):
         return
 
     print_info(operation['msg'])
+
+
+def detailed_info():
+    msg: list = []
+
+    msg.append('Use cases:')
+    msg.append('- tools')
+    msg.append('- tools equip [tool]')
+    msg.append('- tools unequip [tool]')
+
+    return '\n'.join(msg)

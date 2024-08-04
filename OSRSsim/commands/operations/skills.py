@@ -14,3 +14,13 @@ def interface_skills(player: Player, *args):
     except KeyError:
         msg = f'{skill} is not a valid skill.'
         print_info(msg)
+
+
+def detailed_info():
+    msg: list = []
+
+    msg.append('Use cases:')
+    msg.append('- skills')
+    msg.append('- skills [skill]')
+
+    return '\n'.join(msg)
