@@ -166,7 +166,7 @@ class Player:
     def save(self):
         save_output: dict = {
             'name': self.name,
-            'items': self._bank.items,
+            'items': self._bank.get_items(),
             'skills': self._skills.get_skills_XP(),
             'tools': self._tools.get_tools_names(),
             'equipment': self._equipment.get_equipment_names(),
