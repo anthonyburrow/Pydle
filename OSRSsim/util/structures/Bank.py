@@ -12,17 +12,47 @@ class Bank:
         self._items = {item: quantity for item, quantity in self._items.items()
                        if quantity > 0}
 
-    def add(self, items=None, *args, **kwargs) -> None:
+    def add(self, items: str | dict, *args, **kwargs):
         if isinstance(items, str):
-            self._add_item(items, *args, **kwargs)
+            return self._add_item(items, *args, **kwargs)
         elif isinstance(items, dict):
-            self._add_dict(items)
+            return self._add_dict(items)
         elif isinstance(items, Bank):
-            self._add_bank(items)
+            return self._add_bank(items)
 
-    def remove(self, item: str, quantity: int) -> None:
+    def _add_item(self, item: str, quantity: int = 1):
+        if quantity < 0:
+            raise ValueError(f'Tried to add negative {item} to bank')
+
+        if quantity == 0:
+            return
+
+        item = item.lower()
+        if not self.contains(item):
+            self._items[item] = quantity
+            return
+
+        self._items[item] += quantity
+
+    def _add_dict(self, items: dict):
+        for item, quantity in items.items():
+            self._add_item(item, quantity)
+
+    def _add_bank(self, bank):
+        # Could just make this a __add__, etc dunder
+        for item, quantity in bank._items.items():
+            self._add_item(item, quantity)
+
+    # Remove items
+    def remove(self, items: str | dict, *args, **kwargs):
+        if isinstance(items, str):
+            return self._remove_item(items, *args, **kwargs)
+        elif isinstance(items, dict):
+            return self._remove_dict(items)
+
+    def _remove_item(self, item: str, quantity: int):
         if not self.contains(item, quantity):
-            raise ValueError(f'Bank does not contain {quantity}x {item}')
+            raise KeyError(f'Bank does not contain {quantity}x {item}')
 
         new_quantity = self._items[item] - quantity
 
@@ -31,8 +61,18 @@ class Bank:
         else:
             self._items[item] = new_quantity
 
-    def contains(self, item: str, quantity: int = None, *args, **kwargs) -> bool:
-        # TODO: Add bank optional argument instead of single item
+    def _remove_dict(self, items: dict):
+        for item, quantity in items.items():
+            self._remove_item(item, quantity)
+
+    # Contains items
+    def contains(self, items: str | dict, *args, **kwargs) -> bool:
+        if isinstance(items, str):
+            return self._contains_item(items, *args, **kwargs)
+        elif isinstance(items, dict):
+            return self._contains_dict(items)
+
+    def _contains_item(self, item: str, quantity: int = None) -> bool:
         if item.lower() not in self._items:
             return False
 
@@ -43,6 +83,14 @@ class Bank:
 
         return in_bank >= quantity
 
+    def _contains_dict(self, items: dict) -> bool:
+        for item, quantity in items.items():
+            if not self._contains_item(item, quantity):
+                return False
+
+        return True
+
+    # Quantity
     def quantity(self, item: str) -> int:
         if not self.contains(item):
             return 0
@@ -81,25 +129,4 @@ class Bank:
     def __bool__(self) -> bool:
         return bool(self._items)
 
-    def _add_item(self, item: str, quantity: int = 1) -> None:
-        if quantity < 0:
-            raise ValueError(f'Tried to add negative {item} to bank')
 
-        if quantity == 0:
-            return
-
-        item = item.lower()
-        if not self.contains(item):
-            self._items[item] = quantity
-            return
-
-        self._items[item] += quantity
-
-    def _add_dict(self, items: dict) -> None:
-        for item, quantity in items.items():
-            self._add_item(item, quantity)
-
-    def _add_bank(self, bank) -> None:
-        # Could just make this a __add__, etc dunder
-        for item, quantity in bank._items.items():
-            self._add_item(item, quantity)
