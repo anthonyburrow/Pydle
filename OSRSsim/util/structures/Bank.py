@@ -61,7 +61,7 @@ class Bank(dict):
             return self._contains_dict(items)
 
     def _contains_item(self, item: str, quantity: int = None) -> bool:
-        if item.lower() not in self:
+        if item not in self:
             return False
 
         if quantity is None:
@@ -112,3 +112,16 @@ class Bank(dict):
         msg = f'\n'.join(msg)
 
         return msg
+
+    def __eq__(self, other_items) -> bool:
+        if not self._contains_dict(other_items):
+            return False
+
+        if not other_items._contains_dict(self):
+            return False
+
+        for item, quantity in other_items.items():
+            if self[item] != quantity:
+                return False
+
+        return True

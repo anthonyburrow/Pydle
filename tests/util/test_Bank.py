@@ -4,7 +4,6 @@ from OSRSsim.util.structures.Bank import Bank
 def test_instantiate():
     bank = Bank({'a': 1, 'b': 2, 'c': 0, 'd': -1})
 
-    # Removal of zero/negative quantities
     assert bank.contains('a')
     assert not bank.contains('c')
     assert not bank.contains('d')
@@ -22,23 +21,20 @@ def test_add():
     bank.add('a')
     bank.add('c', 5)
 
-    # Can maybe make these checks into Bank __eq__ checks
-    assert bank.quantity('a') == 4
-    assert bank.quantity('b') == 2
-    assert bank.quantity('c') == 5
+    assert bank == Bank({
+        'a': 4, 'b': 2, 'c': 5
+    })
 
     bank.add({'a': 0, 'b': 2, 'd': 1})
-
-    assert bank.quantity('a') == 4
-    assert bank.quantity('b') == 4
-    assert bank.quantity('d') == 1
+    assert bank == Bank({
+        'a': 4, 'b': 4, 'c': 5, 'd': 1
+    })
 
     new_bank = Bank({'a': 0, 'c': 3, 'e': 1})
     bank.add(new_bank)
-
-    assert bank.quantity('a') == 4
-    assert bank.quantity('c') == 8
-    assert bank.quantity('e') == 1
+    assert bank == Bank({
+        'a': 4, 'b': 4, 'c': 8, 'd': 1, 'e': 1
+    })
 
 
 def test_remove():
@@ -85,3 +81,24 @@ def test_quantity():
     assert bank.quantity('a') == 1
     assert bank.quantity('b') == 2
     assert bank.quantity('c') == 0
+
+
+def test_equality():
+    bank1 = Bank({'a': 1, 'b': 2})
+    bank2 = Bank({'a': 1, 'b': 2})
+
+    assert bank1 == bank2
+
+    bank = Bank({'a': 1})
+    assert not bank1 == bank
+
+    bank = Bank({'a': 1, 'b': 2, 'c': 1})
+    assert not bank1 == bank
+
+    bank = Bank({'a': 2, 'b': 2})
+    assert not bank1 == bank
+
+    bank = Bank()
+    assert not bank1 == bank
+
+    assert bank == Bank()
