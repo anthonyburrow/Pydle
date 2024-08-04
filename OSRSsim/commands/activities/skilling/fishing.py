@@ -10,23 +10,16 @@ class FishingActivity(Activity):
     def __init__(self, *args):
         super().__init__(*args)
 
-        self.fish: Fish = None
-        self.parse_args(*args[1:])
+        argument = ' '.join(args[1:])
+        if argument in fish:
+            self.fish: Fish = fish[argument]
+        else:
+            self.fish: Fish = None
 
         self.description: str = 'fishing'
 
         self.fishing_rod: Tool = self.player.get_tool('fishing rod')
         self.loot_table: LootTable = None
-
-    def parse_args(self, *args, **kwargs):
-        '''
-        Accepted command styles:
-            fish 'fish'
-        '''
-        try:
-            self.fish: Fish = fish[args[0]]
-        except (IndexError, KeyError):
-            self.fish: Fish = None
 
     def setup_inherited(self, status: dict) -> dict:
         if self.fish is None:

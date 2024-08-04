@@ -10,23 +10,16 @@ class WoodcuttingActivity(Activity):
     def __init__(self, *args):
         super().__init__(*args)
 
-        self.log: Log = None
-        self.parse_args(*args[1:])
+        argument = ' '.join(args[1:])
+        if argument in logs:
+            self.log: Log = logs[argument]
+        else:
+            self.log: Log = None
 
         self.description: str = 'woodcutting'
 
         self.axe: Tool = self.player.get_tool('axe')
         self.loot_table: LootTable = None
-
-    def parse_args(self, *args, **kwargs):
-        '''
-        Accepted command styles:
-            chop 'log'
-        '''
-        try:
-            self.log: Log = logs[args[0]]
-        except (IndexError, KeyError):
-            self.log: Log = None
 
     def setup_inherited(self, status: dict) -> dict:
         if self.log is None:

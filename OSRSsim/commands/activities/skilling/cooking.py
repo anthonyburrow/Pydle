@@ -13,22 +13,15 @@ class CookingActivity(Activity):
     def __init__(self, *args):
         super().__init__(*args)
 
-        self.cookable: Cookable = None
-        self.parse_args(*args[1:])
+        argument = ' '.join(args[1:])
+        if argument in cookables:
+            self.cookable: Cookable = cookables[argument]
+        else:
+            self.cookable: Cookable = None
 
         self.description: str = 'cooking'
 
         self.loot_table: LootTable = None
-
-    def parse_args(self, *args, **kwargs):
-        '''
-        Accepted command styles:
-            cook 'food'
-        '''
-        try:
-            self.cookable: Cookable = cookables[args[0]]
-        except (IndexError, KeyError):
-            self.cookable: Cookable = None
 
     def setup_inherited(self, status: dict) -> dict:
         if self.cookable is None:

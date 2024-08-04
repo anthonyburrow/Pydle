@@ -13,22 +13,15 @@ class SmithingActivity(Activity):
     def __init__(self, *args):
         super().__init__(*args)
 
-        self.smithable: Smithable = None
-        self.parse_args(*args[1:])
+        argument = ' '.join(args[1:])
+        if argument in smithables:
+            self.smithable: Smithable = smithables[argument]
+        else:
+            self.smithable: Smithable = None
 
         self.description: str = 'smithing'
 
         self.loot_table: LootTable = None
-
-    def parse_args(self, *args, **kwargs):
-        '''
-        Accepted command styles:
-            smith 'item'
-        '''
-        try:
-            self.smithable: Smithable = smithables[' '.join(args)]
-        except (IndexError, KeyError):
-            self.smithable: Smithable = None
 
     def setup_inherited(self, status: dict) -> dict:
         if self.smithable is None:

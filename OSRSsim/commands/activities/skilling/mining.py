@@ -10,23 +10,16 @@ class MiningActivity(Activity):
     def __init__(self, *args):
         super().__init__(*args)
 
-        self.ore: Ore = None
-        self.parse_args(*args[1:])
+        argument = ' '.join(args[1:])
+        if argument in ores:
+            self.ore: Ore = ores[argument]
+        else:
+            self.ore: Ore = None
 
         self.description: str = 'mining'
         self.pickaxe: Tool = self.player.get_tool('pickaxe')
 
         self.loot_table: LootTable = None
-
-    def parse_args(self, *args, **kwargs):
-        '''
-        Accepted command styles:
-            mine 'ore'
-        '''
-        try:
-            self.ore: Ore = ores[args[0]]
-        except (IndexError, KeyError):
-            self.ore: Ore = None
 
     def setup_inherited(self, status: dict) -> dict:
         if self.ore is None:

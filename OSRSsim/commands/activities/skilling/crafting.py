@@ -9,22 +9,15 @@ class CraftingActivity(Activity):
     def __init__(self, *args):
         super().__init__(*args)
 
-        self.craftable: Craftable = None
-        self.parse_args(*args[1:])
+        argument = ' '.join(args[1:])
+        if argument in craftables:
+            self.craftable: Craftable = craftables[argument]
+        else:
+            self.craftable: Craftable = None
 
         self.description: str = 'crafting'
 
         self.loot_table: LootTable = None
-
-    def parse_args(self, *args, **kwargs):
-        '''
-        Accepted command styles:
-            craft 'item'
-        '''
-        try:
-            self.craftable: Craftable = craftables[' '.join(args)]
-        except (IndexError, KeyError):
-            self.craftable: Craftable = None
 
     def setup_inherited(self, status: dict) -> dict:
         if self.craftable is None:

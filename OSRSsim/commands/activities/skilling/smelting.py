@@ -13,22 +13,15 @@ class SmeltingActivity(Activity):
     def __init__(self, *args):
         super().__init__(*args)
 
-        self.smeltable: Smeltable = None
-        self.parse_args(*args[1:])
+        argument = ' '.join(args[1:])
+        if argument in smeltables:
+            self.smeltable: Smeltable = smeltables[argument]
+        else:
+            self.smeltable: Smeltable = None
 
         self.description: str = 'smelting'
 
         self.loot_table: LootTable = None
-
-    def parse_args(self, *args, **kwargs):
-        '''
-        Accepted command styles:
-            smelt 'ore'
-        '''
-        try:
-            self.smeltable: Smeltable = smeltables[args[0]]
-        except (IndexError, KeyError):
-            self.smeltable: Smeltable = None
 
     def setup_inherited(self, status: dict) -> dict:
         if self.smeltable is None:

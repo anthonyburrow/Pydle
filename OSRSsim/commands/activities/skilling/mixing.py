@@ -9,22 +9,15 @@ class MixingActivity(Activity):
     def __init__(self, *args):
         super().__init__(*args)
 
-        self.mixable: Mixable = None
-        self.parse_args(*args[1:])
+        argument = ' '.join(args[1:])
+        if argument in mixables:
+            self.mixable: Mixable = mixables[argument]
+        else:
+            self.mixable: Mixable = None
 
         self.description: str = 'mixing'
 
         self.loot_table: LootTable = None
-
-    def parse_args(self, *args, **kwargs):
-        '''
-        Accepted command styles:
-            mix 'potion'
-        '''
-        try:
-            self.mixable: Mixable = mixables[args[0]]
-        except (IndexError, KeyError):
-            self.mixable: Mixable = None
 
     def setup_inherited(self, status: dict) -> dict:
         if self.mixable is None:

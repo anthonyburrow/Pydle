@@ -12,22 +12,15 @@ class CleaningActivity(Activity):
     def __init__(self, *args):
         super().__init__(*args)
 
-        self.herb: Herb = None
-        self.parse_args(*args[1:])
+        argument = ' '.join(args[1:])
+        if argument in herbs:
+            self.herb: Herb = herbs[argument]
+        else:
+            self.herb: Herb = None
 
         self.description: str = 'cleaning'
 
         self.loot_table: LootTable = None
-
-    def parse_args(self, *args, **kwargs):
-        '''
-        Accepted command styles:
-            clean 'herb'
-        '''
-        try:
-            self.herb: Herb = herbs[args[0]]
-        except (IndexError, KeyError):
-            self.herb: Herb = None
 
     def setup_inherited(self, status: dict) -> dict:
         if self.herb is None:
