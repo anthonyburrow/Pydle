@@ -2,9 +2,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.ticker import MultipleLocator
 
-from OSRSsim.util.ticks import Ticks
+from Pydle.util.ticks import Ticks
 
-from OSRSsim.lib.skilling.mining import ores, pickaxes
+from Pydle.lib.skilling.mining import ores, pickaxes
 
 
 def get_XP_rate(probability, XP, ticks_per_ore):

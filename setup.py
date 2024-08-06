@@ -2,9 +2,9 @@ import setuptools
 from setuptools import setup
 
 
-setup(name='OSRSsim', version='0.1',
+setup(name='Pydle', version='0.1',
       description='Idle game.',
-      url='https://github.com/anthonyburrow/OSRSsim',
+      url='https://github.com/anthonyburrow/Pydle',
       author='Anthony Burrow',
       packages=setuptools.find_packages(),
       include_package_data=True,

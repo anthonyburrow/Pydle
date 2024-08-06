@@ -1,8 +1,8 @@
-from OSRSsim.util.structures.Player import Player
-from OSRSsim.util.structures.Controller import Controller
-from OSRSsim.util.input import parse_command
+from Pydle.util.structures.Player import Player
+from Pydle.util.structures.Controller import Controller
+from Pydle.util.input import parse_command
 
-from OSRSsim.commands.activities.skilling import MiningActivity
+from Pydle.commands.activities.skilling import MiningActivity
 
 
 def test_missing_pickaxe():

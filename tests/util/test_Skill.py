@@ -1,4 +1,4 @@
-from OSRSsim.util.structures.Skill import Skill, MAX_XP, MAX_LEVEL
+from Pydle.util.structures.Skill import Skill, MAX_XP, MAX_LEVEL
 
 
 big_XP = 100_000_000_000

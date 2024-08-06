@@ -1,7 +1,7 @@
 from pathlib import Path
 
-from OSRSsim.util.structures.Player import Player
-from OSRSsim.util.structures.Controller import Controller
+from Pydle.util.structures.Player import Player
+from Pydle.util.structures.Controller import Controller
 
 
 path_save: str = './profile'

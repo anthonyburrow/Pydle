@@ -1,4 +1,4 @@
-from OSRSsim.util.structures.Bank import Bank
+from Pydle.util.structures.Bank import Bank
 
 
 def test_instantiate():
