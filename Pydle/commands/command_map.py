@@ -10,6 +10,7 @@ from .operations import testing
 from ..util.output import print_info
 from ..util.colors import color, color_theme
 from ..util.structures.Player import Player
+from ..util.commands import *
 
 
 def interface_help(player: Player, *args):
@@ -66,6 +67,15 @@ def interface_help(player: Player, *args):
 
         command_str = color(command, color_theme['UI_1'])
         msg.append(f"  - {command_str} {alias_str}: {command_info['help_info']}")
+
+    msg.append('')
+    msg.append('Other:')
+
+    command_str = color(KEY_CANCEL, color_theme['UI_1'])
+    msg.append(f'  - Hold "{command_str}" to cancel an ongoing activity.')
+
+    command_str = color(CMD_EXIT, color_theme['UI_1'])
+    msg.append(f'  - {command_str}: Exit the game.')
 
     print_info('\n'.join(msg), multiline=True)
 
