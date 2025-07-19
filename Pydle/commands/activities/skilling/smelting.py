@@ -1,4 +1,9 @@
-from ....util.structures.Activity import Activity, Status
+from ....util.structures.Activity import (
+    Activity,
+    ActivitySetupResult,
+    ActivityMsgType,
+    ActivityTickResult
+)
 from ....util.structures.LootTable import LootTable
 from ....util.structures.Bank import Bank
 from ....lib.skilling.smithing import smeltables, Smeltable
@@ -13,9 +18,8 @@ class SmeltingActivity(Activity):
     def __init__(self, *args):
         super().__init__(*args)
 
-        argument = ' '.join(args[1:])
-        if argument in smeltables:
-            self.smeltable: Smeltable = smeltables[argument]
+        if self.argument in smeltables:
+            self.smeltable: Smeltable = smeltables[self.argument]
         else:
             self.smeltable: Smeltable = None
 
@@ -23,62 +27,61 @@ class SmeltingActivity(Activity):
 
         self.loot_table: LootTable = None
 
-    def setup_inherited(self, status: dict) -> dict:
+    def setup_inherited(self) -> ActivitySetupResult:
         if self.smeltable is None:
-            status['success'] = False
-            status['msg'] = \
-                'A valid item was not given.'
-            return status
+            return ActivitySetupResult(
+                success=False,
+                msg='A valid item was not given.'
+            )
 
         skill_level: int = self.player.get_level('smithing')
         if skill_level < self.smeltable.level:
-            status['success'] = False
-            status['msg'] = \
-                f'{self.player} must have Level {self.smeltable.level} Smithing to smelt a {self.smeltable.name}.'
-            return status
+            return ActivitySetupResult(
+                success=False,
+                msg=f'{self.player} must have Level {self.smeltable.level} Smithing to smelt a {self.smeltable.name}.'
+            )
 
         if not self.player.has_effect(fire_effect):
             for log_key, log in logs.items():
                 if self.player.has(log.name):
                     break
             else:
-                status['success'] = False
-                status['msg'] = \
-                    f'{self.player} has no logs to fuel a furnace.'
-                return status
+                return ActivitySetupResult(
+                    success=False,
+                    msg=f'{self.player} has no logs to fuel a furnace.'
+                )
 
         for item, quantity in self.smeltable.items_required.items():
             if self.player.has(item, quantity):
                 continue
 
-            msg = f'{self.player} does not have {quantity}x {item}.'
-            status['success'] = False
-            status['msg'] = msg
-            return status
+            return ActivitySetupResult(
+                success=False,
+                msg=f'{self.player} does not have {quantity}x {item}.'
+            )
 
         self._setup_loot_table()
 
-        return status
+        return ActivitySetupResult(success=True)
 
-    def update_inherited(self) -> dict:
+    def update_inherited(self) -> ActivityTickResult:
         '''Processing during each tick.'''
         # Do checks
         ticks_per_action = self.smeltable.ticks_per_action
         if self.tick_count % ticks_per_action:
-            return {
-                'status': Status.STANDBY,
-                'msg': self.standby_text,
-            }
+            return ActivityTickResult(
+                msg=self.standby_text,
+                msg_type=ActivityMsgType.WAITING,
+            )
 
         for item, quantity in self.smeltable.items_required.items():
             if self.player.has(item, quantity):
                 continue
 
-            msg = f'{self.player} ran out of {item}.'
-            return {
-                'status': Status.EXIT,
-                'msg': msg,
-            }
+            return ActivityTickResult(
+                msg=f'{self.player} ran out of {item}.',
+                exit=True,
+            )
 
         if not self.player.has_effect(fire_effect):
             for log_key, log in logs.items():
@@ -87,11 +90,10 @@ class SmeltingActivity(Activity):
                     self.player.add_effect(fire_effect, log.ticks_per_fire)
                     break
             else:
-                msg = f'{self.player} ran out of logs.'
-                return {
-                    'status': Status.EXIT,
-                    'msg': msg,
-                }
+                return ActivityTickResult(
+                    msg=f'{self.player} ran out of logs.',
+                    exit=True,
+                )
 
         # Process the item
         for item, quantity in self.smeltable.items_required.items():
@@ -99,16 +101,13 @@ class SmeltingActivity(Activity):
 
         items: Bank = self.loot_table.roll()
 
-        msg = f'Smelted a {self.smeltable.name}!'
-
-        return {
-            'status': Status.ACTIVE,
-            'msg': msg,
-            'items': items,
-            'XP': {
+        return ActivityTickResult(
+            msg=f'Smelted a {self.smeltable.name}!',
+            items=items,
+            xp={
                 'smithing': self.smeltable.XP,
             },
-        }
+        )
 
     def finish_inherited(self):
         pass

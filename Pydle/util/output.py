@@ -1,3 +1,4 @@
+import traceback
 
 
 INFO_SPACING = '  '
@@ -13,6 +14,7 @@ def print_error(msg: str):
     if not msg:
         return
     print(f'Error: {msg}')
+    print(traceback.format_exc())
 
 
 def print_info(msg: str | tuple[str], multiline=False):

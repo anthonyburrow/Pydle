@@ -1,4 +1,9 @@
-from ....util.structures.Activity import Activity, Status
+from ....util.structures.Activity import (
+    Activity,
+    ActivitySetupResult,
+    ActivityMsgType,
+    ActivityTickResult
+)
 from ....util.structures.LootTable import LootTable
 from ....util.structures.Bank import Bank
 from ....util.structures.Tool import Tool
@@ -10,9 +15,8 @@ class WoodcuttingActivity(Activity):
     def __init__(self, *args):
         super().__init__(*args)
 
-        argument = ' '.join(args[1:])
-        if argument in logs:
-            self.log: Log = logs[argument]
+        if self.argument in logs:
+            self.log: Log = logs[self.argument]
         else:
             self.log: Log = None
 
@@ -21,56 +25,53 @@ class WoodcuttingActivity(Activity):
         self.axe: Tool = self.player.get_tool('axe')
         self.loot_table: LootTable = None
 
-    def setup_inherited(self, status: dict) -> dict:
+    def setup_inherited(self) -> ActivitySetupResult:
         if self.log is None:
-            status['success'] = False
-            status['msg'] = \
-                'A valid log was not given.'
-            return status
+            return ActivitySetupResult(
+                success=False,
+                msg='A valid log was not given.'
+            )
 
         skill_level: int = self.player.get_level('woodcutting')
         if skill_level < self.log.level:
-            status['success'] = False
-            status['msg'] = \
-                f'You must have Level {self.log.level} Woodcutting to chop {self.log.name}.'
-            return status
+            return ActivitySetupResult(
+                success=False,
+                msg=f'You must have Level {self.log.level} Woodcutting to chop {self.log.name}.'
+            )
 
         if self.axe is None:
-            status['success'] = False
-            status['msg'] = \
-                f'{self.player} does not have an axe.'
-            return status
+            return ActivitySetupResult(
+                success=False,
+                msg=f'{self.player} does not have an axe.'
+            )
 
         self._setup_loot_table()
 
-        return status
+        return ActivitySetupResult(success=True)
 
-    def update_inherited(self) -> dict:
+    def update_inherited(self) -> ActivityTickResult:
         '''Processing during each tick.'''
         ticks_per_use = self.axe.ticks_per_use
         if self.tick_count % ticks_per_use:
-            return {
-                'status': Status.STANDBY,
-                'msg': self.standby_text,
-            }
+            return ActivityTickResult(
+                msg=self.standby_text,
+                msg_type=ActivityMsgType.WAITING,
+            )
 
         items: Bank = self.loot_table.roll()
         if not items:
-            return {
-                'status': Status.STANDBY,
-                'msg': self.standby_text,
-            }
+            return ActivityTickResult(
+                msg=self.standby_text,
+                msg_type=ActivityMsgType.WAITING,
+            )
 
-        msg = f'Chopped {items.list_concise()}!'
-
-        return {
-            'status': Status.ACTIVE,
-            'msg': msg,
-            'items': items,
-            'XP': {
+        return ActivityTickResult(
+            msg=f'Chopped {items.list_concise()}!',
+            items=items,
+            xp={
                 'woodcutting': self.log.XP,
             },
-        }
+        )
 
     def finish_inherited(self):
         pass

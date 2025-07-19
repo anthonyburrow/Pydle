@@ -1,4 +1,9 @@
-from ....util.structures.Activity import Activity, Status
+from ....util.structures.Activity import (
+    Activity,
+    ActivitySetupResult,
+    ActivityMsgType,
+    ActivityTickResult
+)
 from ....util.structures.LootTable import LootTable
 from ....util.structures.Bank import Bank
 from ....lib.skilling.cooking import Cookable, cookables
@@ -13,9 +18,8 @@ class CookingActivity(Activity):
     def __init__(self, *args):
         super().__init__(*args)
 
-        argument = ' '.join(args[1:])
-        if argument in cookables:
-            self.cookable: Cookable = cookables[argument]
+        if self.argument in cookables:
+            self.cookable: Cookable = cookables[self.argument]
         else:
             self.cookable: Cookable = None
 
@@ -23,62 +27,61 @@ class CookingActivity(Activity):
 
         self.loot_table: LootTable = None
 
-    def setup_inherited(self, status: dict) -> dict:
+    def setup_inherited(self) -> ActivitySetupResult:
         if self.cookable is None:
-            status['success'] = False
-            status['msg'] = \
-                'A valid item was not given.'
-            return status
+            return ActivitySetupResult(
+                success=False,
+                msg='A valid item was not given.'
+            )
 
         skill_level: int = self.player.get_level('cooking')
         if skill_level < self.cookable.level:
-            status['success'] = False
-            status['msg'] = \
-                f'{self.player} must have Level {self.cookable.level} Cooking to cook {self.cookable.name}.'
-            return status
+            return ActivitySetupResult(
+                success=False,
+                msg=f'{self.player} must have Level {self.cookable.level} Cooking to cook {self.cookable.name}.'
+            )
 
         if not self.player.has_effect(fire_effect):
             for log_key, log in logs.items():
                 if self.player.has(log.name):
                     break
             else:
-                status['success'] = False
-                status['msg'] = \
-                    f'{self.player} has no logs to make a fire.'
-                return status
+                return ActivitySetupResult(
+                    success=False,
+                    msg=f'{self.player} has no logs to make a fire.'
+                )
 
         for item, quantity in self.cookable.items_required.items():
             if self.player.has(item, quantity):
                 continue
 
-            msg = f'{self.player} does not have {quantity}x {item}.'
-            status['success'] = False
-            status['msg'] = msg
-            return status
+            return ActivitySetupResult(
+                success=False,
+                msg=f'{self.player} does not have {quantity}x {item}.'
+            )
 
         self._setup_loot_table()
 
-        return status
+        return ActivitySetupResult(success=True)
 
-    def update_inherited(self) -> dict:
+    def update_inherited(self) -> ActivityTickResult:
         '''Processing during each tick.'''
         # Do checks
         ticks_per_action = self.cookable.ticks_per_action
         if self.tick_count % ticks_per_action:
-            return {
-                'status': Status.STANDBY,
-                'msg': self.standby_text,
-            }
+            return ActivityTickResult(
+                msg=self.standby_text,
+                msg_type=ActivityMsgType.WAITING,
+            )
 
         for item, quantity in self.cookable.items_required.items():
             if self.player.has(item, quantity):
                 continue
 
-            msg = f'{self.player} ran out of {item}.'
-            return {
-                'status': Status.EXIT,
-                'msg': msg,
-            }
+            return ActivityTickResult(
+                msg=f'{self.player} ran out of {item}.',
+                exit=True,
+            )
 
         if not self.player.has_effect(fire_effect):
             for log_key, log in logs.items():
@@ -87,11 +90,10 @@ class CookingActivity(Activity):
                     self.player.add_effect(fire_effect, log.ticks_per_fire)
                     break
             else:
-                msg = f'{self.player} ran out of logs.'
-                return {
-                    'status': Status.EXIT,
-                    'msg': msg,
-                }
+                return ActivityTickResult(
+                    msg=f'{self.player} ran out of logs.',
+                    exit=True,
+                )
 
         # Process the item
         for item, quantity in self.cookable.items_required.items():
@@ -99,25 +101,20 @@ class CookingActivity(Activity):
 
         items: Bank = self.loot_table.roll()
         if not items:
-            msg = f'Burned {self.cookable.name}...'
-            return {
-                'status': Status.ACTIVE,
-                'msg': msg,
-                'XP': {
+            return ActivityTickResult(
+                msg=f'Burned {self.cookable.name}...',
+                xp={
                     'cooking': self.cookable.XP * 0.5,
                 },
-            }
+            )
 
-        msg = f'Cooked {self.cookable.name}!'
-
-        return {
-            'status': Status.ACTIVE,
-            'msg': msg,
-            'items': items,
-            'XP': {
+        return ActivityTickResult(
+            msg=f'Cooked {self.cookable.name}!',
+            items=items,
+            xp={
                 'cooking': self.cookable.XP,
             },
-        }
+        )
 
     def finish_inherited(self):
         pass

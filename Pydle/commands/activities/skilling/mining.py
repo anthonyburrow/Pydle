@@ -1,4 +1,9 @@
-from ....util.structures.Activity import Activity, Status
+from ....util.structures.Activity import (
+    Activity,
+    ActivitySetupResult,
+    ActivityMsgType,
+    ActivityTickResult
+)
 from ....util.structures.LootTable import LootTable
 from ....util.structures.Bank import Bank
 from ....util.structures.Tool import Tool
@@ -10,9 +15,8 @@ class MiningActivity(Activity):
     def __init__(self, *args):
         super().__init__(*args)
 
-        argument = ' '.join(args[1:])
-        if argument in ores:
-            self.ore: Ore = ores[argument]
+        if self.argument in ores:
+            self.ore: Ore = ores[self.argument]
         else:
             self.ore: Ore = None
 
@@ -21,56 +25,53 @@ class MiningActivity(Activity):
 
         self.loot_table: LootTable = None
 
-    def setup_inherited(self, status: dict) -> dict:
+    def setup_inherited(self) -> ActivitySetupResult:
         if self.ore is None:
-            status['success'] = False
-            status['msg'] = \
-                'A valid ore was not given.'
-            return status
+            return ActivitySetupResult(
+                success=False,
+                msg='A valid ore was not given.'
+            )
 
         skill_level: int = self.player.get_level('mining')
         if skill_level < self.ore.level:
-            status['success'] = False
-            status['msg'] = \
-                f'You must have Level {self.ore.level} Mining to mine {self.ore.name}.'
-            return status
+            return ActivitySetupResult(
+                success=False,
+                msg=f'You must have Level {self.ore.level} Mining to mine {self.ore.name}.'
+            )
 
         if self.pickaxe is None:
-            status['success'] = False
-            status['msg'] = \
-                f'{self.player} does not have a pickaxe.'
-            return status
+            return ActivitySetupResult(
+                success=False,
+                msg=f'{self.player} does not have a pickaxe.'
+            )
 
         self._setup_loot_table()
 
-        return status
+        return ActivitySetupResult(success=True)
 
-    def update_inherited(self) -> dict:
+    def update_inherited(self) -> ActivityTickResult:
         '''Processing during each tick.'''
         ticks_per_use = self.pickaxe.ticks_per_use
         if self.tick_count % ticks_per_use:
-            return {
-                'status': Status.STANDBY,
-                'msg': self.standby_text,
-            }
+            return ActivityTickResult(
+                msg=self.standby_text,
+                msg_type=ActivityMsgType.WAITING,
+            )
 
         items: Bank = self.loot_table.roll()
         if not items:
-            return {
-                'status': Status.STANDBY,
-                'msg': self.standby_text,
-            }
+            return ActivityTickResult(
+                msg=self.standby_text,
+                msg_type=ActivityMsgType.WAITING,
+            )
 
-        msg = f'Mined {items.list_concise()}!'
-
-        return {
-            'status': Status.ACTIVE,
-            'msg': msg,
-            'items': items,
-            'XP': {
+        return ActivityTickResult(
+            msg=f'Mined {items.list_concise()}!',
+            items=items,
+            xp={
                 'mining': self.ore.XP,
             },
-        }
+        )
 
     def finish_inherited(self):
         pass

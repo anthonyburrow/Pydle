@@ -1,108 +1,101 @@
-import time
-import keyboard
 from enum import Enum
+from dataclasses import dataclass
+import keyboard
 
-from . import Player, Controller
+from . import Player
+from .Bank import Bank
 from .Skill import level_up_msg
-from ..ticks import Ticks
 from ..output import print_info
-from ..commands import KEY_CANCEL
 from ..misc import client_focused
+from ..commands import KEY_CANCEL
 
 
-class Status(Enum):
-    STANDBY = 0
-    ACTIVE = 1
-    EXIT = 2
+@dataclass
+class ActivitySetupResult:
+    success: bool = True
+    msg: str = ''
+
+
+class ActivityMsgType(Enum):
+    WAITING = 0
+    RESULT = 1
+
+
+@dataclass
+class ActivityTickResult:
+    msg: str = ''
+    msg_type: ActivityMsgType = ActivityMsgType.RESULT
+    exit: bool = False
+    #
+    items: Bank = None
+    xp: dict = None
 
 
 class Activity:
 
-    def __init__(self, controller: Controller, *args):
-        self.player: Player = controller.player
-        self.client_ID = controller.client_ID
+    def __init__(self, player: Player, client_ID: int, *args):
+        self.player: Player = player
+        self.client_ID: int = client_ID
+
+        self.argument = ' '.join(args)
 
         self.tick_count: int = 0
-        self.prev_status: int = Status.STANDBY
+        self.is_active: bool = False
+        self._previous_msg_type = ActivityMsgType.RESULT
 
     def setup(self) -> dict:
         '''Check to see if requirements are met to perform activity.'''
-        status = {
-            'success': True,
-            'msg': '',
-        }
+        result_setup = self.setup_inherited()
 
-        # Setup for inherited classes
-        status = self.setup_inherited(status)
+        return result_setup
 
-        return status
-
-    def begin_loop(self):
-        '''Begin activity loop.'''
+    def begin(self) -> None:
+        self.is_active = True
         print_info(self.startup_text)
 
-        while True:
-            if self._exit_command():
-                self.finish()
-                break
-
-            # TODO: async timing, ditch all the time subtract
-            start = time.time()
-
-            process = self.update()
-
-            if process['status'] == Status.EXIT:
-                self.finish()
-                break
-
-            time_passed = time.time() - start
-            time_to_wait = Ticks(1) - time_passed
-            if time_to_wait > 0:
-                time.sleep(time_to_wait)
-
-    def update(self) -> dict:
+    def update(self) -> None:
         '''Processing during the tick.'''
+        result_tick: ActivityTickResult = self.update_inherited()
 
-        # Activity-specific update
-        process: dict = self.update_inherited()
+        if (
+            result_tick.msg_type == ActivityMsgType.RESULT or
+            self._previous_msg_type != ActivityMsgType.WAITING
+        ):
+            print_info(result_tick.msg)
+        self._previous_msg_type = result_tick.msg_type
 
-        if process['status'] != self.prev_status or self.tick_count == 0:
-            self.prev_status = process['status']
-            print_info(process['msg'])
+        if result_tick.items is not None:
+            self.player.give(result_tick.items)
 
-        if 'items' in process:
-            self.player.give(process['items'])
-
-        if 'XP' in process:
-            for skill, amount in process['XP'].items():
+        if result_tick.xp is not None:
+            for skill, amount in result_tick.xp.items():
                 XP_status = self.player.add_XP(skill, amount)
 
                 if XP_status['leveled_up']:
                     print_info(level_up_msg(self.player, skill))
                     self.reset_on_levelup()
 
-        # Global update
+        # Global updates
         self.player.update_effects()
 
         # End of tick
-        if process['status'] == Status.ACTIVE:
+        if result_tick.exit or self._check_input_standby():
+            self.is_active = False
+
+        if not result_tick.exit and not self.tick_count % 50:
             self.player.save()
 
         self.tick_count += 1
 
-        return process
-
-    def finish(self) -> str:
+    def finish(self) -> None:
         print_info(self.finish_text)
 
-        msg = f'{self.player} is returning from {self.description}...'
-        print_info(msg)
+        print_info(f'{self.player} is returning from {self.description}...')
 
         self.finish_inherited()
 
-        time.sleep(Ticks(4))
-
-        return ''
-
-    def _exit_command(self) -> bool:
-        return keyboard.is_pressed(KEY_CANCEL) and client_focused(self.client_ID)
+    def _check_input_standby(self) -> bool:
+        return (
+            keyboard.is_pressed(KEY_CANCEL) and
+            client_focused(self.client_ID)
+        )

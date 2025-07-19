@@ -1,4 +1,9 @@
-from ....util.structures.Activity import Activity, Status
+from ....util.structures.Activity import (
+    Activity,
+    ActivitySetupResult,
+    ActivityMsgType,
+    ActivityTickResult
+)
 from ....util.structures.LootTable import LootTable
 from ....util.structures.Bank import Bank
 from ....lib.skilling.foraging import herbs, Herb
@@ -12,9 +17,8 @@ class CleaningActivity(Activity):
     def __init__(self, *args):
         super().__init__(*args)
 
-        argument = ' '.join(args[1:])
-        if argument in herbs:
-            self.herb: Herb = herbs[argument]
+        if self.argument in herbs:
+            self.herb: Herb = herbs[self.argument]
         else:
             self.herb: Herb = None
 
@@ -22,45 +26,44 @@ class CleaningActivity(Activity):
 
         self.loot_table: LootTable = None
 
-    def setup_inherited(self, status: dict) -> dict:
+    def setup_inherited(self) -> ActivitySetupResult:
         if self.herb is None:
-            status['success'] = False
-            status['msg'] = \
-                'A valid item was not given.'
-            return status
+            return ActivitySetupResult(
+                success=False,
+                msg='A valid item was not given.'
+            )
 
         skill_level: int = self.player.get_level('herblore')
         if skill_level < self.herb.level:
-            status['success'] = False
-            status['msg'] = \
-                f'{self.player} must have Level {self.herb.level} Herblore to clean a {self.herb.name_clean}.'
-            return status
+            return ActivitySetupResult(
+                success=False,
+                msg=f'{self.player} must have Level {self.herb.level} Herblore to clean a {self.herb.name_clean}.'
+            )
 
         if not self.player.has(self.herb.name_grimy):
-            msg = f'{self.player} does not have any {self.herb.name_grimy}.'
-            status['success'] = False
-            status['msg'] = msg
-            return status
+            return ActivitySetupResult(
+                success=False,
+                msg=f'{self.player} does not have any {self.herb.name_grimy}.'
+            )
 
         self._setup_loot_table()
 
-        return status
+        return ActivitySetupResult(success=True)
 
-    def update_inherited(self) -> dict:
+    def update_inherited(self) -> ActivityTickResult:
         '''Processing during each tick.'''
         # Do checks
         if self.tick_count % ticks_per_clean:
-            return {
-                'status': Status.STANDBY,
-                'msg': self.standby_text,
-            }
+            return ActivityTickResult(
+                msg=self.standby_text,
+                msg_type=ActivityMsgType.WAITING,
+            )
 
         if not self.player.has(self.herb.name_grimy):
-            msg = f'{self.player} ran out of {self.herb.name_grimy} to clean.'
-            return {
-                'status': Status.EXIT,
-                'msg': msg,
-            }
+            return ActivityTickResult(
+                msg=f'{self.player} ran out of {self.herb.name_grimy} to clean.',
+                exit=True,
+            )
 
         # Process the item
         self.player.remove(self.herb.name_grimy, 1)
@@ -69,14 +72,13 @@ class CleaningActivity(Activity):
 
         msg = f'Cleaned {self.herb.name_clean}!'
 
-        return {
-            'status': Status.ACTIVE,
-            'msg': msg,
-            'items': items,
-            'XP': {
+        return ActivityTickResult(
+            msg=msg,
+            items=items,
+            xp={
                 'herblore': self.herb.XP_clean,
             },
-        }
+        )
 
     def finish_inherited(self):
         pass

@@ -1,4 +1,9 @@
-from ....util.structures.Activity import Activity, Status
+from ....util.structures.Activity import (
+    Activity,
+    ActivitySetupResult,
+    ActivityMsgType,
+    ActivityTickResult
+)
 from ....util.structures.LootTable import LootTable
 from ....util.structures.Bank import Bank
 from ....lib.skilling.herblore import mixables, Mixable
@@ -9,9 +14,8 @@ class MixingActivity(Activity):
     def __init__(self, *args):
         super().__init__(*args)
 
-        argument = ' '.join(args[1:])
-        if argument in mixables:
-            self.mixable: Mixable = mixables[argument]
+        if self.argument in mixables:
+            self.mixable: Mixable = mixables[self.argument]
         else:
             self.mixable: Mixable = None
 
@@ -19,52 +23,51 @@ class MixingActivity(Activity):
 
         self.loot_table: LootTable = None
 
-    def setup_inherited(self, status: dict) -> dict:
+    def setup_inherited(self) -> ActivitySetupResult:
         if self.mixable is None:
-            status['success'] = False
-            status['msg'] = \
-                'A valid item was not given.'
-            return status
+            return ActivitySetupResult(
+                success=False,
+                msg='A valid item was not given.'
+            )
 
         skill_level: int = self.player.get_level('herblore')
         if skill_level < self.mixable.level:
-            status['success'] = False
-            status['msg'] = \
-                f'{self.player} must have Level {self.mixable.level} Herblore to mix a {self.mixable.name}.'
-            return status
+            return ActivitySetupResult(
+                success=False,
+                msg=f'{self.player} must have Level {self.mixable.level} Herblore to mix a {self.mixable.name}.'
+            )
 
         for item, quantity in self.mixable.items_required.items():
             if self.player.has(item, quantity):
                 continue
 
-            msg = f'{self.player} does not have any {item}.'
-            status['success'] = False
-            status['msg'] = msg
-            return status
+            return ActivitySetupResult(
+                success=False,
+                msg=f'{self.player} does not have any {item}.'
+            )
 
         self._setup_loot_table()
 
-        return status
+        return ActivitySetupResult(success=True)
 
-    def update_inherited(self) -> dict:
+    def update_inherited(self) -> ActivityTickResult:
         '''Processing during each tick.'''
         # Do checks
         ticks_per_action = self.mixable.ticks_per_action
         if self.tick_count % ticks_per_action:
-            return {
-                'status': Status.STANDBY,
-                'msg': self.standby_text,
-            }
+            return ActivityTickResult(
+                msg=self.standby_text,
+                msg_type=ActivityMsgType.WAITING,
+            )
 
         for item, quantity in self.mixable.items_required.items():
             if self.player.has(item, quantity):
                 continue
 
-            msg = f'{self.player} ran out of {item}.'
-            return {
-                'status': Status.EXIT,
-                'msg': msg,
-            }
+            return ActivityTickResult(
+                msg=f'{self.player} ran out of {item}.',
+                exit=True,
+            )
 
         # Process the item
         for item, quantity in self.mixable.items_required.items():
@@ -72,16 +75,13 @@ class MixingActivity(Activity):
 
         items: Bank = self.loot_table.roll()
 
-        msg = f'Mixed a {self.mixable.name}!'
-
-        return {
-            'status': Status.ACTIVE,
-            'msg': msg,
-            'items': items,
-            'XP': {
+        return ActivityTickResult(
+            msg=f'Mixed a {self.mixable.name}!',
+            items=items,
+            xp={
                 'herblore': self.mixable.XP,
             },
-        }
+        )
 
     def finish_inherited(self):
         pass
