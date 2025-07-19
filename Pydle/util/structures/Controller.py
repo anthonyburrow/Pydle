@@ -1,5 +1,6 @@
 import sys
 import time
+import threading
 
 from . import Player
 from .Activity import Activity, ActivitySetupResult
@@ -51,16 +52,15 @@ class Controller:
 
         activity.begin()
 
+        tick_duration = Ticks(1)
         while activity.is_active:
-            # TODO: async timing, ditch all the time subtract
-            time_start = time.time()
+            # Still needs work...but step in the right direction
+            thread = threading.Thread(target=activity.update)
+            thread.start()
 
-            activity.update()
+            time.sleep(tick_duration)
 
-            time_passed = time.time() - time_start
-            time_to_wait = Ticks(1) - time_passed
-            if time_to_wait > 0.:
-                time.sleep(time_to_wait)
+            thread.join()
 
         activity.finish()
         time.sleep(Ticks(4))
