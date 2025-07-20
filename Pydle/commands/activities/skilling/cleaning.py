@@ -6,7 +6,7 @@ from ....util.structures.Activity import (
 )
 from ....util.structures.LootTable import LootTable
 from ....util.structures.Bank import Bank
-from ....lib.skilling.foraging import herbs, Herb
+from ....lib.skilling.herblore import cleanables, Cleanable
 
 
 ticks_per_clean = 2
@@ -17,33 +17,36 @@ class CleaningActivity(Activity):
     def __init__(self, *args):
         super().__init__(*args)
 
-        if self.argument in herbs:
-            self.herb: Herb = herbs[self.argument]
+        if self.argument in cleanables:
+            self.cleanable: Cleanable = cleanables[self.argument]
         else:
-            self.herb: Herb = None
+            self.cleanable: Cleanable = None
 
         self.description: str = 'cleaning'
 
         self.loot_table: LootTable = None
 
     def setup_inherited(self) -> ActivitySetupResult:
-        if self.herb is None:
+        if self.cleanable is None:
             return ActivitySetupResult(
                 success=False,
                 msg='A valid item was not given.'
             )
 
         skill_level: int = self.player.get_level('herblore')
-        if skill_level < self.herb.level:
+        if skill_level < self.cleanable.level:
             return ActivitySetupResult(
                 success=False,
-                msg=f'{self.player} must have Level {self.herb.level} Herblore to clean a {self.herb.name_clean}.'
+                msg=f'{self.player} must have Level {self.cleanable.level} Herblore to clean a {self.cleanable.name}.'
             )
 
-        if not self.player.has(self.herb.name_grimy):
+        for item, quantity in self.cleanable.items_required.items():
+            if self.player.has(item, quantity):
+                continue
+
             return ActivitySetupResult(
                 success=False,
-                msg=f'{self.player} does not have any {self.herb.name_grimy}.'
+                msg=f'{self.player} does not have {quantity}x {item}.'
             )
 
         self._setup_loot_table()
@@ -59,24 +62,26 @@ class CleaningActivity(Activity):
                 msg_type=ActivityMsgType.WAITING,
             )
 
-        if not self.player.has(self.herb.name_grimy):
+        for item, quantity in self.cleanable.items_required.items():
+            if self.player.has(item, quantity):
+                continue
+
             return ActivityTickResult(
-                msg=f'{self.player} ran out of {self.herb.name_grimy} to clean.',
+                msg=f'{self.player} ran out of {item}.',
                 exit=True,
             )
 
         # Process the item
-        self.player.remove(self.herb.name_grimy, 1)
+        for item, quantity in self.cleanable.items_required.items():
+            self.player.remove(item, quantity)
 
         items: Bank = self.loot_table.roll()
 
-        msg = f'Cleaned {self.herb.name_clean}!'
-
         return ActivityTickResult(
-            msg=msg,
+            msg=f'Cleaned {self.cleanable.name}!',
             items=items,
             xp={
-                'herblore': self.herb.XP_clean,
+                'herblore': self.cleanable.XP,
             },
         )
 
@@ -88,7 +93,7 @@ class CleaningActivity(Activity):
 
     @property
     def startup_text(self) -> str:
-        return f'{self.player} is now cleaning {self.herb.name_clean}.'
+        return f'{self.player} is now cleaning {self.cleanable.name}.'
 
     @property
     def standby_text(self) -> str:
@@ -101,7 +106,7 @@ class CleaningActivity(Activity):
     def _setup_loot_table(self):
         self.loot_table = LootTable()
         self.loot_table.every(
-            self.herb.name_clean, 1
+            self.cleanable.name, 1
         )
 
         # Add more stuff (pets, etc)
@@ -116,8 +121,8 @@ def detailed_info():
     msg.append('')
 
     msg.append('Available herbs:')
-    for herb in herbs:
-        name = str(herb).capitalize()
+    for cleanable in cleanables:
+        name = str(cleanable).capitalize()
         msg.append(f'- {name}')
 
     return '\n'.join(msg)

@@ -92,11 +92,11 @@ class ForagingActivity(Activity):
         return f'{self.player} finished {self.description}.'
 
     def _setup_loot_table(self):
-        foraging_args = (
-            self.player.get_level('foraging'),
-            self.secateurs,
-        )
-        prob_success = self.herb.prob_success(*foraging_args)
+        foraging_args = {
+            'level': self.player.get_level('foraging'),
+            'tool': self.secateurs,
+        }
+        prob_success = self.herb.prob_success(**foraging_args)
 
         self.loot_table = LootTable()
         self.loot_table.tertiary(

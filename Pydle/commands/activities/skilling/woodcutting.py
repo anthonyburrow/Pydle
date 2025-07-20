@@ -92,11 +92,11 @@ class WoodcuttingActivity(Activity):
         return f'{self.player} finished {self.description}.'
 
     def _setup_loot_table(self):
-        woodcutting_args = (
-            self.player.get_level('woodcutting'),
-            self.axe,
-        )
-        prob_success = self.log.prob_success(*woodcutting_args)
+        woodcutting_args = {
+            'level': self.player.get_level('woodcutting'),
+            'tool': self.axe,
+        }
+        prob_success = self.log.prob_success(**woodcutting_args)
 
         self.loot_table = LootTable()
         self.loot_table.tertiary(

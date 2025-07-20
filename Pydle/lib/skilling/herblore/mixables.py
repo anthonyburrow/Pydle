@@ -4,7 +4,6 @@ class Mixable:
 
     def __init__(
         self,
-        # Herb properties
         name: str,
         n_doses: int,
         level: int,
@@ -12,7 +11,6 @@ class Mixable:
         items_required: dict,
         ticks_per_action: int,
     ):
-        # Herb properties
         self.name: str = name
         self.n_doses: int = n_doses
         self.level: int = level
@@ -29,7 +27,7 @@ mixables = {
         XP=25.,
         items_required={
             'vial': 3,
-            'clean guam': 1,
+            'guam': 1,
             'eye of newt': 1,
         },
         ticks_per_action=5,

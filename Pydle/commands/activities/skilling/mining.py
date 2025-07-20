@@ -92,11 +92,11 @@ class MiningActivity(Activity):
         return f'{self.player} finished {self.description}.'
 
     def _setup_loot_table(self):
-        mining_args = (
-            self.player.get_level('mining'),
-            self.pickaxe,
-        )
-        prob_success = self.ore.prob_success(*mining_args)
+        mining_args = {
+            'level': self.player.get_level('mining'),
+            'tool': self.pickaxe,
+        }
+        prob_success = self.ore.prob_success(**mining_args)
 
         self.loot_table = LootTable()
         self.loot_table.tertiary(
