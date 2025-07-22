@@ -2,7 +2,7 @@ from enum import Enum
 from dataclasses import dataclass
 import keyboard
 
-from . import Player
+from .Player import Player
 from .Bank import Bank
 from .Skill import level_up_msg
 from ..output import print_info

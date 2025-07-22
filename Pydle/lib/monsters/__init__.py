@@ -1,1 +1,1 @@
-from .monsters import monsters, Monster
+from .monsters import monsters
