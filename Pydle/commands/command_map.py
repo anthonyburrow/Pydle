@@ -1,3 +1,4 @@
+from .activities import combat
 from .activities import skilling
 
 from .operations import bank
@@ -111,6 +112,11 @@ map_activity = {
         'function': skilling.FishingActivity,
         'help_info': 'Begin to fish.',
         'detailed_info': skilling.fishing.detailed_info,
+    },
+    'kill': {
+        'function': combat.KillingActivity,
+        'help_info': 'Begin to kill a monster.',
+        'detailed_info': combat.killing.detailed_info,
     },
     'mine': {
         'function': skilling.MiningActivity,

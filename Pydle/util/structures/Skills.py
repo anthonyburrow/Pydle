@@ -14,6 +14,10 @@ SKILLS = {
     'crafting': ('Crafting', 'artisan'),
     'herblore': ('Herblore', 'artisan'),
     'smithing': ('Smithing', 'artisan'),
+    # Combat skills
+    'hitpoints': ('Hitpoints', 'combat'),
+    'attack': ('Attack', 'combat'),
+    'defense': ('Defense', 'combat'),
 }
 
 

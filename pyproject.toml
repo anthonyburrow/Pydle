@@ -1,0 +1,37 @@
+[build-system]
+requires = [
+    "setuptools"
+]
+build-backend = "setuptools.build_meta"
+
+
+[project]
+name = "Pydle"
+version = "0.0.1"
+requires-python = ">=3.13"
+authors = [
+    {name = "Anthony Burrow", email = "anthony.r.burrow@gmail.com"},
+]
+maintainers = [
+    {name = "Anthony Burrow", email = "anthony.r.burrow@gmail.com"}
+]
+description = "Terminal-based idle RPG made in Python."
+readme = "README.md"
+classifiers=[
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+]
+dependencies = [
+    "numpy",
+    "keyboard",
+    "pywin32"
+]
+
+[project.urls]
+Repository = "https://github.com/anthonyburrow/Pydle.git"
+
+[project.optional-dependencies]
+test = [
+    "pytest",
+    "matplotlib",
+]

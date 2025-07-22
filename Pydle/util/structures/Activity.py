@@ -64,10 +64,10 @@ class Activity:
             print_info(result_tick.msg)
         self._previous_msg_type = result_tick.msg_type
 
-        if result_tick.items is not None:
+        if result_tick.items:
             self.player.give(result_tick.items)
 
-        if result_tick.xp is not None:
+        if result_tick.xp:
             for skill, amount in result_tick.xp.items():
                 XP_status = self.player.add_XP(skill, amount)
 

@@ -1,4 +1,5 @@
 import numpy as np
+from typing import Self
 
 from .Bank import Bank
 
@@ -11,7 +12,7 @@ class LootTable:
         self._every_items = {}
         self._tertiary_items = {}
 
-    def add(self, item: str, quantity: int = 1, weight: float = 1.) -> None:
+    def add(self, item: str, quantity: int = 1, weight: float = 1.) -> Self:
         # This, or make the ability to add weight to the same item
         if item in self._weighted_items:
             raise KeyError(f'{item} already added to LootTable')
@@ -21,11 +22,17 @@ class LootTable:
         # Could be optimized to not do it every add...
         self._reset_weights()
 
-    def tertiary(self, item: str, probability: float, quantity: int = 1) -> None:
+        return self
+
+    def tertiary(self, item: str, probability: float, quantity: int = 1) -> Self:
         self._tertiary_items[item] = (probability, quantity)
 
-    def every(self, item: str, quantity: int = 1) -> None:
+        return self
+
+    def every(self, item: str, quantity: int = 1) -> Self:
         self._every_items[item] = quantity
+
+        return self
 
     def roll(self, quantity: int = 1) -> Bank:
         loot = Bank()

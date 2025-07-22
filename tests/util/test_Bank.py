@@ -102,3 +102,11 @@ def test_equality():
     assert not bank1 == bank
 
     assert bank == Bank()
+
+
+def test_empty():
+    bank = Bank()
+    assert not bank
+
+    bank.add({'a': 1})
+    assert bank

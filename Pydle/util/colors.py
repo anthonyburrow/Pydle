@@ -59,4 +59,8 @@ color_theme = {
     'skill_combat': LIGHT_CYAN,
     'skill_support': LIGHT_PURPLE,
     'skill_lvl99': YELLOW,
+    # Monsters
+    'monster_basic': LIGHT_PURPLE,
+    'monster_superior': LIGHT_RED,
+    'monster_boss': RED,
 }

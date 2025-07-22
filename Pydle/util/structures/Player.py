@@ -24,6 +24,8 @@ class Player:
 
         self.load(*args, **kwargs)
 
+        self.heal_full()
+
     # Player
     @property
     def name(self) -> str:
@@ -48,6 +50,24 @@ class Player:
     @property
     def skills(self) -> Skills:
         return self._skills
+
+    # Combat
+    @property
+    def hitpoints(self) -> int:
+        return self._hitpoints
+
+    def get_max_hitpoints(self) -> int:
+        return 100 * self.get_skill('hitpoints').level
+
+    def heal(self, amount: int) -> None:
+        max_hp = self.get_max_hitpoints()
+        self._hitpoints = min(max_hp, self._hitpoints + amount)
+
+    def heal_full(self) -> None:
+        self._hitpoints = self.get_max_hitpoints()
+
+    def damage(self, amount: int) -> None:
+        self._hitpoints = max(0, self._hitpoints - amount)
 
     # Items
     def give(self, *args, **kwargs):
@@ -92,6 +112,9 @@ class Player:
     @property
     def stats(self) -> Stats:
         return self._equipment.stats
+
+    def get_stat(self, stat_key: str) -> int:
+        return self.stats[stat_key]
 
     # Updated effects
     def add_effect(self, *args, **kwargs):
@@ -178,5 +201,5 @@ class Player:
 
     # Misc
     def __str__(self):
-        text: str = f'{self._name}'
+        text: str = f'{self.name}'
         return color(text, color_theme['player'])
