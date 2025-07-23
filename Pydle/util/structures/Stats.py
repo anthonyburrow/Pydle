@@ -2,44 +2,32 @@ from ..colors import color
 
 
 STATS = {
-    'ticks_per_action': {
+    'attack_speed': {
         'name': 'Attack Speed',
         'default': 3,
     },
-    'attack_melee': {
-        'name': 'Melee Attack',
+    'physical_strength': {
+        'name': 'Physical Strength',
         'default': 0,
     },
-    'attack_ranged': {
-        'name': 'Ranged Attack',
+    'physical_defense': {
+        'name': 'Physical Defense',
         'default': 0,
     },
-    'attack_magic': {
-        'name': 'Magic Attack',
+    'magical_power': {
+        'name': 'Magical Power',
         'default': 0,
     },
-    'strength_melee': {
-        'name': 'Melee Strength',
+    'magical_barrier': {
+        'name': 'Magical Barrier',
         'default': 0,
     },
-    'strength_ranged': {
-        'name': 'Ranged Strength',
+    'accuracy': {
+        'name': 'Accuracy',
         'default': 0,
     },
-    'strength_magic': {
-        'name': 'Magic Strength',
-        'default': 0,
-    },
-    'defense_melee': {
-        'name': 'Melee Defense',
-        'default': 0,
-    },
-    'defense_ranged': {
-        'name': 'Ranged Defense',
-        'default': 0,
-    },
-    'defense_magic': {
-        'name': 'Magic Defense',
+    'evasiveness': {
+        'name': 'Evasiveness',
         'default': 0,
     },
 }

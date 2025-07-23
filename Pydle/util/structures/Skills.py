@@ -18,6 +18,9 @@ SKILLS = {
     'hitpoints': ('Hitpoints', 'combat'),
     'attack': ('Attack', 'combat'),
     'defense': ('Defense', 'combat'),
+    'evasiveness': ('Evasiveness', 'combat'),
+    'strength': ('Strength', 'combat'),
+    'magic': ('Magic', 'combat'),
 }
 
 

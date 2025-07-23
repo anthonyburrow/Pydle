@@ -7,7 +7,7 @@ helms = {
         name='copper helm',
         tier=1,
         stats=Stats({
-            'defense_melee': 1,
+            'physical_defense': 1,
         })
     )
 }

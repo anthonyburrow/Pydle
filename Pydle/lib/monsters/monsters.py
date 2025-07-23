@@ -16,9 +16,9 @@ monsters = {
         ),
         'hitpoints': 100,
         'stats': Stats({
-            'ticks_per_action': 4,
-            'attack_melee': 1,
-            'defense_melee': 1,
+            'attack_speed': 4,
+            'physical_strength': 1,
+            'physical_defense': 1,
         }),
     }
 }
