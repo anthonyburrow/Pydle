@@ -19,8 +19,8 @@ class CombatEngine:
         self.monster: Monster = monster
 
     def tick(self, tick_count: int) -> CombatResult | None:
-        monster_speed: int = self.monster.get_stat('attack_speed')
-        player_speed: int = self.player.get_stat('attack_speed')
+        monster_speed: int = self.monster.attack_speed
+        player_speed: int = self.player.equipment['weapon'].attack_speed
 
         player_attacks: bool = tick_count % player_speed == 0
         monster_attacks: bool = (tick_count - 1) % monster_speed == 0

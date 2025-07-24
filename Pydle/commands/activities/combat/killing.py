@@ -31,6 +31,12 @@ class KillingActivity(Activity):
                 msg='A valid monster was not given.'
             )
 
+        if self.player.equipment['weapon'] is None:
+            return ActivitySetupResult(
+                success=False,
+                msg=f'{self.player} needs a weapon to fight!'
+            )
+
         # Checks for:
         #   - "slayer" level/rank
         #   - items required to do monster/boss

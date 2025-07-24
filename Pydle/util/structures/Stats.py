@@ -2,33 +2,23 @@ from ..colors import color
 
 
 STATS = {
-    'attack_speed': {
-        'name': 'Attack Speed',
-        'default': 3,
-    },
     'physical_strength': {
         'name': 'Physical Strength',
-        'default': 0,
     },
     'physical_defense': {
         'name': 'Physical Defense',
-        'default': 0,
     },
     'magical_power': {
         'name': 'Magical Power',
-        'default': 0,
     },
     'magical_barrier': {
         'name': 'Magical Barrier',
-        'default': 0,
     },
     'accuracy': {
         'name': 'Accuracy',
-        'default': 0,
     },
     'evasiveness': {
         'name': 'Evasiveness',
-        'default': 0,
     },
 }
 
@@ -40,9 +30,9 @@ class Stats(dict):
 
         for stat_key in STATS:
             if stats is None:
-                self[stat_key] = STATS[stat_key]['default']
+                self[stat_key] = 0
             elif stat_key not in stats:
-                self[stat_key] = STATS[stat_key]['default']
+                self[stat_key] = 0
             else:
                 self[stat_key] = stats[stat_key]
 

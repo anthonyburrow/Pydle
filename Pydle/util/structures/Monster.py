@@ -23,6 +23,7 @@ class Monster:
         loot_table: LootTable = None,
         # Combat
         hitpoints: int = 100,
+        attack_speed: int = 3,
         stats: Stats = None,
     ):
         # Info
@@ -38,6 +39,7 @@ class Monster:
         # Combat
         self.hitpoints: int = hitpoints
         self.max_hitpoints: int = hitpoints
+        self.attack_speed: int = attack_speed
         self.stats: Stats = stats
 
     def damage(self, amount: int) -> None:

@@ -19,3 +19,17 @@ class Equippable:
 
     def __str__(self):
         return color(self.name.capitalize(), color_theme['equipment'])
+
+
+class Weapon(Equippable):
+
+    def __init__(self, attack_speed: int = 3, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.attack_speed = attack_speed
+
+
+class Armor(Equippable):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
