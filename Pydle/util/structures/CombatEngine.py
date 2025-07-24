@@ -18,6 +18,73 @@ class CombatEngine:
         self.player: Player = player
         self.monster: Monster = monster
 
+        self.player_hit_chance: float = 0.
+        self.player_max_hit: int = 1
+
+        self.monster_hit_chance: float = 0.
+        self.monster_max_hit: int = 1
+
+        self.calculate_values()
+
+    def calculate_values(self):
+        # Player hit chance
+        accuracy: int = self._calculate_effective_level(
+            self.player.get_level('attack'),
+            self.player.get_stat('accuracy')
+        )
+
+        evasiveness: int = self.monster.get_stat('evasiveness')
+
+        self.player_hit_chance = self._calculate_hit_chance(
+            accuracy, evasiveness
+        )
+
+        # Monster hit chance
+        accuracy: int = self.monster.get_stat('accuracy')
+
+        evasiveness: int = self._calculate_effective_level(
+            self.player.get_level('evasiveness'),
+            self.player.get_stat('evasiveness')
+        )
+
+        self.monster_hit_chance = self._calculate_hit_chance(
+            accuracy, evasiveness
+        )
+
+        # Player max hit
+        physical_strength: int = self._calculate_effective_level(
+            self.player.get_level('strength'),
+            self.player.get_stat('physical_strength')
+        )
+        magical_power: int = self._calculate_effective_level(
+            self.player.get_level('magic'),
+            self.player.get_stat('magical_power')
+        )
+
+        physical_defense: int = self.monster.get_stat('physical_defense')
+        magical_barrier: int = self.monster.get_stat('magical_barrier')
+
+        self.player_max_hit = self._calculate_total_max_hit(
+            physical_strength, physical_defense, magical_power, magical_barrier
+        )
+
+        # Monster max hit
+        physical_strength: int = self.monster.get_stat('physical_strength')
+        magical_power: int = self.monster.get_stat('magical_power')
+
+        physical_defense: int = self._calculate_effective_level(
+            self.player.get_level('defense'),
+            self.player.get_stat('physical_defense')
+        )
+        magical_barrier: int = self._calculate_effective_level(
+            self.player.get_level('defense'),
+            self.player.get_stat('magical_barrier')
+        )
+
+        self.monster_max_hit = self._calculate_total_max_hit(
+            physical_strength, physical_defense, magical_power, magical_barrier
+        )
+
     def tick(self, tick_count: int) -> CombatResult | None:
         monster_speed: int = self.monster.attack_speed
         player_speed: int = self.player.equipment['weapon'].attack_speed
@@ -32,10 +99,10 @@ class CombatEngine:
         player_damage: int = 0
         monster_damage: int = 0
 
-        xp_per_dmg = 2.
+        xp_per_dmg: float = 2.
 
         if monster_attacks:
-            player_damage: int = self.calculate_damage_to_player(
+            player_damage = self.calculate_damage_to_player(
                 self.player, self.monster
             )
             player_damage = min(player_damage, self.player.hitpoints)
@@ -43,7 +110,7 @@ class CombatEngine:
             xp['defense'] = float(player_damage) * xp_per_dmg
 
         if player_attacks:
-            monster_damage: int = self.calculate_damage_to_monster(
+            monster_damage = self.calculate_damage_to_monster(
                 self.player, self.monster
             )
             monster_damage = min(monster_damage, self.monster.hitpoints)
@@ -61,78 +128,24 @@ class CombatEngine:
         player: Player,
         monster: Monster,
     ) -> int:
-        # Calculate hit chance
-        accuracy: int = self._calculate_effective_level(
-            player.get_level('attack'), player.get_stat('accuracy')
-        )
-
-        # Player accuracy boosts
-
-        evasiveness: int = monster.get_stat('evasiveness')
-
-        hit_chance = self._calculate_hit_chance(
-            accuracy, evasiveness
-        )
-        if rand() > hit_chance:
+        if rand() > self.player_hit_chance:
             return 0
 
-        # Calculate damage of hit
-        physical_strength: int = self._calculate_effective_level(
-            player.get_level('strength'), player.get_stat('physical_strength')
-        )
+        damage: int = randint(1, self.player_max_hit + 1)
 
-        magical_power: int = self._calculate_effective_level(
-            player.get_level('magic'), player.get_stat('magical_power')
-        )
-
-        # Player offensive boosts
-
-        physical_defense: int = monster.get_stat('physical_defense')
-
-        magical_barrier: int = monster.get_stat('magical_barrier')
-
-        return self._calculate_damage(
-            physical_strength, physical_defense, magical_power, magical_barrier
-        )
+        return damage
 
     def calculate_damage_to_player(
         self,
         player: Player,
         monster: Monster,
     ) -> int:
-        # Calculate hit chance
-        accuracy: int = monster.get_stat('accuracy')
-
-        evasiveness: int = self._calculate_effective_level(
-            player.get_level('evasiveness'), player.get_stat('evasiveness')
-        )
-
-        # Player evasiveness boosts
-
-        hit_chance = self._calculate_hit_chance(
-            accuracy, evasiveness
-        )
-        if rand() > hit_chance:
+        if rand() > self.monster_hit_chance:
             return 0
 
-        # Calculate damage of hit
-        physical_strength: int = monster.get_stat('physical_strength')
+        damage: int = randint(1, self.monster_max_hit + 1)
 
-        magical_power: int = monster.get_stat('magical_power')
-
-        physical_defense: int = self._calculate_effective_level(
-            player.get_level('defense'), player.get_stat('physical_defense')
-        )
-
-        magical_barrier: int = self._calculate_effective_level(
-            player.get_level('defense'), player.get_stat('magical_barrier')
-        )
-
-        # Player defensive boosts
-
-        return self._calculate_damage(
-            physical_strength, physical_defense, magical_power, magical_barrier
-        )
+        return damage
 
     def _calculate_effective_level(
         self,
@@ -180,10 +193,3 @@ class CombatEngine:
         max_hit: int = max_physical + max_magic
 
         return max_hit
-
-    def _calculate_damage(self, *args, **kwargs) -> int:
-        max_hit: int = self._calculate_total_max_hit(*args, **kwargs)
-
-        damage: int = randint(1, max_hit + 1)
-
-        return damage

@@ -89,7 +89,8 @@ class KillingActivity(Activity):
         self.player.heal_full()
 
     def reset_on_levelup(self):
-        pass
+        # Recalculate hit chance/max hit on levelup
+        self.combat_engine.calculate_values()
 
     @property
     def startup_text(self) -> str:
