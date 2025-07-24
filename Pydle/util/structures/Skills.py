@@ -4,6 +4,14 @@ from ..colors import color, skill_to_color
 
 # { skill_key : (Formal name, Skill type) }
 SKILLS = {
+    # Combat skills
+    'hitpoints': ('Hitpoints', 'combat'),
+    'strength': ('Strength', 'combat'),
+    'defense': ('Defense', 'combat'),
+    'magic': ('Magic', 'combat'),
+    'barrier': ('Barrier', 'combat'),
+    'accuracy': ('Accuracy', 'combat'),
+    'evasiveness': ('Evasiveness', 'combat'),
     # Gathering skills
     'fishing': ('Fishing', 'gathering'),
     'foraging': ('Foraging', 'gathering'),
@@ -14,13 +22,6 @@ SKILLS = {
     'crafting': ('Crafting', 'artisan'),
     'herblore': ('Herblore', 'artisan'),
     'smithing': ('Smithing', 'artisan'),
-    # Combat skills
-    'hitpoints': ('Hitpoints', 'combat'),
-    'attack': ('Attack', 'combat'),
-    'defense': ('Defense', 'combat'),
-    'evasiveness': ('Evasiveness', 'combat'),
-    'strength': ('Strength', 'combat'),
-    'magic': ('Magic', 'combat'),
 }
 
 

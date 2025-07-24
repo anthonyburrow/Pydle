@@ -19,7 +19,7 @@ weapons = {
         attack_speed=3,
         stats=Stats({
             'physical_strength': 4,
-            'magical_power': 1,
+            'magical_power': 0,
             'accuracy': 1,
         }),
     ),
@@ -29,7 +29,7 @@ weapons = {
         attack_speed=3,
         stats=Stats({
             'physical_strength': 6,
-            'magical_power': 1,
+            'magical_power': 0,
             'accuracy': 1,
         }),
     ),
@@ -39,7 +39,7 @@ weapons = {
         attack_speed=3,
         stats=Stats({
             'physical_strength': 8,
-            'magical_power': 1,
+            'magical_power': 0,
             'accuracy': 1,
         }),
     ),
@@ -49,7 +49,7 @@ weapons = {
         attack_speed=3,
         stats=Stats({
             'physical_strength': 11,
-            'magical_power': 2,
+            'magical_power': 0,
             'accuracy': 2,
         }),
     ),
@@ -59,7 +59,7 @@ weapons = {
         attack_speed=3,
         stats=Stats({
             'physical_strength': 14,
-            'magical_power': 3,
+            'magical_power': 0,
             'accuracy': 3,
         }),
     ),
@@ -69,7 +69,7 @@ weapons = {
         attack_speed=3,
         stats=Stats({
             'physical_strength': 20,
-            'magical_power': 4,
+            'magical_power': 0,
             'accuracy': 4,
         }),
     ),
@@ -79,7 +79,7 @@ weapons = {
         attack_speed=3,
         stats=Stats({
             'physical_strength': 24,
-            'magical_power': 5,
+            'magical_power': 0,
             'accuracy': 5,
         }),
     ),
@@ -89,7 +89,7 @@ weapons = {
         attack_speed=3,
         stats=Stats({
             'physical_strength': 27,
-            'magical_power': 5,
+            'magical_power': 0,
             'accuracy': 5,
         }),
     ),
@@ -99,7 +99,7 @@ weapons = {
         attack_speed=3,
         stats=Stats({
             'physical_strength': 30,
-            'magical_power': 6,
+            'magical_power': 0,
             'accuracy': 6,
         }),
     ),
