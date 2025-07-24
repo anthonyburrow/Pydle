@@ -102,16 +102,16 @@ class CombatEngine:
         xp_per_dmg: float = 2.
 
         if monster_attacks:
-            player_damage = self.calculate_damage_to_player(
-                self.player, self.monster
+            player_damage = self._calculate_damage(
+                self.monster_hit_chance, self.monster_max_hit
             )
             player_damage = min(player_damage, self.player.hitpoints)
             self.player.damage(player_damage)
             xp['defense'] = float(player_damage) * xp_per_dmg
 
         if player_attacks:
-            monster_damage = self.calculate_damage_to_monster(
-                self.player, self.monster
+            monster_damage = self._calculate_damage(
+                self.player_hit_chance, self.player_max_hit
             )
             monster_damage = min(monster_damage, self.monster.hitpoints)
             self.monster.damage(monster_damage)
@@ -123,27 +123,11 @@ class CombatEngine:
             xp=xp
         )
 
-    def calculate_damage_to_monster(
-        self,
-        player: Player,
-        monster: Monster,
-    ) -> int:
-        if rand() > self.player_hit_chance:
+    def _calculate_damage(self, hit_chance: float, max_hit: int) -> int:
+        if rand() > hit_chance:
             return 0
 
-        damage: int = randint(1, self.player_max_hit + 1)
-
-        return damage
-
-    def calculate_damage_to_player(
-        self,
-        player: Player,
-        monster: Monster,
-    ) -> int:
-        if rand() > self.monster_hit_chance:
-            return 0
-
-        damage: int = randint(1, self.monster_max_hit + 1)
+        damage: int = randint(1, max_hit + 1)
 
         return damage
 
