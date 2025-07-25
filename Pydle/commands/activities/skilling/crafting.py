@@ -79,7 +79,7 @@ class CraftingActivity(Activity):
             msg=f'Crafted a {self.craftable}!',
             items=items,
             xp={
-                'crafting': self.craftable.XP,
+                'crafting': self.craftable.xp,
             },
         )
 

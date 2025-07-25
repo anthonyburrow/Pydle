@@ -81,7 +81,7 @@ class CleaningActivity(Activity):
             msg=f'Cleaned {self.cleanable}!',
             items=items,
             xp={
-                'herblore': self.cleanable.XP,
+                'herblore': self.cleanable.xp,
             },
         )
 

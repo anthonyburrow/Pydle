@@ -11,7 +11,7 @@ craftables = {
     'leather': Craftable(
         name='leather',
         level=1,
-        XP=6.,
+        xp=6.,
         items_required={
             'raw hide': 1,
         },
@@ -20,7 +20,7 @@ craftables = {
     'leather gloves': Craftable(
         name='leather gloves',
         level=1,
-        XP=15.,
+        xp=15.,
         items_required={
             'leather': 1,
         },

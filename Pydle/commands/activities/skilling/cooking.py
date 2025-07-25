@@ -104,7 +104,7 @@ class CookingActivity(Activity):
             return ActivityTickResult(
                 msg=f'Burned {self.cookable}...',
                 xp={
-                    'cooking': self.cookable.XP * 0.5,
+                    'cooking': self.cookable.xp * 0.5,
                 },
             )
 
@@ -112,7 +112,7 @@ class CookingActivity(Activity):
             msg=f'Cooked {self.cookable}!',
             items=items,
             xp={
-                'cooking': self.cookable.XP,
+                'cooking': self.cookable.xp,
             },
         )
 

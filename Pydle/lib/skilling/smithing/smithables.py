@@ -14,7 +14,7 @@ smithables = {
     #
     'copper longsword': Smithable(
         name='copper longsword',
-        XP=25.,
+        xp=25.,
         level=1,
         ticks_per_action=6,
         items_required={
@@ -23,7 +23,7 @@ smithables = {
     ),
     'copper kiteshield': Smithable(
         name='copper kiteshield',
-        XP=25.,
+        xp=25.,
         level=1,
         ticks_per_action=6,
         items_required={
@@ -32,7 +32,7 @@ smithables = {
     ),
     'copper helm': Smithable(
         name='copper helm',
-        XP=25.,
+        xp=25.,
         level=1,
         ticks_per_action=6,
         items_required={
@@ -41,7 +41,7 @@ smithables = {
     ),
     'copper chestplate': Smithable(
         name='copper chestplate',
-        XP=37.5,
+        xp=37.5,
         level=1,
         ticks_per_action=6,
         items_required={
@@ -50,7 +50,7 @@ smithables = {
     ),
     'copper platelegs': Smithable(
         name='copper platelegs',
-        XP=37.5,
+        xp=37.5,
         level=1,
         ticks_per_action=6,
         items_required={
@@ -59,7 +59,7 @@ smithables = {
     ),
     'copper gauntlets': Smithable(
         name='copper gauntlets',
-        XP=12.5,
+        xp=12.5,
         level=1,
         ticks_per_action=6,
         items_required={
@@ -68,7 +68,7 @@ smithables = {
     ),
     'copper boots': Smithable(
         name='copper boots',
-        XP=12.5,
+        xp=12.5,
         level=1,
         ticks_per_action=6,
         items_required={
@@ -80,7 +80,7 @@ smithables = {
     #
     'iron longsword': Smithable(
         name='iron longsword',
-        XP=50.,
+        xp=50.,
         level=10,
         ticks_per_action=6,
         items_required={
@@ -89,7 +89,7 @@ smithables = {
     ),
     'iron kiteshield': Smithable(
         name='iron kiteshield',
-        XP=50.,
+        xp=50.,
         level=10,
         ticks_per_action=6,
         items_required={
@@ -98,7 +98,7 @@ smithables = {
     ),
     'iron helm': Smithable(
         name='iron helm',
-        XP=50.,
+        xp=50.,
         level=10,
         ticks_per_action=6,
         items_required={
@@ -107,7 +107,7 @@ smithables = {
     ),
     'iron chestplate': Smithable(
         name='iron chestplate',
-        XP=75.,
+        xp=75.,
         level=10,
         ticks_per_action=6,
         items_required={
@@ -116,7 +116,7 @@ smithables = {
     ),
     'iron platelegs': Smithable(
         name='iron platelegs',
-        XP=75.,
+        xp=75.,
         level=10,
         ticks_per_action=6,
         items_required={
@@ -125,7 +125,7 @@ smithables = {
     ),
     'iron gauntlets': Smithable(
         name='iron gauntlets',
-        XP=25.,
+        xp=25.,
         level=10,
         ticks_per_action=6,
         items_required={
@@ -134,7 +134,7 @@ smithables = {
     ),
     'iron boots': Smithable(
         name='iron boots',
-        XP=25.,
+        xp=25.,
         level=10,
         ticks_per_action=6,
         items_required={
@@ -146,7 +146,7 @@ smithables = {
     #
     'steel longsword': Smithable(
         name='steel longsword',
-        XP=75.,
+        xp=75.,
         level=15,
         ticks_per_action=6,
         items_required={
@@ -155,7 +155,7 @@ smithables = {
     ),
     'steel kiteshield': Smithable(
         name='steel kiteshield',
-        XP=75.,
+        xp=75.,
         level=15,
         ticks_per_action=6,
         items_required={
@@ -164,7 +164,7 @@ smithables = {
     ),
     'steel helm': Smithable(
         name='steel helm',
-        XP=75.,
+        xp=75.,
         level=15,
         ticks_per_action=6,
         items_required={
@@ -173,7 +173,7 @@ smithables = {
     ),
     'steel chestplate': Smithable(
         name='steel chestplate',
-        XP=112.5,
+        xp=112.5,
         level=15,
         ticks_per_action=6,
         items_required={
@@ -182,7 +182,7 @@ smithables = {
     ),
     'steel platelegs': Smithable(
         name='steel platelegs',
-        XP=112.5,
+        xp=112.5,
         level=15,
         ticks_per_action=6,
         items_required={
@@ -191,7 +191,7 @@ smithables = {
     ),
     'steel gauntlets': Smithable(
         name='steel gauntlets',
-        XP=37.5,
+        xp=37.5,
         level=15,
         ticks_per_action=6,
         items_required={
@@ -200,7 +200,7 @@ smithables = {
     ),
     'steel boots': Smithable(
         name='steel boots',
-        XP=37.5,
+        xp=37.5,
         level=15,
         ticks_per_action=6,
         items_required={
@@ -212,7 +212,7 @@ smithables = {
     #
     'mithril longsword': Smithable(
         name='mithril longsword',
-        XP=100.,
+        xp=100.,
         level=20,
         ticks_per_action=6,
         items_required={
@@ -221,7 +221,7 @@ smithables = {
     ),
     'mithril kiteshield': Smithable(
         name='mithril kiteshield',
-        XP=100.,
+        xp=100.,
         level=20,
         ticks_per_action=6,
         items_required={
@@ -230,7 +230,7 @@ smithables = {
     ),
     'mithril helm': Smithable(
         name='mithril helm',
-        XP=100.,
+        xp=100.,
         level=20,
         ticks_per_action=6,
         items_required={
@@ -239,7 +239,7 @@ smithables = {
     ),
     'mithril chestplate': Smithable(
         name='mithril chestplate',
-        XP=150.,
+        xp=150.,
         level=20,
         ticks_per_action=6,
         items_required={
@@ -248,7 +248,7 @@ smithables = {
     ),
     'mithril platelegs': Smithable(
         name='mithril platelegs',
-        XP=150.,
+        xp=150.,
         level=20,
         ticks_per_action=6,
         items_required={
@@ -257,7 +257,7 @@ smithables = {
     ),
     'mithril gauntlets': Smithable(
         name='mithril gauntlets',
-        XP=50.,
+        xp=50.,
         level=20,
         ticks_per_action=6,
         items_required={
@@ -266,7 +266,7 @@ smithables = {
     ),
     'mithril boots': Smithable(
         name='mithril boots',
-        XP=50.,
+        xp=50.,
         level=20,
         ticks_per_action=6,
         items_required={
@@ -278,7 +278,7 @@ smithables = {
     #
     'adamant longsword': Smithable(
         name='adamant longsword',
-        XP=125.,
+        xp=125.,
         level=30,
         ticks_per_action=6,
         items_required={
@@ -287,7 +287,7 @@ smithables = {
     ),
     'adamant kiteshield': Smithable(
         name='adamant kiteshield',
-        XP=125.,
+        xp=125.,
         level=30,
         ticks_per_action=6,
         items_required={
@@ -296,7 +296,7 @@ smithables = {
     ),
     'adamant helm': Smithable(
         name='adamant helm',
-        XP=125.,
+        xp=125.,
         level=30,
         ticks_per_action=6,
         items_required={
@@ -305,7 +305,7 @@ smithables = {
     ),
     'adamant chestplate': Smithable(
         name='adamant chestplate',
-        XP=187.5,
+        xp=187.5,
         level=30,
         ticks_per_action=6,
         items_required={
@@ -314,7 +314,7 @@ smithables = {
     ),
     'adamant platelegs': Smithable(
         name='adamant platelegs',
-        XP=187.5,
+        xp=187.5,
         level=30,
         ticks_per_action=6,
         items_required={
@@ -323,7 +323,7 @@ smithables = {
     ),
     'adamant gauntlets': Smithable(
         name='adamant gauntlets',
-        XP=62.5,
+        xp=62.5,
         level=30,
         ticks_per_action=6,
         items_required={
@@ -332,7 +332,7 @@ smithables = {
     ),
     'adamant boots': Smithable(
         name='adamant boots',
-        XP=62.5,
+        xp=62.5,
         level=30,
         ticks_per_action=6,
         items_required={
@@ -344,7 +344,7 @@ smithables = {
     #
     'rune longsword': Smithable(
         name='rune longsword',
-        XP=150.,
+        xp=150.,
         level=40,
         ticks_per_action=6,
         items_required={
@@ -353,7 +353,7 @@ smithables = {
     ),
     'rune kiteshield': Smithable(
         name='rune kiteshield',
-        XP=150.,
+        xp=150.,
         level=40,
         ticks_per_action=6,
         items_required={
@@ -362,7 +362,7 @@ smithables = {
     ),
     'rune helm': Smithable(
         name='rune helm',
-        XP=150.,
+        xp=150.,
         level=40,
         ticks_per_action=6,
         items_required={
@@ -371,7 +371,7 @@ smithables = {
     ),
     'rune chestplate': Smithable(
         name='rune chestplate',
-        XP=225.,
+        xp=225.,
         level=40,
         ticks_per_action=6,
         items_required={
@@ -380,7 +380,7 @@ smithables = {
     ),
     'rune platelegs': Smithable(
         name='rune platelegs',
-        XP=225.,
+        xp=225.,
         level=40,
         ticks_per_action=6,
         items_required={
@@ -389,7 +389,7 @@ smithables = {
     ),
     'rune gauntlets': Smithable(
         name='rune gauntlets',
-        XP=75.,
+        xp=75.,
         level=40,
         ticks_per_action=6,
         items_required={
@@ -398,7 +398,7 @@ smithables = {
     ),
     'rune boots': Smithable(
         name='rune boots',
-        XP=75.,
+        xp=75.,
         level=40,
         ticks_per_action=6,
         items_required={

@@ -9,7 +9,7 @@ class Gatherable:
     def __init__(
         self,
         name: str,
-        XP: float,
+        xp: float,
         level: int,
         gather_value: float,
         n_per_gather: int = 1,
@@ -18,7 +18,7 @@ class Gatherable:
         growth_rate: float = 0.15
     ):
         self.name: str = name
-        self.XP: float = XP
+        self.xp: float = xp
         self.level: int = level
         self.n_per_gather: int = n_per_gather
 

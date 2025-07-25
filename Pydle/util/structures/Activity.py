@@ -69,9 +69,9 @@ class Activity:
 
         if result_tick.xp:
             for skill, amount in result_tick.xp.items():
-                XP_status = self.player.add_XP(skill, amount)
+                xp_status = self.player.add_xp(skill, amount)
 
-                if XP_status['leveled_up']:
+                if xp_status['leveled_up']:
                     print_info(level_up_msg(self.player, skill))
                     self.reset_on_levelup()
 

@@ -69,7 +69,7 @@ class MiningActivity(Activity):
             msg=f'Mined {items.list_concise()}!',
             items=items,
             xp={
-                'mining': self.ore.XP,
+                'mining': self.ore.xp,
             },
         )
 

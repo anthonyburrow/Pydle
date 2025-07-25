@@ -69,7 +69,7 @@ class FishingActivity(Activity):
             msg=f'Fished {items.list_concise()}!',
             items=items,
             xp={
-                'fishing': self.fish.XP,
+                'fishing': self.fish.xp,
             },
         )
 

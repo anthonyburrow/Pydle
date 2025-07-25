@@ -105,7 +105,7 @@ class SmeltingActivity(Activity):
             msg=f'Smelted a {self.smeltable}!',
             items=items,
             xp={
-                'smithing': self.smeltable.XP,
+                'smithing': self.smeltable.xp,
             },
         )
 

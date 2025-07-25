@@ -11,7 +11,7 @@ cleanables = {
     'guam': Cleanable(
         name='guam',
         level=1,
-        XP=1.,
+        xp=1.,
         items_required={
             'grimy guam': 1,
         },
@@ -20,7 +20,7 @@ cleanables = {
     'marrentill': Cleanable(
         name='marrentill',
         level=10,
-        XP=2.,
+        xp=2.,
         items_required={
             'grimy marrentill': 1,
         },
@@ -29,7 +29,7 @@ cleanables = {
     'harralander': Cleanable(
         name='harralander',
         level=15,
-        XP=3.5,
+        xp=3.5,
         items_required={
             'grimy harralander': 1,
         },
@@ -38,7 +38,7 @@ cleanables = {
     'ranarr': Cleanable(
         name='ranarr',
         level=20,
-        XP=5.,
+        xp=5.,
         items_required={
             'grimy ranarr': 1,
         },
@@ -47,7 +47,7 @@ cleanables = {
     'toadflax': Cleanable(
         name='toadflax',
         level=30,
-        XP=6.5,
+        xp=6.5,
         items_required={
             'grimy toadflax': 1,
         },
@@ -56,7 +56,7 @@ cleanables = {
     'irit': Cleanable(
         name='irit',
         level=40,
-        XP=8.5,
+        xp=8.5,
         items_required={
             'grimy irit': 1,
         },
@@ -65,7 +65,7 @@ cleanables = {
     'kwuarm': Cleanable(
         name='kwuarm',
         level=50,
-        XP=10.5,
+        xp=10.5,
         items_required={
             'grimy kwuarm': 1,
         },
@@ -74,7 +74,7 @@ cleanables = {
     'avantoe': Cleanable(
         name='avantoe',
         level=60,
-        XP=12.5,
+        xp=12.5,
         items_required={
             'grimy avantoe': 1,
         },
@@ -83,7 +83,7 @@ cleanables = {
     'snapdragon': Cleanable(
         name='snapdragon',
         level=70,
-        XP=17.5,
+        xp=17.5,
         items_required={
             'grimy snapdragon': 1,
         },
@@ -92,7 +92,7 @@ cleanables = {
     'torstol': Cleanable(
         name='torstol',
         level=80,
-        XP=24.,
+        xp=24.,
         items_required={
             'grimy torstol': 1,
         },
@@ -101,7 +101,7 @@ cleanables = {
     'fellstalk': Cleanable(
         name='fellstalk',
         level=90,
-        XP=35.,
+        xp=35.,
         items_required={
             'grimy fellstalk': 1,
         },

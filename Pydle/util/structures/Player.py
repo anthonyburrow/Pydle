@@ -32,11 +32,11 @@ class Player:
         return self._name
 
     # Skills and Experience
-    def add_XP(self, *args, **kwargs) -> dict:
-        return self._skills.add_XP(*args, **kwargs)
+    def add_xp(self, *args, **kwargs) -> dict:
+        return self._skills.add_xp(*args, **kwargs)
 
-    def set_XP(self, *args, **kwargs):
-        return self._skills.set_XP(*args, **kwargs)
+    def set_xp(self, *args, **kwargs):
+        return self._skills.set_xp(*args, **kwargs)
 
     def set_level(self, *args, **kwargs):
         return self._skills.set_level(*args, **kwargs)
@@ -190,7 +190,7 @@ class Player:
         save_output: dict = {
             'name': self.name,
             'items': self._bank.get_items(),
-            'skills': self._skills.get_skills_XP(),
+            'skills': self._skills.get_skills_xp(),
             'tools': self._tools.get_tools_names(),
             'equipment': self._equipment.get_equipment_names(),
             'updated_effects': self._updated_effects.get_effects(),

@@ -105,7 +105,7 @@ class SmithingActivity(Activity):
             msg=f'Smithed a {self.smithable}!',
             items=items,
             xp={
-                'smithing': self.smithable.XP,
+                'smithing': self.smithable.xp,
             },
         )
 

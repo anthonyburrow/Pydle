@@ -14,7 +14,7 @@ mixables = {
         name='attack potion',
         n_doses=3,
         level=1,
-        XP=25.,
+        xp=25.,
         items_required={
             'vial': 3,
             'guam': 1,

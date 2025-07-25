@@ -69,7 +69,7 @@ class WoodcuttingActivity(Activity):
             msg=f'Chopped {items.list_concise()}!',
             items=items,
             xp={
-                'woodcutting': self.log.XP,
+                'woodcutting': self.log.xp,
             },
         )
 

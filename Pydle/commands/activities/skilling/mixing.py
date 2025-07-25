@@ -79,7 +79,7 @@ class MixingActivity(Activity):
             msg=f'Mixed a {self.mixable}!',
             items=items,
             xp={
-                'herblore': self.mixable.XP,
+                'herblore': self.mixable.xp,
             },
         )
 

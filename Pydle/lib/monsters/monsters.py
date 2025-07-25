@@ -8,7 +8,7 @@ monsters = {
         'name': 'goblin',
         'level': 1,
         'tier': MonsterTier.BASIC,
-        'XP': 10.,
+        'xp': 10.,
         'loot_table': (
             LootTable()
             .every('bones')

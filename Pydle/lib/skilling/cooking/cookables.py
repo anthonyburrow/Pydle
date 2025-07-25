@@ -44,7 +44,7 @@ cookables = {
     'shrimp': Cookable(
         name='shrimp',
         items_required={'raw shrimp': 1},
-        XP=12.5,
+        xp=12.5,
         level=1,
         ticks_per_action=3,
         characteristic_level=10,
@@ -53,7 +53,7 @@ cookables = {
     'herring': Cookable(
         name='herring',
         items_required={'raw herring': 1},
-        XP=22.5,
+        xp=22.5,
         level=10,
         ticks_per_action=3,
         characteristic_level=20,
@@ -62,7 +62,7 @@ cookables = {
     'bass': Cookable(
         name='bass',
         items_required={'raw bass': 1},
-        XP=35.,
+        xp=35.,
         level=15,
         ticks_per_action=3,
         characteristic_level=30,
@@ -71,7 +71,7 @@ cookables = {
     'trout': Cookable(
         name='trout',
         items_required={'raw trout': 1},
-        XP=50.,
+        xp=50.,
         level=20,
         ticks_per_action=3,
         characteristic_level=40,
@@ -80,7 +80,7 @@ cookables = {
     'salmon': Cookable(
         name='salmon',
         items_required={'raw salmon': 1},
-        XP=65.,
+        xp=65.,
         level=30,
         ticks_per_action=3,
         characteristic_level=50,
@@ -89,7 +89,7 @@ cookables = {
     'lobster': Cookable(
         name='lobster',
         items_required={'raw lobster': 1},
-        XP=85.,
+        xp=85.,
         level=40,
         ticks_per_action=3,
         characteristic_level=60,
@@ -98,7 +98,7 @@ cookables = {
     'swordfish': Cookable(
         name='swordfish',
         items_required={'raw swordfish': 1},
-        XP=125.,
+        xp=125.,
         level=60,
         ticks_per_action=3,
         characteristic_level=70,
@@ -107,7 +107,7 @@ cookables = {
     'shark': Cookable(
         name='shark',
         items_required={'raw shark': 1},
-        XP=175.,
+        xp=175.,
         level=70,
         ticks_per_action=3,
         characteristic_level=80,
@@ -116,7 +116,7 @@ cookables = {
     'anglerfish': Cookable(
         name='anglerfish',
         items_required={'raw anglerfish': 1},
-        XP=240.,
+        xp=240.,
         level=80,
         ticks_per_action=3,
         characteristic_level=90,
@@ -125,7 +125,7 @@ cookables = {
     'whale': Cookable(
         name='whale',
         items_required={'raw whale': 1},
-        XP=350.,
+        xp=350.,
         level=90,
         ticks_per_action=3,
         characteristic_level=100,

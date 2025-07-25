@@ -36,14 +36,14 @@ class Skills:
     def get_skills(self) -> dict:
         return {skill_key: self.get_skill(skill_key) for skill_key in SKILLS}
 
-    def get_skills_XP(self) -> dict:
-        return {skill_key: self.get_skill(skill_key).XP for skill_key in SKILLS}
+    def get_skills_xp(self) -> dict:
+        return {skill_key: self.get_skill(skill_key).xp for skill_key in SKILLS}
 
-    def add_XP(self, skill_key: str, XP: float):
-        return self.get_skill(skill_key).add_XP(XP)
+    def add_xp(self, skill_key: str, xp: float):
+        return self.get_skill(skill_key).add_xp(xp)
 
-    def set_XP(self, skill_key: str, XP: float):
-        return self.get_skill(skill_key).set_XP(XP)
+    def set_xp(self, skill_key: str, xp: float):
+        return self.get_skill(skill_key).set_xp(xp)
 
     def set_level(self, skill_key: str, level: int):
         return self.get_skill(skill_key).set_level(level)
@@ -61,8 +61,8 @@ class Skills:
                 self._skills[skill_key] = Skill(*skill_info)
                 continue
 
-            skill_XP = skills_dict[skill_key]
-            self._skills[skill_key] = Skill(*skill_info, XP=skill_XP)
+            skill_xp = skills_dict[skill_key]
+            self._skills[skill_key] = Skill(*skill_info, xp=skill_xp)
 
     @property
     def skills(self) -> dict:
@@ -78,7 +78,7 @@ class Skills:
                 skill_to_color(skill.skill_type),
                 justify=just_amount,
             )
-            skill_line: str = f'{name} | Lvl {skill.level:<2} ({skill.XP:,.0f} EXP)'
+            skill_line: str = f'{name} | Lvl {skill.level:<2} ({skill.xp:,.0f} Exp)'
             msg.append(skill_line)
 
         msg = '\n'.join(msg)

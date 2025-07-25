@@ -69,7 +69,7 @@ class ForagingActivity(Activity):
             msg=f'Collected {items.list_concise()}!',
             items=items,
             xp={
-                'foraging': self.herb.XP,
+                'foraging': self.herb.xp,
             },
         )
 

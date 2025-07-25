@@ -7,11 +7,11 @@ from Pydle.util.ticks import Ticks
 from Pydle.lib.skilling.mining import ores, pickaxes
 
 
-def get_XP_rate(probability, XP, ticks_per_ore):
+def get_xp_rate(probability, xp, ticks_per_ore):
     n_ticks = 3600. / Ticks()
     n_attempts = int(n_ticks / ticks_per_ore)
     n_success = int(n_attempts * probability)
-    total_xp = n_success * XP
+    total_xp = n_success * xp
     return total_xp
 
 
@@ -22,7 +22,7 @@ def test_probability_curve():
 
     for ore, pickaxe in zip(ores.values(), pickaxes.values()):
         probs = np.array([ore.prob_success(lvl, pickaxe) for lvl in levels])
-        xp_rates = np.array([get_XP_rate(p, ore.XP, pickaxe.ticks_per_use) for p in probs])
+        xp_rates = np.array([get_xp_rate(p, ore.xp, pickaxe.ticks_per_use) for p in probs])
 
         ax[0].plot(levels, probs, '-', ms=1.5, label=ore.name)
         ax[1].plot(levels, xp_rates, '-', ms=1.5)
@@ -31,7 +31,7 @@ def test_probability_curve():
     # pickaxe = pickaxes['Elder pickaxe']
     # ore = ores['orikalkum']
     # probs = np.array([ore.prob_success(lvl, pickaxe['power'], pickaxe['level']) for lvl in levels])
-    # xp_rates = np.array([get_XP_rate(p, ore.XP, pickaxe['ticks_per_use']) for p in probs])
+    # xp_rates = np.array([get_xp_rate(p, ore.xp, pickaxe['ticks_per_use']) for p in probs])
 
     # ax[0].plot(levels, probs, '-', ms=1.5, label=ore.name)
     # ax[1].plot(levels, xp_rates, '-', ms=1.5)
@@ -44,7 +44,7 @@ def test_probability_curve():
 
     ax[1].set_xlabel('Level')
     ax[0].set_ylabel('probability of success')
-    ax[1].set_ylabel('XP rate')
+    ax[1].set_ylabel('xp rate')
 
     ax[0].set_xlim(1, 126)
     ax[0].set_ylim(0., 1.)

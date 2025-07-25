@@ -10,7 +10,7 @@ class Smeltable(Produceable):
 smeltables = {
     'copper': Smeltable(
         name='copper bar',
-        XP=6.,
+        xp=6.,
         level=1,
         ticks_per_action=3,
         items_required={
@@ -19,7 +19,7 @@ smeltables = {
     ),
     'iron': Smeltable(
         name='iron bar',
-        XP=12.5,
+        xp=12.5,
         level=1,
         ticks_per_action=3,
         items_required={
@@ -28,7 +28,7 @@ smeltables = {
     ),
     'steel': Smeltable(
         name='steel bar',
-        XP=17.5,
+        xp=17.5,
         level=1,
         ticks_per_action=3,
         items_required={
@@ -38,7 +38,7 @@ smeltables = {
     ),
     'mithril': Smeltable(
         name='mithril bar',
-        XP=30.,
+        xp=30.,
         level=1,
         ticks_per_action=3,
         items_required={
@@ -47,7 +47,7 @@ smeltables = {
     ),
     'adamant': Smeltable(
         name='adamantite bar',
-        XP=37.5,
+        xp=37.5,
         level=1,
         ticks_per_action=3,
         items_required={
@@ -56,7 +56,7 @@ smeltables = {
     ),
     'rune': Smeltable(
         name='runite bar',
-        XP=50.,
+        xp=50.,
         level=1,
         ticks_per_action=3,
         items_required={

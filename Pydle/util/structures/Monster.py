@@ -19,7 +19,7 @@ class Monster:
         name: str,
         level: int = 1,
         tier: MonsterTier = MonsterTier.BASIC,
-        XP: float = None,
+        xp: float = None,
         loot_table: LootTable = None,
         # Combat
         hitpoints: int = 100,
@@ -30,10 +30,10 @@ class Monster:
         self.name: str = name
         self.tier: MonsterTier = tier
         self.level: int = level
-        if XP is None:
-            self.XP: float = 4. * float(hitpoints)
+        if xp is None:
+            self.xp: float = 4. * float(hitpoints)
         else:
-            self.XP: float = XP
+            self.xp: float = xp
         self.loot_table = loot_table if loot_table is not None else LootTable()
 
         # Combat
