@@ -27,8 +27,6 @@ class CombatEngine:
 
         self.calculate_values()
 
-        print(self.player_hit_chance, self.player_max_hit_strength, self.player_max_hit_magical)
-
     def calculate_values(self):
         # Player hit chance
         accuracy: int = self._calculate_effective_level(
