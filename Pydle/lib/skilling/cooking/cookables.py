@@ -1,34 +1,30 @@
 from numpy import exp
 
+from ....util.structures.Produceable import Produceable
 
-class Cookable:
+
+class Cookable(Produceable):
 
     def __init__(
         self,
-        name: str,
-        items_required: dict,
-        XP: float,
-        level: int,
-        ticks_per_action: int,
+        # Burning quantities
         characteristic_level: int,
-        food_value: float,
+        produce_value: float,
         min_prob_factor: float = 0.1,
-        growth_rate: float = 0.15
+        growth_rate: float = 0.15,
+        *args,
+        **kwargs
     ):
-        self.name: str = name
-        self.items_required: dict = items_required
-        self.XP: float = XP
-        self.level: int = level
-        self.ticks_per_action: int = ticks_per_action
+        super().__init__(*args, **kwargs)
 
         # Burning quantities
         self.characteristic_level: int = characteristic_level
-        self.food_value: float = food_value
+        self.produce_value: float = produce_value
         self.min_prob_factor: float = min_prob_factor
         self.growth_rate: float = growth_rate
 
     def prob_success(self, level: int):
-        L = self.food_value
+        L = self.produce_value
         k = self.growth_rate
 
         if level < self.level:
@@ -36,7 +32,7 @@ class Cookable:
 
         prob = L / (1. + exp(-k * (level - self.characteristic_level)))
 
-        min_prob = self.min_prob_factor * self.food_value
+        min_prob = self.min_prob_factor * self.produce_value
         if prob < min_prob:
             prob = min_prob
 
@@ -52,7 +48,7 @@ cookables = {
         level=1,
         ticks_per_action=3,
         characteristic_level=10,
-        food_value=1.00,
+        produce_value=1.00,
     ),
     'herring': Cookable(
         name='herring',
@@ -61,7 +57,7 @@ cookables = {
         level=10,
         ticks_per_action=3,
         characteristic_level=20,
-        food_value=0.83,
+        produce_value=0.83,
     ),
     'bass': Cookable(
         name='bass',
@@ -70,7 +66,7 @@ cookables = {
         level=15,
         ticks_per_action=3,
         characteristic_level=30,
-        food_value=0.69,
+        produce_value=0.69,
     ),
     'trout': Cookable(
         name='trout',
@@ -79,7 +75,7 @@ cookables = {
         level=20,
         ticks_per_action=3,
         characteristic_level=40,
-        food_value=0.56,
+        produce_value=0.56,
     ),
     'salmon': Cookable(
         name='salmon',
@@ -88,7 +84,7 @@ cookables = {
         level=30,
         ticks_per_action=3,
         characteristic_level=50,
-        food_value=0.46,
+        produce_value=0.46,
     ),
     'lobster': Cookable(
         name='lobster',
@@ -97,7 +93,7 @@ cookables = {
         level=40,
         ticks_per_action=3,
         characteristic_level=60,
-        food_value=0.37,
+        produce_value=0.37,
     ),
     'swordfish': Cookable(
         name='swordfish',
@@ -106,7 +102,7 @@ cookables = {
         level=60,
         ticks_per_action=3,
         characteristic_level=70,
-        food_value=0.29,
+        produce_value=0.29,
     ),
     'shark': Cookable(
         name='shark',
@@ -115,7 +111,7 @@ cookables = {
         level=70,
         ticks_per_action=3,
         characteristic_level=80,
-        food_value=0.22,
+        produce_value=0.22,
     ),
     'anglerfish': Cookable(
         name='anglerfish',
@@ -124,7 +120,7 @@ cookables = {
         level=80,
         ticks_per_action=3,
         characteristic_level=90,
-        food_value=0.16,
+        produce_value=0.16,
     ),
     'whale': Cookable(
         name='whale',
@@ -133,7 +129,7 @@ cookables = {
         level=90,
         ticks_per_action=3,
         characteristic_level=100,
-        food_value=0.11,
+        produce_value=0.11,
     ),
 
 }

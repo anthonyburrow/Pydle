@@ -1,20 +1,10 @@
+from ....util.structures.Produceable import Produceable
 
 
-class Craftable:
+class Craftable(Produceable):
 
-    def __init__(
-        self,
-        name: str,
-        level: int,
-        XP: float,
-        items_required: dict,
-        ticks_per_action: int,
-    ):
-        self.name: str = name
-        self.level: int = level
-        self.XP: float = XP
-        self.items_required: dict = items_required
-        self.ticks_per_action: int = ticks_per_action
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
 
 craftables = {

@@ -1,4 +1,4 @@
-from ..Gatherable import Gatherable
+from ....util.structures.Gatherable import Gatherable
 
 
 class Log(Gatherable):

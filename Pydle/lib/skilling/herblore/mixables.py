@@ -1,22 +1,12 @@
+from ....util.structures.Produceable import Produceable
 
 
-class Mixable:
+class Mixable(Produceable):
 
-    def __init__(
-        self,
-        name: str,
-        n_doses: int,
-        level: int,
-        XP: float,
-        items_required: dict,
-        ticks_per_action: int,
-    ):
-        self.name: str = name
+    def __init__(self, n_doses: int = 1, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
         self.n_doses: int = n_doses
-        self.level: int = level
-        self.XP: float = XP
-        self.items_required: dict = items_required
-        self.ticks_per_action: int = ticks_per_action
 
 
 mixables = {
