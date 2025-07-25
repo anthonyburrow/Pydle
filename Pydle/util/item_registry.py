@@ -200,10 +200,10 @@ ITEMS = {
     #
     'copper ore',
     'iron ore',
-    'coal ore',
+    'coal',
     'mithril ore',
-    'adamant ore',
-    'rune ore',
+    'adamantite ore',
+    'runite ore',
     'orikalkum ore',
     'necronium ore',
     'bane ore',
@@ -211,10 +211,10 @@ ITEMS = {
 
     'copper bar',
     'iron bar',
-    'coal bar',
+    'steel bar',
     'mithril bar',
-    'adamant bar',
-    'rune bar',
+    'adamantite bar',
+    'runite bar',
     'orikalkum bar',
     'necronium bar',
     'bane bar',
@@ -247,3 +247,8 @@ ITEMS = {
     #
     'coins',
 }
+
+
+def verify_item(item: str) -> None:
+    if item not in ITEMS:
+        raise ValueError(f'"{item}" is not a valid item --- check registry.')

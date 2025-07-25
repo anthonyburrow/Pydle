@@ -2,6 +2,7 @@ import numpy as np
 from typing import Self
 
 from .Bank import Bank
+from ..item_registry import verify_item
 
 
 class LootTable:
@@ -13,6 +14,8 @@ class LootTable:
         self._tertiary_items = {}
 
     def add(self, item: str, quantity: int = 1, weight: float = 1.) -> Self:
+        verify_item(item)
+
         # This, or make the ability to add weight to the same item
         if item in self._weighted_items:
             raise KeyError(f'{item} already added to LootTable')
@@ -25,11 +28,21 @@ class LootTable:
         return self
 
     def tertiary(self, item: str, probability: float, quantity: int = 1) -> Self:
+        verify_item(item)
+
+        if item in self._tertiary_items:
+            raise KeyError(f'{item} already added to LootTable')
+
         self._tertiary_items[item] = (probability, quantity)
 
         return self
 
     def every(self, item: str, quantity: int = 1) -> Self:
+        verify_item(item)
+
+        if item in self._every_items:
+            raise KeyError(f'{item} already added to LootTable')
+
         self._every_items[item] = quantity
 
         return self

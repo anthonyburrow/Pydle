@@ -1,5 +1,5 @@
 from ..colors import color, color_theme
-from ..item_registry import ITEMS
+from ..item_registry import verify_item
 
 
 class Bank(dict):
@@ -20,8 +20,7 @@ class Bank(dict):
 
         item = item.lower()
 
-        if item not in ITEMS:
-            raise ValueError(f'"{item}" is not a valid item --- check registry.')
+        verify_item(item)
 
         if not self.contains(item):
             self[item] = quantity
