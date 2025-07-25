@@ -10,6 +10,7 @@ ITEMS = {
     'copper gauntlets',
     'copper boots',
     'copper longsword',
+    'copper kiteshield',
 
     'iron helm',
     'iron chestplate',
@@ -17,6 +18,7 @@ ITEMS = {
     'iron gauntlets',
     'iron boots',
     'iron longsword',
+    'iron kiteshield',
 
     'steel helm',
     'steel chestplate',
@@ -24,6 +26,7 @@ ITEMS = {
     'steel gauntlets',
     'steel boots',
     'steel longsword',
+    'steel kiteshield',
 
     'mithril helm',
     'mithril chestplate',
@@ -31,6 +34,7 @@ ITEMS = {
     'mithril gauntlets',
     'mithril boots',
     'mithril longsword',
+    'mithril kiteshield',
 
     'adamant helm',
     'adamant chestplate',
@@ -38,6 +42,7 @@ ITEMS = {
     'adamant gauntlets',
     'adamant boots',
     'adamant longsword',
+    'adamant kiteshield',
 
     'rune helm',
     'rune chestplate',
@@ -45,6 +50,7 @@ ITEMS = {
     'rune gauntlets',
     'rune boots',
     'rune longsword',
+    'rune kiteshield',
 
     'orikalkum helm',
     'orikalkum chestplate',
@@ -52,6 +58,7 @@ ITEMS = {
     'orikalkum gauntlets',
     'orikalkum boots',
     'orikalkum longsword',
+    'orikalkum kiteshield',
 
     'necronium helm',
     'necronium chestplate',
@@ -59,6 +66,7 @@ ITEMS = {
     'necronium gauntlets',
     'necronium boots',
     'necronium longsword',
+    'necronium kiteshield',
 
     'bane helm',
     'bane chestplate',
@@ -66,6 +74,7 @@ ITEMS = {
     'bane gauntlets',
     'bane boots',
     'bane longsword',
+    'bane kiteshield',
 
     'elder helm',
     'elder chestplate',
@@ -73,6 +82,7 @@ ITEMS = {
     'elder gauntlets',
     'elder boots',
     'elder longsword',
+    'elder kiteshield',
 
     'leather gloves',
 

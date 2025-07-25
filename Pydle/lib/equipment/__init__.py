@@ -4,3 +4,4 @@ from .legs import legs
 from .gloves import gloves
 from .boots import boots
 from .weapons import weapons
+from .offhands import offhands

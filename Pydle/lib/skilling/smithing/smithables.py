@@ -21,6 +21,15 @@ smithables = {
             'copper bar': 2,
         },
     ),
+    'copper kiteshield': Smithable(
+        name='copper kiteshield',
+        XP=25.,
+        level=1,
+        ticks_per_action=6,
+        items_required={
+            'copper bar': 2,
+        },
+    ),
     'copper helm': Smithable(
         name='copper helm',
         XP=25.,
@@ -71,6 +80,15 @@ smithables = {
     #
     'iron longsword': Smithable(
         name='iron longsword',
+        XP=50.,
+        level=10,
+        ticks_per_action=6,
+        items_required={
+            'iron bar': 2,
+        },
+    ),
+    'iron kiteshield': Smithable(
+        name='iron kiteshield',
         XP=50.,
         level=10,
         ticks_per_action=6,
@@ -135,6 +153,15 @@ smithables = {
             'steel bar': 2,
         },
     ),
+    'steel kiteshield': Smithable(
+        name='steel kiteshield',
+        XP=75.,
+        level=15,
+        ticks_per_action=6,
+        items_required={
+            'steel bar': 2,
+        },
+    ),
     'steel helm': Smithable(
         name='steel helm',
         XP=75.,
@@ -185,6 +212,15 @@ smithables = {
     #
     'mithril longsword': Smithable(
         name='mithril longsword',
+        XP=100.,
+        level=20,
+        ticks_per_action=6,
+        items_required={
+            'mithril bar': 2,
+        },
+    ),
+    'mithril kiteshield': Smithable(
+        name='mithril kiteshield',
         XP=100.,
         level=20,
         ticks_per_action=6,
@@ -249,6 +285,15 @@ smithables = {
             'adamantite bar': 2,
         },
     ),
+    'adamant kiteshield': Smithable(
+        name='adamant kiteshield',
+        XP=125.,
+        level=30,
+        ticks_per_action=6,
+        items_required={
+            'adamantite bar': 2,
+        },
+    ),
     'adamant helm': Smithable(
         name='adamant helm',
         XP=125.,
@@ -299,6 +344,15 @@ smithables = {
     #
     'rune longsword': Smithable(
         name='rune longsword',
+        XP=150.,
+        level=40,
+        ticks_per_action=6,
+        items_required={
+            'runite bar': 2,
+        },
+    ),
+    'rune kiteshield': Smithable(
+        name='rune kiteshield',
         XP=150.,
         level=40,
         ticks_per_action=6,
