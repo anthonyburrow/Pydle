@@ -1,4 +1,5 @@
 from ..colors import color, color_theme
+from ..item_registry import ITEMS
 
 
 class Bank(dict):
@@ -14,13 +15,14 @@ class Bank(dict):
             return self._add_dict(items)
 
     def _add_item(self, item: str, quantity: int = 1):
-        if quantity < 0:
-            return
-
-        if quantity == 0:
+        if quantity <= 0:
             return
 
         item = item.lower()
+
+        if item not in ITEMS:
+            raise ValueError(f'"{item}" is not a valid item --- check registry.')
+
         if not self.contains(item):
             self[item] = quantity
             return
