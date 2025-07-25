@@ -34,7 +34,7 @@ class CraftingActivity(Activity):
         if skill_level < self.craftable.level:
             return ActivitySetupResult(
                 success=False,
-                msg=f'{self.player} must have Level {self.craftable.level} Crafting to craft a {self.craftable.name}.'
+                msg=f'{self.player} must have Level {self.craftable.level} Crafting to craft a {self.craftable}.'
             )
 
         for item, quantity in self.craftable.items_required.items():
@@ -76,7 +76,7 @@ class CraftingActivity(Activity):
         items: Bank = self.loot_table.roll()
 
         return ActivityTickResult(
-            msg=f'Crafted a {self.craftable.name}!',
+            msg=f'Crafted a {self.craftable}!',
             items=items,
             xp={
                 'crafting': self.craftable.XP,
@@ -91,7 +91,7 @@ class CraftingActivity(Activity):
 
     @property
     def startup_text(self) -> str:
-        return f'{self.player} is now crafting a {self.craftable.name}.'
+        return f'{self.player} is now crafting a {self.craftable}.'
 
     @property
     def standby_text(self) -> str:

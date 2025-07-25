@@ -38,7 +38,7 @@ class SmeltingActivity(Activity):
         if skill_level < self.smeltable.level:
             return ActivitySetupResult(
                 success=False,
-                msg=f'{self.player} must have Level {self.smeltable.level} Smithing to smelt a {self.smeltable.name}.'
+                msg=f'{self.player} must have Level {self.smeltable.level} Smithing to smelt a {self.smeltable}.'
             )
 
         if not self.player.has_effect(fire_effect):
@@ -102,7 +102,7 @@ class SmeltingActivity(Activity):
         items: Bank = self.loot_table.roll()
 
         return ActivityTickResult(
-            msg=f'Smelted a {self.smeltable.name}!',
+            msg=f'Smelted a {self.smeltable}!',
             items=items,
             xp={
                 'smithing': self.smeltable.XP,
@@ -117,7 +117,7 @@ class SmeltingActivity(Activity):
 
     @property
     def startup_text(self) -> str:
-        return f'{self.player} is now smelting a {self.smeltable.name}.'
+        return f'{self.player} is now smelting a {self.smeltable}.'
 
     @property
     def standby_text(self) -> str:

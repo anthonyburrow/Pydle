@@ -38,7 +38,7 @@ class CookingActivity(Activity):
         if skill_level < self.cookable.level:
             return ActivitySetupResult(
                 success=False,
-                msg=f'{self.player} must have Level {self.cookable.level} Cooking to cook {self.cookable.name}.'
+                msg=f'{self.player} must have Level {self.cookable.level} Cooking to cook {self.cookable}.'
             )
 
         if not self.player.has_effect(fire_effect):
@@ -102,14 +102,14 @@ class CookingActivity(Activity):
         items: Bank = self.loot_table.roll()
         if not items:
             return ActivityTickResult(
-                msg=f'Burned {self.cookable.name}...',
+                msg=f'Burned {self.cookable}...',
                 xp={
                     'cooking': self.cookable.XP * 0.5,
                 },
             )
 
         return ActivityTickResult(
-            msg=f'Cooked {self.cookable.name}!',
+            msg=f'Cooked {self.cookable}!',
             items=items,
             xp={
                 'cooking': self.cookable.XP,
@@ -124,7 +124,7 @@ class CookingActivity(Activity):
 
     @property
     def startup_text(self) -> str:
-        return f'{self.player} is now cooking {self.cookable.name}.'
+        return f'{self.player} is now cooking {self.cookable}.'
 
     @property
     def standby_text(self) -> str:

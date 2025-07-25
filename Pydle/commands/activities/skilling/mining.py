@@ -36,7 +36,7 @@ class MiningActivity(Activity):
         if skill_level < self.ore.level:
             return ActivitySetupResult(
                 success=False,
-                msg=f'You must have Level {self.ore.level} Mining to mine {self.ore.name}.'
+                msg=f'You must have Level {self.ore.level} Mining to mine {self.ore}.'
             )
 
         if self.pickaxe is None:
@@ -81,7 +81,7 @@ class MiningActivity(Activity):
 
     @property
     def startup_text(self) -> str:
-        return f'{self.player} is now mining {self.ore.name}.'
+        return f'{self.player} is now mining {self.ore}.'
 
     @property
     def standby_text(self) -> str:

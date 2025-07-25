@@ -37,7 +37,7 @@ class CleaningActivity(Activity):
         if skill_level < self.cleanable.level:
             return ActivitySetupResult(
                 success=False,
-                msg=f'{self.player} must have Level {self.cleanable.level} Herblore to clean a {self.cleanable.name}.'
+                msg=f'{self.player} must have Level {self.cleanable.level} Herblore to clean a {self.cleanable}.'
             )
 
         for item, quantity in self.cleanable.items_required.items():
@@ -78,7 +78,7 @@ class CleaningActivity(Activity):
         items: Bank = self.loot_table.roll()
 
         return ActivityTickResult(
-            msg=f'Cleaned {self.cleanable.name}!',
+            msg=f'Cleaned {self.cleanable}!',
             items=items,
             xp={
                 'herblore': self.cleanable.XP,
@@ -93,7 +93,7 @@ class CleaningActivity(Activity):
 
     @property
     def startup_text(self) -> str:
-        return f'{self.player} is now cleaning {self.cleanable.name}.'
+        return f'{self.player} is now cleaning {self.cleanable}.'
 
     @property
     def standby_text(self) -> str:

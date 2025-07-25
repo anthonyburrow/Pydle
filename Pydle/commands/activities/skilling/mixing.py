@@ -34,7 +34,7 @@ class MixingActivity(Activity):
         if skill_level < self.mixable.level:
             return ActivitySetupResult(
                 success=False,
-                msg=f'{self.player} must have Level {self.mixable.level} Herblore to mix a {self.mixable.name}.'
+                msg=f'{self.player} must have Level {self.mixable.level} Herblore to mix a {self.mixable}.'
             )
 
         for item, quantity in self.mixable.items_required.items():
@@ -76,7 +76,7 @@ class MixingActivity(Activity):
         items: Bank = self.loot_table.roll()
 
         return ActivityTickResult(
-            msg=f'Mixed a {self.mixable.name}!',
+            msg=f'Mixed a {self.mixable}!',
             items=items,
             xp={
                 'herblore': self.mixable.XP,
@@ -91,7 +91,7 @@ class MixingActivity(Activity):
 
     @property
     def startup_text(self) -> str:
-        return f'{self.player} is now mixing {self.mixable.name}s.'
+        return f'{self.player} is now mixing a {self.mixable}.'
 
     @property
     def standby_text(self) -> str:

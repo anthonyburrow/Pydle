@@ -36,7 +36,7 @@ class ForagingActivity(Activity):
         if skill_level < self.herb.level:
             return ActivitySetupResult(
                 success=False,
-                msg=f'You must have Level {self.herb.level} Foraging to collect {self.herb.name_grimy}.'
+                msg=f'You must have Level {self.herb.level} Foraging to collect {self.herb}.'
             )
 
         if self.secateurs is None:
@@ -81,7 +81,7 @@ class ForagingActivity(Activity):
 
     @property
     def startup_text(self) -> str:
-        return f'{self.player} is now collecting {self.herb.name_grimy}.'
+        return f'{self.player} is now collecting {self.herb}.'
 
     @property
     def standby_text(self) -> str:
@@ -100,7 +100,7 @@ class ForagingActivity(Activity):
 
         self.loot_table = LootTable()
         self.loot_table.tertiary(
-            self.herb.name_grimy, prob_success, self.herb.n_per_gather
+            self.herb.name, prob_success, self.herb.n_per_gather
         )
 
         # Add more stuff (pets, etc)

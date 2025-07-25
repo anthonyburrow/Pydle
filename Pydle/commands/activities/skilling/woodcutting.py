@@ -36,7 +36,7 @@ class WoodcuttingActivity(Activity):
         if skill_level < self.log.level:
             return ActivitySetupResult(
                 success=False,
-                msg=f'You must have Level {self.log.level} Woodcutting to chop {self.log.name}.'
+                msg=f'You must have Level {self.log.level} Woodcutting to chop {self.log}.'
             )
 
         if self.axe is None:
@@ -81,7 +81,7 @@ class WoodcuttingActivity(Activity):
 
     @property
     def startup_text(self) -> str:
-        return f'{self.player} is now chopping {self.log.name}.'
+        return f'{self.player} is now chopping {self.log}.'
 
     @property
     def standby_text(self) -> str:

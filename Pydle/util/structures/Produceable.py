@@ -1,3 +1,5 @@
+from ...util.colors import color, color_theme
+
 
 class Produceable:
 
@@ -14,3 +16,7 @@ class Produceable:
         self.level: int = level
         self.ticks_per_action: int = ticks_per_action
         self.items_required: dict = items_required
+
+    def __str__(self):
+        text: str = f'{self.name}'
+        return color(text, color_theme['skill_artisan'])

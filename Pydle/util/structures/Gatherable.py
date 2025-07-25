@@ -1,6 +1,7 @@
 from numpy import exp
 
 from ...util.structures.Tool import Tool
+from ...util.colors import color, color_theme
 
 
 class Gatherable:
@@ -48,3 +49,7 @@ class Gatherable:
             prob *= 0.5
 
         return prob
+
+    def __str__(self):
+        text: str = f'{self.name}'
+        return color(text, color_theme['skill_gathering'])

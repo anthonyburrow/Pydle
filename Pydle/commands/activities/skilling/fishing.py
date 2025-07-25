@@ -36,7 +36,7 @@ class FishingActivity(Activity):
         if skill_level < self.fish.level:
             return ActivitySetupResult(
                 success=False,
-                msg=f'You must have Level {self.fish.level} Fishing to fish {self.fish.name}.'
+                msg=f'You must have Level {self.fish.level} Fishing to fish {self.fish}.'
             )
 
         if self.fishing_rod is None:
@@ -81,7 +81,7 @@ class FishingActivity(Activity):
 
     @property
     def startup_text(self) -> str:
-        return f'{self.player} is now fishing {self.fish.name}.'
+        return f'{self.player} is now fishing {self.fish}.'
 
     @property
     def standby_text(self) -> str:
