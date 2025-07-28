@@ -4,7 +4,7 @@ from matplotlib.ticker import MultipleLocator
 
 from Pydle.util.ticks import Ticks
 
-from Pydle.lib.skilling.mining import ores, pickaxes
+from Pydle.lib.skilling.mining import ORES, PICKAXES
 
 
 def get_xp_rate(probability, xp, ticks_per_ore):
@@ -20,16 +20,16 @@ def test_probability_curve():
 
     levels = np.arange(1, 127)
 
-    for ore, pickaxe in zip(ores.values(), pickaxes.values()):
+    for ore, pickaxe in zip(ORES.values(), PICKAXES.values()):
         probs = np.array([ore.prob_success(lvl, pickaxe) for lvl in levels])
         xp_rates = np.array([get_xp_rate(p, ore.xp, pickaxe.ticks_per_use) for p in probs])
 
         ax[0].plot(levels, probs, '-', ms=1.5, label=ore.name)
         ax[1].plot(levels, xp_rates, '-', ms=1.5)
 
-    # pickaxe = pickaxes['Iron pickaxe']
-    # pickaxe = pickaxes['Elder pickaxe']
-    # ore = ores['orikalkum']
+    # pickaxe = PICKAXES['Iron pickaxe']
+    # pickaxe = PICKAXES['Elder pickaxe']
+    # ore = ORES['orikalkum']
     # probs = np.array([ore.prob_success(lvl, pickaxe['power'], pickaxe['level']) for lvl in levels])
     # xp_rates = np.array([get_xp_rate(p, ore.xp, pickaxe['ticks_per_use']) for p in probs])
 

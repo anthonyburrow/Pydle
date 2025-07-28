@@ -1,2 +1,2 @@
-from .herbs import herbs, Herb
-from .secateurs import secateurs
+from .herbs import HERBS, Herb
+from .secateurs import SECATEURS

@@ -66,7 +66,7 @@ class Player:
         return self._hitpoints
 
     def get_max_hitpoints(self) -> int:
-        return 100 * self.get_skill('hitpoints').level
+        return 90 + 10 * self.get_skill('hitpoints').level
 
     def heal(self, amount: int) -> None:
         max_hp = self.get_max_hitpoints()

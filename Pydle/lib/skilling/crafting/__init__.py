@@ -1,1 +1,1 @@
-from .craftables import craftables, Craftable
+from .craftables import CRAFTABLES, Craftable

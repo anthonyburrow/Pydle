@@ -6,7 +6,7 @@ from ....util.structures.Activity import (
 )
 from ....util.structures.LootTable import LootTable
 from ....util.structures.Bank import Bank
-from ....lib.skilling.crafting import craftables, Craftable
+from ....lib.skilling.crafting import CRAFTABLES, Craftable
 
 
 class CraftingActivity(Activity):
@@ -14,8 +14,8 @@ class CraftingActivity(Activity):
     def __init__(self, *args):
         super().__init__(*args)
 
-        if self.argument in craftables:
-            self.craftable: Craftable = craftables[self.argument]
+        if self.argument in CRAFTABLES:
+            self.craftable: Craftable = CRAFTABLES[self.argument]
         else:
             self.craftable: Craftable = None
 
@@ -119,7 +119,7 @@ def detailed_info():
     msg.append('')
 
     msg.append('Available items:')
-    for craftable in craftables:
+    for craftable in CRAFTABLES:
         name = str(craftable).capitalize()
         msg.append(f'- {name}')
 

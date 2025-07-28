@@ -8,8 +8,8 @@ from ....util.structures.Bank import Bank
 from ....util.structures.Monster import Monster
 from ....util.structures.CombatEngine import CombatEngine
 from ....util.structures.Area import Area
-from ....lib.monsters import monsters
-from ....lib.areas import areas
+from ....lib.monsters import MONSTERS
+from ....lib.areas import AREAS
 
 
 class KillingActivity(Activity):
@@ -17,9 +17,9 @@ class KillingActivity(Activity):
     def __init__(self, *args):
         super().__init__(*args)
 
-        if self.argument in monsters:
+        if self.argument in MONSTERS:
             self.monster_key = self.argument
-            self.monster: Monster = Monster(**monsters[self.monster_key])
+            self.monster: Monster = Monster(**MONSTERS[self.monster_key])
         else:
             self.monster: Monster = None
 
@@ -33,7 +33,7 @@ class KillingActivity(Activity):
                 msg='A valid monster was not given.'
             )
 
-        area: Area = areas[self.player.area]
+        area: Area = AREAS[self.player.area]
         if not area.contains_monster(self.monster_key):
             return ActivitySetupResult(
                 success=False,
@@ -125,7 +125,7 @@ def detailed_info():
     # msg.append('')
 
     # msg.append('Available monsters:')
-    # for monster in monsters:
+    # for monster in MONSTERS:
     #     name = str(monster['name']).capitalize()
     #     msg.append(f'- {name}')
 

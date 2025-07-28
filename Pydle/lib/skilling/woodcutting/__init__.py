@@ -1,2 +1,2 @@
-from .logs import logs, Log
-from .axes import axes
+from .logs import LOGS, Log
+from .axes import AXES

@@ -3,7 +3,7 @@ from ...util.structures.Stats import Stats
 from ...util.structures.LootTable import LootTable
 
 
-monsters = {
+MONSTERS = {
     'goblin': {
         'name': 'goblin',
         'level': 1,

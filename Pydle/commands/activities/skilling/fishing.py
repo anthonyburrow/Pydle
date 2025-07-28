@@ -8,8 +8,8 @@ from ....util.structures.LootTable import LootTable
 from ....util.structures.Bank import Bank
 from ....util.structures.Tool import Tool
 from ....util.structures.Area import Area
-from ....lib.skilling.fishing import Fish, fish
-from ....lib.areas import areas
+from ....lib.skilling.fishing import Fish, FISH
+from ....lib.areas import AREAS
 
 
 class FishingActivity(Activity):
@@ -17,8 +17,8 @@ class FishingActivity(Activity):
     def __init__(self, *args):
         super().__init__(*args)
 
-        if self.argument in fish:
-            self.fish: Fish = fish[self.argument]
+        if self.argument in FISH:
+            self.fish: Fish = FISH[self.argument]
             self.fish_key: str = self.argument
         else:
             self.fish: Fish = None
@@ -42,7 +42,7 @@ class FishingActivity(Activity):
                 msg=f'You must have Level {self.fish.level} Fishing to fish {self.fish}.'
             )
 
-        area: Area = areas[self.player.area]
+        area: Area = AREAS[self.player.area]
         if not area.contains_fish(self.fish_key):
             return ActivitySetupResult(
                 success=False,
@@ -125,8 +125,8 @@ def detailed_info():
     msg.append('')
 
     msg.append('Available fish:')
-    for _fish in fish:
-        name = str(_fish).capitalize()
+    for fish in FISH:
+        name = str(fish).capitalize()
         msg.append(f'- {name}')
 
     return '\n'.join(msg)

@@ -39,7 +39,7 @@ class Cookable(Produceable):
         return prob
 
 
-cookables = {
+COOKABLES = {
     # Fish
     'shrimp': Cookable(
         name='shrimp',

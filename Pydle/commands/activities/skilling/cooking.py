@@ -6,8 +6,8 @@ from ....util.structures.Activity import (
 )
 from ....util.structures.LootTable import LootTable
 from ....util.structures.Bank import Bank
-from ....lib.skilling.cooking import Cookable, cookables
-from ....lib.skilling.woodcutting import logs
+from ....lib.skilling.cooking import Cookable, COOKABLES
+from ....lib.skilling.woodcutting import LOGS
 
 
 fire_effect = 'cooking fire'
@@ -18,8 +18,8 @@ class CookingActivity(Activity):
     def __init__(self, *args):
         super().__init__(*args)
 
-        if self.argument in cookables:
-            self.cookable: Cookable = cookables[self.argument]
+        if self.argument in COOKABLES:
+            self.cookable: Cookable = COOKABLES[self.argument]
         else:
             self.cookable: Cookable = None
 
@@ -42,7 +42,7 @@ class CookingActivity(Activity):
             )
 
         if not self.player.has_effect(fire_effect):
-            for log_key, log in logs.items():
+            for log_key, log in LOGS.items():
                 if self.player.has(log.name):
                     break
             else:
@@ -84,7 +84,7 @@ class CookingActivity(Activity):
             )
 
         if not self.player.has_effect(fire_effect):
-            for log_key, log in logs.items():
+            for log_key, log in LOGS.items():
                 if self.player.has(log.name):
                     self.player.remove(log.name, 1)
                     self.player.add_effect(fire_effect, log.ticks_per_fire)
@@ -157,7 +157,7 @@ def detailed_info():
     msg.append('')
 
     msg.append('Available foods:')
-    for cookable in cookables:
+    for cookable in COOKABLES:
         name = str(cookable).capitalize()
         msg.append(f'- {name}')
 

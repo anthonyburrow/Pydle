@@ -1,1 +1,1 @@
-from .cookables import cookables, Cookable
+from .cookables import COOKABLES, Cookable

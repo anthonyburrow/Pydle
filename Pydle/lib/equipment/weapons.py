@@ -2,7 +2,7 @@ from ...util.structures.Equippable import Weapon
 from ...util.structures.Stats import Stats
 
 
-weapons = {
+WEAPONS = {
     'copper longsword': Weapon(
         name='copper longsword',
         tier=1,

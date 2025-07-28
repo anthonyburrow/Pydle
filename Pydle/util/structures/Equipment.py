@@ -2,24 +2,24 @@ from . import Player, Equippable
 from .Stats import Stats
 from ..colors import color
 from ...lib.equipment import (
-    weapons,
-    offhands,
-    helms,
-    bodies,
-    legs,
-    gloves,
-    boots
+    WEAPONS,
+    OFFHANDS,
+    HELMS,
+    BODIES,
+    LEGS,
+    GLOVES,
+    BOOTS,
 )
 
 
 EQUIPMENT = {
-    'weapon': weapons,
-    'offhand': offhands,
-    'helm': helms,
-    'body': bodies,
-    'legs': legs,
-    'gloves': gloves,
-    'boots': boots,
+    'weapon': WEAPONS,
+    'offhand': OFFHANDS,
+    'helm': HELMS,
+    'body': BODIES,
+    'legs': LEGS,
+    'gloves': GLOVES,
+    'boots': BOOTS,
 }
 
 

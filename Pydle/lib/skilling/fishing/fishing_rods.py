@@ -1,7 +1,7 @@
 from ....util.structures.Tool import Tool
 
 
-fishing_rods = {
+FISHING_RODS = {
     'copper fishing rod': Tool(
         name='copper fishing rod',
         level=1,

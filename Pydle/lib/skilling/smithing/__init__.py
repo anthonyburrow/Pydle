@@ -1,2 +1,2 @@
-from .smeltables import smeltables, Smeltable
-from .smithables import smithables, Smithable
+from .smeltables import SMELTABLES, Smeltable
+from .smithables import SMITHABLES, Smithable

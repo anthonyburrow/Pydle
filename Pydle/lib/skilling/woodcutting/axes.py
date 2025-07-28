@@ -1,7 +1,7 @@
 from ....util.structures.Tool import Tool
 
 
-axes = {
+AXES = {
     'copper axe': Tool(
         name='copper axe',
         level=1,

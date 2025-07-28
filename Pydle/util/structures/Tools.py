@@ -4,10 +4,10 @@ from ...lib.skilling import mining, woodcutting, foraging, fishing
 
 
 TOOLS = {
-    'pickaxe': mining.pickaxes,
-    'axe': woodcutting.axes,
-    'secateurs': foraging.secateurs,
-    'fishing rod': fishing.fishing_rods,
+    'pickaxe': mining.PICKAXES,
+    'axe': woodcutting.AXES,
+    'secateurs': foraging.SECATEURS,
+    'fishing rod': fishing.FISHING_RODS,
 }
 
 

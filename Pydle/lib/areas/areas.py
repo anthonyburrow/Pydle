@@ -3,7 +3,7 @@ from ...util.structures.Area import Area
 
 HOME_AREA = 'hearthmere'
 
-areas = {
+AREAS = {
     'hearthmere': Area(
         name='Hearthmere',
         coordinates=(0, 0),

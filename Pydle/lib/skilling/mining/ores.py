@@ -7,7 +7,7 @@ class Ore(Gatherable):
         super().__init__(*args, **kwargs)
 
 
-ores = {
+ORES = {
     'copper': Ore(
         name='copper ore',
         xp=5.,

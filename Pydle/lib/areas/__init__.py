@@ -1,1 +1,1 @@
-from .areas import areas, HOME_AREA
+from .areas import AREAS, HOME_AREA

@@ -9,7 +9,7 @@ class Log(Gatherable):
         self.ticks_per_fire: int = ticks_per_fire
 
 
-logs = {
+LOGS = {
     'logs': Log(
         name='logs',
         xp=12.5,

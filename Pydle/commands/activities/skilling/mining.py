@@ -8,8 +8,8 @@ from ....util.structures.LootTable import LootTable
 from ....util.structures.Bank import Bank
 from ....util.structures.Tool import Tool
 from ....util.structures.Area import Area
-from ....lib.skilling.mining import Ore, ores
-from ....lib.areas import areas
+from ....lib.skilling.mining import Ore, ORES
+from ....lib.areas import AREAS
 
 
 class MiningActivity(Activity):
@@ -17,8 +17,8 @@ class MiningActivity(Activity):
     def __init__(self, *args):
         super().__init__(*args)
 
-        if self.argument in ores:
-            self.ore: Ore = ores[self.argument]
+        if self.argument in ORES:
+            self.ore: Ore = ORES[self.argument]
             self.ore_key: str = self.argument
         else:
             self.ore: Ore = None
@@ -42,7 +42,7 @@ class MiningActivity(Activity):
                 msg=f'You must have Level {self.ore.level} Mining to mine {self.ore}.'
             )
 
-        area: Area = areas[self.player.area]
+        area: Area = AREAS[self.player.area]
         if not area.contains_ore(self.ore_key):
             return ActivitySetupResult(
                 success=False,
@@ -125,7 +125,7 @@ def detailed_info():
     msg.append('')
 
     msg.append('Available ores:')
-    for ore in ores:
+    for ore in ORES:
         name = str(ore).capitalize()
         msg.append(f'- {name}')
 

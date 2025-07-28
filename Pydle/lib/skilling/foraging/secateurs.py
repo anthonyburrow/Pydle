@@ -1,7 +1,7 @@
 from ....util.structures.Tool import Tool
 
 
-secateurs = {
+SECATEURS = {
     'copper secateurs': Tool(
         name='copper secateurs',
         level=1,

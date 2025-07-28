@@ -8,7 +8,7 @@ class Smithable(Produceable):
 
 
 
-smithables = {
+SMITHABLES = {
     #
     # Copper
     #

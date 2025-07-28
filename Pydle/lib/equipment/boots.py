@@ -2,7 +2,7 @@ from ...util.structures.Equippable import Armor
 from ...util.structures.Stats import Stats
 
 
-boots = {
+BOOTS = {
     'copper boots': Armor(
         name='copper boots',
         tier=1,

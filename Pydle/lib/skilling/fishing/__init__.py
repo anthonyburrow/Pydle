@@ -1,2 +1,2 @@
-from .fish import fish, Fish
-from .fishing_rods import fishing_rods
+from .fish import FISH, Fish
+from .fishing_rods import FISHING_RODS

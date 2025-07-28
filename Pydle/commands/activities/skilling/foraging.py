@@ -8,8 +8,8 @@ from ....util.structures.LootTable import LootTable
 from ....util.structures.Bank import Bank
 from ....util.structures.Tool import Tool
 from ....util.structures.Area import Area
-from ....lib.skilling.foraging import Herb, herbs
-from ....lib.areas import areas
+from ....lib.skilling.foraging import Herb, HERBS
+from ....lib.areas import AREAS
 
 
 class ForagingActivity(Activity):
@@ -17,8 +17,8 @@ class ForagingActivity(Activity):
     def __init__(self, *args):
         super().__init__(*args)
 
-        if self.argument in herbs:
-            self.herb: Herb = herbs[self.argument]
+        if self.argument in HERBS:
+            self.herb: Herb = HERBS[self.argument]
             self.herb_key: str = self.argument
         else:
             self.herb: Herb = None
@@ -42,7 +42,7 @@ class ForagingActivity(Activity):
                 msg=f'You must have Level {self.herb.level} Foraging to collect {self.herb}.'
             )
 
-        area: Area = areas[self.player.area]
+        area: Area = AREAS[self.player.area]
         if not area.contains_herb(self.herb_key):
             return ActivitySetupResult(
                 success=False,
@@ -125,7 +125,7 @@ def detailed_info():
     msg.append('')
 
     msg.append('Available items:')
-    for herb in herbs:
+    for herb in HERBS:
         name = str(herb).capitalize()
         msg.append(f'- {name}')
 

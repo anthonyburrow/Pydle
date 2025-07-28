@@ -7,7 +7,7 @@ class Craftable(Produceable):
         super().__init__(*args, **kwargs)
 
 
-craftables = {
+CRAFTABLES = {
     'leather': Craftable(
         name='leather',
         level=1,

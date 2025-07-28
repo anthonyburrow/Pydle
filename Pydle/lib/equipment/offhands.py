@@ -2,7 +2,7 @@ from ...util.structures.Equippable import Armor
 from ...util.structures.Stats import Stats
 
 
-offhands = {
+OFFHANDS = {
     'copper kiteshield': Armor(
         name='copper kiteshield',
         tier=1,

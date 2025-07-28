@@ -6,8 +6,8 @@ from ....util.structures.Activity import (
 )
 from ....util.structures.LootTable import LootTable
 from ....util.structures.Bank import Bank
-from ....lib.skilling.smithing import smithables, Smithable
-from ....lib.skilling.woodcutting import logs
+from ....lib.skilling.smithing import SMITHABLES, Smithable
+from ....lib.skilling.woodcutting import LOGS
 
 
 fire_effect = 'smithing fire'
@@ -18,8 +18,8 @@ class SmithingActivity(Activity):
     def __init__(self, *args):
         super().__init__(*args)
 
-        if self.argument in smithables:
-            self.smithable: Smithable = smithables[self.argument]
+        if self.argument in SMITHABLES:
+            self.smithable: Smithable = SMITHABLES[self.argument]
         else:
             self.smithable: Smithable = None
 
@@ -42,7 +42,7 @@ class SmithingActivity(Activity):
             )
 
         if not self.player.has_effect(fire_effect):
-            for log_key, log in logs.items():
+            for log_key, log in LOGS.items():
                 if self.player.has(log.name):
                     break
             else:
@@ -84,7 +84,7 @@ class SmithingActivity(Activity):
             )
 
         if not self.player.has_effect(fire_effect):
-            for log_key, log in logs.items():
+            for log_key, log in LOGS.items():
                 if self.player.has(log.name):
                     self.player.remove(log.name, 1)
                     self.player.add_effect(fire_effect, log.ticks_per_fire)
@@ -145,7 +145,7 @@ def detailed_info():
     msg.append('')
 
     msg.append('Available items:')
-    for smithable in smithables:
+    for smithable in SMITHABLES:
         name = str(smithable).capitalize()
         msg.append(f'- {name}')
 

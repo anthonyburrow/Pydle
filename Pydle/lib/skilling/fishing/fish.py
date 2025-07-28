@@ -7,7 +7,7 @@ class Fish(Gatherable):
         super().__init__(*args, **kwargs)
 
 
-fish = {
+FISH = {
     'shrimp': Fish(
         name='raw shrimp',
         level=1,

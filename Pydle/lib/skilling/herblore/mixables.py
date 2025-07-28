@@ -9,7 +9,7 @@ class Mixable(Produceable):
         self.n_doses: int = n_doses
 
 
-mixables = {
+MIXABLES = {
     'attack': Mixable(
         name='attack potion',
         n_doses=3,

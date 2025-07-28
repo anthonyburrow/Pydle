@@ -6,7 +6,7 @@ from ....util.structures.Activity import (
 )
 from ....util.structures.LootTable import LootTable
 from ....util.structures.Bank import Bank
-from ....lib.skilling.herblore import cleanables, Cleanable
+from ....lib.skilling.herblore import CLEANABLES, Cleanable
 
 
 ticks_per_clean = 2
@@ -17,8 +17,8 @@ class CleaningActivity(Activity):
     def __init__(self, *args):
         super().__init__(*args)
 
-        if self.argument in cleanables:
-            self.cleanable: Cleanable = cleanables[self.argument]
+        if self.argument in CLEANABLES:
+            self.cleanable: Cleanable = CLEANABLES[self.argument]
         else:
             self.cleanable: Cleanable = None
 
@@ -121,7 +121,7 @@ def detailed_info():
     msg.append('')
 
     msg.append('Available herbs:')
-    for cleanable in cleanables:
+    for cleanable in CLEANABLES:
         name = str(cleanable).capitalize()
         msg.append(f'- {name}')
 

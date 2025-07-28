@@ -6,7 +6,7 @@ from ....util.structures.Activity import (
 )
 from ....util.structures.LootTable import LootTable
 from ....util.structures.Bank import Bank
-from ....lib.skilling.herblore import mixables, Mixable
+from ....lib.skilling.herblore import MIXABLES, Mixable
 
 
 class MixingActivity(Activity):
@@ -14,8 +14,8 @@ class MixingActivity(Activity):
     def __init__(self, *args):
         super().__init__(*args)
 
-        if self.argument in mixables:
-            self.mixable: Mixable = mixables[self.argument]
+        if self.argument in MIXABLES:
+            self.mixable: Mixable = MIXABLES[self.argument]
         else:
             self.mixable: Mixable = None
 
@@ -119,7 +119,7 @@ def detailed_info():
     msg.append('')
 
     msg.append('Available potions:')
-    for mixable in mixables:
+    for mixable in MIXABLES:
         name = str(mixable).capitalize()
         msg.append(f'- {name}')
 

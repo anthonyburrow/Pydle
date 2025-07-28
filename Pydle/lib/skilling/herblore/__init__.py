@@ -1,2 +1,2 @@
-from .mixables import mixables, Mixable
-from .cleanables import cleanables, Cleanable
+from .mixables import MIXABLES, Mixable
+from .cleanables import CLEANABLES, Cleanable

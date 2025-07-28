@@ -7,7 +7,7 @@ class Smeltable(Produceable):
         super().__init__(*args, **kwargs)
 
 
-smeltables = {
+SMELTABLES = {
     'copper': Smeltable(
         name='copper bar',
         xp=2.,

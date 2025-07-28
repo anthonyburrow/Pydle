@@ -7,7 +7,7 @@ class Cleanable(Produceable):
         super().__init__(*args, **kwargs)
 
 
-cleanables = {
+CLEANABLES = {
     'guam': Cleanable(
         name='guam',
         level=1,

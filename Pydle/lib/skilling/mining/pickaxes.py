@@ -1,7 +1,7 @@
 from ....util.structures.Tool import Tool
 
 
-pickaxes = {
+PICKAXES = {
     'copper pickaxe': Tool(
         name='copper pickaxe',
         level=1,

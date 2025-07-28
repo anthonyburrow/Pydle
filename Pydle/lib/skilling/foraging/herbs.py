@@ -7,7 +7,7 @@ class Herb(Gatherable):
         super().__init__(*args, **kwargs)
 
 
-herbs = {
+HERBS = {
     'guam': Herb(
         name='grimy guam',
         level=1,

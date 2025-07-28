@@ -5,7 +5,7 @@ from ....util.structures.Activity import (
     ActivityTickResult
 )
 from ....util.structures.Area import Area
-from ....lib.areas import areas
+from ....lib.areas import AREAS
 
 
 class TravelingActivity(Activity):
@@ -13,8 +13,8 @@ class TravelingActivity(Activity):
     def __init__(self, *args):
         super().__init__(*args)
 
-        if self.argument in areas:
-            self.area: Area = areas[self.argument]
+        if self.argument in AREAS:
+            self.area: Area = AREAS[self.argument]
             self.area_key: str = self.argument
         else:
             self.area: Area = None
@@ -22,7 +22,7 @@ class TravelingActivity(Activity):
         self.description: str = 'traveling'
 
         if self.area is not None:
-            current_area = areas[self.player.area]
+            current_area = AREAS[self.player.area]
             self.travel_ticks = self.area.travel_ticks(
                 current_area.coordinates
             )
@@ -94,7 +94,7 @@ def detailed_info():
     msg.append('')
 
     msg.append('Available areas:')
-    for area in areas:
+    for area in AREAS:
         name = str(area).capitalize()
         msg.append(f'- {name}')
 

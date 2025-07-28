@@ -6,8 +6,8 @@ from ....util.structures.Activity import (
 )
 from ....util.structures.LootTable import LootTable
 from ....util.structures.Bank import Bank
-from ....lib.skilling.smithing import smeltables, Smeltable
-from ....lib.skilling.woodcutting import logs
+from ....lib.skilling.smithing import SMELTABLES, Smeltable
+from ....lib.skilling.woodcutting import LOGS
 
 
 fire_effect = 'smithing fire'
@@ -18,8 +18,8 @@ class SmeltingActivity(Activity):
     def __init__(self, *args):
         super().__init__(*args)
 
-        if self.argument in smeltables:
-            self.smeltable: Smeltable = smeltables[self.argument]
+        if self.argument in SMELTABLES:
+            self.smeltable: Smeltable = SMELTABLES[self.argument]
         else:
             self.smeltable: Smeltable = None
 
@@ -42,7 +42,7 @@ class SmeltingActivity(Activity):
             )
 
         if not self.player.has_effect(fire_effect):
-            for log_key, log in logs.items():
+            for log_key, log in LOGS.items():
                 if self.player.has(log.name):
                     break
             else:
@@ -84,7 +84,7 @@ class SmeltingActivity(Activity):
             )
 
         if not self.player.has_effect(fire_effect):
-            for log_key, log in logs.items():
+            for log_key, log in LOGS.items():
                 if self.player.has(log.name):
                     self.player.remove(log.name, 1)
                     self.player.add_effect(fire_effect, log.ticks_per_fire)
@@ -145,7 +145,7 @@ def detailed_info():
     msg.append('')
 
     msg.append('Available ores:')
-    for smeltable in smeltables:
+    for smeltable in SMELTABLES:
         name = str(smeltable).capitalize()
         msg.append(f'- {name}')
 
