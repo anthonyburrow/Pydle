@@ -11,12 +11,10 @@ TOOLS = {
 }
 
 
-class Tools:
+class Tools(dict):
 
     def __init__(self, player: Player):
         self._player: Player = player
-
-        self._tools: dict = {}
 
     def equip(self, tool: str) -> dict:
         if not self._player.has(tool):
@@ -36,7 +34,7 @@ class Tools:
 
             self._player.remove(tool, quantity=1)
             tool_obj = tool_dict[tool]
-            self._tools[tool_type] = tool_obj
+            self[tool_type] = tool_obj
 
             msg = f"{tool_obj} was equipped to {self._player}'s toolbelt."
             return {
@@ -59,7 +57,7 @@ class Tools:
                 'msg': msg,
             }
 
-        self._tools[tool_type] = None
+        self[tool_type] = None
         self._player.give(old_tool.name)
 
         msg: str = f"{old_tool} was unequipped from {self._player}'s toolbelt."
@@ -69,7 +67,7 @@ class Tools:
         }
 
     def get_tool(self, tool_key: str) -> Tool:
-        return self._tools[tool_key]
+        return self[tool_key]
 
     def get_tools(self) -> dict:
         return {tool_key: self.get_tool(tool_key) for tool_key in TOOLS}
@@ -89,25 +87,21 @@ class Tools:
         for tool_key, tools_lib in TOOLS.items():
             # Basically only procs if new player
             if tools_dict is None:
-                self._tools[tool_key] = None
+                self[tool_key] = None
                 continue
 
             # Occurs when there's additions to TOOLS
             if tool_key not in tools_dict:
-                self._tools[tool_key] = None
+                self[tool_key] = None
                 continue
 
             tool_name = tools_dict[tool_key]
 
             if tool_name is None or not tool_name:
-                self._tools[tool_key] = None
+                self[tool_key] = None
                 continue
 
-            self._tools[tool_key] = tools_lib[tool_name]
-
-    @property
-    def tools(self) -> dict:
-        return self._tools
+            self[tool_key] = tools_lib[tool_name]
 
     def __str__(self) -> str:
         msg: list = []
