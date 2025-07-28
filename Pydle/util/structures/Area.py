@@ -51,5 +51,37 @@ class Area:
     def contains_monster(self, monster: str) -> bool:
         return monster in self.monsters
 
+    def detailed_info(self) -> str:
+        msg = []
+
+        msg.append(self.name)
+        msg.append('---')
+
+        if self.monsters:
+            msg.append('Monsters:')
+            [msg.append(f'- {x}') for x in self.monsters]
+            msg.append('')
+
+        if self.fish:
+            msg.append('Fishing:')
+            [msg.append(f'- {x}') for x in self.fish]
+            msg.append('')
+
+        if self.herbs:
+            msg.append('Foraging:')
+            [msg.append(f'- {x}') for x in self.herbs]
+            msg.append('')
+
+        if self.logs:
+            msg.append('Woodcutting:')
+            [msg.append(f'- {x}') for x in self.logs]
+            msg.append('')
+
+        if self.ores:
+            msg.append('Mining:')
+            [msg.append(f'- {x}') for x in self.ores]
+
+        return '\n'.join(msg)
+
     def __str__(self) -> str:
         return self.name

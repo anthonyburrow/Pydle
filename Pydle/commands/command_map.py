@@ -2,6 +2,7 @@ from .activities import combat
 from .activities import skilling
 from .activities import misc
 
+from .operations import area
 from .operations import bank
 from .operations import effects
 from .operations import equipment
@@ -147,6 +148,12 @@ map_activity = {
 }
 
 map_operations = {
+    'area': {
+        'function': area.interface_area,
+        'aliases': ('a', 'location', 'loc'),
+        'help_info': "Display the player's current location.",
+        'detailed_info': area.detailed_info,
+    },
     'bank': {
         'function': bank.interface_bank,
         'aliases': ('b',),
