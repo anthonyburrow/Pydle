@@ -7,7 +7,9 @@ from ....util.structures.Activity import (
 from ....util.structures.LootTable import LootTable
 from ....util.structures.Bank import Bank
 from ....util.structures.Tool import Tool
+from ....util.structures.Area import Area
 from ....lib.skilling.woodcutting import Log, logs
+from ....lib.areas import areas
 
 
 class WoodcuttingActivity(Activity):
@@ -17,6 +19,7 @@ class WoodcuttingActivity(Activity):
 
         if self.argument in logs:
             self.log: Log = logs[self.argument]
+            self.log_key: str = self.argument
         else:
             self.log: Log = None
 
@@ -37,6 +40,13 @@ class WoodcuttingActivity(Activity):
             return ActivitySetupResult(
                 success=False,
                 msg=f'You must have Level {self.log.level} Woodcutting to chop {self.log}.'
+            )
+
+        area: Area = areas[self.player.area]
+        if not area.contains_log(self.log_key):
+            return ActivitySetupResult(
+                success=False,
+                msg=f'{area} does not have {self.log} anywhere.'
             )
 
         if self.axe is None:

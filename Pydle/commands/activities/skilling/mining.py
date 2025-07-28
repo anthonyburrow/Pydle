@@ -7,7 +7,9 @@ from ....util.structures.Activity import (
 from ....util.structures.LootTable import LootTable
 from ....util.structures.Bank import Bank
 from ....util.structures.Tool import Tool
+from ....util.structures.Area import Area
 from ....lib.skilling.mining import Ore, ores
+from ....lib.areas import areas
 
 
 class MiningActivity(Activity):
@@ -17,6 +19,7 @@ class MiningActivity(Activity):
 
         if self.argument in ores:
             self.ore: Ore = ores[self.argument]
+            self.ore_key: str = self.argument
         else:
             self.ore: Ore = None
 
@@ -37,6 +40,13 @@ class MiningActivity(Activity):
             return ActivitySetupResult(
                 success=False,
                 msg=f'You must have Level {self.ore.level} Mining to mine {self.ore}.'
+            )
+
+        area: Area = areas[self.player.area]
+        if not area.contains_ore(self.ore_key):
+            return ActivitySetupResult(
+                success=False,
+                msg=f'{area} does not have {self.ore} anywhere.'
             )
 
         if self.pickaxe is None:

@@ -149,6 +149,8 @@ class Player:
         else:
             self._name: str = name
 
+        self._area: str = HOME_AREA
+
         self._bank: Bank = Bank()
 
         self._skills: Skills = Skills()

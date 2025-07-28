@@ -7,7 +7,9 @@ from ....util.structures.Activity import (
 from ....util.structures.LootTable import LootTable
 from ....util.structures.Bank import Bank
 from ....util.structures.Tool import Tool
+from ....util.structures.Area import Area
 from ....lib.skilling.foraging import Herb, herbs
+from ....lib.areas import areas
 
 
 class ForagingActivity(Activity):
@@ -17,6 +19,7 @@ class ForagingActivity(Activity):
 
         if self.argument in herbs:
             self.herb: Herb = herbs[self.argument]
+            self.herb_key: str = self.argument
         else:
             self.herb: Herb = None
 
@@ -37,6 +40,13 @@ class ForagingActivity(Activity):
             return ActivitySetupResult(
                 success=False,
                 msg=f'You must have Level {self.herb.level} Foraging to collect {self.herb}.'
+            )
+
+        area: Area = areas[self.player.area]
+        if not area.contains_herb(self.herb_key):
+            return ActivitySetupResult(
+                success=False,
+                msg=f'{area} does not have {self.herb} anywhere.'
             )
 
         if self.secateurs is None:

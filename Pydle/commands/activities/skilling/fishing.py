@@ -7,7 +7,9 @@ from ....util.structures.Activity import (
 from ....util.structures.LootTable import LootTable
 from ....util.structures.Bank import Bank
 from ....util.structures.Tool import Tool
+from ....util.structures.Area import Area
 from ....lib.skilling.fishing import Fish, fish
+from ....lib.areas import areas
 
 
 class FishingActivity(Activity):
@@ -17,6 +19,7 @@ class FishingActivity(Activity):
 
         if self.argument in fish:
             self.fish: Fish = fish[self.argument]
+            self.fish_key: str = self.argument
         else:
             self.fish: Fish = None
 
@@ -37,6 +40,13 @@ class FishingActivity(Activity):
             return ActivitySetupResult(
                 success=False,
                 msg=f'You must have Level {self.fish.level} Fishing to fish {self.fish}.'
+            )
+
+        area: Area = areas[self.player.area]
+        if not area.contains_fish(self.fish_key):
+            return ActivitySetupResult(
+                success=False,
+                msg=f'{area} does not have {self.fish} anywhere.'
             )
 
         if self.fishing_rod is None:

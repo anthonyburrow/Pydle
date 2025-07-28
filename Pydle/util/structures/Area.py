@@ -48,8 +48,8 @@ class Area:
     def contains_log(self, log: str) -> bool:
         return log in self.logs
 
-    def contains_monster(self, monster: str) -> bool:
-        return monster in self.monsters
+    def contains_ore(self, ore: str) -> bool:
+        return ore in self.ores
 
     def detailed_info(self) -> str:
         msg = []

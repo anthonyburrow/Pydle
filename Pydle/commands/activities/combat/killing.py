@@ -7,7 +7,9 @@ from ....util.structures.Activity import (
 from ....util.structures.Bank import Bank
 from ....util.structures.Monster import Monster
 from ....util.structures.CombatEngine import CombatEngine
+from ....util.structures.Area import Area
 from ....lib.monsters import monsters
+from ....lib.areas import areas
 
 
 class KillingActivity(Activity):
@@ -16,8 +18,8 @@ class KillingActivity(Activity):
         super().__init__(*args)
 
         if self.argument in monsters:
-            monster_args = monsters[self.argument]
-            self.monster: Monster = Monster(**monster_args)
+            self.monster_key = self.argument
+            self.monster: Monster = Monster(**monsters[self.monster_key])
         else:
             self.monster: Monster = None
 
@@ -29,6 +31,13 @@ class KillingActivity(Activity):
             return ActivitySetupResult(
                 success=False,
                 msg='A valid monster was not given.'
+            )
+
+        area: Area = areas[self.player.area]
+        if not area.contains_monster(self.monster_key):
+            return ActivitySetupResult(
+                success=False,
+                msg=f'{area} does not have a {self.monster} anywhere.'
             )
 
         if self.player.equipment['weapon'] is None:

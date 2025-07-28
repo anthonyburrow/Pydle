@@ -12,7 +12,7 @@ def test_missing_pickaxe():
     player.set_level('mining', 99)
     controller = Controller(player)
 
-    command = 'mine iron'
+    command = 'mine copper'
     command = parse_command(command)
 
     # Test no pickaxe
