@@ -10,6 +10,7 @@ from .Equipment import Equipment
 from .Stats import Stats
 from .UpdatedEffects import UpdatedEffects
 from ..colors import color, color_theme
+from ...lib.areas import HOME_AREA
 
 
 _default_save_file = 'character.save'
@@ -30,6 +31,14 @@ class Player:
     @property
     def name(self) -> str:
         return self._name
+
+    # Area
+    @property
+    def area(self) -> str:
+        return self._area
+
+    def set_area(self, area: str) -> None:
+        self._area = area
 
     # Skills and Experience
     def add_xp(self, *args, **kwargs) -> dict:
@@ -162,6 +171,11 @@ class Player:
 
         self._name: str = save_input['name']
 
+        if 'area' in save_input:
+            self._area: str = save_input['area']
+        else:
+            self._area: str = HOME_AREA
+
         self._bank: Bank = Bank(save_input['items'])
 
         self._skills: Skills = Skills()
@@ -189,6 +203,7 @@ class Player:
     def save(self):
         save_output: dict = {
             'name': self.name,
+            'area': self.area,
             'items': self._bank.get_items(),
             'skills': self._skills.get_skills_xp(),
             'tools': self._tools.get_tools_names(),

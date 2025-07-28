@@ -1,5 +1,6 @@
 from .activities import combat
 from .activities import skilling
+from .activities import misc
 
 from .operations import bank
 from .operations import effects
@@ -137,6 +138,11 @@ map_activity = {
         'function': skilling.SmithingActivity,
         'help_info': 'Begin to smith a metal item.',
         'detailed_info': skilling.smithing.detailed_info,
+    },
+    'travel': {
+        'function': misc.TravelingActivity,
+        'help_info': 'Begin to travel to a different area.',
+        'detailed_info': misc.travel.detailed_info,
     },
 }
 
