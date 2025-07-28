@@ -10,17 +10,26 @@ class Smeltable(Produceable):
 smeltables = {
     'copper': Smeltable(
         name='copper bar',
-        xp=6.,
+        xp=2.,
         level=1,
         ticks_per_action=3,
         items_required={
             'copper ore': 2,
         },
     ),
+    'silver': Smeltable(
+        name='silver bar',
+        xp=3.,
+        level=5,
+        ticks_per_action=3,
+        items_required={
+            'silver ore': 2,
+        },
+    ),
     'iron': Smeltable(
         name='iron bar',
-        xp=12.5,
-        level=1,
+        xp=5.,
+        level=10,
         ticks_per_action=3,
         items_required={
             'iron ore': 2,
@@ -28,39 +37,67 @@ smeltables = {
     ),
     'steel': Smeltable(
         name='steel bar',
-        xp=17.5,
-        level=1,
+        xp=9.,
+        level=15,
         ticks_per_action=3,
         items_required={
-            'iron ore': 1,
+            'iron ore': 2,
             'coal': 1,
         },
     ),
-    'mithril': Smeltable(
-        name='mithril bar',
-        xp=30.,
-        level=1,
+    'gold': Smeltable(
+        name='gold bar',
+        xp=14.,
+        level=20,
         ticks_per_action=3,
         items_required={
-            'mithril ore': 2,
+            'gold ore': 2,
         },
     ),
-    'adamant': Smeltable(
+    'adamantite': Smeltable(
         name='adamantite bar',
-        xp=37.5,
-        level=1,
+        xp=26.,
+        level=30,
         ticks_per_action=3,
         items_required={
             'adamantite ore': 2,
+            'coal': 1,
         },
     ),
-    'rune': Smeltable(
-        name='runite bar',
-        xp=50.,
-        level=1,
+    'blackirn': Smeltable(
+        name='blackirn bar',
+        xp=40.,
+        level=50,
         ticks_per_action=3,
         items_required={
-            'runite ore': 2,
+            'black ore': 2,
+        },
+    ),
+    'wyrmheart': Smeltable(
+        name='wyrmheart bar',
+        xp=60.,
+        level=70,
+        ticks_per_action=3,
+        items_required={
+            'wyrmheart ore': 2,
+        },
+    ),
+    'valnorite': Smeltable(
+        name='valnorite bar',
+        xp=100.,
+        level=90,
+        ticks_per_action=3,
+        items_required={
+            'valnorite ore': 2,
+        },
+    ),
+    'kharadant': Smeltable(
+        name='kharadant bar',
+        xp=160.,
+        level=110,
+        ticks_per_action=3,
+        items_required={
+            'kharad ore': 2,
         },
     ),
 }

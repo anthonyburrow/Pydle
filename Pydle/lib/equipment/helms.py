@@ -30,15 +30,6 @@ helms = {
             'evasiveness': 1,
         }),
     ),
-    'mithril helm': Armor(
-        name='mithril helm',
-        tier=20,
-        stats=Stats({
-            'physical_defense': 5,
-            'magical_barrier': 1,
-            'evasiveness': 1,
-        }),
-    ),
     'adamant helm': Armor(
         name='adamant helm',
         tier=30,
@@ -46,51 +37,6 @@ helms = {
             'physical_defense': 7,
             'magical_barrier': 1,
             'evasiveness': 1,
-        }),
-    ),
-    'rune helm': Armor(
-        name='rune helm',
-        tier=40,
-        stats=Stats({
-            'physical_defense': 9,
-            'magical_barrier': 2,
-            'evasiveness': 2,
-        }),
-    ),
-    'orikalkum helm': Armor(
-        name='orikalkum helm',
-        tier=60,
-        stats=Stats({
-            'physical_defense': 14,
-            'magical_barrier': 3,
-            'evasiveness': 3,
-        }),
-    ),
-    'necronium helm': Armor(
-        name='necronium helm',
-        tier=70,
-        stats=Stats({
-            'physical_defense': 16,
-            'magical_barrier': 3,
-            'evasiveness': 3,
-        }),
-    ),
-    'bane helm': Armor(
-        name='bane helm',
-        tier=80,
-        stats=Stats({
-            'physical_defense': 18,
-            'magical_barrier': 4,
-            'evasiveness': 4,
-        }),
-    ),
-    'elder helm': Armor(
-        name='elder helm',
-        tier=90,
-        stats=Stats({
-            'physical_defense': 20,
-            'magical_barrier': 4,
-            'evasiveness': 4,
         }),
     ),
 }

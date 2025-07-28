@@ -33,16 +33,6 @@ weapons = {
             'accuracy': 1,
         }),
     ),
-    'mithril longsword': Weapon(
-        name='mithril longsword',
-        tier=20,
-        attack_speed=3,
-        stats=Stats({
-            'physical_strength': 8,
-            'magical_power': 0,
-            'accuracy': 1,
-        }),
-    ),
     'adamant longsword': Weapon(
         name='adamant longsword',
         tier=30,
@@ -51,56 +41,6 @@ weapons = {
             'physical_strength': 11,
             'magical_power': 0,
             'accuracy': 2,
-        }),
-    ),
-    'rune longsword': Weapon(
-        name='rune longsword',
-        tier=40,
-        attack_speed=3,
-        stats=Stats({
-            'physical_strength': 14,
-            'magical_power': 0,
-            'accuracy': 3,
-        }),
-    ),
-    'orikalkum longsword': Weapon(
-        name='orikalkum longsword',
-        tier=60,
-        attack_speed=3,
-        stats=Stats({
-            'physical_strength': 20,
-            'magical_power': 0,
-            'accuracy': 4,
-        }),
-    ),
-    'necronium longsword': Weapon(
-        name='necronium longsword',
-        tier=70,
-        attack_speed=3,
-        stats=Stats({
-            'physical_strength': 24,
-            'magical_power': 0,
-            'accuracy': 5,
-        }),
-    ),
-    'bane longsword': Weapon(
-        name='bane longsword',
-        tier=80,
-        attack_speed=3,
-        stats=Stats({
-            'physical_strength': 27,
-            'magical_power': 0,
-            'accuracy': 5,
-        }),
-    ),
-    'elder longsword': Weapon(
-        name='elder longsword',
-        tier=90,
-        attack_speed=3,
-        stats=Stats({
-            'physical_strength': 30,
-            'magical_power': 0,
-            'accuracy': 6,
         }),
     ),
 }

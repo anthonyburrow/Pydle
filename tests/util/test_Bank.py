@@ -2,11 +2,11 @@ from Pydle.util.structures.Bank import Bank
 
 
 def test_instantiate():
-    bank = Bank({'copper ore': 1, 'iron ore': 2, 'coal': 0, 'mithril ore': -1})
+    bank = Bank({'copper ore': 1, 'iron ore': 2, 'coal': 0, 'gold ore': -1})
 
     assert bank.contains('copper ore')
     assert not bank.contains('coal')
-    assert not bank.contains('mithril ore')
+    assert not bank.contains('gold ore')
 
 
 def test_add():
@@ -25,25 +25,25 @@ def test_add():
         'copper ore': 4, 'iron ore': 2, 'coal': 5
     })
 
-    bank.add({'copper ore': 0, 'iron ore': 2, 'mithril ore': 1})
+    bank.add({'copper ore': 0, 'iron ore': 2, 'gold ore': 1})
     assert bank == Bank({
-        'copper ore': 4, 'iron ore': 4, 'coal': 5, 'mithril ore': 1
+        'copper ore': 4, 'iron ore': 4, 'coal': 5, 'gold ore': 1
     })
 
     new_bank = Bank({'copper ore': 0, 'coal': 3, 'adamantite ore': 1})
     bank.add(new_bank)
     assert bank == Bank({
-        'copper ore': 4, 'iron ore': 4, 'coal': 8, 'mithril ore': 1, 'adamantite ore': 1
+        'copper ore': 4, 'iron ore': 4, 'coal': 8, 'gold ore': 1, 'adamantite ore': 1
     })
 
 
 def test_remove():
-    bank = Bank({'copper ore': 1, 'iron ore': 2, 'coal': 3, 'mithril ore': 4})
+    bank = Bank({'copper ore': 1, 'iron ore': 2, 'coal': 3, 'gold ore': 4})
 
     bank.remove('copper ore', 1)
     bank.remove('iron ore', 1)
 
-    bank.remove({'coal': 1, 'mithril ore': 2})
+    bank.remove({'coal': 1, 'gold ore': 2})
 
     try:
         bank.remove('adamantite ore', 1)
@@ -53,7 +53,7 @@ def test_remove():
     assert not bank.contains('copper ore')
     assert bank.quantity('iron ore') == 1
     assert bank.quantity('coal') == 2
-    assert bank.quantity('mithril ore') == 2
+    assert bank.quantity('gold ore') == 2
     assert not bank.contains('adamantite ore')
 
 
