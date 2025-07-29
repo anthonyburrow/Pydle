@@ -24,7 +24,8 @@ classifiers=[
 dependencies = [
     "numpy",
     "keyboard",
-    "pywin32"
+    "pywin32",
+    "colorama"
 ]
 
 [project.urls]

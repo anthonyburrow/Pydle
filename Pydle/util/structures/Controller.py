@@ -1,6 +1,7 @@
 import sys
 import time
 import threading
+from colorama import just_fix_windows_console
 
 from . import Player
 from .Activity import Activity, ActivitySetupResult
@@ -15,6 +16,9 @@ class Controller:
     def __init__(self, player: Player):
         self.player: Player = player
         self.client_ID: int = get_client_ID()
+
+        # Allow Colorama/termcolor to work on Windows (does nothing if Unix/Mac)
+        just_fix_windows_console()
 
     def loop(self):
         while True:
