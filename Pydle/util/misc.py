@@ -26,21 +26,16 @@ SYS_PLATFORM = get_platform()
 if SYS_PLATFORM == Platform.WINDOWS:
     import win32gui
 elif SYS_PLATFORM == Platform.LINUX:
-    import shutil
-    import subprocess
+    from Xlib import display
 
 
 def get_client_ID():
     if SYS_PLATFORM == Platform.WINDOWS:
         return win32gui.GetForegroundWindow()
     elif SYS_PLATFORM == Platform.LINUX:
-        result = subprocess.run(
-            ['xdotool', 'getwindowfocus'],
-            stdout=subprocess.PIPE,
-            stderr=subprocess.DEVNULL,
-            text=True
-        )
-        return result.stdout.strip()
+        d = display.Display()
+        window = d.get_input_focus().focus
+        return window.id
 
 def client_focused(client_ID) -> bool:
     return client_ID == get_client_ID()

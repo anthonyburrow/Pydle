@@ -25,6 +25,7 @@ dependencies = [
     "numpy",
     "keyboard",
     "pywin32; sys_platform == 'win32'",
+    "python-xlib; sys_platform == 'linux'",
     "colorama",
     "platformdirs"
 ]
