@@ -29,29 +29,17 @@ elif SYS_PLATFORM == Platform.LINUX:
     from Xlib import display as xdisplay
 
 
-def is_display_available() -> bool:
-    if SYS_PLATFORM == Platform.WINDOWS:
-        return True
-    elif SYS_PLATFORM == Platform.LINUX:
-        try:
-            d = xdisplay.Display()
-            d.close()
-            return True
-        except Exception:
-            return False
-    return False
-
-
-def get_client_ID():
+def get_client_ID() -> int | None:
     if SYS_PLATFORM == Platform.WINDOWS:
         return win32gui.GetForegroundWindow()
     elif SYS_PLATFORM == Platform.LINUX:
-        d = xdisplay.Display()
+        try:
+            d = xdisplay.Display()
+        except Exception:
+            return None
         window = d.get_input_focus().focus
         return window.id
 
-def client_focused(client_ID) -> bool:
-    if not is_display_available():
-        return True
 
+def client_focused(client_ID: int) -> bool:
     return client_ID == get_client_ID()

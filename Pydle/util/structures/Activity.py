@@ -97,5 +97,5 @@ class Activity:
     def _check_input_standby(self) -> bool:
         return (
             keyboard.is_pressed(KEY_CANCEL) and
-            client_focused(self.client_ID)
+            if self.client_ID and client_focused(self.client_ID)
         )
