@@ -1,4 +1,4 @@
-from .commands import *
+from .commands import CMD_EXIT
 from ..commands.command_map import map_activity, map_operations, alias_to_command
 
 

@@ -6,7 +6,8 @@ from colorama import just_fix_windows_console
 from . import Player
 from .Activity import Activity, ActivitySetupResult
 from ..output import print_info, print_error
-from ..input import parse_command, flush_input, COMMAND_PREFIX
+from ..input import parse_command, flush_input
+from ..commands import COMMAND_PREFIX
 from ..misc import get_client_ID
 from ..ticks import Ticks
 

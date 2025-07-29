@@ -13,7 +13,7 @@ from .operations import testing
 from ..util.output import print_info
 from ..util.colors import color, color_theme
 from ..util.structures.Player import Player
-from ..util.commands import *
+from ..util.commands import KEY_CANCEL, CMD_EXIT
 
 
 def interface_help(player: Player, *args):
