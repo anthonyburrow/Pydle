@@ -72,14 +72,18 @@ class LootTable:
                                  p=self._weighted_probabilities)
         counted_drops, counts = np.unique(drops, return_counts=True)
 
-        loot = {drop: self._weighted_items[drop][1] * count
-                for drop, count in zip(counted_drops, counts)}
+        loot = {
+            drop: int(self._weighted_items[drop][1] * count)
+            for drop, count in zip(counted_drops, counts)
+        }
 
         return loot
 
     def _roll_every(self, quantity) -> dict:
-        loot = {drop: quantity * self._every_items[drop]
-                for drop in self._every_items}
+        loot = {
+            drop: quantity * self._every_items[drop]
+            for drop in self._every_items
+        }
 
         return loot
 
@@ -92,6 +96,6 @@ class LootTable:
             rolls = np.random.rand(quantity)
             n_successful = (rolls < probability).sum()
 
-            loot[item] = n_successful * item_quantity
+            loot[item] = int(n_successful * item_quantity)
 
         return loot

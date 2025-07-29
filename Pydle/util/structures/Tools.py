@@ -14,8 +14,14 @@ TOOLS = {
 
 class Tools(dict):
 
-    def __init__(self, player: Player):
+    def __init__(self, player: Player, tools_dict: dict = None):
         self._player: Player = player
+
+        tools_dict = tools_dict or {}
+
+        for tool_key, tools_lib in TOOLS.items():
+            tool_name: str = tools_dict.get(tool_key, '')
+            self[tool_key] = tools_lib.get(tool_name, '')
 
     def equip(self, tool: str) -> Result:
         if not self._player.has(tool):
@@ -29,7 +35,7 @@ class Tools(dict):
                 continue
 
             old_tool = self.get_tool(tool_type)
-            if old_tool is not None:
+            if old_tool:
                 self._player.give(old_tool.name)
 
             self._player.remove(tool, quantity=1)
@@ -54,13 +60,13 @@ class Tools(dict):
             )
 
         old_tool: Tool = self.get_tool(tool_type)
-        if old_tool is None:
+        if not old_tool:
             return Result(
                 success=False,
                 msg=f'{self._player} has no {tool_type} equipped.',
             )
 
-        self[tool_type] = None
+        self[tool_type] = ''
         self._player.give(old_tool.name)
 
         return Result(
@@ -72,38 +78,19 @@ class Tools(dict):
         return self[tool_key]
 
     def get_tools(self) -> dict:
-        return {tool_key: self.get_tool(tool_key) for tool_key in TOOLS}
+        return {
+            tool_key: self.get_tool(tool_key)
+            for tool_key in TOOLS
+        }
 
-    def get_tools_names(self) -> dict:
-        tool_names = {}
+    def to_dict(self) -> dict:
+        tool_names: dict = {}
+
         for tool_key in TOOLS:
-            tool = self.get_tool(tool_key)
-            if tool is None:
-                tool_names[tool_key] = ''
-            else:
-                tool_names[tool_key] = tool.name
+            tool: Tool = self.get_tool(tool_key)
+            tool_names[tool_key] = tool.name if tool else ''
 
         return tool_names
-
-    def load_tools(self, tools_dict: dict = None):
-        for tool_key, tools_lib in TOOLS.items():
-            # Basically only procs if new player
-            if tools_dict is None:
-                self[tool_key] = None
-                continue
-
-            # Occurs when there's additions to TOOLS
-            if tool_key not in tools_dict:
-                self[tool_key] = None
-                continue
-
-            tool_name = tools_dict[tool_key]
-
-            if tool_name is None or not tool_name:
-                self[tool_key] = None
-                continue
-
-            self[tool_key] = tools_lib[tool_name]
 
     def __str__(self) -> str:
         msg: list = []
@@ -115,7 +102,7 @@ class Tools(dict):
                 '',
                 justify=just_amount
             )
-            tool_str = tool if tool is not None else '---'
+            tool_str = tool or '---'
             tool_line = f'{name} | {tool_str}'
             msg.append(tool_line)
 

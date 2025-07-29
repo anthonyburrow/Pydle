@@ -3,8 +3,11 @@ from ..colors import color
 
 class UpdatedEffects(dict):
 
-    def __init__(self, *arg, **kwargs):
-        super().__init__(*arg, **kwargs)
+    def __init__(self, effects_dict: dict = None):
+        effects_dict = effects_dict or {}
+
+        for effect_key, effect_ticks in effects_dict.items():
+            self[effect_key] = effect_ticks
 
     def add_effect(self, effect_key: str, effect_ticks: int):
         self[effect_key] = effect_ticks
@@ -27,12 +30,8 @@ class UpdatedEffects(dict):
         for effect_key in keys_to_remove:
             self.remove_effect(effect_key)
 
-    def get_effects(self) -> dict:
+    def to_dict(self) -> dict:
         return dict(self)
-
-    def load_effects(self, effects_dict: dict):
-        for effect_key, effect_ticks in effects_dict.items():
-            self[effect_key] = effect_ticks
 
     def __str__(self):
         if not self:

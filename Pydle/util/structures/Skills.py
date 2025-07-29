@@ -25,19 +25,20 @@ SKILLS = {
 }
 
 
-class Skills:
+class Skills(dict):
 
-    def __init__(self):
-        self._skills: dict = {}
+    def __init__(self, skills_dict: dict = None):
+        skills_dict = skills_dict or {}
+
+        for skill_key, skill_info in SKILLS.items():
+            xp: float = skills_dict.get(skill_key, 0.)
+            self[skill_key] = Skill(*skill_info, xp=xp)
 
     def get_skill(self, skill_key: str) -> Skill:
-        return self._skills[skill_key]
+        return self[skill_key]
 
     def get_skills(self) -> dict:
         return {skill_key: self.get_skill(skill_key) for skill_key in SKILLS}
-
-    def get_skills_xp(self) -> dict:
-        return {skill_key: self.get_skill(skill_key).xp for skill_key in SKILLS}
 
     def add_xp(self, skill_key: str, xp: float):
         return self.get_skill(skill_key).add_xp(xp)
@@ -51,22 +52,11 @@ class Skills:
     def get_level(self, skill_key: str) -> int:
         return self.get_skill(skill_key).level
 
-    def load_skills(self, skills_dict: dict = None):
-        for skill_key, skill_info in SKILLS.items():
-            if skills_dict is None:
-                self._skills[skill_key] = Skill(*skill_info)
-                continue
-
-            if skill_key not in skills_dict:
-                self._skills[skill_key] = Skill(*skill_info)
-                continue
-
-            skill_xp = skills_dict[skill_key]
-            self._skills[skill_key] = Skill(*skill_info, xp=skill_xp)
-
-    @property
-    def skills(self) -> dict:
-        return self._skills
+    def to_dict(self) -> dict:
+        return {
+            skill_key: float(self.get_skill(skill_key).xp)
+            for skill_key in SKILLS
+        }
 
     def __str__(self) -> str:
         msg: list = []

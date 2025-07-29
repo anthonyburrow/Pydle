@@ -1,5 +1,7 @@
-import pickle
 from pathlib import Path
+from dataclasses import dataclass, asdict
+from typing import Self
+import json
 
 from .Bank import Bank
 from .Skills import Skills
@@ -14,7 +16,33 @@ from ..Result import Result
 from ...lib.areas import HOME_AREA
 
 
-_default_save_file = 'character.save'
+_default_save_file = 'player.json'
+
+
+@dataclass
+class PlayerSaveData:
+    name: str
+    area: str
+    items: dict
+    skills: dict
+    tools: dict
+    equipment: dict
+    updated_effects: dict
+
+    def to_dict(self) -> dict:
+        return asdict(self)
+
+    @classmethod
+    def from_dict(cls, data: dict) -> Self:
+        return cls(
+            name=data.get('name', 'UNNAMED'),
+            area=data.get('area', HOME_AREA),
+            items=data.get('items', {}),
+            skills=data.get('skills', {}),
+            tools=data.get('tools', {}),
+            equipment=data.get('equipment', {}),
+            updated_effects=data.get('updated_effects', {}),
+        )
 
 
 class Player:
@@ -145,77 +173,43 @@ class Player:
 
     # Management
     def new_load(self, name: str = None, *args, **kwargs):
-        if name is None:
-            self._name: str = input('Character name?\n> ')
-        else:
-            self._name: str = name
-
+        self._name: str = name or input('Character name?\n> ')
         self._area: str = HOME_AREA
-
         self._bank: Bank = Bank()
-
         self._skills: Skills = Skills()
-        self._skills.load_skills()
-
         self._tools: Tools = Tools(self)
-        self._tools.load_tools()
-
         self._equipment: Equipment = Equipment(self)
-        self._equipment.load_equipment()
-
         self._updated_effects: UpdatedEffects = UpdatedEffects()
 
     def load(self, *args, **kwargs):
         if not Path(self.save_file).is_file():
             return self.new_load(*args, **kwargs)
 
-        with open(self.save_file, 'rb') as file:
-            save_input: dict = pickle.load(file)
+        with open(self.save_file, 'r') as file:
+            data = json.load(file)
+        save_data = PlayerSaveData.from_dict(data)
 
-        self._name: str = save_input['name']
-
-        if 'area' in save_input:
-            self._area: str = save_input['area']
-        else:
-            self._area: str = HOME_AREA
-
-        self._bank: Bank = Bank(save_input['items'])
-
-        self._skills: Skills = Skills()
-        if 'skills' in save_input:
-            self._skills.load_skills(save_input['skills'])
-        else:
-            self._skills.load_skills()
-
-        self._tools: Tools = Tools(self)
-        if 'tools' in save_input:
-            self._tools.load_tools(save_input['tools'])
-        else:
-            self._tools.load_tools()
-
-        self._equipment: Equipment = Equipment(self)
-        if 'equipment' in save_input:
-            self._equipment.load_equipment(save_input['equipment'])
-        else:
-            self._equipment.load_equipment()
-
-        self._updated_effects: UpdatedEffects = UpdatedEffects()
-        if 'updated_effects' in save_input:
-            self._updated_effects.load_effects(save_input['updated_effects'])
+        self._name: str = save_data.name
+        self._area: str = save_data.area
+        self._bank: Bank = Bank(save_data.items)
+        self._skills: Skills = Skills(save_data.skills)
+        self._tools: Tools = Tools(self, save_data.tools)
+        self._equipment: Equipment = Equipment(self, save_data.equipment)
+        self._updated_effects: UpdatedEffects = UpdatedEffects(save_data.updated_effects)
 
     def save(self):
-        save_output: dict = {
-            'name': self.name,
-            'area': self.area,
-            'items': self._bank.get_items(),
-            'skills': self._skills.get_skills_xp(),
-            'tools': self._tools.get_tools_names(),
-            'equipment': self._equipment.get_equipment_names(),
-            'updated_effects': self._updated_effects.get_effects(),
-        }
+        save_data = PlayerSaveData(
+            name=self.name,
+            area=self.area,
+            items=self._bank.to_dict(),
+            skills=self._skills.to_dict(),
+            tools=self._tools.to_dict(),
+            equipment=self._equipment.to_dict(),
+            updated_effects=self._updated_effects.to_dict(),
+        )
 
-        with open(self.save_file, 'wb') as file:
-            pickle.dump(save_output, file)
+        with open(self.save_file, 'w') as file:
+            json.dump(save_data.to_dict(), file, indent=4)
 
     # Misc
     def __str__(self):

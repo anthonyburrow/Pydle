@@ -5,7 +5,7 @@ from ..item_registry import verify_item
 class Bank(dict):
 
     def __init__(self, items: dict = None):
-        if items is not None:
+        if items:
             self.add(items)
 
     def add(self, items: str | dict, *args, **kwargs):
@@ -86,8 +86,10 @@ class Bank(dict):
 
         return self[item]
 
-    def get_items(self) -> dict:
-        return {item: qty for item, qty in self.items()}
+    def to_dict(self) -> dict:
+        return {
+            item: qty for item, qty in self.items()
+        }
 
     def list_concise(self) -> str:
         items_str = []

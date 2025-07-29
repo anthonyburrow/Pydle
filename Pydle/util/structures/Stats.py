@@ -36,6 +36,10 @@ class Stats(dict):
             else:
                 self[stat_key] = stats[stat_key]
 
+    def reset(self):
+        for stat_key in STATS:
+            self[stat_key] = 0
+
     def __str__(self):
         msg: list = []
         just_amount: int = max([len(s) for s in STATS])

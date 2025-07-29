@@ -26,10 +26,18 @@ EQUIPMENT = {
 
 class Equipment(dict):
 
-    def __init__(self, player: Player):
+    def __init__(self, player: Player, equipment_dict: dict = None):
         self._player: Player = player
 
         self._stats: Stats = Stats()
+
+        equipment_dict = equipment_dict or {}
+
+        for equippable_key, equippable_lib in EQUIPMENT.items():
+            equippable_name: str = equipment_dict.get(equippable_key, '')
+            self[equippable_key] = equippable_lib.get(equippable_name, '')
+
+        self._calculate_stats()
 
     def equip(self, equippable_name: str) -> Result:
         if not self._player.has(equippable_name):
@@ -43,7 +51,7 @@ class Equipment(dict):
                 continue
 
             prev_equippable: Equippable = self.get_equippable(equippable_key)
-            if prev_equippable is not None:
+            if prev_equippable:
                 self._player.give(prev_equippable.name)
 
             self._player.remove(equippable_name, quantity=1)
@@ -70,13 +78,13 @@ class Equipment(dict):
             )
 
         prev_equippable: Equippable = self.get_equippable(equippable_key)
-        if prev_equippable is None:
+        if not prev_equippable:
             return Result(
                 success=False,
                 msg=f'{self._player} has no {equippable_key} equipped.'
             )
 
-        self[equippable_key] = None
+        self[equippable_key] = ''
         self._player.give(prev_equippable.name)
 
         self._calculate_stats()
@@ -90,18 +98,17 @@ class Equipment(dict):
         return self[equippable_key]
 
     def get_equipment(self) -> dict:
-        return {equippable_key: self.get_equippable(equippable_key)
-                for equippable_key in EQUIPMENT}
+        return {
+            equippable_key: self.get_equippable(equippable_key)
+            for equippable_key in EQUIPMENT
+        }
 
-    def get_equipment_names(self) -> dict:
-        '''Structure for saved profile'''
-        equipment_names = {}
+    def to_dict(self) -> dict:
+        equipment_names: dict = {}
+
         for equippable_key in EQUIPMENT:
-            equippable = self.get_equippable(equippable_key)
-            if equippable is None:
-                equipment_names[equippable_key] = ''
-            else:
-                equipment_names[equippable_key] = equippable.name
+            equippable: Equippable = self.get_equippable(equippable_key)
+            equipment_names[equippable_key] = equippable.name if equippable else ''
 
         return equipment_names
 
@@ -109,27 +116,13 @@ class Equipment(dict):
     def stats(self) -> Stats:
         return self._stats
 
-    def load_equipment(self, equipment_names: dict = None):
-        for equippable_key, equippable_lib in EQUIPMENT.items():
-            # Basically only procs if new player
-            if equipment_names is None:
-                self[equippable_key] = None
+    def _calculate_stats(self):
+        self._stats.reset()
+
+        for equippable_key, equippable in self.items():
+            if not equippable:
                 continue
-
-            # Occurs when there are additions to EQUIPMENT
-            if equippable_key not in equipment_names:
-                self[equippable_key] = None
-                continue
-
-            equippable_name = equipment_names[equippable_key]
-
-            if equippable_name is None or not equippable_name:
-                self[equippable_key] = None
-                continue
-
-            self[equippable_key] = equippable_lib[equippable_name]
-
-        self._calculate_stats()
+            self._stats += equippable.stats
 
     def __str__(self) -> str:
         msg: list = []
@@ -141,22 +134,12 @@ class Equipment(dict):
                 '',
                 justify=just_amount
             )
-            equippable_str = equippable if equippable is not None else '---'
+            equippable_str = equippable if equippable else '---'
             msg.append(f'{name} | {equippable_str}')
 
-        attack_speed_str = self["weapon"].attack_speed if self['weapon'] else 'N/A'
+        attack_speed_str = self['weapon'].attack_speed if self['weapon'] else 'N/A'
         msg.append(f'\nWeapon tick speed: {attack_speed_str}')
 
         msg = '\n'.join(msg)
 
         return msg
-
-    def _calculate_stats(self):
-        stats: Stats = Stats()
-
-        for equippable_key, equippable in self.items():
-            if equippable is None:
-                continue
-            stats += equippable.stats
-
-        self._stats = stats
