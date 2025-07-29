@@ -1,5 +1,6 @@
 from . import Player, Tool
 from ..colors import color
+from ..Result import Result
 from ...lib.skilling import mining, woodcutting, foraging, fishing
 
 
@@ -16,13 +17,12 @@ class Tools(dict):
     def __init__(self, player: Player):
         self._player: Player = player
 
-    def equip(self, tool: str) -> dict:
+    def equip(self, tool: str) -> Result:
         if not self._player.has(tool):
-            msg = f'{self._player} does not have a {tool}.'
-            return {
-                'success': False,
-                'msg': msg,
-            }
+            return Result(
+                success=False,
+                msg=f'{self._player} does not have a {tool}.',
+            )
 
         for tool_type, tool_dict in TOOLS.items():
             if tool not in tool_dict:
@@ -36,35 +36,37 @@ class Tools(dict):
             tool_obj = tool_dict[tool]
             self[tool_type] = tool_obj
 
-            msg = f"{tool_obj} was equipped to {self._player}'s toolbelt."
-            return {
-                'success': True,
-                'msg': msg,
-            }
+            return Result(
+                success=True,
+                msg=f"{tool_obj} was equipped to {self._player}'s toolbelt.",
+            )
 
-        msg = f"{tool.capitalize()} cannot be placed in {self._player}'s toolbelt."
-        return {
-            'success': False,
-            'msg': msg,
-        }
+        return Result(
+            success=False,
+            msg=f"{tool.capitalize()} cannot be placed in {self._player}'s toolbelt.",
+        )
 
-    def unequip(self, tool_type: str) -> dict:
+    def unequip(self, tool_type: str) -> Result:
+        if tool_type not in self:
+            return Result(
+                success=False,
+                msg=f'{tool_type.capitalize()} is not a valid type of tool (axe, pickaxe, etc.).',
+            )
+
         old_tool: Tool = self.get_tool(tool_type)
         if old_tool is None:
-            msg: str = f'{self._player} has no {tool_type} equipped.'
-            return {
-                'success': False,
-                'msg': msg,
-            }
+            return Result(
+                success=False,
+                msg=f'{self._player} has no {tool_type} equipped.',
+            )
 
         self[tool_type] = None
         self._player.give(old_tool.name)
 
-        msg: str = f"{old_tool} was unequipped from {self._player}'s toolbelt."
-        return {
-            'success': True,
-            'msg': msg,
-        }
+        return Result(
+            success=True,
+            msg=f"{old_tool} was unequipped from {self._player}'s toolbelt.",
+        )
 
     def get_tool(self, tool_key: str) -> Tool:
         return self[tool_key]

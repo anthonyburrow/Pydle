@@ -1,5 +1,6 @@
 from ...util.structures.Player import Player
 from ...util.output import print_info
+from ...util.Result import Result
 
 
 def interface_tools(player: Player, *args):
@@ -16,15 +17,15 @@ def interface_tools(player: Player, *args):
         return
 
     if subcommand == 'equip':
-        operation = player.equip_tool(tool)
+        result: Result = player.equip_tool(tool)
     elif subcommand == 'unequip':
-        operation = player.unequip_tool(tool)
+        result: Result = player.unequip_tool(tool)
     else:
         msg = f'{subcommand} is not a valid argument.'
         print_info(msg)
         return
 
-    print_info(operation['msg'])
+    print_info(result.msg)
 
 
 def detailed_info():

@@ -10,6 +10,7 @@ from .Equipment import Equipment
 from .Stats import Stats
 from .UpdatedEffects import UpdatedEffects
 from ..colors import color, color_theme
+from ..Result import Result
 from ...lib.areas import HOME_AREA
 
 
@@ -93,10 +94,10 @@ class Player:
         return self._bank
 
     # Tools
-    def equip_tool(self, *args, **kwargs):
+    def equip_tool(self, *args, **kwargs) -> Result:
         return self._tools.equip(*args, **kwargs)
 
-    def unequip_tool(self, *args, **kwargs):
+    def unequip_tool(self, *args, **kwargs) -> Result:
         return self._tools.unequip(*args, **kwargs)
 
     def get_tool(self, *args, **kwargs) -> Tool:
@@ -107,10 +108,10 @@ class Player:
         return self._tools
 
     # Equipment
-    def equip(self, *args, **kwargs):
+    def equip(self, *args, **kwargs) -> Result:
         return self._equipment.equip(*args, **kwargs)
 
-    def unequip(self, *args, **kwargs):
+    def unequip(self, *args, **kwargs) -> Result:
         return self._equipment.unequip(*args, **kwargs)
 
     @property

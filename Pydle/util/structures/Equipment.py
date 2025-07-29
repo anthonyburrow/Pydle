@@ -1,6 +1,7 @@
 from . import Player, Equippable
 from .Stats import Stats
 from ..colors import color
+from ..Result import Result
 from ...lib.equipment import (
     WEAPONS,
     OFFHANDS,
@@ -28,16 +29,14 @@ class Equipment(dict):
     def __init__(self, player: Player):
         self._player: Player = player
 
-        self._equipment: dict = {}
         self._stats: Stats = Stats()
 
-    def equip(self, equippable_name: str) -> dict:
+    def equip(self, equippable_name: str) -> Result:
         if not self._player.has(equippable_name):
-            msg = f'{self._player} does not have a {equippable_name}.'
-            return {
-                'success': False,
-                'msg': msg,
-            }
+            return Result(
+                success=False,
+                msg=f'{self._player} does not have a {equippable_name}.'
+            )
 
         for equippable_key, equippable_lib in EQUIPMENT.items():
             if equippable_name not in equippable_lib:
@@ -53,37 +52,39 @@ class Equipment(dict):
 
             self._calculate_stats()
 
-            msg = f"{equippable} was equipped."
-            return {
-                'success': True,
-                'msg': msg,
-            }
+            return Result(
+                success=True,
+                msg=f'{equippable} was equipped.'
+            )
 
-        msg = f"{equippable_name.capitalize()} cannot be equipped."
-        return {
-            'success': False,
-            'msg': msg,
-        }
+        return Result(
+            success=False,
+            msg=f'{equippable_name.capitalize()} cannot be equipped.'
+        )
 
-    def unequip(self, equippable_key: str) -> dict:
+    def unequip(self, equippable_key: str) -> Result:
+        if equippable_key not in self:
+            return Result(
+                success=False,
+                msg=f'{equippable_key.capitalize()} is not a valid type of equipment (helm, body, etc.).',
+            )
+
         prev_equippable: Equippable = self.get_equippable(equippable_key)
         if prev_equippable is None:
-            msg: str = f'{self._player} has no {equippable_key} equipped.'
-            return {
-                'success': False,
-                'msg': msg,
-            }
+            return Result(
+                success=False,
+                msg=f'{self._player} has no {equippable_key} equipped.'
+            )
 
         self[equippable_key] = None
         self._player.give(prev_equippable.name)
 
         self._calculate_stats()
 
-        msg: str = f"{prev_equippable} was unequipped."
-        return {
-            'success': True,
-            'msg': msg,
-        }
+        return Result(
+            success=True,
+            msg=f'{prev_equippable} was unequipped.'
+        )
 
     def get_equippable(self, equippable_key: str) -> Equippable:
         return self[equippable_key]
