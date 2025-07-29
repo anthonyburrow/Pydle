@@ -20,8 +20,8 @@ class Tools(dict):
         tools_dict = tools_dict or {}
 
         for tool_key, tools_lib in TOOLS.items():
-            tool_name: str = tools_dict.get(tool_key, '')
-            self[tool_key] = tools_lib.get(tool_name, '')
+            tool_name: str = tools_dict.get(tool_key, None)
+            self[tool_key] = tools_lib.get(tool_name, None)
 
     def equip(self, tool: str) -> Result:
         if not self._player.has(tool):
@@ -109,3 +109,8 @@ class Tools(dict):
         msg = '\n'.join(msg)
 
         return msg
+
+    def __setitem__(self, key, value):
+        if key not in TOOLS:
+            raise KeyError(f'Invalid skill key: "{key}"')
+        super().__setitem__(key, value)

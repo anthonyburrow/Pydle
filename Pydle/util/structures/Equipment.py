@@ -34,8 +34,8 @@ class Equipment(dict):
         equipment_dict = equipment_dict or {}
 
         for equippable_key, equippable_lib in EQUIPMENT.items():
-            equippable_name: str = equipment_dict.get(equippable_key, '')
-            self[equippable_key] = equippable_lib.get(equippable_name, '')
+            equippable_name: str = equipment_dict.get(equippable_key, None)
+            self[equippable_key] = equippable_lib.get(equippable_name, None)
 
         self._calculate_stats()
 
@@ -143,3 +143,8 @@ class Equipment(dict):
         msg = '\n'.join(msg)
 
         return msg
+
+    def __setitem__(self, key, value):
+        if key not in EQUIPMENT:
+            raise KeyError(f'Invalid skill key: "{key}"')
+        super().__setitem__(key, value)

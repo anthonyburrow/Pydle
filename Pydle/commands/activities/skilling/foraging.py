@@ -49,7 +49,7 @@ class ForagingActivity(Activity):
                 msg=f'{area} does not have {self.herb} anywhere.'
             )
 
-        if self.secateurs is None:
+        if not self.secateurs:
             return ActivitySetupResult(
                 success=False,
                 msg=f'{self.player} does not have any secateurs.'

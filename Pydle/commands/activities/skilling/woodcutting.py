@@ -49,7 +49,7 @@ class WoodcuttingActivity(Activity):
                 msg=f'{area} does not have {self.log} anywhere.'
             )
 
-        if self.axe is None:
+        if not self.axe:
             return ActivitySetupResult(
                 success=False,
                 msg=f'{self.player} does not have an axe.'

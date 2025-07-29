@@ -74,3 +74,8 @@ class Skills(dict):
         msg = '\n'.join(msg)
 
         return msg
+
+    def __setitem__(self, key, value):
+        if key not in SKILLS:
+            raise KeyError(f'Invalid skill key: "{key}"')
+        super().__setitem__(key, value)

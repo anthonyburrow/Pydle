@@ -25,16 +25,13 @@ STATS = {
 
 class Stats(dict):
 
-    def __init__(self, stats: dict = None, *arg, **kwargs):
+    def __init__(self, stats_dict: dict = None, *arg, **kwargs):
         super().__init__(*arg, **kwargs)
 
+        stats_dict = stats_dict or {}
+
         for stat_key in STATS:
-            if stats is None:
-                self[stat_key] = 0
-            elif stat_key not in stats:
-                self[stat_key] = 0
-            else:
-                self[stat_key] = stats[stat_key]
+            self[stat_key] = stats_dict.get(stat_key, 0)
 
     def reset(self):
         for stat_key in STATS:
@@ -57,12 +54,12 @@ class Stats(dict):
 
         return msg
 
-    def __setitem__(self, key: str, value: int):
-        if key not in STATS:
-            return
-        super().__setitem__(key, int(value))
-
     def __add__(self, other_stats):
         for stat in STATS:
             self[stat] += other_stats[stat]
         return self
+
+    def __setitem__(self, key, value):
+        if key not in STATS:
+            raise KeyError(f'Invalid skill key: "{key}"')
+        super().__setitem__(key, int(value))

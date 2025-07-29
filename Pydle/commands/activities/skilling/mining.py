@@ -49,7 +49,7 @@ class MiningActivity(Activity):
                 msg=f'{area} does not have {self.ore} anywhere.'
             )
 
-        if self.pickaxe is None:
+        if not self.pickaxe:
             return ActivitySetupResult(
                 success=False,
                 msg=f'{self.player} does not have a pickaxe.'

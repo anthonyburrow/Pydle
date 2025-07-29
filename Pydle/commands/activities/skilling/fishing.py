@@ -49,7 +49,7 @@ class FishingActivity(Activity):
                 msg=f'{area} does not have {self.fish} anywhere.'
             )
 
-        if self.fishing_rod is None:
+        if not self.fishing_rod:
             return ActivitySetupResult(
                 success=False,
                 msg=f'{self.player} does not have a fishing rod.'
