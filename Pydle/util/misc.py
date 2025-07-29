@@ -27,7 +27,6 @@ if SYS_PLATFORM == Platform.WINDOWS:
     import win32gui
 elif SYS_PLATFORM == Platform.LINUX:
     from Xlib import display as xdisplay
-    from Xlib import error as xerror
 
 
 def is_display_available() -> bool:
@@ -38,7 +37,7 @@ def is_display_available() -> bool:
             d = xdisplay.Display()
             d.close()
             return True
-        except xerror.DisplayNameError:
+        except Exception:
             return False
     return False
 
