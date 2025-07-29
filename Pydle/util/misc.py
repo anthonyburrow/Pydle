@@ -26,16 +26,32 @@ SYS_PLATFORM = get_platform()
 if SYS_PLATFORM == Platform.WINDOWS:
     import win32gui
 elif SYS_PLATFORM == Platform.LINUX:
-    from Xlib import display
+    import Xlib
+
+
+def is_display_available() -> bool:
+    if SYS_PLATFORM == Platform.WINDOWS:
+        return True
+    elif SYS_PLATFORM == Platform.LINUX:
+        try:
+            d = Xlib.display.Display()
+            d.close()
+            return True
+        except Xlib.error.DisplayNameError:
+            return False
+    return False
 
 
 def get_client_ID():
     if SYS_PLATFORM == Platform.WINDOWS:
         return win32gui.GetForegroundWindow()
     elif SYS_PLATFORM == Platform.LINUX:
-        d = display.Display()
+        d = Xlib.display.Display()
         window = d.get_input_focus().focus
         return window.id
 
 def client_focused(client_ID) -> bool:
+    if not is_display_available():
+        return True
+
     return client_ID == get_client_ID()
