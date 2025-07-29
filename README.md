@@ -16,8 +16,8 @@ cd Pydle
 pip install .
 ```
 
-This creates a `pydle` script that should be added to your path that runs the
-game:
+This creates a `pydle` script that should be added to your path. You can run
+this script from anywhere to run the game:
 
 ```
 pydle
@@ -30,6 +30,11 @@ Python packages (which are installed with `pip install .`):
 - `pywin32`
 - `colorama`
 - `platformdirs`
+
+Player data is written to a "player.json" file which is saved in the
+`platformdirs` user data directory:
+- Windows: `C:\Users\<username>\AppData\Local\Pydle\Pydle`
+- Linux: `~/.local/share/Pydle/Pydle`
 
 
 ## In the Game
