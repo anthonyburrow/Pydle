@@ -106,13 +106,13 @@ class Bank(dict):
         msg.append('---')
 
         if not self:
-            return f'\n'.join(msg)
+            return '\n'.join(msg)
 
         for item, quantity in self.items():
             qty = color(f'({quantity}x)', color_theme['UI_1'])
             msg.append(f'{item.capitalize()} {qty}')
 
-        msg = f'\n'.join(msg)
+        msg = '\n'.join(msg)
 
         return msg
 
