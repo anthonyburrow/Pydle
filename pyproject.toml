@@ -25,7 +25,8 @@ dependencies = [
     "numpy",
     "keyboard",
     "pywin32",
-    "colorama"
+    "colorama",
+    "platformdirs"
 ]
 
 [project.urls]
@@ -36,3 +37,10 @@ test = [
     "pytest",
     "matplotlib",
 ]
+
+[project.scripts]
+pydle = "Pydle.main:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["Pydle", "Pydle.*"]

@@ -8,14 +8,28 @@ expect many changes, deviations, and additions as it evolves.
 
 ## Installation and Running
 
-Currently, it's best to download the source, navigate to the root directory,
-and run the main entry-point file with `python ./Pydle.py`.
+Clone the source and install with `pip`:
+
+```
+git clone https://github.com/anthonyburrow/Pydle.git
+cd Pydle
+pip install .
+```
+
+This creates a `pydle` script that should be added to your path that runs the
+game:
+
+```
+pydle
+```
 
 This game was built on Python 3.13.5 for Windows, and requires the following
-Python packages:
+Python packages (which are installed with `pip install .`):
 - `numpy`
 - `keyboard`
 - `pywin32`
+- `colorama`
+- `platformdirs`
 
 
 ## In the Game
