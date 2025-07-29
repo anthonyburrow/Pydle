@@ -1,4 +1,5 @@
 from ..ticks import Ticks
+from ..colors import color, color_theme
 
 
 class Area:
@@ -54,34 +55,40 @@ class Area:
     def detailed_info(self) -> str:
         msg = []
 
-        msg.append(self.name)
-        msg.append('---')
+        msg.append('-' * len(self.name))
+        msg.append(str(self))
+        msg.append('-' * len(self.name))
+        msg.append('')
+
+        # text: str = f'{self.name}'
+        # color('Monsters', color_theme['player'])
 
         if self.monsters:
-            msg.append('Monsters:')
-            [msg.append(f'- {x}') for x in self.monsters]
+            msg.append(f'{color('Monsters', color_theme['skill_combat'])}:')
+            [msg.append(f'- {x.capitalize()}') for x in self.monsters]
             msg.append('')
 
         if self.fish:
-            msg.append('Fishing:')
-            [msg.append(f'- {x}') for x in self.fish]
+            msg.append(f'{color('Fishing', color_theme['skill_gathering'])}:')
+            [msg.append(f'- {x.capitalize()}') for x in self.fish]
             msg.append('')
 
         if self.herbs:
-            msg.append('Foraging:')
-            [msg.append(f'- {x}') for x in self.herbs]
+            msg.append(f'{color('Foraging', color_theme['skill_gathering'])}:')
+            [msg.append(f'- {x.capitalize()}') for x in self.herbs]
             msg.append('')
 
         if self.logs:
-            msg.append('Woodcutting:')
-            [msg.append(f'- {x}') for x in self.logs]
+            msg.append(f'{color('Woodcutting', color_theme['skill_gathering'])}:')
+            [msg.append(f'- {x.capitalize()}') for x in self.logs]
             msg.append('')
 
         if self.ores:
-            msg.append('Mining:')
-            [msg.append(f'- {x}') for x in self.ores]
+            msg.append(f'{color('Mining', color_theme['skill_gathering'])}:')
+            [msg.append(f'- {x.capitalize()}') for x in self.ores]
 
         return '\n'.join(msg)
 
     def __str__(self) -> str:
-        return self.name
+        text: str = f'{self.name}'
+        return color(text, color_theme['UI_1'])

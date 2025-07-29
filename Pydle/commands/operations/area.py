@@ -13,9 +13,8 @@ def interface_area(player: Player, *args):
     if subcommand == 'list':
         msg = []
         msg.append('Available areas:')
-        for area in AREAS:
-            name = str(area).capitalize()
-            msg.append(f'- {name}')
+        for area_key, area in AREAS.items():
+            msg.append(f'- {area}')
         return print_info('\n'.join(msg), multiline=True)
 
     if subcommand not in AREAS:
