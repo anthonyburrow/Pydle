@@ -60,9 +60,6 @@ class Area:
         msg.append('-' * len(self.name))
         msg.append('')
 
-        # text: str = f'{self.name}'
-        # color('Monsters', color_theme['player'])
-
         if self.monsters:
             msg.append(f'{color('Monsters', color_theme['skill_combat'])}:')
             [msg.append(f'- {x.capitalize()}') for x in self.monsters]
