@@ -18,9 +18,6 @@ from ...lib.areas import HOME_AREA
 from ...lib.item_sets import NEW_PLAYER_ITEMS
 
 
-_default_save_file = 'player.json'
-
-
 @dataclass
 class PlayerSaveData:
     name: str
@@ -50,8 +47,6 @@ class PlayerSaveData:
 class Player:
 
     def __init__(self, save_file: str = None, *args, **kwargs):
-        if save_file is None:
-            save_file = _default_save_file
         self.save_file: str = save_file
 
         self.load(*args, **kwargs)
@@ -186,6 +181,9 @@ class Player:
         self.save()
 
     def load(self, *args, **kwargs):
+        if not self.save_file:
+            return self.load_new_player(*args, **kwargs)
+
         if not Path(self.save_file).is_file():
             return self.load_new_player(*args, **kwargs)
 
@@ -202,6 +200,9 @@ class Player:
         self._updated_effects: UpdatedEffects = UpdatedEffects(save_data.updated_effects)
 
     def save(self):
+        if not self.save_file:
+            return
+
         save_data = PlayerSaveData(
             name=self.name,
             area=self.area,
