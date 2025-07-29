@@ -41,5 +41,7 @@ def get_client_ID() -> int | None:
         return window.id
 
 
-def client_focused(client_ID: int) -> bool:
+def client_focused(client_ID: int | None) -> bool:
+    if client_ID is None:
+        return True
     return client_ID == get_client_ID()
