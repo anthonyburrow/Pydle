@@ -24,7 +24,7 @@ classifiers=[
 dependencies = [
     "numpy",
     "keyboard",
-    "pywin32",
+    "pywin32; sys_platform == 'win32'",
     "colorama",
     "platformdirs"
 ]
@@ -33,9 +33,10 @@ dependencies = [
 Repository = "https://github.com/anthonyburrow/Pydle.git"
 
 [project.optional-dependencies]
-test = [
+dev = [
     "pytest",
-    "matplotlib",
+    "pytest-cov",
+    "ruff",
 ]
 
 [project.scripts]

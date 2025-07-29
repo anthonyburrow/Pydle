@@ -1,5 +1,0 @@
-numpy
-keyboard
-pywin32
-colorama
-platformdirs
