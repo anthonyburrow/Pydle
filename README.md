@@ -40,10 +40,8 @@ Player data is written to a "player.json" file which is saved in the
 ## In the Game
 
 The game begins with the user giving a name to their character. This begins a
-save file for this character saved in `<root>/profile/`, which is loaded
-anytime the game starts again.
+save file for this character, which is loaded anytime the game starts again.
 
 For a list of available commands, use `help` or `?`.
 
 The the CLI and game can be closed with the `exit` command.
-
