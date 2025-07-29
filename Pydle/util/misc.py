@@ -41,3 +41,6 @@ def get_client_ID():
             text=True
         )
         return result.stdout.strip()
+
+def client_focused(client_ID) -> bool:
+    return client_ID == get_client_ID()
