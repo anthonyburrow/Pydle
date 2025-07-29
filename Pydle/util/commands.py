@@ -1,3 +1,5 @@
+COMMAND_PREFIX = '> '
+
 # Keys
 KEY_CANCEL = 'c'
 

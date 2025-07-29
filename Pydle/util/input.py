@@ -2,9 +2,6 @@ from .commands import *
 from ..commands.command_map import map_activity, map_operations, alias_to_command
 
 
-COMMAND_PREFIX = '> '
-
-
 def flush_input():
     try:
         import msvcrt

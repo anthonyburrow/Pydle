@@ -12,8 +12,10 @@ from .Equipment import Equipment
 from .Stats import Stats
 from .UpdatedEffects import UpdatedEffects
 from ..colors import color, color_theme
+from ..commands import COMMAND_PREFIX
 from ..Result import Result
 from ...lib.areas import HOME_AREA
+from ...lib.item_sets import NEW_PLAYER_ITEMS
 
 
 _default_save_file = 'player.json'
@@ -172,18 +174,20 @@ class Player:
         return self._updated_effects
 
     # Management
-    def new_load(self, name: str = None, *args, **kwargs):
-        self._name: str = name or input('Character name?\n> ')
+    def load_new_player(self, name: str = None, *args, **kwargs):
+        self._name: str = name or input(f'Character name?\n{COMMAND_PREFIX}')
         self._area: str = HOME_AREA
-        self._bank: Bank = Bank()
+        self._bank: Bank = Bank(NEW_PLAYER_ITEMS)
         self._skills: Skills = Skills()
         self._tools: Tools = Tools(self)
         self._equipment: Equipment = Equipment(self)
         self._updated_effects: UpdatedEffects = UpdatedEffects()
 
+        self.save()
+
     def load(self, *args, **kwargs):
         if not Path(self.save_file).is_file():
-            return self.new_load(*args, **kwargs)
+            return self.load_new_player(*args, **kwargs)
 
         with open(self.save_file, 'r') as file:
             data = json.load(file)
