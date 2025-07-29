@@ -2,10 +2,6 @@ from .commands import *
 from ..commands.command_map import map_activity, map_operations, alias_to_command
 
 
-NULL_INPUT = {
-    'type': None
-}
-
 COMMAND_PREFIX = '> '
 
 
@@ -23,6 +19,7 @@ def flush_input():
 
 def parse_command(msg: str) -> dict:
     msg = msg.lower()
+    msg = msg.strip()
     msg = msg.split(' ')
 
     command = msg[0]
@@ -44,5 +41,11 @@ def parse_command(msg: str) -> dict:
         return {
             'type': 'exit',
         }
+    elif command:
+        return {
+            'type': 'unknown',
+        }
 
-    return NULL_INPUT
+    return {
+        'type': None
+    }

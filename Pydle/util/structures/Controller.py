@@ -31,13 +31,15 @@ class Controller:
         command: str = input(COMMAND_PREFIX)
         command: dict = parse_command(command)
 
-        if command['type'] == 'activity':
+        command_type = command['type']
+
+        if command_type == 'activity':
             self.control_activity(command)
-        elif command['type'] == 'operation':
+        elif command_type == 'operation':
             self.control_operation(command)
-        elif command['type'] == 'exit':
+        elif command_type == 'exit':
             sys.exit()
-        else:
+        elif command_type == 'unknown':
             print_info('Unknown command.')
 
     def control_activity(self, command: dict):
