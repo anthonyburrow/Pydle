@@ -6,7 +6,6 @@ from .Player import Player
 from .UserInterface import UserInterface
 from .Bank import Bank
 from .Skill import level_up_msg
-from ..misc import client_focused
 from ..commands import KEY_CANCEL
 
 
@@ -33,10 +32,9 @@ class ActivityTickResult:
 
 class Activity:
 
-    def __init__(self, player: Player, ui: UserInterface, client_ID: int, *args):
+    def __init__(self, player: Player, ui: UserInterface, *args):
         self.player: Player = player
         self.ui: UserInterface = ui
-        self.client_ID: int = client_ID
 
         self.argument: str = ' '.join(args)
 
@@ -98,5 +96,5 @@ class Activity:
     def _check_input_standby(self) -> bool:
         return (
             keyboard.is_pressed(KEY_CANCEL) and
-            client_focused(self.client_ID)
+            self.ui.is_focused()
         )

@@ -18,7 +18,7 @@ def test_missing_pickaxe():
     command = parse_command(command)
 
     # Test no pickaxe
-    activity = MiningActivity(player, ui, controller.client_ID, *command['args'])
+    activity = MiningActivity(player, ui, *command['args'])
     result_setup = activity.setup()
 
     assert not result_setup.success
@@ -27,7 +27,7 @@ def test_missing_pickaxe():
     player.give('iron pickaxe')
     player.equip_tool('iron pickaxe')
 
-    activity = MiningActivity(player, ui, controller.client_ID, *command['args'])
+    activity = MiningActivity(player, ui, *command['args'])
     result_setup = activity.setup()
 
     assert result_setup.success
@@ -47,7 +47,7 @@ def test_misspelled_ore():
     player.give('iron pickaxe')
     player.equip_tool('iron pickaxe')
 
-    activity = MiningActivity(player, ui, controller.client_ID, *command['args'])
+    activity = MiningActivity(player, ui, *command['args'])
     result_setup = activity.setup()
 
     assert not result_setup.success

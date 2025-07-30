@@ -7,7 +7,6 @@ from .Player import Player
 from .UserInterface import UserInterface
 from .Activity import Activity, ActivitySetupResult
 from ..input import parse_command, flush_input
-from ..misc import get_client_ID
 from ..ticks import Ticks
 
 
@@ -15,8 +14,6 @@ class Controller:
 
     def __init__(self, player: Player, ui: UserInterface):
         self.player: Player = player
-        self.client_ID: int = get_client_ID()
-
         self.ui: UserInterface = ui
 
     def loop(self):
@@ -47,7 +44,7 @@ class Controller:
 
     def control_activity(self, command: dict):
         activity: Activity = command['activity'](
-            self.player, self.ui, self.client_ID, *command['args']
+            self.player, self.ui, *command['args']
         )
 
         result_setup: ActivitySetupResult = activity.setup()
