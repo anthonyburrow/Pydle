@@ -1,21 +1,18 @@
 from ...util.structures.Player import Player
-from ...util.output import print_info
+from ...util.structures.UserInterface import UserInterface
 from ..testing.skilling import testing_skilling
 
 
-def interface_testing(player: Player, *args):
+def interface_testing(player: Player, ui: UserInterface, *args):
     if not args:
-        msg = 'A subcommand for `testing` is needed.'
-        print_info(msg)
-        return
+        return ui.print('A subcommand for `testing` is needed.')
 
     subcommand = args[0]
 
     if subcommand == 'skilling':
         testing_skilling(player)
     else:
-        msg = f'Unknown subcommand `{subcommand}`'
-        print_info(msg)
+        ui.print(f'Unknown subcommand `{subcommand}`')
 
 
 def detailed_info():

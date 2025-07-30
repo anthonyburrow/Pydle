@@ -3,37 +3,35 @@ import time
 import threading
 from colorama import just_fix_windows_console
 
-from . import Player
+from .Player import Player
+from .UserInterface import UserInterface
 from .Activity import Activity, ActivitySetupResult
-from ..output import print_info, print_error
 from ..input import parse_command, flush_input
-from ..commands import COMMAND_PREFIX
 from ..misc import get_client_ID
 from ..ticks import Ticks
 
 
 class Controller:
 
-    def __init__(self, player: Player):
+    def __init__(self, player: Player, ui: UserInterface):
         self.player: Player = player
         self.client_ID: int = get_client_ID()
 
-        # Allow Colorama/termcolor to work on Windows (does nothing if Unix/Mac)
-        just_fix_windows_console()
+        self.ui: UserInterface = ui
 
     def loop(self):
         while True:
             try:
                 self.listen()
             except Exception as e:
-                print_error(e)
+                self.ui.print_error(e)
                 continue
 
             self.player.save()
 
     def listen(self):
         flush_input()
-        command: str = input(COMMAND_PREFIX)
+        command: str = self.ui.get_command()
         command: dict = parse_command(command)
 
         command_type = command['type']
@@ -45,16 +43,16 @@ class Controller:
         elif command_type == 'exit':
             sys.exit()
         elif command_type == 'unknown':
-            print_info('Unknown command.')
+            self.ui.print('Unknown command.')
 
     def control_activity(self, command: dict):
         activity: Activity = command['activity'](
-            self.player, self.client_ID, *command['args']
+            self.player, self.ui, self.client_ID, *command['args']
         )
 
         result_setup: ActivitySetupResult = activity.setup()
         if not result_setup.success:
-            print_info(result_setup.msg)
+            self.ui.print(result_setup.msg)
             return
 
         activity.begin()
@@ -74,4 +72,4 @@ class Controller:
 
     def control_operation(self, command: dict):
         function = command['function']
-        function(self.player, *command['args'])
+        function(self.player, self.ui, *command['args'])

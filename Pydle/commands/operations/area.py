@@ -1,12 +1,12 @@
 from ...util.structures.Player import Player
-from ...util.output import print_info
+from ...util.structures.UserInterface import UserInterface
 from ...lib.areas import AREAS
 
 
-def interface_area(player: Player, *args):
+def interface_area(player: Player, ui: UserInterface, *args):
     if not args:
         current_area = AREAS[player.area]
-        return print_info(f'{player} is currently at {current_area}.')
+        return ui.print(f'{player} is currently at {current_area}.')
 
     subcommand = ' '.join(args)
 
@@ -15,12 +15,12 @@ def interface_area(player: Player, *args):
         msg.append('Available areas:')
         for area_key, area in AREAS.items():
             msg.append(f'- {area}')
-        return print_info('\n'.join(msg), multiline=True)
+        return ui.print('\n'.join(msg), multiline=True)
 
     if subcommand not in AREAS:
-        return print_info(f'{subcommand} is not a valid area.')
+        return ui.print(f'{subcommand} is not a valid area.')
 
-    print_info(AREAS[subcommand].detailed_info(), multiline=True)
+    ui.print(AREAS[subcommand].detailed_info(), multiline=True)
 
 
 def detailed_info():

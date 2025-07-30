@@ -28,10 +28,6 @@ def color(text: str, color: str, justify: int = 0, just_type: str = 'right'):
     return out_text
 
 
-def skill_to_color(skill_type: str) -> str:
-    return color_theme[f'skill_{skill_type}']
-
-
 # THEME:
 color_theme = {
     # UI elements

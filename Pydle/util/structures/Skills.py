@@ -1,5 +1,5 @@
 from .Skill import Skill
-from ..colors import color, skill_to_color
+from ..colors import color, color_theme
 
 
 # { skill_key : (Formal name, Skill type) }
@@ -65,7 +65,7 @@ class Skills(dict):
             skill: Skill = self.get_skill(skill_key)
             name: str = color(
                 skill.name,
-                skill_to_color(skill.skill_type),
+                color_theme[f'skill_{skill.skill_type}'],
                 justify=just_amount,
             )
             skill_line: str = f'{name} | Lvl {skill.level:<2} ({skill.xp:,.0f} Exp)'

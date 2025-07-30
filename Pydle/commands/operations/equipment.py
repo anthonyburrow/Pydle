@@ -1,32 +1,30 @@
 from ...util.structures.Player import Player
-from ...util.output import print_info
+from ...util.structures.UserInterface import UserInterface
 from ...util.Result import Result
 
 
-def interface_equipment(player: Player, *args):
+def interface_equipment(player: Player, ui: UserInterface, *args):
     if not args:
-        return print_info(str(player.equipment), multiline=True)
+        return ui.print(str(player.equipment), multiline=True)
 
     subcommand = args[0]
 
     if subcommand == 'stats':
-        return print_info(str(player.stats), multiline=True)
+        return ui.print(str(player.stats), multiline=True)
 
     equippable_name = ' '.join(args[1:])
 
     if not equippable_name:
-        msg = 'An item argument was not given.'
-        return print_info(msg)
+        return ui.print('An item argument was not given.')
 
     if subcommand == 'equip':
         result: Result = player.equip(equippable_name)
     elif subcommand == 'unequip':
         result: Result = player.unequip(equippable_name)
     else:
-        msg = f'{subcommand} is not a valid argument.'
-        return print_info(msg)
+        return ui.print(f'"{subcommand}" is not a valid argument.')
 
-    print_info(result.msg)
+    ui.print(result.msg)
 
 
 def detailed_info():

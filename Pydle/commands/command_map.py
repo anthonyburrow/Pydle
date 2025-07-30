@@ -10,30 +10,30 @@ from .operations import skills
 from .operations import tools
 from .operations import testing
 
-from ..util.output import print_info
 from ..util.colors import color, color_theme
 from ..util.structures.Player import Player
+from ..util.structures.UserInterface import UserInterface
 from ..util.commands import KEY_CANCEL, CMD_EXIT
 
 
-def interface_help(player: Player, *args):
+def interface_help(player: Player, ui: UserInterface, *args):
     if args:
         subcommand = args[0]
         if subcommand in map_activity:
             msg_func = map_activity[subcommand]['detailed_info']
             msg = msg_func()
-            print_info(msg, multiline=True)
+            ui.print(msg, multiline=True)
         elif subcommand in map_operations:
             msg_func = map_operations[subcommand]['detailed_info']
             msg = msg_func()
-            print_info(msg, multiline=True)
+            ui.print(msg, multiline=True)
         elif subcommand == 'help':
             command_str = color('help', color_theme['UI_1'])
             msg = f'Use `{command_str} [command]` for more detail on a command.'
-            print_info(msg)
+            ui.print(msg)
         else:
             msg = f'Invalid argument {subcommand}.'
-            print_info(msg)
+            ui.print(msg)
 
         return
 
@@ -80,7 +80,7 @@ def interface_help(player: Player, *args):
     command_str = color(CMD_EXIT, color_theme['UI_1'])
     msg.append(f'  - {command_str}: Exit the game.')
 
-    print_info('\n'.join(msg), multiline=True)
+    ui.print('\n'.join(msg), multiline=True)
 
 
 # Mapping

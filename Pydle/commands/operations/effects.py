@@ -1,10 +1,10 @@
 from ...util.structures.Player import Player
-from ...util.output import print_info
+from ...util.structures.UserInterface import UserInterface
 
 
-def interface_effects(player: Player, *args):
+def interface_effects(player: Player, ui: UserInterface, *args):
     if not args:
-        return print_info(str(player.updated_effects), multiline=True)
+        return ui.print(str(player.updated_effects), multiline=True)
 
 
 def detailed_info():

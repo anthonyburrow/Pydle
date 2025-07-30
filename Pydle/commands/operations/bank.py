@@ -1,11 +1,10 @@
 from ...util.structures.Player import Player
-from ...util.output import print_info
+from ...util.structures.UserInterface import UserInterface
 
 
-def interface_bank(player: Player, *args):
+def interface_bank(player: Player, ui: UserInterface, *args):
     if not args:
-        print_info(str(player.bank), multiline=True)
-        return
+        return ui.print(str(player.bank), multiline=True)
 
 
 def detailed_info():

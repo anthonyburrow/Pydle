@@ -1,6 +1,6 @@
 import numpy as np
 
-from ..colors import color, color_theme, skill_to_color
+from ..colors import color, color_theme
 from . import Player
 
 
@@ -80,7 +80,7 @@ class Skill:
         return msg
 
     def __str__(self):
-        msg = color(self.name, skill_to_color(self.skill_type))
+        msg = color(self.name, color_theme[f'skill_{self.skill_type}'])
 
         return msg
 

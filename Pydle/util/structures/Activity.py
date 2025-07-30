@@ -3,9 +3,9 @@ from dataclasses import dataclass
 import keyboard
 
 from .Player import Player
+from .UserInterface import UserInterface
 from .Bank import Bank
 from .Skill import level_up_msg
-from ..output import print_info
 from ..misc import client_focused
 from ..commands import KEY_CANCEL
 
@@ -33,11 +33,12 @@ class ActivityTickResult:
 
 class Activity:
 
-    def __init__(self, player: Player, client_ID: int, *args):
+    def __init__(self, player: Player, ui: UserInterface, client_ID: int, *args):
         self.player: Player = player
+        self.ui: UserInterface = ui
         self.client_ID: int = client_ID
 
-        self.argument = ' '.join(args)
+        self.argument: str = ' '.join(args)
 
         self.tick_count: int = 0
         self.is_active: bool = False
@@ -51,7 +52,7 @@ class Activity:
 
     def begin(self) -> None:
         self.is_active = True
-        print_info(self.startup_text)
+        self.ui.print(self.startup_text)
 
     def update(self) -> None:
         '''Processing during the tick.'''
@@ -61,7 +62,7 @@ class Activity:
             result_tick.msg_type == ActivityMsgType.RESULT or
             self._previous_msg_type != ActivityMsgType.WAITING
         ):
-            print_info(result_tick.msg)
+            self.ui.print(result_tick.msg)
         self._previous_msg_type = result_tick.msg_type
 
         if result_tick.items:
@@ -72,7 +73,7 @@ class Activity:
                 xp_status = self.player.add_xp(skill, amount)
 
                 if xp_status['leveled_up']:
-                    print_info(level_up_msg(self.player, skill))
+                    self.ui.print(level_up_msg(self.player, skill))
                     self.reset_on_levelup()
 
         # Global updates
@@ -88,9 +89,9 @@ class Activity:
         self.tick_count += 1
 
     def finish(self) -> None:
-        print_info(self.finish_text)
+        self.ui.print(self.finish_text)
 
-        print_info(f'{self.player} is returning from {self.description}...')
+        self.ui.print(f'{self.player} is returning from {self.description}...')
 
         self.finish_inherited()
 
