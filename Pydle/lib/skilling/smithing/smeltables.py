@@ -64,6 +64,16 @@ SMELTABLES = {
             'coal': 1,
         },
     ),
+    'hexrite': Smeltable(
+        name='hexrite bar',
+        xp=30.,
+        level=40,
+        ticks_per_action=3,
+        items_required={
+            'hexstone ore': 2,
+            'coal': 1,
+        },
+    ),
     'blackirn': Smeltable(
         name='blackirn bar',
         xp=40.,
@@ -71,6 +81,15 @@ SMELTABLES = {
         ticks_per_action=3,
         items_required={
             'black ore': 2,
+        },
+    ),
+    'witchsilver': Smeltable(
+        name='witchsilver bar',
+        xp=50.,
+        level=60,
+        ticks_per_action=3,
+        items_required={
+            'witchsilver ore': 2,
         },
     ),
     'wyrmheart': Smeltable(
@@ -82,6 +101,15 @@ SMELTABLES = {
             'wyrmheart ore': 2,
         },
     ),
+    'veilsteel': Smeltable(
+        name='veilsteel bar',
+        xp=80.,
+        level=80,
+        ticks_per_action=3,
+        items_required={
+            'veilstone ore': 2,
+        },
+    ),
     'valnorite': Smeltable(
         name='valnorite bar',
         xp=100.,
@@ -89,6 +117,15 @@ SMELTABLES = {
         ticks_per_action=3,
         items_required={
             'valnorite ore': 2,
+        },
+    ),
+    'cursebound': Smeltable(
+        name='cursebound bar',
+        xp=130.,
+        level=100,
+        ticks_per_action=3,
+        items_required={
+            'cursevein ore': 2,
         },
     ),
     'kharadant': Smeltable(

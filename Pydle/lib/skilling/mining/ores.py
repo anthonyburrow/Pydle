@@ -38,24 +38,49 @@ ORES = {
         xp=55.,
         level=30,
     ),
+    'hexstone': Ore(
+        name='hexstone ore',
+        xp=75.,
+        level=40,
+    ),
     'black': Ore(
         name='black ore',
         xp=100.,
         level=50,
+    ),
+    'witchsilver': Ore(
+        name='witchsilver ore',
+        xp=125.,
+        level=60,
     ),
     'wyrmheart': Ore(
         name='wyrmheart ore',
         xp=150.,
         level=70,
     ),
+    'veilstone': Ore(
+        name='veilstone ore',
+        xp=200.,
+        level=80,
+    ),
     'valnorite': Ore(
         name='valnorite ore',
         xp=250.,
         level=90,
     ),
+    'cursevein': Ore(
+        name='cursevein ore',
+        xp=325.,
+        level=100,
+    ),
     'kharad': Ore(
         name='kharad ore',
         xp=400.,
         level=110,
+    ),
+    'voidcrystal': Ore(
+        name='voidcrystal shard',
+        xp=475.,
+        level=120,
     ),
 }
