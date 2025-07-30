@@ -10,75 +10,88 @@ class Log(Gatherable):
 
 
 LOGS = {
-    'logs': Log(
-        name='logs',
-        xp=12.5,
+    'pine': Log(
+        name='pine log',
+        xp=5.,
         level=1,
         ticks_per_fire=30,
-        gather_value=1.00,
     ),
-    'oak': Log(
-        name='oak logs',
-        xp=22.5,
+    'birch': Log(
+        name='birch log',
+        xp=12.5,
         level=10,
         ticks_per_fire=30,
-        gather_value=0.83,
-    ),
-    'willow': Log(
-        name='willow logs',
-        xp=35.,
-        level=15,
-        ticks_per_fire=30,
-        gather_value=0.69,
-    ),
-    'teak': Log(
-        name='teak logs',
-        xp=50.,
-        level=20,
-        ticks_per_fire=30,
-        gather_value=0.56,
     ),
     'maple': Log(
-        name='maple logs',
-        xp=65.,
+        name='maple log',
+        xp=20.,
+        level=15,
+        ticks_per_fire=30,
+    ),
+    'willow': Log(
+        name='willow log',
+        xp=35.,
+        level=20,
+        ticks_per_fire=30,
+    ),
+    'oak': Log(
+        name='oak log',
+        xp=55.,
         level=30,
         ticks_per_fire=30,
-        gather_value=0.46,
     ),
-    'acadia': Log(
-        name='acadia logs',
-        xp=85.,
+    'elm': Log(
+        name='elm log',
+        xp=75.,
         level=40,
         ticks_per_fire=30,
-        gather_value=0.37,
     ),
-    'mahogany': Log(
-        name='mahogany logs',
+    'yew': Log(
+        name='yew log',
+        xp=100.,
+        level=50,
+        ticks_per_fire=30,
+    ),
+    'bloodwood': Log(
+        name='bloodwood log',
         xp=125.,
         level=60,
         ticks_per_fire=30,
-        gather_value=0.29,
     ),
-    'yew': Log(
-        name='yew logs',
-        xp=175.,
+    'ironwood': Log(
+        name='ironwood log',
+        xp=150.,
         level=70,
         ticks_per_fire=30,
-        gather_value=0.22,
     ),
-    'magic': Log(
-        name='magic logs',
-        xp=240.,
+    'ashen': Log(
+        name='ashen log',
+        xp=200.,
         level=80,
         ticks_per_fire=30,
-        gather_value=0.16,
     ),
-    'elder': Log(
-        name='elder logs',
-        xp=350.,
+    'heartwood': Log(
+        name='heartwood log',
+        xp=250.,
         level=90,
         ticks_per_fire=30,
-        gather_value=0.11,
     ),
-
+    'glassthorn': Log(
+        name='glassthorn log',
+        xp=325.,
+        level=100,
+        ticks_per_fire=30,
+    ),
+    'emberpine': Log(
+        name='emberpine log',
+        xp=400.,
+        level=110,
+        ticks_per_fire=30,
+    ),
+    'ebonspire': Log(
+        name='ebonspire log',
+        xp=475.,
+        level=120,
+        ticks_per_fire=30,
+    ),
 }

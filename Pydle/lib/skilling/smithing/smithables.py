@@ -75,6 +75,26 @@ SMITHABLES = {
             'copper bar': 1,
         },
     ),
+    'copper pickaxe': Smithable(
+        name='copper pickaxe',
+        xp=24.,
+        level=1,
+        ticks_per_action=6,
+        items_required={
+            'copper bar': 3,
+            'pine log': 1,
+        },
+    ),
+    'copper axe': Smithable(
+        name='copper axe',
+        xp=16.,
+        level=1,
+        ticks_per_action=6,
+        items_required={
+            'copper bar': 2,
+            'pine log': 1,
+        },
+    ),
     #
     # Iron
     #
@@ -139,6 +159,26 @@ SMITHABLES = {
         ticks_per_action=6,
         items_required={
             'iron bar': 1,
+        },
+    ),
+    'iron pickaxe': Smithable(
+        name='iron pickaxe',
+        xp=60.,
+        level=10,
+        ticks_per_action=6,
+        items_required={
+            'iron bar': 3,
+            'birch log': 1,
+        },
+    ),
+    'iron axe': Smithable(
+        name='iron axe',
+        xp=40.,
+        level=10,
+        ticks_per_action=6,
+        items_required={
+            'iron bar': 2,
+            'birch log': 1,
         },
     ),
     #
@@ -207,6 +247,26 @@ SMITHABLES = {
             'steel bar': 1,
         },
     ),
+    'steel pickaxe': Smithable(
+        name='steel pickaxe',
+        xp=108.,
+        level=15,
+        ticks_per_action=6,
+        items_required={
+            'steel bar': 3,
+            'maple log': 1,
+        },
+    ),
+    'steel axe': Smithable(
+        name='steel axe',
+        xp=72.,
+        level=15,
+        ticks_per_action=6,
+        items_required={
+            'steel bar': 2,
+            'maple log': 1,
+        },
+    ),
     #
     # Adamant
     #
@@ -271,6 +331,26 @@ SMITHABLES = {
         ticks_per_action=6,
         items_required={
             'adamantite bar': 1,
+        },
+    ),
+    'adamant pickaxe': Smithable(
+        name='adamant pickaxe',
+        xp=312.,
+        level=30,
+        ticks_per_action=6,
+        items_required={
+            'adamantite bar': 3,
+            'oak log': 1,
+        },
+    ),
+    'adamant axe': Smithable(
+        name='adamant axe',
+        xp=208.,
+        level=30,
+        ticks_per_action=6,
+        items_required={
+            'adamantite bar': 2,
+            'oak log': 1,
         },
     ),
 }

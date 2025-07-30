@@ -17,7 +17,7 @@ AREAS = {
             'guam',
         },
         logs={
-            'logs',
+            'pine',
         },
         ores={
             'copper',

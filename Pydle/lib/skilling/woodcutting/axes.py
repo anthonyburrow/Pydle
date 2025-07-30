@@ -5,25 +5,41 @@ AXES = {
     'copper axe': Tool(
         name='copper axe',
         level=1,
-        power=0.50,
         ticks_per_use=3,
     ),
     'iron axe': Tool(
         name='iron axe',
         level=10,
-        power=0.55,
         ticks_per_use=3,
     ),
     'steel axe': Tool(
         name='steel axe',
         level=15,
-        power=0.60,
         ticks_per_use=3,
     ),
     'adamant axe': Tool(
         name='adamant axe',
         level=30,
-        power=0.70,
+        ticks_per_use=3,
+    ),
+    'blackirn axe': Tool(
+        name='blackirn axe',
+        level=50,
+        ticks_per_use=3,
+    ),
+    'wyrmheart axe': Tool(
+        name='wyrmheart axe',
+        level=70,
+        ticks_per_use=3,
+    ),
+    'valnorite axe': Tool(
+        name='valnorite axe',
+        level=90,
+        ticks_per_use=3,
+    ),
+    'kharadant axe': Tool(
+        name='kharadant axe',
+        level=110,
         ticks_per_use=3,
     ),
 }

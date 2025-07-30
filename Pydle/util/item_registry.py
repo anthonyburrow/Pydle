@@ -55,11 +55,19 @@ ITEMS = {
     'iron pickaxe',
     'steel pickaxe',
     'adamant pickaxe',
+    'blackirn pickaxe',
+    'wyrmheart pickaxe',
+    'valnorite pickaxe',
+    'kharadant pickaxe',
 
     'copper axe',
     'iron axe',
     'steel axe',
     'adamant axe',
+    'blackirn axe',
+    'wyrmheart axe',
+    'valnorite axe',
+    'kharadant axe',
 
     #
     # Herbs
@@ -88,16 +96,20 @@ ITEMS = {
     #
     # Logs
     #
-    'logs',
-    'oak logs',
-    'willow logs',
-    'teak logs',
-    'maple logs',
-    'acadia logs',
-    'mahogany logs',
-    'yew logs',
-    'magic logs',
-    'elder logs',
+    'pine log',
+    'birch log',
+    'maple log',
+    'willow log',
+    'oak log',
+    'elm log',
+    'yew log',
+    'bloodwood log',
+    'ironwood log',
+    'ashen log',
+    'heartwood log',
+    'glassthorn log',
+    'emberpine log',
+    'ebonspire log',
 
     #
     # Fish
