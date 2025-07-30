@@ -1,6 +1,6 @@
 from enum import Enum
 from dataclasses import dataclass
-import keyboard
+from pynput import keyboard
 
 from .Player import Player
 from .UserInterface import UserInterface
@@ -42,6 +42,11 @@ class Activity:
         self.is_active: bool = False
         self._previous_msg_type = ActivityMsgType.RESULT
 
+        self.listener = keyboard.Listener(
+            on_release=self.manual_cancel
+        )
+        self.listener.start()
+
     def setup(self) -> dict:
         '''Check to see if requirements are met to perform activity.'''
         result_setup = self.setup_inherited()
@@ -78,7 +83,7 @@ class Activity:
         self.player.update_effects()
 
         # End of tick
-        if result_tick.exit or self._check_input_standby():
+        if result_tick.exit:
             self.is_active = False
 
         if not result_tick.exit and not self.tick_count % 50:
@@ -88,13 +93,15 @@ class Activity:
 
     def finish(self) -> None:
         self.ui.print(self.finish_text)
-
         self.ui.print(f'{self.player} is returning from {self.description}...')
+
+        self.listener.stop()
 
         self.finish_inherited()
 
-    def _check_input_standby(self) -> bool:
-        return (
-            keyboard.is_pressed(KEY_CANCEL) and
-            self.ui.is_focused()
-        )
+    def manual_cancel(self, key):
+        if not isinstance(key, keyboard.KeyCode):
+            return
+
+        if key.char == KEY_CANCEL and self.ui.is_focused():
+            self.is_active = False
