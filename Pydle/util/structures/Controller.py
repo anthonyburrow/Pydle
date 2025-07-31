@@ -1,7 +1,6 @@
 import sys
 import time
 import threading
-from colorama import just_fix_windows_console
 
 from .Player import Player
 from .UserInterface import UserInterface

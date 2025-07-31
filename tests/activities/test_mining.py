@@ -12,7 +12,6 @@ def test_missing_pickaxe():
     ui = NullUserInterface()
 
     player.set_level('mining', 99)
-    controller = Controller(player, ui)
 
     command = 'mine copper'
     command = parse_command(command)
@@ -39,7 +38,6 @@ def test_misspelled_ore():
     ui = NullUserInterface()
 
     player.set_level('mining', 99)
-    controller = Controller(player, ui)
 
     command = 'mine irn'
     command = parse_command(command)
