@@ -26,8 +26,8 @@ pydle
 This game was built on Python 3.13.5 for Windows, and requires the following
 Python packages (which are installed with `pip install .`):
 - `numpy`
-- `keyboard`
-- `pywin32`
+- `pynput`
+- `pywin32` (Windows) / `python-xlib` (Linux)
 - `colorama`
 - `platformdirs`
 

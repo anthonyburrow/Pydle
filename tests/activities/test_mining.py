@@ -1,6 +1,5 @@
 from Pydle.util.structures.Player import Player
 from Pydle.util.structures.UserInterface import NullUserInterface
-from Pydle.util.structures.Controller import Controller
 from Pydle.util.input import parse_command
 
 from Pydle.commands.activities.skilling import MiningActivity
