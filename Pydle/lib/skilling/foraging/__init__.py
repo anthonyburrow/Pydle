@@ -1,9 +1,9 @@
-from .herbs import HERBS, Herb
+from .collectables import COLLECTABLES, Collectable
 from .secateurs import SECATEURS
 
 
 __all__ = [
-    'HERBS',
-    'Herb',
+    'COLLECTABLES',
+    'Collectable',
     'SECATEURS',
 ]

@@ -10,11 +10,12 @@ AREAS = {
         monsters={
             'goblin',
         },
+        collectables={
+            'parsley': 3,
+            'thyme': 1,
+        },
         fish={
             'shrimp',
-        },
-        herbs={
-            'guam',
         },
         logs={
             'pine',

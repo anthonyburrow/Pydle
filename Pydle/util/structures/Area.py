@@ -12,8 +12,8 @@ class Area:
         # Combat
         monsters: set[str] = None,
         # Gatherables
+        collectables: set[str] = None,
         fish: set[str] = None,
-        herbs: set[str] = None,
         logs: set[str] = None,
         ores: set[str] = None,
     ):
@@ -23,8 +23,8 @@ class Area:
         # Combat
         self.monsters: set[str] = monsters or set()
         # Gatherables
+        self.collectables: dict = collectables or dict()
         self.fish: set[str] = fish or set()
-        self.herbs: set[str] = herbs or set()
         self.logs: set[str] = logs or set()
         self.ores: set[str] = ores or set()
 
@@ -40,11 +40,11 @@ class Area:
     def contains_monster(self, monster: str) -> bool:
         return monster in self.monsters
 
+    def contains_collectable(self, collectable: str) -> bool:
+        return collectable in self.collectables
+
     def contains_fish(self, fish: str) -> bool:
         return fish in self.fish
-
-    def contains_herb(self, herb: str) -> bool:
-        return herb in self.herbs
 
     def contains_log(self, log: str) -> bool:
         return log in self.logs
@@ -70,9 +70,9 @@ class Area:
             [msg.append(f'- {x.capitalize()}') for x in self.fish]
             msg.append('')
 
-        if self.herbs:
+        if self.collectables:
             msg.append(f'{color('Foraging', color_theme['skill_gathering'])}:')
-            [msg.append(f'- {x.capitalize()}') for x in self.herbs]
+            [msg.append(f'- {x.capitalize()}') for x in self.collectables]
             msg.append('')
 
         if self.logs:

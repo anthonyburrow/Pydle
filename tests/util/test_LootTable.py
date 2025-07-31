@@ -21,6 +21,7 @@ def test_weighted():
     except KeyError:
         pass
 
+    table._reset_weighted_probs()
     probabilities = np.array([0.25, 0.25, 0.5])
     assert np.array_equal(probabilities, table._weighted_probabilities)
 
