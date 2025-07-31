@@ -1,6 +1,6 @@
 # Pydle
 
-A RuneScape-esque CLI (terminal-based) idle game written in Python.
+A RuneScape-esque CLI (terminal-based) idle RPG written in Python.
 
 Currently, many RuneScape ideas and content are implemented into this, but I
 expect many changes, deviations, and additions as it evolves.
@@ -23,8 +23,9 @@ this script from anywhere to run the game:
 pydle
 ```
 
-This game was built on Python 3.13.5 for Windows, and requires the following
-Python packages (which are installed with `pip install .`):
+This game is developed on Python 3.13.5 for Windows, but it should be
+combatible with Linux as well. The following Python packages (which are
+installed with `pip install .`) are required:
 - `numpy`
 - `pynput`
 - `pywin32` (Windows) / `python-xlib` (Linux)
