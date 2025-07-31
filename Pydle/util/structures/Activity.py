@@ -1,12 +1,10 @@
 from enum import Enum
 from dataclasses import dataclass
-from pynput import keyboard
 
 from .Player import Player
 from .UserInterface import UserInterface
 from .Bank import Bank
 from .Skill import level_up_msg
-from ..commands import KEY_CANCEL
 
 
 @dataclass
@@ -42,11 +40,6 @@ class Activity:
         self.is_active: bool = False
         self._previous_msg_type = ActivityMsgType.RESULT
 
-        self.listener = keyboard.Listener(
-            on_release=self.manual_cancel
-        )
-        self.listener.start()
-
     def setup(self) -> dict:
         '''Check to see if requirements are met to perform activity.'''
         result_setup = self.setup_inherited()
@@ -55,6 +48,8 @@ class Activity:
 
     def begin(self) -> None:
         self.is_active = True
+        self.ui.start_keyboard_listener()
+
         self.ui.print(self.startup_text)
 
     def update(self) -> None:
@@ -83,7 +78,7 @@ class Activity:
         self.player.update_effects()
 
         # End of tick
-        if result_tick.exit:
+        if result_tick.exit or not self.ui.activity_running:
             self.is_active = False
 
         if not result_tick.exit and not self.tick_count % 50:
@@ -95,13 +90,6 @@ class Activity:
         self.ui.print(self.finish_text)
         self.ui.print(f'{self.player} is returning from {self.description}...')
 
-        self.listener.stop()
+        self.ui.stop_keyboard_listener()
 
         self.finish_inherited()
-
-    def manual_cancel(self, key):
-        if not isinstance(key, keyboard.KeyCode):
-            return
-
-        if key.char == KEY_CANCEL and self.ui.is_focused():
-            self.is_active = False

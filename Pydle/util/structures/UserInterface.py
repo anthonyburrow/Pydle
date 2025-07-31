@@ -1,7 +1,12 @@
 import traceback
 from colorama import just_fix_windows_console
 
-from ..commands import COMMAND_PREFIX
+try:
+    from pynput import keyboard
+except ImportError:
+    pass
+
+from ..commands import COMMAND_PREFIX, KEY_CANCEL
 from ..platform import SYS_PLATFORM, Platform
 
 
@@ -18,7 +23,10 @@ class UserInterface:
         just_fix_windows_console()
 
         self.indent: str = '  '
-        self.client_ID: int = self.get_client_ID()
+        self.client_ID: int = self._get_client_ID()
+
+        self.keyboard_listener = None
+        self.activity_running: bool = False
 
     def print(self, message: str, multiline: bool = False) -> None:
         if not message:
@@ -41,17 +49,38 @@ class UserInterface:
     def get_command(self) -> str:
         return input(COMMAND_PREFIX)
 
+    def start_keyboard_listener(self):
+        self.keyboard_listener = keyboard.Listener(
+            on_release=self._cancel_pressed
+        )
+        self.keyboard_listener.start()
+
+        self.activity_running = True
+
+    def stop_keyboard_listener(self):
+        self.keyboard_listener.stop()
+        self.keyboard_listener = None
+
+        self.activity_running = False
+
+    def _cancel_pressed(self, key):
+        if not isinstance(key, keyboard.KeyCode):
+            return
+
+        if key.char == KEY_CANCEL and self._is_focused():
+            self.activity_running = False
+
+    def _is_focused(self) -> bool:
+        return self.client_ID == self._get_client_ID()
+
     @staticmethod
-    def get_client_ID() -> int:
+    def _get_client_ID() -> int:
         if SYS_PLATFORM == Platform.WINDOWS:
             return win32gui.GetForegroundWindow()
         elif SYS_PLATFORM == Platform.LINUX:
             d = xdisplay.Display()
             window = d.get_input_focus().focus
             return window.id
-
-    def is_focused(self) -> bool:
-        return self.client_ID == self.get_client_ID()
 
 
 class NullUserInterface(UserInterface):
@@ -61,7 +90,9 @@ class NullUserInterface(UserInterface):
     def print_error(self, message: str): pass
     def get_command(self, prompt: str) -> str:
         return ''
-    def get_client_ID(self) -> int:
+    def _get_client_ID(self) -> int:
         return 0
     def client_focused(self) -> bool:
         return True
+    def start_keyboard_listener(self): pass
+    def stop_keyboard_listener(self): pass
