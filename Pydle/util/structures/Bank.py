@@ -1,5 +1,6 @@
 from ..colors import color, color_theme
 from ..item_registry import verify_item
+from ..visuals import centered_title
 
 
 class Bank(dict):
@@ -102,15 +103,24 @@ class Bank(dict):
     def __str__(self) -> str:
         msg: list = []
 
-        msg.append('BANK')
-        msg.append('---')
+        max_item_length: int = max([len(x) for x in self])
+        max_qty_length: int = max(len(str(x)) for x in self.values())
+        total_length: int = max_item_length + max_qty_length + 6
+
+        msg.append(centered_title('BANK', total_length))
 
         if not self:
             return '\n'.join(msg)
 
         for item, quantity in self.items():
-            qty = color(f'({quantity}x)', color_theme['UI_1'])
-            msg.append(f'{item.capitalize()} {qty}')
+            item_str = f'{item.capitalize()}'
+            qty_str = color(
+                f'[{quantity}]'.rjust(max_qty_length + 2),
+                color_theme['UI_1']
+            )
+            msg.append(
+                f'* {item_str:<{max_item_length}}  {qty_str}'
+            )
 
         msg = '\n'.join(msg)
 
