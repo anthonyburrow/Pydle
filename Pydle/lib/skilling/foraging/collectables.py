@@ -13,8 +13,8 @@ COLLECTABLES = {
         xp=5.,
         level=1,
     ),
-    'clover': Collectable(
-        name='clover bloom',
+    'dandelion': Collectable(
+        name='dandelion bloom',
         xp=5.,
         level=1,
     ),
@@ -93,8 +93,8 @@ COLLECTABLES = {
         xp=150.,
         level=70,
     ),
-    'blackcurrant': Collectable(
-        name='blackcurrant berries',
+    'mandrake': Collectable(
+        name='mandrake root',
         xp=150.,
         level=70,
     ),
@@ -114,7 +114,7 @@ COLLECTABLES = {
         level=90,
     ),
     'belladonna': Collectable(
-        name='belladonna leaf',
+        name='belladonna leaves',
         xp=250.,
         level=90,
     ),
