@@ -1,4 +1,4 @@
-from ..colors import color
+from ..visuals import centered_title
 
 
 STATS = {
@@ -39,16 +39,17 @@ class Stats(dict):
 
     def __str__(self):
         msg: list = []
-        just_amount: int = max([len(s) for s in STATS])
+
+        max_stat_length: int = max([len(x) for x in self])
+        max_value_length: int = max([len(str(x)) for x in self.values()])
+        total_length = max_stat_length + max_value_length + 3
+
+        msg.append(centered_title('STATS', total_length))
+
         for stat_key, stat_info in STATS.items():
             stat_name = stat_info['name']
-            name = color(
-                stat_name,
-                '',
-                justify=just_amount
-            )
             value = self[stat_key]
-            msg.append(f'{name} : {value}')
+            msg.append(f'{stat_name:>{max_stat_length}} | {value:>{max_value_length}}')
 
         msg = '\n'.join(msg)
 
