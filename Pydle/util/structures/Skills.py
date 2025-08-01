@@ -1,5 +1,6 @@
 from .Skill import Skill
 from ..colors import color, color_theme
+from ..visuals import centered_title
 
 
 # { skill_key : (Formal name, Skill type) }
@@ -60,15 +61,23 @@ class Skills(dict):
 
     def __str__(self) -> str:
         msg: list = []
-        just_amount: int = max([len(s) for s in SKILLS])
+
+        max_skill_length: int = max([len(x.name) for x in self.values()])
+        max_level_length: int = max([len(str(x.level)) for x in self.values()])
+        max_exp_length: int = max([len(f'{x.xp:,.0f}') for x in self.values()])
+        total_length = max_skill_length + max_level_length + max_exp_length + 14
+
+        msg.append(centered_title('SKILLS', total_length))
+
         for skill_key in SKILLS:
             skill: Skill = self.get_skill(skill_key)
             name: str = color(
                 skill.name,
                 color_theme[f'skill_{skill.skill_type}'],
-                justify=just_amount,
+                justify=max_skill_length,
             )
-            skill_line: str = f'{name} | Lvl {skill.level:<2} ({skill.xp:,.0f} Exp)'
+            exp_str = f'{skill.xp:,.0f}'
+            skill_line: str = f'{name} | Lvl {skill.level:>{max_level_length}} | {exp_str:>{max_exp_length}} Exp'
             msg.append(skill_line)
 
         msg = '\n'.join(msg)
