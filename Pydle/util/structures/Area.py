@@ -1,6 +1,11 @@
 from ..ticks import Ticks
 from ..colors import color, color_theme
 
+from ...lib.skilling.foraging import COLLECTABLES
+from ...lib.skilling.fishing import FISH
+from ...lib.skilling.woodcutting import LOGS
+from ...lib.skilling.mining import ORES
+
 
 class Area:
 
@@ -62,27 +67,30 @@ class Area:
 
         if self.monsters:
             msg.append(f'{color('Monsters', color_theme['skill_combat'])}:')
-            [msg.append(f'- {x.capitalize()}') for x in self.monsters]
+            [msg.append(f'- {key.capitalize()}') for key in self.monsters]
             msg.append('')
 
-        if self.fish:
-            msg.append(f'{color('Fishing', color_theme['skill_gathering'])}:')
-            [msg.append(f'- {x.capitalize()}') for x in self.fish]
-            msg.append('')
+        def append_gathering_block(
+            label: str,
+            items: set | dict,
+            data_source: dict
+        ):
+            if not items:
+                return
+            msg.append(f"{color(label, color_theme['skill_gathering'])}:")
 
-        if self.collectables:
-            msg.append(f'{color('Foraging', color_theme['skill_gathering'])}:')
-            [msg.append(f'- {x.capitalize()}') for x in self.collectables]
-            msg.append('')
+            just_amount: int = max([len(x) for x in self.collectables])
+            for key in items:
+                level = data_source[key].level
+                msg.append(f'- {key.capitalize():<{just_amount}} | Lvl {level}')
 
-        if self.logs:
-            msg.append(f'{color('Woodcutting', color_theme['skill_gathering'])}:')
-            [msg.append(f'- {x.capitalize()}') for x in self.logs]
-            msg.append('')
-
-        if self.ores:
-            msg.append(f'{color('Mining', color_theme['skill_gathering'])}:')
-            [msg.append(f'- {x.capitalize()}') for x in self.ores]
+        append_gathering_block('Foraging', self.collectables, COLLECTABLES)
+        msg.append('')
+        append_gathering_block('Fishing', self.fish, FISH)
+        msg.append('')
+        append_gathering_block('Woodcutting', self.logs, LOGS)
+        msg.append('')
+        append_gathering_block('Mining', self.ores, ORES)
 
         return '\n'.join(msg)
 
