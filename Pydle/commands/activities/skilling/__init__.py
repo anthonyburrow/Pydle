@@ -1,4 +1,3 @@
-from .cleaning import CleaningActivity
 from .cooking import CookingActivity
 from .crafting import CraftingActivity
 from .fishing import FishingActivity
@@ -11,7 +10,6 @@ from .woodcutting import WoodcuttingActivity
 
 
 __all__ = [
-    'CleaningActivity',
     'CookingActivity',
     'CraftingActivity',
     'FishingActivity',

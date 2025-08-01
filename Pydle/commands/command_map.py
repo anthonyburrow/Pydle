@@ -90,11 +90,6 @@ map_activity = {
         'help_info': 'Begin a woodcutting trip.',
         'detailed_info': skilling.woodcutting.detailed_info,
     },
-    'clean': {
-        'function': skilling.CleaningActivity,
-        'help_info': 'Begin to clean herbs.',
-        'detailed_info': skilling.cleaning.detailed_info,
-    },
     'collect': {
         'function': skilling.ForagingActivity,
         'help_info': 'Begin to forage for herbs.',
