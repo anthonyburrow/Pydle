@@ -10,63 +10,73 @@ class Fish(Gatherable):
 FISH = {
     'shrimp': Fish(
         name='raw shrimp',
+        xp=5.,
         level=1,
+    ),
+    'anchovy': Fish(
+        name='raw anchovy',
         xp=12.5,
-        gather_value=1.00,
-    ),
-    'herring': Fish(
-        name='raw herring',
         level=10,
-        xp=22.5,
-        gather_value=0.83,
-    ),
-    'bass': Fish(
-        name='raw bass',
-        level=15,
-        xp=35.,
-        gather_value=0.69,
     ),
     'trout': Fish(
         name='raw trout',
+        xp=20.,
+        level=15,
+    ),
+    'cod': Fish(
+        name='raw cod',
+        xp=35.,
         level=20,
-        xp=50.,
-        gather_value=0.56,
+    ),
+    'catfish': Fish(
+        name='raw catfish',
+        xp=55.,
+        level=30,
+    ),
+    'bass': Fish(
+        name='raw bass',
+        xp=75.,
+        level=40,
     ),
     'salmon': Fish(
         name='raw salmon',
-        level=30,
-        xp=65.,
-        gather_value=0.46,
+        xp=100.,
+        level=50,
     ),
     'lobster': Fish(
         name='raw lobster',
-        level=40,
-        xp=85.,
-        gather_value=0.37,
-    ),
-    'swordfish': Fish(
-        name='raw swordfish',
-        level=60,
         xp=125.,
-        gather_value=0.29,
+        level=60,
     ),
-    'shark': Fish(
-        name='raw shark',
+    'barracuda': Fish(
+        name='raw barracuda',
+        xp=150.,
         level=70,
-        xp=175.,
-        gather_value=0.22,
+    ),
+    'tuna': Fish(
+        name='raw bluefin tuna',
+        xp=200.,
+        level=80,
+    ),
+    'marlin': Fish(
+        name='raw marlin',
+        xp=250.,
+        level=90,
     ),
     'anglerfish': Fish(
         name='raw anglerfish',
-        level=80,
-        xp=240.,
-        gather_value=0.16,
+        xp=325.,
+        level=100,
     ),
-    'whale': Fish(
-        name='raw whale',
-        level=90,
-        xp=350.,
-        gather_value=0.11,
+    'shark': Fish(
+        name='raw great white shark',
+        xp=400.,
+        level=110,
     ),
-
+    'coelacanth': Fish(
+        name='raw coelacanth',
+        xp=475.,
+        level=120,
+    ),
 }
+
