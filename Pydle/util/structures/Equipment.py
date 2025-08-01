@@ -1,6 +1,7 @@
 from . import Player, Equippable
 from .Stats import Stats
 from ..colors import color
+from ..visuals import centered_title
 from ..Result import Result
 from ...lib.equipment import (
     WEAPONS,
@@ -126,15 +127,28 @@ class Equipment(dict):
 
     def __str__(self) -> str:
         msg: list = []
-        just_amount: int = max([len(e) for e in EQUIPMENT])
+
+        max_type_length: int = max([len(x) for x in EQUIPMENT])
+        max_equippable_length: int = 0
+        for equippable in self.values():
+            if equippable is None:
+                length = 3
+            else:
+                length = len(equippable.name)
+            if length > max_equippable_length:
+                max_equippable_length = length
+        total_length = max_type_length + max_equippable_length + 3
+
+        msg.append(centered_title('EQUIPMENT', total_length))
+
         for equippable_key in EQUIPMENT:
             equippable: Equippable = self.get_equippable(equippable_key)
             name = color(
                 equippable_key.capitalize(),
                 '',
-                justify=just_amount
+                justify=max_type_length
             )
-            equippable_str = equippable if equippable else '---'
+            equippable_str = equippable or '---'
             msg.append(f'{name} | {equippable_str}')
 
         attack_speed_str = self['weapon'].attack_speed if self['weapon'] else 'N/A'

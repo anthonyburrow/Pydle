@@ -1,5 +1,6 @@
 from . import Player, Tool
 from ..colors import color
+from ..visuals import centered_title
 from ..Result import Result
 from ...lib.skilling import mining, woodcutting, foraging, fishing
 
@@ -94,17 +95,29 @@ class Tools(dict):
 
     def __str__(self) -> str:
         msg: list = []
-        just_amount: int = max([len(t) for t in TOOLS])
+
+        max_type_length: int = max([len(x) for x in TOOLS])
+        max_tool_length: int = 0
+        for tool in self.values():
+            if tool is None:
+                length = 3
+            else:
+                length = len(tool.name)
+            if length > max_tool_length:
+                max_tool_length = length
+        total_length = max_type_length + max_tool_length + 3
+
+        msg.append(centered_title('TOOLS', total_length))
+
         for tool_key in TOOLS:
             tool: Tool = self.get_tool(tool_key)
             name = color(
                 tool_key.capitalize(),
                 '',
-                justify=just_amount
+                justify=max_type_length
             )
             tool_str = tool or '---'
-            tool_line = f'{name} | {tool_str}'
-            msg.append(tool_line)
+            msg.append(f'{name} | {tool_str}')
 
         msg = '\n'.join(msg)
 
