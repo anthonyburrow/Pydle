@@ -37,6 +37,9 @@ color_theme = {
     # Items
     'tools': MAGENTA,
     'equipment': MAGENTA,
+    'quality_poor': RED,
+    'quality_good': MAGENTA,
+    'quality_master': CYAN,
     # Skills
     'skill_gathering': GREEN,
     'skill_artisan': RED,

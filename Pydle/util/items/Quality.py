@@ -15,6 +15,5 @@ class Quality(Enum):
             return None
         return cls(value)
 
-    @property
-    def label(self) -> str:
+    def __str__(self) -> str:
         return self.name.title()

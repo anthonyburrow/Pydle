@@ -2,7 +2,8 @@ from abc import ABC
 from typing import Self
 
 from .Quality import Quality
-from ..ItemRegistry import ItemRegistry
+from ..ItemRegistry import ITEM_REGISTRY
+from ..colors import color, color_theme
 from ..structures.Bank import BankKey
 
 
@@ -36,6 +37,8 @@ class ItemInstance:
         self.quantity: int = quantity
         self.quality: Quality | None = quality
 
+        self.set_name()
+
     def to_dict(self) -> dict:
         return {
             'item_id': self.item_id,
@@ -53,14 +56,30 @@ class ItemInstance:
 
     @property
     def base(self) -> Item:
-        return ItemRegistry[self.item_id]
+        return ITEM_REGISTRY[self.item_id]
 
     def get_key(self) -> BankKey:
         return BankKey(self.item_id, self.quality)
 
+    def set_name(self) -> None:
+        if not self.quality:
+            return
+
+        quality_str: str = f'{self.quality}'
+        self.name: str = f'{quality_str} {self.base.name}'
+
     def __str__(self) -> str:
-        quality_str: str = self.quality.label if self.quality else ''
-        return f'{quality_str}{self.base}'
+        if not self.quality:
+            return str(self.base)
+
+        if self.quality == Quality.POOR or self.quality == Quality.GOOD:
+            theme: str = 'quality_poor'
+        elif self.quality == Quality.GREAT or self.quality == Quality.SUPERIOR:
+            theme: str = 'quality_good'
+        elif self.quality == Quality.MASTER:
+            theme: str = 'quality_master'
+
+        return color(self.name, color_theme[theme])
 
     def __getattr__(self, name):
         try:

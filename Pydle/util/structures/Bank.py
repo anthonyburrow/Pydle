@@ -3,8 +3,8 @@ from typing import Self
 
 from ..colors import color, color_theme
 from ..visuals import centered_title
-from ..structures.Quality import Quality
-from ..structures.Item import ItemInstance
+from ..items.Quality import Quality
+from ..items.Item import ItemInstance
 
 
 @dataclass(frozen=True)
@@ -136,8 +136,8 @@ class Bank(dict):
     def __str__(self) -> str:
         msg: list = []
 
-        max_item_length: int = max([len(x) for x in self])
-        max_qty_length: int = max(len(str(x)) for x in self.values())
+        max_item_length: int = max([len(x.name) for x in self.values()])
+        max_qty_length: int = max(len(str(x.quantity)) for x in self.values())
         total_length: int = max_item_length + max_qty_length + 6
 
         msg.append(centered_title('BANK', total_length))
@@ -145,14 +145,13 @@ class Bank(dict):
         if not self:
             return '\n'.join(msg)
 
-        for item, quantity in self.items():
-            item_str = f'{item.capitalize()}'
+        for item_instance in self.value():
             qty_str = color(
-                f'[{quantity}]'.rjust(max_qty_length + 2),
+                f'[{item_instance.quantity}]'.rjust(max_qty_length + 2),
                 color_theme['UI_1']
             )
             msg.append(
-                f'* {item_str:<{max_item_length}}  {qty_str}'
+                f'* {item_instance:<{max_item_length}}  {qty_str}'
             )
 
         msg = '\n'.join(msg)
