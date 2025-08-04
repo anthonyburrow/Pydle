@@ -1,7 +1,6 @@
-from .mixables import MIXABLES, Mixable
+from .mixables import MIXABLES
 
 
 __all__ = [
     'MIXABLES',
-    'Mixable',
 ]

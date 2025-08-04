@@ -1,9 +1,8 @@
-from .ores import ORES, Ore
+from .ores import ORES
 from .pickaxes import PICKAXES
 
 
 __all__ = [
     'ORES',
-    'Ore',
     'PICKAXES',
 ]

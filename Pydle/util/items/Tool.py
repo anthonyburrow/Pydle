@@ -1,16 +1,19 @@
 from ..colors import color, color_theme
+from ..structures.Item import Item
 
 
-class Tool:
+class Tool(Item):
 
     def __init__(
         self,
+        item_id: str,
         name: str,
         level: int,
         power: float = None,
         ticks_per_use: int = 3,
     ):
-        self.name: str = name
+        super().__init__(item_id, name)
+
         self.level: int = level
 
         self.power: float = self._default_power() if power is None else power

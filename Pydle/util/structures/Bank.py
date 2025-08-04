@@ -1,102 +1,135 @@
+from dataclasses import dataclass
+from typing import Self
+
 from ..colors import color, color_theme
-from ..item_registry import verify_item
 from ..visuals import centered_title
+from ..structures.Quality import Quality
+from ..structures.Item import ItemInstance
+
+
+@dataclass(frozen=True)
+class BankKey:
+    item_id: str
+    quality: Quality | None = None
+
+    def to_string(self) -> str:
+        if self.quality:
+            return f'{self.quality.name.lower()} {self.item_id}'
+        return self.item_id
+
+    def __hash__(self):
+        return hash((self.item_id, self.quality))
 
 
 class Bank(dict):
 
-    def __init__(self, items: dict = None):
+    def __init__(self, items: ItemInstance | Self = None):
         if items:
             self.add(items)
 
-    def add(self, items: str | dict, *args, **kwargs):
-        if isinstance(items, str):
-            return self._add_item(items, *args, **kwargs)
-        elif isinstance(items, dict):
-            return self._add_dict(items)
+    def add(self, items: ItemInstance | Self) -> None:
+        if isinstance(items, ItemInstance):
+            return self._add_instance(items)
+        elif isinstance(items, Bank):
+            return self._add_bank(items)
 
-    def _add_item(self, item: str, quantity: int = 1):
-        if quantity <= 0:
+    def _add_instance(self, item_instance: ItemInstance):
+        bank_key: BankKey = item_instance.get_key()
+
+        if self.contains(item_instance):
+            self[bank_key].quantity += item_instance.quantity
             return
 
-        item = item.lower()
+        self[bank_key] = item_instance
 
-        verify_item(item)
+    def _add_bank(self, item_bank: Self):
+        for item_instance in item_bank.values():
+            self._add_instance(item_instance)
 
-        if not self.contains(item):
-            self[item] = quantity
-            return
+    def remove(self, items: ItemInstance | Self):
+        if isinstance(items, ItemInstance):
+            return self._remove_instance(items)
+        elif isinstance(items, Bank):
+            return self._remove_bank(items)
 
-        self[item] += quantity
+    def _remove_instance(self, item_instance: ItemInstance):
+        bank_key: BankKey = item_instance.get_key()
+        quantity: int = item_instance.quantity
 
-    def _add_dict(self, items: dict):
-        for item, quantity in items.items():
-            self._add_item(item, quantity)
+        if not self.contains(item_instance, check_quantity=True):
+            item_id: str = item_instance.item_id
+            raise KeyError(f'Bank does not contain {quantity}x {item_id}')
 
-    # Remove items
-    def remove(self, items: str | dict, *args, **kwargs):
-        if isinstance(items, str):
-            return self._remove_item(items, *args, **kwargs)
-        elif isinstance(items, dict):
-            return self._remove_dict(items)
-
-    def _remove_item(self, item: str, quantity: int):
-        if not self.contains(item, quantity):
-            raise KeyError(f'Bank does not contain {quantity}x {item}')
-
-        new_quantity = self[item] - quantity
+        new_quantity: int = self[bank_key].quantity - quantity
 
         if new_quantity <= 0:
-            self.pop(item)
-        else:
-            self[item] = new_quantity
+            self.pop(bank_key)
+            return
 
-    def _remove_dict(self, items: dict):
-        for item, quantity in items.items():
-            self._remove_item(item, quantity)
+        self[bank_key].quantity = new_quantity
 
-    # Contains items
-    def contains(self, items: str | dict, *args, **kwargs) -> bool:
-        if isinstance(items, str):
-            return self._contains_item(items, *args, **kwargs)
-        elif isinstance(items, dict):
-            return self._contains_dict(items)
+    def _remove_bank(self, item_bank: Self):
+        for item_instance in item_bank.values():
+            self._remove_instance(item_instance)
 
-    def _contains_item(self, item: str, quantity: int = None) -> bool:
-        if item not in self:
+    def contains(
+        self,
+        items: ItemInstance | Self,
+        check_quantity: bool = False
+    ) -> bool:
+        if isinstance(items, ItemInstance):
+            return self._contains_instance(items, check_quantity=check_quantity)
+        elif isinstance(items, Bank):
+            return self._contains_bank(items, check_quantity=check_quantity)
+
+    def _contains_instance(
+        self,
+        item_instance: ItemInstance,
+        check_quantity: bool = False,
+    ) -> bool:
+        bank_key: BankKey = item_instance.get_key()
+
+        if bank_key not in self:
             return False
 
-        if quantity is None:
+        if not check_quantity:
             return True
 
-        in_bank = self[item]
+        return self[bank_key].quantity >= item_instance.quantity
 
-        return in_bank >= quantity
-
-    def _contains_dict(self, items: dict) -> bool:
-        for item, quantity in items.items():
-            if not self._contains_item(item, quantity):
+    def _contains_bank(
+        self,
+        item_bank: Self,
+        check_quantity: bool = False,
+    ) -> bool:
+        for item_instance in item_bank.values():
+            if not self._contains_instance(
+                item_instance, check_quantity=check_quantity
+            ):
                 return False
 
         return True
 
-    # Quantity
-    def quantity(self, item: str) -> int:
-        if not self.contains(item):
-            return 0
-
-        return self[item]
-
-    def to_dict(self) -> dict:
+    def to_dict(self) -> dict[str, dict]:
         return {
-            item: qty for item, qty in self.items()
+            item_key.to_string(): item_instance.to_dict()
+            for item_key, item_instance in self.items()
         }
 
+    @classmethod
+    def from_dict(cls, data: dict[str, dict]) -> Self:
+        bank = cls()
+        for instance_dict in data.values():
+            item_instance = ItemInstance.from_dict(instance_dict)
+            bank_key: BankKey = item_instance.get_key()
+            bank[bank_key] = item_instance
+        return bank
+
     def list_concise(self) -> str:
-        items_str = []
-        for item, quantity in self.items():
-            items_str.append(f'{quantity}x {item}')
-        msg = ', '.join(items_str)
+        list_str: list = []
+        for item_instance in self.values():
+            list_str.append(f'{item_instance.quantity}x {item_instance}')
+        msg = ', '.join(list_str)
 
         return msg
 
@@ -125,16 +158,3 @@ class Bank(dict):
         msg = '\n'.join(msg)
 
         return msg
-
-    def __eq__(self, other_items) -> bool:
-        if not self._contains_dict(other_items):
-            return False
-
-        if not other_items._contains_dict(self):
-            return False
-
-        for item, quantity in other_items.items():
-            if self[item] != quantity:
-                return False
-
-        return True

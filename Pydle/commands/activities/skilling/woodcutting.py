@@ -8,7 +8,8 @@ from ....util.structures.LootTable import LootTable
 from ....util.structures.Bank import Bank
 from ....util.structures.Tool import Tool
 from ....util.structures.Area import Area
-from ....lib.skilling.woodcutting import Log, LOGS
+from ....util.items.skilling.Log import Log
+from ....lib.skilling.woodcutting import LOGS
 from ....lib.areas import AREAS
 
 

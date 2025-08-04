@@ -6,7 +6,8 @@ from ....util.structures.Activity import (
 )
 from ....util.structures.LootTable import LootTable
 from ....util.structures.Bank import Bank
-from ....lib.skilling.herblore import MIXABLES, Mixable
+from ....util.items.skilling.Mixable import Mixable
+from ....lib.skilling.herblore import MIXABLES
 
 
 class MixingActivity(Activity):

@@ -6,7 +6,8 @@ from ....util.structures.Activity import (
 )
 from ....util.structures.LootTable import LootTable
 from ....util.structures.Bank import Bank
-from ....lib.skilling.crafting import CRAFTABLES, Craftable
+from ....util.items.skilling.Craftable import Craftable
+from ....lib.skilling.crafting import CRAFTABLES
 
 
 class CraftingActivity(Activity):

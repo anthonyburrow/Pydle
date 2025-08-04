@@ -8,7 +8,8 @@ from ....util.structures.LootTable import LootTable
 from ....util.structures.Bank import Bank
 from ....util.structures.Tool import Tool
 from ....util.structures.Area import Area
-from ....lib.skilling.fishing import Fish, FISH
+from ....util.items.skilling.Fish import Fish
+from ....lib.skilling.fishing import FISH
 from ....lib.areas import AREAS
 
 

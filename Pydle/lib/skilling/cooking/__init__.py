@@ -1,7 +1,6 @@
-from .cookables import COOKABLES, Cookable
+from .cookables import COOKABLES
 
 
 __all__ = [
     'COOKABLES',
-    'Cookable',
 ]

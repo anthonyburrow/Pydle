@@ -1,14 +1,16 @@
 from numpy import exp
 
+from .Item import Item
 from ...util.structures.Tool import Tool
 from ...util.colors import color, color_theme
 from ...util.ticks import Ticks
 
 
-class Gatherable:
+class Gatherable(Item):
 
     def __init__(
         self,
+        item_id: str,
         name: str,
         xp: float,
         level: int,
@@ -18,7 +20,8 @@ class Gatherable:
         min_prob_factor: float = 0.1,
         growth_rate: float = 0.15
     ):
-        self.name: str = name
+        super().__init__(item_id, name)
+
         self.xp: float = xp
         self.level: int = level
         self.n_per_gather: int = n_per_gather

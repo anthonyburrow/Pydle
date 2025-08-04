@@ -6,7 +6,8 @@ from ....util.structures.Activity import (
 )
 from ....util.structures.LootTable import LootTable
 from ....util.structures.Bank import Bank
-from ....lib.skilling.cooking import Cookable, COOKABLES
+from ....util.items.skilling.Cookable import Cookable
+from ....lib.skilling.cooking import COOKABLES
 from ....lib.skilling.woodcutting import LOGS
 
 

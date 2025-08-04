@@ -1,9 +1,8 @@
-from .collectables import COLLECTABLES, Collectable
+from .collectables import COLLECTABLES
 from .secateurs import SECATEURS
 
 
 __all__ = [
     'COLLECTABLES',
-    'Collectable',
     'SECATEURS',
 ]

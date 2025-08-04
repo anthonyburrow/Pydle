@@ -1,17 +1,20 @@
+from .Item import Item
 from ...util.colors import color, color_theme
 
 
-class Produceable:
+class Produceable(Item):
 
     def __init__(
         self,
+        item_id: str,
         name: str,
         xp: float,
         level: int,
         ticks_per_action: int,
         items_required: dict,
     ):
-        self.name: str = name
+        super().__init__(item_id, name)
+
         self.xp: float = xp
         self.level: int = level
         self.ticks_per_action: int = ticks_per_action

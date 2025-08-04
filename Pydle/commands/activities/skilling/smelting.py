@@ -6,7 +6,8 @@ from ....util.structures.Activity import (
 )
 from ....util.structures.LootTable import LootTable
 from ....util.structures.Bank import Bank
-from ....lib.skilling.smithing import SMELTABLES, Smeltable
+from ....util.items.skilling.Smeltable import Smeltable
+from ....lib.skilling.smithing import SMELTABLES
 from ....lib.skilling.woodcutting import LOGS
 
 

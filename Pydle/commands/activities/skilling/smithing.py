@@ -6,7 +6,8 @@ from ....util.structures.Activity import (
 )
 from ....util.structures.LootTable import LootTable
 from ....util.structures.Bank import Bank
-from ....lib.skilling.smithing import SMITHABLES, Smithable
+from ....util.items.skilling.Smithable import Smithable
+from ....lib.skilling.smithing import SMITHABLES
 from ....lib.skilling.woodcutting import LOGS
 
 

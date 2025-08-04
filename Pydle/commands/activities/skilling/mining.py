@@ -8,7 +8,8 @@ from ....util.structures.LootTable import LootTable
 from ....util.structures.Bank import Bank
 from ....util.structures.Tool import Tool
 from ....util.structures.Area import Area
-from ....lib.skilling.mining import Ore, ORES
+from ....util.items.skilling.Ore import Ore
+from ....lib.skilling.mining import ORES
 from ....lib.areas import AREAS
 
 

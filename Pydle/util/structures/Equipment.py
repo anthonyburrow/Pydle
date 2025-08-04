@@ -40,8 +40,8 @@ class Equipment(dict):
 
         self._calculate_stats()
 
-    def equip(self, equippable_name: str) -> Result:
-        if not self._player.has(equippable_name):
+    def equip(self, equippable_id: str) -> Result:
+        if not self._player.has(equippable_id):
             return Result(
                 success=False,
                 msg=f'{self._player} does not have a {equippable_name}.'

@@ -193,7 +193,7 @@ class Player:
 
         self._name: str = save_data.name
         self._area: str = save_data.area
-        self._bank: Bank = Bank(save_data.items)
+        self._bank: Bank = Bank.from_dict(save_data.items)
         self._skills: Skills = Skills(save_data.skills)
         self._tools: Tools = Tools(self, save_data.tools)
         self._equipment: Equipment = Equipment(self, save_data.equipment)

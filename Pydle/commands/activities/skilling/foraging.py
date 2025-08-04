@@ -8,7 +8,8 @@ from ....util.structures.LootTable import LootTable
 from ....util.structures.Bank import Bank
 from ....util.structures.Tool import Tool
 from ....util.structures.Area import Area
-from ....lib.skilling.foraging import Collectable, COLLECTABLES
+from ....util.items.skilling.Collectable import Collectable
+from ....lib.skilling.foraging import COLLECTABLES
 from ....lib.areas import AREAS
 
 

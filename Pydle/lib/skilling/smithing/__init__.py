@@ -1,10 +1,8 @@
-from .smeltables import SMELTABLES, Smeltable
-from .smithables import SMITHABLES, Smithable
+from .smeltables import SMELTABLES
+from .smithables import SMITHABLES
 
 
 __all__ = [
     'SMELTABLES',
-    'Smeltable',
     'SMITHABLES',
-    'Smithable',
 ]

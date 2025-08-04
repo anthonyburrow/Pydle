@@ -1,7 +1,6 @@
-from .craftables import CRAFTABLES, Craftable
+from .craftables import CRAFTABLES
 
 
 __all__ = [
     'CRAFTABLES',
-    'Craftable',
 ]
