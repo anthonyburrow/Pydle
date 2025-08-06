@@ -14,6 +14,7 @@ class BankKey:
 
     def to_string(self) -> str:
         if self.quality:
+            ItemInstance.get_name(self.item_id, self.quality)
             return f'{self.quality.name.lower()} {self.item_id}'
         return self.item_id
 
@@ -112,8 +113,8 @@ class Bank(dict):
 
     def to_dict(self) -> dict[str, dict]:
         return {
-            item_key.to_string(): item_instance.to_dict()
-            for item_key, item_instance in self.items()
+            bank_key.to_string(): item_instance.to_dict()
+            for bank_key, item_instance in self.items()
         }
 
     @classmethod

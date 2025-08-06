@@ -4,11 +4,12 @@ from ....util.structures.Activity import (
     ActivityMsgType,
     ActivityTickResult
 )
+from ....util.structures.Tools import ToolSlot
 from ....util.structures.LootTable import LootTable
 from ....util.structures.Bank import Bank
-from ....util.structures.Tool import Tool
 from ....util.structures.Area import Area
 from ....util.items.skilling.Fish import Fish
+from ....util.items.Item import ItemInstance
 from ....lib.skilling.fishing import FISH
 from ....lib.areas import AREAS
 
@@ -26,7 +27,7 @@ class FishingActivity(Activity):
 
         self.description: str = 'fishing'
 
-        self.fishing_rod: Tool = self.player.get_tool('fishing rod')
+        self.fishing_rod: ItemInstance = self.player.get_tool(ToolSlot.FISHING_ROD)
         self.loot_table: LootTable = None
 
     def setup_inherited(self) -> ActivitySetupResult:

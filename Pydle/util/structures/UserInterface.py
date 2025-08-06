@@ -46,7 +46,7 @@ class UserInterface:
         print(f'Error: {message}')
         print(traceback.format_exc())
 
-    def get_command(self) -> str:
+    def get_input(self) -> str:
         return input(COMMAND_PREFIX)
 
     def start_keyboard_listener(self):

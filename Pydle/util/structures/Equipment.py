@@ -1,117 +1,103 @@
-from . import Player, Equippable
+from enum import Enum, auto
+from typing import Self
+
+from . import Player
 from .Stats import Stats
 from ..colors import color
 from ..visuals import centered_title
 from ..Result import Result
-from ...lib.equipment import (
-    WEAPONS,
-    OFFHANDS,
-    HELMS,
-    BODIES,
-    LEGS,
-    GLOVES,
-    BOOTS,
-)
+from ..items.Item import ItemInstance
 
 
-EQUIPMENT = {
-    'weapon': WEAPONS,
-    'offhand': OFFHANDS,
-    'helm': HELMS,
-    'body': BODIES,
-    'legs': LEGS,
-    'gloves': GLOVES,
-    'boots': BOOTS,
-}
+class EquipmentSlot(Enum):
+    WEAPON = auto()
+    OFFHAND = auto()
+    HELM = auto()
+    BODY = auto()
+    LEGS = auto()
+    GLOVES = auto()
+    BOOTS = auto()
+
+    def to_string(self) -> str:
+        return self.name.lower()
 
 
 class Equipment(dict):
 
-    def __init__(self, player: Player, equipment_dict: dict = None):
+    def __init__(self, player: Player, equipment_dict: dict | None = None):
         self._player: Player = player
 
         self._stats: Stats = Stats()
 
         equipment_dict = equipment_dict or {}
+        self.load_from_dict(equipment_dict)
 
-        for equippable_key, equippable_lib in EQUIPMENT.items():
-            equippable_name: str = equipment_dict.get(equippable_key, None)
-            self[equippable_key] = equippable_lib.get(equippable_name, None)
-
-        self._calculate_stats()
-
-    def equip(self, equippable_id: str) -> Result:
-        if not self._player.has(equippable_id):
+    def equip(self, item_instance: ItemInstance) -> Result:
+        if not self._player.has(item_instance):
             return Result(
                 success=False,
-                msg=f'{self._player} does not have a {equippable_name}.'
+                msg=f'{self._player} does not have a {item_instance}.'
             )
 
-        for equippable_key, equippable_lib in EQUIPMENT.items():
-            if equippable_name not in equippable_lib:
-                continue
+        equipment_slot: EquipmentSlot = item_instance.equipment_slot
 
-            prev_equippable: Equippable = self.get_equippable(equippable_key)
-            if prev_equippable:
-                self._player.give(prev_equippable.name)
+        previous_instance: ItemInstance | None = self.get(equipment_slot)
+        if previous_instance:
+            self._player.give(previous_instance)
 
-            self._player.remove(equippable_name, quantity=1)
-            equippable = equippable_lib[equippable_name]
-            self[equippable_key] = equippable
-
-            self._calculate_stats()
-
-            return Result(
-                success=True,
-                msg=f'{equippable} was equipped.'
-            )
-
-        return Result(
-            success=False,
-            msg=f'{equippable_name.capitalize()} cannot be equipped.'
-        )
-
-    def unequip(self, equippable_key: str) -> Result:
-        if equippable_key not in self:
-            return Result(
-                success=False,
-                msg=f'{equippable_key.capitalize()} is not a valid type of equipment (helm, body, etc.).',
-            )
-
-        prev_equippable: Equippable = self.get_equippable(equippable_key)
-        if not prev_equippable:
-            return Result(
-                success=False,
-                msg=f'{self._player} has no {equippable_key} equipped.'
-            )
-
-        self[equippable_key] = ''
-        self._player.give(prev_equippable.name)
+        self._player.remove(item_instance)
+        self[equipment_slot] = item_instance
 
         self._calculate_stats()
 
         return Result(
             success=True,
-            msg=f'{prev_equippable} was unequipped.'
+            msg=f'{item_instance} was equipped.'
         )
 
-    def get_equippable(self, equippable_key: str) -> Equippable:
-        return self[equippable_key]
+    def unequip(self, item_instance: ItemInstance) -> Result:
+        equipment_slot: EquipmentSlot = item_instance.equipment_slot
 
-    def get_equipment(self) -> dict:
-        return {
-            equippable_key: self.get_equippable(equippable_key)
-            for equippable_key in EQUIPMENT
-        }
+        previous_instance: ItemInstance | None = self.get(equipment_slot)
+        if not previous_instance or previous_instance != item_instance:
+            return Result(
+                success=False,
+                msg=f'{self._player} does not have {item_instance} equipped.'
+            )
 
-    def to_dict(self) -> dict:
-        equipment_names: dict = {}
+        self[equipment_slot] = None
+        self._player.give(item_instance)
 
-        for equippable_key in EQUIPMENT:
-            equippable: Equippable = self.get_equippable(equippable_key)
-            equipment_names[equippable_key] = equippable.name if equippable else ''
+        self._calculate_stats()
 
-        return equipment_names
+        return Result(
+            success=True,
+            msg=f'{previous_instance} was unequipped.'
+        )
+
+    def to_dict(self) -> dict[str, dict | None]:
+        equipment_dict: dict[str, dict | None] = {}
+
+        for equipment_slot, item_instance in self.items():
+            if not item_instance:
+                equipment_dict[equipment_slot.to_string()] = None
+                continue
+            equipment_dict[equipment_slot.to_string()] = item_instance.to_dict()
+
+        return equipment_dict
+
+    def load_from_dict(self, equipment_dict: dict) -> Self:
+        for equipment_slot in EquipmentSlot:
+            instance_dict: dict | None = equipment_dict.get(equipment_slot.to_string())
+
+            if instance_dict is None:
+                self[equipment_slot] = None
+                continue
+
+            item_instance: ItemInstance = ItemInstance.from_dict(instance_dict)
+            self[equipment_slot] = item_instance
+
+        self._calculate_stats()
 
     @property
     def stats(self) -> Stats:
@@ -120,38 +106,38 @@ class Equipment(dict):
     def _calculate_stats(self):
         self._stats.reset()
 
-        for equippable_key, equippable in self.items():
-            if not equippable:
+        for equippable_slot, item_instance in self.items():
+            if not item_instance:
                 continue
-            self._stats += equippable.stats
+            self._stats += item_instance.stats
 
     def __str__(self) -> str:
         msg: list = []
 
-        max_type_length: int = max([len(x) for x in EQUIPMENT])
+        max_type_length: int = max([len(x.to_string()) for x in EquipmentSlot])
         max_equippable_length: int = 0
-        for equippable in self.values():
-            if equippable is None:
+        for item_instance in self.values():
+            if item_instance is None:
                 length = 3
             else:
-                length = len(equippable.name)
+                length = len(item_instance.name)
             if length > max_equippable_length:
                 max_equippable_length = length
         total_length = max_type_length + max_equippable_length + 3
 
         msg.append(centered_title('EQUIPMENT', total_length))
 
-        for equippable_key in EQUIPMENT:
-            equippable: Equippable = self.get_equippable(equippable_key)
+        for equippable_slot, item_instance in self.items():
             name = color(
-                equippable_key.capitalize(),
+                equippable_slot.to_string.capitalize(),
                 '',
                 justify=max_type_length
             )
-            equippable_str = equippable or '---'
+            equippable_str = item_instance or '---'
             msg.append(f'{name} | {equippable_str}')
 
-        attack_speed_str = self['weapon'].attack_speed if self['weapon'] else 'N/A'
+        weapon_instance: ItemInstance | None = self.get(EquipmentSlot.WEAPON)
+        attack_speed_str = weapon_instance.attack_speed if weapon_instance else 'N/A'
         msg.append(f'\nWeapon tick speed: {attack_speed_str}')
 
         msg = '\n'.join(msg)
@@ -159,6 +145,6 @@ class Equipment(dict):
         return msg
 
     def __setitem__(self, key, value):
-        if key not in EQUIPMENT:
-            raise KeyError(f'Invalid skill key: "{key}"')
+        if key not in EquipmentSlot:
+            raise KeyError(f'Invalid EquipmentSlot key: "{key}"')
         super().__setitem__(key, value)

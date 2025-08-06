@@ -6,8 +6,9 @@ from ....util.structures.Activity import (
 )
 from ....util.structures.LootTable import LootTable
 from ....util.structures.Bank import Bank
-from ....util.structures.Tool import Tool
 from ....util.structures.Area import Area
+from ....util.structures.Tools import ToolSlot
+from ....util.items.Item import ItemInstance
 from ....util.items.skilling.Log import Log
 from ....lib.skilling.woodcutting import LOGS
 from ....lib.areas import AREAS
@@ -26,7 +27,7 @@ class WoodcuttingActivity(Activity):
 
         self.description: str = 'woodcutting'
 
-        self.axe: Tool = self.player.get_tool('axe')
+        self.axe: ItemInstance = self.player.get_tool(ToolSlot.AXE)
         self.loot_table: LootTable = None
 
     def setup_inherited(self) -> ActivitySetupResult:

@@ -5,7 +5,8 @@ import threading
 from .Player import Player
 from .UserInterface import UserInterface
 from .Activity import Activity, ActivitySetupResult
-from ..input import parse_command, flush_input
+from ..input import flush_input
+from ..Command import Command, CommandType
 from ..ticks import Ticks
 
 
@@ -27,23 +28,21 @@ class Controller:
 
     def listen(self):
         flush_input()
-        command: str = self.ui.get_command()
-        command: dict = parse_command(command)
+        raw_in: str = self.ui.get_input()
+        command: Command = Command(raw_in)
 
-        command_type = command['type']
-
-        if command_type == 'activity':
+        if command.type == CommandType.ACTIVITY:
             self.control_activity(command)
-        elif command_type == 'operation':
+        elif command.type == CommandType.OPERATION:
             self.control_operation(command)
-        elif command_type == 'exit':
+        elif command.type == CommandType.EXIT:
             sys.exit()
-        elif command_type == 'unknown':
+        elif command.type == CommandType.UNKNOWN:
             self.ui.print('Unknown command.')
 
-    def control_activity(self, command: dict):
-        activity: Activity = command['activity'](
-            self.player, self.ui, *command['args']
+    def control_activity(self, command: Command):
+        activity: Activity = command.command_activity(
+            self.player, self.ui, command
         )
 
         result_setup: ActivitySetupResult = activity.setup()
@@ -66,6 +65,5 @@ class Controller:
         activity.finish()
         time.sleep(Ticks(4))
 
-    def control_operation(self, command: dict):
-        function = command['function']
-        function(self.player, self.ui, *command['args'])
+    def control_operation(self, command: Command):
+        command.command_function(self.player, self.ui, command)

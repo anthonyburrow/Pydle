@@ -4,11 +4,12 @@ from ....util.structures.Activity import (
     ActivityMsgType,
     ActivityTickResult
 )
+from ....util.structures.Tools import ToolSlot
 from ....util.structures.LootTable import LootTable
 from ....util.structures.Bank import Bank
-from ....util.structures.Tool import Tool
 from ....util.structures.Area import Area
 from ....util.items.skilling.Collectable import Collectable
+from ....util.items.Item import ItemInstance
 from ....lib.skilling.foraging import COLLECTABLES
 from ....lib.areas import AREAS
 
@@ -22,7 +23,7 @@ class ForagingActivity(Activity):
 
         self.description: str = 'foraging'
 
-        self.secateurs: Tool = self.player.get_tool('secateurs')
+        self.secateurs: ItemInstance = self.player.get_tool(ToolSlot.SECATEURS)
         self.loot_table: LootTable = None
 
         self._xp_table: dict = {}
@@ -33,7 +34,7 @@ class ForagingActivity(Activity):
         if not self.area.collectables:
             return ActivitySetupResult(
                 success=False,
-                msg=f'There is nothing to be found in {area}.'
+                msg=f'There is nothing to be found in {self.area}.'
             )
 
         for collectable_key in self.area.collectables:

@@ -8,18 +8,13 @@ from ..structures.Bank import BankKey
 
 
 class Item(ABC):
-    def __init__(self, item_id: str, name: str):
+    def __init__(self, item_id: str, name: str, supported_qualities=None):
         self.item_id: str = item_id
         self.name: str = name
+        self.supported_qualities: list[Quality] = supported_qualities or []
 
     def __repr__(self):
         return f'<Item id={self.item_id}, name={self.name}>'
-
-    # def to_dict(self) -> dict:
-    #     return {'item_id': self.item_id, 'name': self.name}
-
-    # def display_name(self, quality: str | None = None) -> str:
-    #     return f'{quality} {self.name}'.strip().title()
 
     def __str__(self):
         return self.name
@@ -37,7 +32,7 @@ class ItemInstance:
         self.quantity: int = quantity
         self.quality: Quality | None = quality
 
-        self.set_name()
+        self.get_name = self.get_name(self.name, self.quality)
 
     def to_dict(self) -> dict:
         return {
@@ -61,12 +56,12 @@ class ItemInstance:
     def get_key(self) -> BankKey:
         return BankKey(self.item_id, self.quality)
 
-    def set_name(self) -> None:
-        if not self.quality:
-            return
+    @staticmethod
+    def get_name(base_name: str, quality: Quality) -> str:
+        if not quality:
+            return base_name
 
-        quality_str: str = f'{self.quality}'
-        self.name: str = f'{quality_str} {self.base.name}'
+        return f'{quality} {base_name}'
 
     def __str__(self) -> str:
         if not self.quality:
@@ -89,3 +84,13 @@ class ItemInstance:
                 f"'{self.__class__.__name__}' object or its underlying "
                 f"'{self.base.__class__.__name__}' object has no attribute '{name}'"
             )
+
+    def __eq__(self, other) -> bool:
+        if not isinstance(other, ItemInstance):
+            return False
+
+        return (
+            self.item_id == other.item_id and
+            self.quantity == other.quantity and
+            self.quality == other.quality
+        )

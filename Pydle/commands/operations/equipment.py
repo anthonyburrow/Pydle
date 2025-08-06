@@ -1,28 +1,37 @@
+from ...util.Result import Result
+from ...util.Command import Command
+from ...util.ItemParser import ITEM_PARSER
+from ...util.items.Item import ItemInstance
+from ...util.items.Equippable import Equippable
 from ...util.structures.Player import Player
 from ...util.structures.UserInterface import UserInterface
-from ...util.Result import Result
 
 
-def interface_equipment(player: Player, ui: UserInterface, *args):
-    if not args:
+def interface_equipment(player: Player, ui: UserInterface, command: Command):
+    if not command.subcommand and not command.item_name:
         return ui.print(str(player.equipment), multiline=True)
 
-    subcommand = args[0]
-
-    if subcommand == 'stats':
+    if command.subcommand == 'stats':
         return ui.print(str(player.stats), multiline=True)
 
-    equippable_name = ' '.join(args[1:])
-
-    if not equippable_name:
+    if not command.item_name:
         return ui.print('An item argument was not given.')
 
-    if subcommand == 'equip':
-        result: Result = player.equip(equippable_name)
-    elif subcommand == 'unequip':
-        result: Result = player.unequip(equippable_name)
-    else:
-        return ui.print(f'"{subcommand}" is not a valid argument.')
+    if command.quantity != 1:
+        return ui.print('Only one item can be equipped or unequipped at a time.')
+
+    item_instance: ItemInstance | None = ITEM_PARSER.get_instance(command)
+
+    if not item_instance:
+        return ui.print(f"Item '{command.item_name}' is not a valid argument.")
+
+    if not isinstance(item_instance.base, Equippable):
+        return ui.print(f"Item '{item_instance}' is not equippable.")
+
+    if command.subcommand == 'equip':
+        result: Result = player.equip(item_instance)
+    elif command.subcommand == 'unequip':
+        result: Result = player.unequip(item_instance)
 
     ui.print(result.msg)
 

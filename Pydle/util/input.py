@@ -1,5 +1,3 @@
-from .commands import CMD_EXIT
-from ..commands.command_map import map_activity, map_operations, alias_to_command
 
 
 def flush_input():
@@ -12,37 +10,3 @@ def flush_input():
         import sys
         import termios
         termios.tcflush(sys.stdin, termios.TCIOFLUSH)
-
-
-def parse_command(msg: str) -> dict:
-    msg = msg.lower()
-    msg = msg.strip()
-    msg = msg.split(' ')
-
-    command = msg[0]
-    command = alias_to_command(command)
-
-    if command in map_activity:
-        return {
-            'type': 'activity',
-            'activity': map_activity[command]['function'],
-            'args': tuple(msg[1:]),
-        }
-    elif command in map_operations:
-        return {
-            'type': 'operation',
-            'function': map_operations[command]['function'],
-            'args': tuple(msg[1:]),
-        }
-    elif command == CMD_EXIT:
-        return {
-            'type': 'exit',
-        }
-    elif command:
-        return {
-            'type': 'unknown',
-        }
-
-    return {
-        'type': None
-    }

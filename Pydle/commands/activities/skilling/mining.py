@@ -6,9 +6,10 @@ from ....util.structures.Activity import (
 )
 from ....util.structures.LootTable import LootTable
 from ....util.structures.Bank import Bank
-from ....util.structures.Tool import Tool
 from ....util.structures.Area import Area
+from ....util.structures.Tools import ToolSlot
 from ....util.items.skilling.Ore import Ore
+from ....util.items.Item import ItemInstance
 from ....lib.skilling.mining import ORES
 from ....lib.areas import AREAS
 
@@ -25,7 +26,7 @@ class MiningActivity(Activity):
             self.ore: Ore = None
 
         self.description: str = 'mining'
-        self.pickaxe: Tool = self.player.get_tool('pickaxe')
+        self.pickaxe: ItemInstance = self.player.get_tool(ToolSlot.PICKAXE)
 
         self.loot_table: LootTable = None
 

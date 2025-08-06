@@ -1,5 +1,6 @@
+from .Item import Item
 from ..colors import color, color_theme
-from ..structures.Item import Item
+from ..structures.Tools import ToolSlot
 
 
 class Tool(Item):
@@ -8,12 +9,14 @@ class Tool(Item):
         self,
         item_id: str,
         name: str,
+        tool_slot: ToolSlot, 
         level: int,
         power: float = None,
         ticks_per_use: int = 3,
     ):
         super().__init__(item_id, name)
 
+        self.tool_slot: ToolSlot = tool_slot
         self.level: int = level
 
         self.power: float = self._default_power() if power is None else power

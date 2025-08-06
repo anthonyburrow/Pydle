@@ -7,13 +7,13 @@ from .Bank import Bank
 from .Skills import Skills
 from .Skill import Skill
 from .Tools import Tools
-from .Tool import Tool
 from .Equipment import Equipment
 from .Stats import Stats
 from .UpdatedEffects import UpdatedEffects
 from ..colors import color, color_theme
 from ..commands import COMMAND_PREFIX
 from ..Result import Result
+from ..items.Item import ItemInstance
 from ...lib.areas import HOME_AREA
 from ...lib.item_sets import NEW_PLAYER_ITEMS
 
@@ -125,8 +125,8 @@ class Player:
     def unequip_tool(self, *args, **kwargs) -> Result:
         return self._tools.unequip(*args, **kwargs)
 
-    def get_tool(self, *args, **kwargs) -> Tool:
-        return self._tools.get_tool(*args, **kwargs)
+    def get_tool(self, *args, **kwargs) -> ItemInstance | None:
+        return self._tools.get(*args, **kwargs)
 
     @property
     def tools(self) -> Tools:

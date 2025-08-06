@@ -1,4 +1,5 @@
 from enum import Enum
+from typing import Self
 
 
 class Quality(Enum):
@@ -10,7 +11,7 @@ class Quality(Enum):
     MASTER = 5
 
     @classmethod
-    def from_value(cls, value: int):
+    def from_value(cls, value: int) -> Self | None:
         if value is None:
             return None
         return cls(value)
