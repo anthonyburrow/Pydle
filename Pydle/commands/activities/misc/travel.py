@@ -14,8 +14,8 @@ class TravelingActivity(Activity):
         super().__init__(*args)
 
         if self.argument in AREAS:
-            self.area: Area = AREAS[self.argument]
-            self.area_key: str = self.argument
+            self.area: Area = AREAS[self.command.argument]
+            self.area_key: str = self.command.argument
         else:
             self.area: Area = None
 
