@@ -129,7 +129,7 @@ class Equipment(dict):
 
         for equippable_slot, item_instance in self.items():
             name = color(
-                equippable_slot.to_string.capitalize(),
+                equippable_slot.to_string().capitalize(),
                 '',
                 justify=max_type_length
             )
