@@ -2,29 +2,22 @@ import numpy as np
 from typing import Self
 
 from .Bank import Bank
-from ..item_registry import verify_item
+from ..items.Item import ItemInstance
 
 
 class LootTable:
 
     def __init__(self):
-        self._weighted_items: list[str | None] = []
-        self._weighted_quantities: list[int] = []
+        self._weighted_items: list[ItemInstance | None] = []
         self._weighted_weights: list[float] = []
         self._weighted_probabilities: np.ndarray | None = None
-        self._needs_reset = True
+        self._needs_reset: bool = True
 
-        self._every_items = {}
-        self._tertiary_items = {}
+        self._every_items = list[ItemInstance] = []
+        self._tertiary_items: list[tuple[ItemInstance, float]] = []
 
-    def add(self, item: str, quantity: int = 1, weight: float = 1.) -> Self:
-        verify_item(item)
-
-        if item in self._weighted_items:
-            raise KeyError(f'{item} already added to LootTable.')
-
-        self._weighted_items.append(item)
-        self._weighted_quantities.append(quantity)
+    def add(self, item_instance: ItemInstance, weight: float = 1.) -> Self:
+        self._weighted_items.append(item_instance)
         self._weighted_weights.append(weight)
 
         self._needs_reset = True
@@ -32,34 +25,20 @@ class LootTable:
         return self
 
     def add_empty(self, weight: float = 1.) -> Self:
-        if None in self._weighted_items:
-            raise KeyError(f'Empty weight already added to LootTable.')
-
         self._weighted_items.append(None)
-        self._weighted_quantities.append(0)
         self._weighted_weights.append(weight)
 
         self._needs_reset = True
 
         return self
 
-    def tertiary(self, item: str, probability: float, quantity: int = 1) -> Self:
-        verify_item(item)
-
-        if item in self._tertiary_items:
-            raise KeyError(f'{item} already added to LootTable')
-
-        self._tertiary_items[item] = (probability, quantity)
+    def tertiary(self, item_instance: ItemInstance, probability: float) -> Self:
+        self._tertiary_items.append((item_instance, probability))
 
         return self
 
-    def every(self, item: str, quantity: int = 1) -> Self:
-        verify_item(item)
-
-        if item in self._every_items:
-            raise KeyError(f'{item} already added to LootTable')
-
-        self._every_items[item] = quantity
+    def every(self, item_instance: ItemInstance) -> Self:
+        self._every_items.append(item_instance)
 
         return self
 
@@ -83,7 +62,7 @@ class LootTable:
 
         self._needs_reset = False
 
-    def _roll_weighted(self, n_rolls: int) -> dict:
+    def _roll_weighted(self, n_rolls: int) -> ItemInstance | Bank:
         if self._needs_reset:
             self._reset_weighted_probs()
 
@@ -95,37 +74,51 @@ class LootTable:
 
         if n_rolls == 1:
             index = index[0]
-            item = self._weighted_items[index]
-            quantity = self._weighted_quantities[index]
-            return {} if item is None else {item: quantity}
+            item_instance: ItemInstance | None = self._weighted_items[index]
+            return item_instance or Bank()
 
-        result = Bank()
+        loot: Bank = Bank()
         for i in index:
-            item = self._weighted_items[i]
-            if item is None:
+            item_instance: ItemInstance | None = self._weighted_items[i]
+            if item_instance is None:
                 continue
-            quantity = self._weighted_quantities[i]
-            result.add(item, quantity)
 
-        return result
-
-    def _roll_every(self, n_rolls: int) -> dict:
-        loot = {
-            drop: n_rolls * self._every_items[drop]
-            for drop in self._every_items
-        }
+            loot.add(item_instance)
 
         return loot
 
-    def _roll_tertiary(self, n_rolls: int) -> dict:
-        loot = {}
+    def _roll_every(self, n_rolls: int) -> Bank:
+        loot: Bank = Bank()
 
-        for item, item_info in self._tertiary_items.items():
-            probability, item_quantity = item_info
+        for item_instance in self._every_items:
+            if n_rolls == 1:
+                loot.add(item_instance)
+                continue
 
-            rolls = np.random.rand(n_rolls)
-            n_successful = (rolls < probability).sum()
+            new_quantity: int = n_rolls * item_instance.quantity
+            new_instance: ItemInstance = item_instance.copy(quantity=new_quantity)
 
-            loot[item] = int(n_successful * item_quantity)
+            loot.add(new_instance)
+
+        return loot
+
+    def _roll_tertiary(self, n_rolls: int) -> Bank:
+        loot: Bank = Bank()
+
+        for item_instance, probability in self._tertiary_items:
+            rolls: np.ndarray = np.random.rand(n_rolls)
+            n_successful: int = (rolls < probability).sum()
+
+            if not n_successful:
+                continue
+
+            if n_rolls == 1:
+                loot.add(item_instance)
+                continue
+
+            new_quantity: int = n_successful * item_instance.quantity
+            new_instance: ItemInstance = item_instance.copy(quantity=new_quantity)
+
+            loot.add(new_instance)
 
         return loot

@@ -1,3 +1,5 @@
+from ....util.ItemRegistry import ITEM_REGISTRY
+from ....util.ItemParser import ITEM_PARSER
 from ....util.structures.Activity import (
     Activity,
     ActivitySetupResult,
@@ -8,8 +10,8 @@ from ....util.structures.Tools import ToolSlot
 from ....util.structures.LootTable import LootTable
 from ....util.structures.Bank import Bank
 from ....util.structures.Area import Area
-from ....util.items.skilling.Fish import Fish
 from ....util.items.Item import ItemInstance
+from ....util.items.skilling.Fish import Fish
 from ....lib.skilling.fishing import FISH
 from ....lib.areas import AREAS
 
@@ -19,22 +21,25 @@ class FishingActivity(Activity):
     def __init__(self, *args):
         super().__init__(*args)
 
-        if self.argument in FISH:
-            self.fish: Fish = FISH[self.argument]
-            self.fish_key: str = self.argument
-        else:
-            self.fish: Fish = None
+        self.fish: ItemInstance | None = ITEM_PARSER.get_instance(self.command)
+        self.fish.set_quantity(self.fish.n_per_gather)
+
+        self.fishing_rod: ItemInstance | None = self.player.get_tool(ToolSlot.FISHING_ROD)
+        self.loot_table: LootTable = None
 
         self.description: str = 'fishing'
-
-        self.fishing_rod: ItemInstance = self.player.get_tool(ToolSlot.FISHING_ROD)
-        self.loot_table: LootTable = None
 
     def setup_inherited(self) -> ActivitySetupResult:
         if self.fish is None:
             return ActivitySetupResult(
                 success=False,
-                msg='A valid fish was not given.'
+                msg='A valid item was not given.'
+            )
+
+        if not isinstance(self.fish, Fish):
+            return ActivitySetupResult(
+                success=False,
+                msg=f'{self.fish} is not a valid fish.'
             )
 
         skill_level: int = self.player.get_level('fishing')
@@ -45,7 +50,7 @@ class FishingActivity(Activity):
             )
 
         area: Area = AREAS[self.player.area]
-        if not area.contains_fish(self.fish_key):
+        if not area.contains_fish(self.fish):
             return ActivitySetupResult(
                 success=False,
                 msg=f'{area} does not have {self.fish} anywhere.'
@@ -54,7 +59,7 @@ class FishingActivity(Activity):
         if not self.fishing_rod:
             return ActivitySetupResult(
                 success=False,
-                msg=f'{self.player} does not have a fishing rod.'
+                msg=f'{self.player} does not have a fishing rod equipped.'
             )
 
         self._setup_loot_table()
@@ -104,15 +109,15 @@ class FishingActivity(Activity):
         return f'{self.player} finished {self.description}.'
 
     def _setup_loot_table(self):
-        fishing_args = (
-            self.player.get_level('fishing'),
-            self.fishing_rod,
-        )
-        prob_success = self.fish.prob_success(*fishing_args)
+        fishing_args = {
+            'level': self.player.get_level('fishing'),
+            'tool': self.fishing_rod,
+        }
+        prob_success = self.fish.prob_success(**fishing_args)
 
-        self.loot_table = LootTable()
-        self.loot_table.tertiary(
-            self.fish.name, prob_success, self.fish.n_per_gather
+        self.loot_table = (
+            LootTable()
+            .tertiary(self.fish, prob_success)
         )
 
         # Add more stuff (pets, etc)
@@ -127,8 +132,8 @@ def detailed_info():
     msg.append('')
 
     msg.append('Available fish:')
-    for fish in FISH:
-        name = str(fish).capitalize()
-        msg.append(f'- {name}')
+    for item_id in FISH:
+        fish: Fish = ITEM_REGISTRY[item_id]
+        msg.append(f'- {fish}')
 
     return '\n'.join(msg)

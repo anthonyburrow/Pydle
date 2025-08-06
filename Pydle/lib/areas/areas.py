@@ -11,17 +11,17 @@ AREAS = {
             'goblin',
         },
         collectables={
-            'parsley': 3,
-            'thyme': 1,
+            'parsley leaves': 3,
+            'thyme leaves': 1,
         },
         fish={
-            'shrimp',
+            'raw shrimp',
         },
         logs={
-            'pine',
+            'pine log',
         },
         ores={
-            'copper',
+            'copper ore',
         },
     ),
     'eastveil': Area(

@@ -1,3 +1,4 @@
+from ....util.ItemParser import ITEM_PARSER
 from ....util.structures.Activity import (
     Activity,
     ActivitySetupResult,
@@ -6,11 +7,9 @@ from ....util.structures.Activity import (
 )
 from ....util.structures.Tools import ToolSlot
 from ....util.structures.LootTable import LootTable
-from ....util.structures.Bank import Bank
+from ....util.structures.Bank import Bank, BankKey
 from ....util.structures.Area import Area
-from ....util.items.skilling.Collectable import Collectable
 from ....util.items.Item import ItemInstance
-from ....lib.skilling.foraging import COLLECTABLES
 from ....lib.areas import AREAS
 
 
@@ -26,20 +25,20 @@ class ForagingActivity(Activity):
         self.secateurs: ItemInstance = self.player.get_tool(ToolSlot.SECATEURS)
         self.loot_table: LootTable = None
 
-        self._xp_table: dict = {}
+        self._xp_table: dict[BankKey, float] = {}
 
     def setup_inherited(self) -> ActivitySetupResult:
-        skill_level: int = self.player.get_level('foraging')
-
         if not self.area.collectables:
             return ActivitySetupResult(
                 success=False,
                 msg=f'There is nothing to be found in {self.area}.'
             )
 
-        for collectable_key in self.area.collectables:
-            collectable: Collectable = COLLECTABLES[collectable_key]
-            if skill_level >= collectable.level:
+        skill_level: int = self.player.get_level('foraging')
+
+        for collectable_name in self.area.collectables:
+            item_instance: ItemInstance = ITEM_PARSER.get_instance(collectable_name)
+            if skill_level >= item_instance.level:
                 break
         else:
             return ActivitySetupResult(
@@ -78,8 +77,8 @@ class ForagingActivity(Activity):
 
         # Loop needed in case of non-collectables (e.g. pets) in loot
         xp: float = 0
-        for item in items:
-            xp += self._xp_table.get(item, 0.)
+        for bank_key in items:
+            xp += self._xp_table.get(bank_key, 0.)
 
         return ActivityTickResult(
             msg=f'Collected {items.list_concise()}!',
@@ -118,23 +117,22 @@ class ForagingActivity(Activity):
         empty_weight: float = 1.
         total_area_weight: int = sum(self.area.collectables.values())
 
-        for collectable_key, area_weight in self.area.collectables.items():
-            collectable: Collectable = COLLECTABLES[collectable_key]
+        for collectable_name, area_weight in self.area.collectables.items():
+            item_instance: ItemInstance = ITEM_PARSER.get_instance(collectable_name)
 
-            if self.player.get_level('foraging') < collectable.level:
+            if self.player.get_level('foraging') < item_instance.level:
                 continue
 
-            prob_success = collectable.prob_success(**foraging_args)
+            prob_success = item_instance.prob_success(**foraging_args)
             adjusted_weight = prob_success * (area_weight / total_area_weight)
             self.loot_table.add(
-                item=collectable.name,
-                quantity=collectable.n_per_gather,
+                item_instance=item_instance,
                 weight=adjusted_weight,
             )
 
             empty_weight -= adjusted_weight
 
-            self._xp_table[collectable.name] = collectable.xp
+            self._xp_table[item_instance.get_key()] = item_instance.xp
 
         empty_weight = max(0., empty_weight)
         self.loot_table.add_empty(weight=empty_weight)

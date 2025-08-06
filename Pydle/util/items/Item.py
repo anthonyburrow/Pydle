@@ -53,6 +53,9 @@ class ItemInstance:
     def base(self) -> Item:
         return ITEM_REGISTRY[self.item_id]
 
+    def set_quantity(self, quantity: int) -> None:
+        self.quantity = quantity
+
     def get_key(self) -> BankKey:
         return BankKey(self.item_id, self.quality)
 
@@ -62,6 +65,11 @@ class ItemInstance:
             return base_name
 
         return f'{quality} {base_name}'
+
+    def copy(self, **overrides):
+        data = self.__dict__.copy()
+        data.update(overrides)
+        return ItemInstance(**data)
 
     def __str__(self) -> str:
         if not self.quality:

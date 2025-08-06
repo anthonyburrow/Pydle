@@ -1,6 +1,6 @@
 from ..ticks import Ticks
 from ..colors import color, color_theme
-
+from ..items.Item import ItemInstance
 from ...lib.skilling.foraging import COLLECTABLES
 from ...lib.skilling.fishing import FISH
 from ...lib.skilling.woodcutting import LOGS
@@ -45,17 +45,17 @@ class Area:
     def contains_monster(self, monster: str) -> bool:
         return monster in self.monsters
 
-    def contains_collectable(self, collectable: str) -> bool:
-        return collectable in self.collectables
+    def contains_collectable(self, item_instance: ItemInstance) -> bool:
+        return item_instance.name in self.collectables
 
-    def contains_fish(self, fish: str) -> bool:
-        return fish in self.fish
+    def contains_fish(self, item_instance: ItemInstance) -> bool:
+        return item_instance.name in self.fish
 
-    def contains_log(self, log: str) -> bool:
-        return log in self.logs
+    def contains_log(self, item_instance: ItemInstance) -> bool:
+        return item_instance.name in self.logs
 
-    def contains_ore(self, ore: str) -> bool:
-        return ore in self.ores
+    def contains_ore(self, item_instance: ItemInstance) -> bool:
+        return item_instance.name in self.ores
 
     def detailed_info(self) -> str:
         msg = []

@@ -5,6 +5,7 @@ from .Player import Player
 from .UserInterface import UserInterface
 from .Bank import Bank
 from .Skill import level_up_msg
+from ..Command import Command
 
 
 @dataclass
@@ -30,11 +31,10 @@ class ActivityTickResult:
 
 class Activity:
 
-    def __init__(self, player: Player, ui: UserInterface, *args):
+    def __init__(self, player: Player, ui: UserInterface, command: Command):
         self.player: Player = player
         self.ui: UserInterface = ui
-
-        self.argument: str = ' '.join(args)
+        self.command: Command = command
 
         self.tick_count: int = 0
         self.is_active: bool = False

@@ -28,7 +28,7 @@ class ItemParser:
                 }
 
     def get_instance(self, command: Command) -> ItemInstance | None:
-        instance_kwargs: dict = self._name_map.get(command.item_name)
+        instance_kwargs: dict = self._name_map.get(command.argument)
 
         if not instance_kwargs:
             return None
