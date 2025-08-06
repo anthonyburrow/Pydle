@@ -8,13 +8,13 @@ from ...util.structures.UserInterface import UserInterface
 
 
 def interface_equipment(player: Player, ui: UserInterface, command: Command):
-    if not command.subcommand and not command.item_name:
+    if not command.subcommand and not command.argument:
         return ui.print(str(player.equipment), multiline=True)
 
     if command.subcommand == 'stats':
         return ui.print(str(player.stats), multiline=True)
 
-    if not command.item_name:
+    if not command.argument:
         return ui.print('An item argument was not given.')
 
     if command.quantity != 1:
@@ -23,7 +23,7 @@ def interface_equipment(player: Player, ui: UserInterface, command: Command):
     item_instance: ItemInstance | None = ITEM_PARSER.get_instance(command)
 
     if not item_instance:
-        return ui.print(f"Item '{command.item_name}' is not a valid argument.")
+        return ui.print(f"Item '{command.argument}' is not a valid argument.")
 
     if not isinstance(item_instance.base, Equippable):
         return ui.print(f"Item '{item_instance}' is not equippable.")

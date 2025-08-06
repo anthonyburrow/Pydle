@@ -1,17 +1,16 @@
+from ...util.Command import Command
 from ...util.structures.Player import Player
 from ...util.structures.UserInterface import UserInterface
 
 
-def interface_skills(player: Player, ui: UserInterface, *args):
-    if not args:
+def interface_skills(player: Player, ui: UserInterface, command: Command):
+    if not command.subcommand and not command.argument:
         return ui.print(str(player.skills), multiline=True)
 
-    skill = args[0]
-
     try:
-        ui.print(player.get_skill(skill).details())
+        ui.print(player.get_skill(command.argument).details())
     except KeyError:
-        ui.print(f'{skill} is not a valid skill.')
+        ui.print(f'{command.argument} is not a valid skill.')
 
 
 def detailed_info():

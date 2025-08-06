@@ -1,18 +1,17 @@
+from ..testing.skilling import testing_skilling
+from ...util.Command import Command
 from ...util.structures.Player import Player
 from ...util.structures.UserInterface import UserInterface
-from ..testing.skilling import testing_skilling
 
 
-def interface_testing(player: Player, ui: UserInterface, *args):
-    if not args:
+def interface_testing(player: Player, ui: UserInterface, command: Command):
+    if not command.subcommand and not command.argument:
         return ui.print('A subcommand for `testing` is needed.')
 
-    subcommand = args[0]
-
-    if subcommand == 'skilling':
+    if command.subcommand == 'skilling':
         testing_skilling(player)
     else:
-        ui.print(f'Unknown subcommand `{subcommand}`')
+        ui.print(f'Unknown subcommand `{command.subcommand}`')
 
 
 def detailed_info():

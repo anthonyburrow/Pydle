@@ -1,8 +1,9 @@
 from ...util.structures.Player import Player
+from ...util.structures.Bank import Bank
 
 
 def testing_skilling(player: Player):
-    items = {
+    items: Bank = Bank.from_dict({
         'copper pickaxe': 1,
         'iron pickaxe': 1,
         'iron axe': 1,
@@ -13,6 +14,6 @@ def testing_skilling(player: Player):
         'vial': 1000,
         'eye of newt': 1000,
         'raw hide': 1000,
-    }
+    })
 
     player.give(items)

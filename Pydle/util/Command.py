@@ -17,6 +17,7 @@ SUBCOMMANDS: dict[str, set[str]] = {
     'area': {'list'},
     'equipment': {'equip', 'unequip', 'stats'},
     'tools': {'equip', 'unequip'},
+    'testing': {'skilling'},
 }
 
 
@@ -28,7 +29,7 @@ class Command:
         self.command: str = None
         self.subcommand: str | None = None
         self.quantity: int | None = None
-        self.item_name: str | None = None
+        self.argument: str | None = None
 
         self.type: CommandType = None
         self.activity: Activity | None = None
@@ -61,7 +62,7 @@ class Command:
         if tokens:
             return
 
-        self.item_string = ' '.join(tokens)
+        self.argument = ' '.join(tokens)
 
     def _get_command_info(self):
         if self.command in map_activity:
