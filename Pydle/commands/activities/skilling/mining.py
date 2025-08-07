@@ -1,19 +1,19 @@
-from ....util.ItemParser import ITEM_REGISTRY
-from ....util.ItemParser import ITEM_PARSER
+from ....lib.areas import AREAS
+from ....lib.skilling.mining import ORES
+from ....util.items.Item import ItemInstance
+from ....util.items.ItemParser import ITEM_PARSER
+from ....util.items.ItemRegistry import ITEM_REGISTRY
+from ....util.items.skilling.Ore import Ore
+from ....util.player.Bank import Bank
+from ....util.player.Tools import ToolSlot
 from ....util.structures.Activity import (
     Activity,
     ActivitySetupResult,
     ActivityMsgType,
     ActivityTickResult
 )
-from ....util.structures.Tools import ToolSlot
-from ....util.structures.LootTable import LootTable
-from ....util.structures.Bank import Bank
 from ....util.structures.Area import Area
-from ....util.items.Item import ItemInstance
-from ....util.items.skilling.Ore import Ore
-from ....lib.skilling.mining import ORES
-from ....lib.areas import AREAS
+from ....util.structures.LootTable import LootTable
 
 
 class MiningActivity(Activity):

@@ -1,6 +1,6 @@
+from .Monster import MonsterInstance
 from .MonsterRegistry import MonsterRegistry, MONSTER_REGISTRY
-from .structures.Monster import MonsterInstance
-from .Command import Command
+from ..Command import Command
 
 
 class MonsterParser:

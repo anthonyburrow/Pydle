@@ -1,4 +1,4 @@
-from Pydle.util.structures.Player import Player
+from Pydle.util.player.Player import Player
 from Pydle.util.structures.UserInterface import NullUserInterface
 from Pydle.util.input import parse_command
 

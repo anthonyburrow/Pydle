@@ -1,7 +1,7 @@
 from platformdirs import user_data_dir
 from pathlib import Path
 
-from .util.structures.Player import Player
+from .util.player.Player import Player
 from .util.structures.Controller import Controller
 from .util.structures.UserInterface import UserInterface
 

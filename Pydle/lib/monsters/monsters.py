@@ -1,5 +1,5 @@
-from ...util.ItemParser import ITEM_PARSER
-from ...util.structures.Monster import MonsterTier
+from ...util.items.ItemParser import ITEM_PARSER
+from ...util.monsters.Monster import MonsterTier
 from ...util.structures.LootTable import LootTable
 
 

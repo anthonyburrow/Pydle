@@ -1,6 +1,6 @@
 from .Item import Item
 from ..colors import color, color_theme
-from ..structures.Tools import ToolSlot
+from ..player.Tools import ToolSlot
 
 
 class Tool(Item):
@@ -26,4 +26,4 @@ class Tool(Item):
         return 0.5 + float(self.level) * 0.5 * 0.01
 
     def __str__(self):
-        return color(self.name.capitalize(), color_theme['tools'])
+        return color(self.name.title(), color_theme['tools'])

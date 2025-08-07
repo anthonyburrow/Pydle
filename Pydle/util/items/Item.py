@@ -1,10 +1,10 @@
 from abc import ABC
 from typing import Self
 
+from .ItemRegistry import ITEM_REGISTRY
 from .Quality import Quality
-from ..ItemRegistry import ITEM_REGISTRY
 from ..colors import color, color_theme
-from ..structures.Bank import BankKey
+from ..player.Bank import BankKey
 
 
 class Item(ABC):
@@ -17,7 +17,7 @@ class Item(ABC):
         return f'<Item id={self.item_id}, name={self.name}>'
 
     def __str__(self):
-        return self.name
+        return self.name.title()
 
 
 class ItemInstance:
@@ -34,7 +34,7 @@ class ItemInstance:
         self.quantity: int = quantity
         self.quality: Quality | None = quality
 
-        self.name = self.get_name(self.name, self.quality)
+        self.name = ItemInstance.get_name(self.name, self.quality)
 
     def to_dict(self) -> dict:
         return {
@@ -84,7 +84,7 @@ class ItemInstance:
         elif self.quality == Quality.MASTER:
             theme: str = 'quality_master'
 
-        return color(self.name, color_theme[theme])
+        return color(self.name.title(), color_theme[theme])
 
     def __getattr__(self, name):
         try:

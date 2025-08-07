@@ -49,6 +49,17 @@ class UserInterface:
     def get_input(self) -> str:
         return input(COMMAND_PREFIX)
 
+    def flush_input(self):
+        try:
+            import msvcrt
+            while msvcrt.kbhit():
+                msvcrt.getch()
+        except ImportError:
+            # for linux/unix
+            import sys
+            import termios
+            termios.tcflush(sys.stdin, termios.TCIOFLUSH)
+
     def start_keyboard_listener(self):
         self.keyboard_listener = keyboard.Listener(
             on_release=self._cancel_pressed

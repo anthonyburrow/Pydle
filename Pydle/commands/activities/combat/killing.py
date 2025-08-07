@@ -1,16 +1,16 @@
-from ....util.MonsterParser import MONSTER_PARSER
+from ....lib.areas import AREAS
+from ....util.monsters.Monster import Monster, MonsterInstance
+from ....util.monsters.MonsterParser import MONSTER_PARSER
+from ....util.player.Bank import Bank
+from ....util.player.Equipment import EquipmentSlot
 from ....util.structures.Activity import (
     Activity,
     ActivitySetupResult,
     ActivityMsgType,
     ActivityTickResult
 )
-from ....util.structures.Bank import Bank
-from ....util.structures.Monster import Monster, MonsterInstance
-from ....util.structures.CombatEngine import CombatEngine
 from ....util.structures.Area import Area
-from ....util.structures.Equipment import EquipmentSlot
-from ....lib.areas import AREAS
+from ....util.structures.CombatEngine import CombatEngine
 
 
 class KillingActivity(Activity):

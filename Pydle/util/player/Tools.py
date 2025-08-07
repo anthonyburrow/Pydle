@@ -1,11 +1,11 @@
 from enum import Enum, auto
 from typing import Self
 
-from . import Player, Tool
-from ..colors import color
-from ..visuals import centered_title
+from .Player import Player
 from ..Result import Result
+from ..visuals import centered_title
 from ..items.Item import ItemInstance
+from ..items.Tool import Tool
 
 
 class ToolSlot(Enum):
@@ -14,8 +14,8 @@ class ToolSlot(Enum):
     SECATEURS = auto()
     FISHING_ROD = auto()
 
-    def to_string(self) -> str:
-        return self.name.lower()
+    def __str__(self) -> str:
+        return self.name.title()
 
 
 class Tools(dict):
@@ -70,15 +70,15 @@ class Tools(dict):
 
         for tool_slot, item_instance in self.items():
             if not item_instance:
-                tool_dict[tool_slot.to_string()] = None
+                tool_dict[tool_slot.name] = None
                 continue
-            tool_dict[tool_slot.to_string()] = item_instance.to_dict()
+            tool_dict[tool_slot.name] = item_instance.to_dict()
 
         return tool_dict
 
     def load_from_dict(self, tools_dict: dict) -> Self:
         for tool_slot in ToolSlot:
-            instance_dict: dict | None = tools_dict.get(tool_slot.to_string())
+            instance_dict: dict | None = tools_dict.get(tool_slot.name)
 
             if instance_dict is None:
                 self[tool_slot] = None
@@ -92,7 +92,7 @@ class Tools(dict):
     def __str__(self) -> str:
         msg: list = []
 
-        max_type_length: int = max([len(x.to_string()) for x in ToolSlot])
+        max_type_length: int = max([len(str(x)) for x in ToolSlot])
         max_tool_length: int = 0
         for item_instance in self.values():
             if item_instance is None:
@@ -106,13 +106,8 @@ class Tools(dict):
         msg.append(centered_title('TOOLS', total_length))
 
         for tool_slot, item_instance in self.items():
-            name = color(
-                tool_slot.to_string().capitalize(),
-                '',
-                justify=max_type_length
-            )
             tool_str = item_instance or '---'
-            msg.append(f'{name} | {tool_str}')
+            msg.append(f'{tool_slot:>{max_type_length}} | {tool_str}')
 
         msg = '\n'.join(msg)
 

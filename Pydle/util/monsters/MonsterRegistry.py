@@ -1,5 +1,5 @@
-from .structures.Monster import Monster
-from ..lib.monsters import MONSTERS
+from .Monster import Monster
+from ...lib.monsters import MONSTERS
 
 
 class MonsterRegistry(dict):

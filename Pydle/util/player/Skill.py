@@ -1,7 +1,7 @@
 import numpy as np
 
+from .Player import Player
 from ..colors import color, color_theme
-from . import Player
 
 
 MAX_LEVEL: int = 126
@@ -79,14 +79,12 @@ class Skill:
 
         return msg
 
-    def __str__(self):
-        msg = color(self.name, color_theme[f'skill_{self.skill_type}'])
+    def __str__(self) -> str:
+        return color(self.name, color_theme[f'skill_{self.skill_type}'])
 
-        return msg
-
-    def _adjust_level(self) -> dict:
-        current_lvl = self.level
-        leveled_up = False
+    def _adjust_level(self) -> dict[str, bool]:
+        current_lvl: int = self.level
+        leveled_up: bool = False
         for lvl in range(current_lvl + 1, MAX_LEVEL + 1):
             required_xp = XP_TABLE[lvl]
 

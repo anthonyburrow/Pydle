@@ -1,9 +1,9 @@
 from enum import Enum
 
-from ...util.MonsterRegistry import MONSTER_REGISTRY
-from ...util.structures.Stats import Stats
-from ...util.structures.LootTable import LootTable
-from ...util.colors import color, color_theme
+from .MonsterRegistry import MONSTER_REGISTRY
+from ..colors import color, color_theme
+from ..player.Stats import Stats
+from ..structures.LootTable import LootTable
 
 
 class MonsterTier(Enum):
@@ -49,6 +49,7 @@ class Monster:
             theme: str = 'monster_superior'
         elif self.tier == MonsterTier.BOSS:
             theme: str = 'monster_boss'
+
         return color(self.name, color_theme[theme])
 
 

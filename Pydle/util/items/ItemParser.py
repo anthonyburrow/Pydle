@@ -1,6 +1,6 @@
+from .Item import Item, ItemInstance
 from .ItemRegistry import ItemRegistry, ITEM_REGISTRY
-from .items.Item import Item, ItemInstance
-from .Command import Command
+from ..Command import Command
 
 
 class ItemParser:
@@ -28,7 +28,7 @@ class ItemParser:
                 }
 
     def get_base(self, item_name: str) -> Item | None:
-        instance_kwargs: dict = self._name_map.get(item_name)
+        instance_kwargs: dict = self._name_map.get(item_name.lower())
 
         if not instance_kwargs:
             return None

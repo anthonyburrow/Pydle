@@ -1,9 +1,9 @@
-from numpy.random import rand, randint
-from numpy import exp
 from dataclasses import dataclass
+from numpy import exp
+from numpy.random import rand, randint
 
-from .Player import Player
-from .Monster import Monster
+from ..monsters.Monster import Monster
+from ..player.Player import Player
 
 
 @dataclass

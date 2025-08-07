@@ -1,4 +1,4 @@
-from Pydle.util.structures.UpdatedEffects import UpdatedEffects
+from Pydle.util.player.UpdatedEffects import UpdatedEffects
 
 
 def test_update():

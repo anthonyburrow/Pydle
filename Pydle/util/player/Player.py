@@ -1,14 +1,14 @@
-from pathlib import Path
 from dataclasses import dataclass, asdict
-from typing import Self
 import json
+from pathlib import Path
+from typing import Self
 
 from .Bank import Bank
-from .Skills import Skills
-from .Skill import Skill
-from .Tools import Tools
 from .Equipment import Equipment
+from .Skill import Skill
+from .Skills import Skills
 from .Stats import Stats
+from .Tools import Tools
 from .UpdatedEffects import UpdatedEffects
 from ..colors import color, color_theme
 from ..commands import COMMAND_PREFIX
@@ -218,5 +218,4 @@ class Player:
 
     # Misc
     def __str__(self):
-        text: str = f'{self.name}'
-        return color(text, color_theme['player'])
+        return color(self.name, color_theme['player'])

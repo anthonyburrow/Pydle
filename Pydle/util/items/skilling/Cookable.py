@@ -1,6 +1,6 @@
 from numpy import exp
 
-from ....util.structures.Produceable import Produceable
+from ..Produceable import Produceable
 
 
 class Cookable(Produceable):

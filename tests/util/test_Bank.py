@@ -1,4 +1,4 @@
-from Pydle.util.structures.Bank import Bank
+from Pydle.util.player.Bank import Bank
 
 
 def test_instantiate():

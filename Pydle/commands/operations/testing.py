@@ -1,6 +1,6 @@
 from ..testing.skilling import testing_skilling
 from ...util.Command import Command
-from ...util.structures.Player import Player
+from ...util.player.Player import Player
 from ...util.structures.UserInterface import UserInterface
 
 

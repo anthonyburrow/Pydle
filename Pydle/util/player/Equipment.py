@@ -1,11 +1,10 @@
 from enum import Enum, auto
 from typing import Self
 
-from . import Player
+from .Player import Player
 from .Stats import Stats
-from ..colors import color
-from ..visuals import centered_title
 from ..Result import Result
+from ..visuals import centered_title
 from ..items.Item import ItemInstance
 
 
@@ -18,8 +17,8 @@ class EquipmentSlot(Enum):
     GLOVES = auto()
     BOOTS = auto()
 
-    def to_string(self) -> str:
-        return self.name.lower()
+    def __str__(self) -> str:
+        return self.name.title()
 
 
 class Equipment(dict):
@@ -80,15 +79,15 @@ class Equipment(dict):
 
         for equipment_slot, item_instance in self.items():
             if not item_instance:
-                equipment_dict[equipment_slot.to_string()] = None
+                equipment_dict[equipment_slot.name] = None
                 continue
-            equipment_dict[equipment_slot.to_string()] = item_instance.to_dict()
+            equipment_dict[equipment_slot.name] = item_instance.to_dict()
 
         return equipment_dict
 
     def load_from_dict(self, equipment_dict: dict) -> Self:
         for equipment_slot in EquipmentSlot:
-            instance_dict: dict | None = equipment_dict.get(equipment_slot.to_string())
+            instance_dict: dict | None = equipment_dict.get(equipment_slot.name)
 
             if instance_dict is None:
                 self[equipment_slot] = None
@@ -114,7 +113,7 @@ class Equipment(dict):
     def __str__(self) -> str:
         msg: list = []
 
-        max_type_length: int = max([len(x.to_string()) for x in EquipmentSlot])
+        max_type_length: int = max([len(str(x)) for x in EquipmentSlot])
         max_equippable_length: int = 0
         for item_instance in self.values():
             if item_instance is None:
@@ -128,13 +127,8 @@ class Equipment(dict):
         msg.append(centered_title('EQUIPMENT', total_length))
 
         for equippable_slot, item_instance in self.items():
-            name = color(
-                equippable_slot.to_string().capitalize(),
-                '',
-                justify=max_type_length
-            )
             equippable_str = item_instance or '---'
-            msg.append(f'{name} | {equippable_str}')
+            msg.append(f'{equippable_slot:>{max_type_length}} | {equippable_str}')
 
         weapon_instance: ItemInstance | None = self.get(EquipmentSlot.WEAPON)
         attack_speed_str = weapon_instance.attack_speed if weapon_instance else 'N/A'

@@ -1,4 +1,4 @@
-from Pydle.util.structures.Stats import Stats
+from Pydle.util.player.Stats import Stats
 
 
 def test_stats_add():

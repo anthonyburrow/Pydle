@@ -1,5 +1,5 @@
-from ...util.structures.Player import Player
-from ...util.structures.Bank import Bank
+from ...util.player.Bank import Bank
+from ...util.player.Player import Player
 
 
 def testing_skilling(player: Player):

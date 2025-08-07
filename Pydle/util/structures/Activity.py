@@ -1,11 +1,11 @@
-from enum import Enum
 from dataclasses import dataclass
+from enum import Enum
 
-from .Player import Player
 from .UserInterface import UserInterface
-from .Bank import Bank
-from .Skill import level_up_msg
 from ..Command import Command
+from ..player.Bank import Bank
+from ..player.Player import Player
+from ..player.Skill import level_up_msg
 
 
 @dataclass

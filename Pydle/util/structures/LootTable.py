@@ -1,8 +1,8 @@
 import numpy as np
 from typing import Self
 
-from .Bank import Bank
 from ..items.Item import ItemInstance
+from ..player.Bank import Bank
 
 
 class LootTable:

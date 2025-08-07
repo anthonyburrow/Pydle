@@ -12,11 +12,10 @@ class BankKey:
     item_id: str
     quality: Quality | None = None
 
-    def to_string(self) -> str:
-        if self.quality:
-            ItemInstance.get_name(self.item_id, self.quality)
-            return f'{self.quality.name.lower()} {self.item_id}'
-        return self.item_id
+    def __str__(self) -> str:
+        if not self.quality:
+            return self.item_id
+        return f'{self.quality} {self.item_id}'
 
     def __hash__(self):
         return hash((self.item_id, self.quality))
@@ -113,7 +112,7 @@ class Bank(dict):
 
     def to_dict(self) -> dict[str, dict]:
         return {
-            bank_key.to_string(): item_instance.to_dict()
+            str(bank_key): item_instance.to_dict()
             for bank_key, item_instance in self.items()
         }
 

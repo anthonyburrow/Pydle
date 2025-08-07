@@ -1,13 +1,12 @@
 import sys
-import time
 import threading
+import time
 
-from .Player import Player
-from .UserInterface import UserInterface
 from .Activity import Activity, ActivitySetupResult
-from ..input import flush_input
+from .UserInterface import UserInterface
 from ..Command import Command, CommandType
 from ..ticks import Ticks
+from ..player.Player import Player
 
 
 class Controller:
@@ -27,7 +26,8 @@ class Controller:
             self.player.save()
 
     def listen(self):
-        flush_input()
+        self.ui.flush_input()
+
         raw_in: str = self.ui.get_input()
         command: Command = Command(raw_in)
 

@@ -68,5 +68,4 @@ class Gatherable(Item):
 
 
     def __str__(self):
-        text: str = f'{self.name}'
-        return color(text, color_theme['skill_gathering'])
+        return color(self.name.title(), color_theme['skill_gathering'])

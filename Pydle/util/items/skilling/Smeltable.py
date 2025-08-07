@@ -1,4 +1,4 @@
-from ....util.structures.Produceable import Produceable
+from ..Produceable import Produceable
 
 
 class Smeltable(Produceable):

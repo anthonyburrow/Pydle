@@ -1,7 +1,7 @@
-from ...util.Command import Command
-from ...util.structures.Player import Player
-from ...util.structures.UserInterface import UserInterface
 from ...lib.areas import AREAS
+from ...util.Command import Command
+from ...util.player.Player import Player
+from ...util.structures.UserInterface import UserInterface
 
 
 def interface_area(player: Player, ui: UserInterface, command: Command):

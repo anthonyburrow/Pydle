@@ -1,6 +1,6 @@
 from .activities import combat
-from .activities import skilling
 from .activities import misc
+from .activities import skilling
 
 from .operations import area
 from .operations import bank
@@ -11,9 +11,9 @@ from .operations import tools
 from .operations import testing
 
 from ..util.colors import color, color_theme
-from ..util.structures.Player import Player
-from ..util.structures.UserInterface import UserInterface
 from ..util.commands import KEY_CANCEL, CMD_EXIT
+from ..util.player.Player import Player
+from ..util.structures.UserInterface import UserInterface
 
 
 def interface_help(player: Player, ui: UserInterface, *args):

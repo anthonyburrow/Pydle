@@ -1,4 +1,4 @@
-from ....util.structures.Gatherable import Gatherable
+from ..Gatherable import Gatherable
 
 
 class Fish(Gatherable):

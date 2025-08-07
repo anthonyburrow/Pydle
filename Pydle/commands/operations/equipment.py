@@ -1,9 +1,9 @@
-from ...util.Result import Result
 from ...util.Command import Command
-from ...util.ItemParser import ITEM_PARSER
-from ...util.items.Item import ItemInstance
+from ...util.Result import Result
 from ...util.items.Equippable import Equippable
-from ...util.structures.Player import Player
+from ...util.items.Item import ItemInstance
+from ...util.items.ItemParser import ITEM_PARSER
+from ...util.player.Player import Player
 from ...util.structures.UserInterface import UserInterface
 
 

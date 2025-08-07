@@ -1,11 +1,11 @@
-from .Monster import MonsterInstance
-from ..ticks import Ticks
 from ..colors import color, color_theme
+from ..ticks import Ticks
 from ..items.Item import ItemInstance
-from ...lib.skilling.foraging import COLLECTABLES
+from ..monsters.Monster import MonsterInstance
 from ...lib.skilling.fishing import FISH
-from ...lib.skilling.woodcutting import LOGS
+from ...lib.skilling.foraging import COLLECTABLES
 from ...lib.skilling.mining import ORES
+from ...lib.skilling.woodcutting import LOGS
 
 
 class Area:
