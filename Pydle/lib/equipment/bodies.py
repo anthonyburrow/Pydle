@@ -1,8 +1,10 @@
+from ...util.player.EquipmentSlot import EquipmentSlot
 
 
 BODIES = {
     'copper chestplate': {
         'name': 'copper chestplate',
+        'equipment_slot': EquipmentSlot.BODY,
         'tier': 1,
         'stats': {
             'physical_defense': 2,
@@ -12,6 +14,7 @@ BODIES = {
     },
     'iron chestplate': {
         'name': 'iron chestplate',
+        'equipment_slot': EquipmentSlot.BODY,
         'tier': 10,
         'stats': {
             'physical_defense': 4,
@@ -21,6 +24,7 @@ BODIES = {
     },
     'steel chestplate': {
         'name': 'steel chestplate',
+        'equipment_slot': EquipmentSlot.BODY,
         'tier': 15,
         'stats': {
             'physical_defense': 6,
@@ -30,6 +34,7 @@ BODIES = {
     },
     'adamant chestplate': {
         'name': 'adamant chestplate',
+        'equipment_slot': EquipmentSlot.BODY,
         'tier': 30,
         'stats': {
             'physical_defense': 11,

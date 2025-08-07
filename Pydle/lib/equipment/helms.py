@@ -1,8 +1,10 @@
+from ...util.player.EquipmentSlot import EquipmentSlot
 
 
 HELMS = {
     'copper helm': {
         'name': 'copper helm',
+        'equipment_slot': EquipmentSlot.HELM,
         'tier': 1,
         'stats': {
             'physical_defense': 1,
@@ -12,6 +14,7 @@ HELMS = {
     },
     'iron helm': {
         'name': 'iron helm',
+        'equipment_slot': EquipmentSlot.HELM,
         'tier': 10,
         'stats': {
             'physical_defense': 3,
@@ -21,6 +24,7 @@ HELMS = {
     },
     'steel helm': {
         'name': 'steel helm',
+        'equipment_slot': EquipmentSlot.HELM,
         'tier': 15,
         'stats': {
             'physical_defense': 4,
@@ -30,6 +34,7 @@ HELMS = {
     },
     'adamant helm': {
         'name': 'adamant helm',
+        'equipment_slot': EquipmentSlot.HELM,
         'tier': 30,
         'stats': {
             'physical_defense': 7,

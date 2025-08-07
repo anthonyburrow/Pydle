@@ -4,7 +4,7 @@ from .Item import Item
 from .ItemRegistry import ITEM_REGISTRY
 from .Quality import Quality
 from ..colors import color, color_theme
-from ..player.Bank import BankKey
+from ..player.BankKey import BankKey
 
 
 class ItemInstance:

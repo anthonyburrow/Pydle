@@ -1,9 +1,9 @@
 from numpy import exp
 
 from .Item import Item
-from ...util.structures.Tool import Tool
-from ...util.colors import color, color_theme
-from ...util.ticks import Ticks
+from .Tool import Tool
+from ..colors import color, color_theme
+from ..ticks import Ticks
 
 
 class Gatherable(Item):

@@ -1,21 +1,9 @@
-from enum import Enum, auto
-from typing import Self
-
 from .Player import Player
+from .ToolSlot import ToolSlot
 from ..Result import Result
 from ..visuals import centered_title
 from ..items.ItemInstance import ItemInstance
 from ..items.Tool import Tool
-
-
-class ToolSlot(Enum):
-    PICKAXE = auto()
-    AXE = auto()
-    SECATEURS = auto()
-    FISHING_ROD = auto()
-
-    def __str__(self) -> str:
-        return self.name.title()
 
 
 class Tools(dict):
@@ -76,7 +64,7 @@ class Tools(dict):
 
         return tool_dict
 
-    def load_from_dict(self, tools_dict: dict) -> Self:
+    def load_from_dict(self, tools_dict: dict) -> None:
         for tool_slot in ToolSlot:
             instance_dict: dict | None = tools_dict.get(tool_slot.name)
 

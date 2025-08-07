@@ -1,8 +1,10 @@
+from ...util.player.EquipmentSlot import EquipmentSlot
 
 
 OFFHANDS = {
     'copper kiteshield': {
         'name': 'copper kiteshield',
+        'equipment_slot': EquipmentSlot.OFFHAND,
         'tier': 1,
         'stats': {
             'physical_defense': 2,
@@ -12,6 +14,7 @@ OFFHANDS = {
     },
     'iron kiteshield': {
         'name': 'iron kiteshield',
+        'equipment_slot': EquipmentSlot.OFFHAND,
         'tier': 10,
         'stats': {
             'physical_defense': 4,
@@ -21,6 +24,7 @@ OFFHANDS = {
     },
     'steel kiteshield': {
         'name': 'steel kiteshield',
+        'equipment_slot': EquipmentSlot.OFFHAND,
         'tier': 15,
         'stats': {
             'physical_defense': 6,
@@ -30,6 +34,7 @@ OFFHANDS = {
     },
     'adamant kiteshield': {
         'name': 'adamant kiteshield',
+        'equipment_slot': EquipmentSlot.OFFHAND,
         'tier': 30,
         'stats': {
             'physical_defense': 11,

@@ -1,8 +1,11 @@
+from Pydle.util.items.ItemInstance import ItemInstance
 from Pydle.util.player.Bank import Bank
 
 
 def test_instantiate():
-    bank = Bank({'copper ore': 1, 'iron ore': 2, 'coal': 0, 'gold ore': -1})
+    item_instance: ItemInstance
+
+    bank = Bank()
 
     assert bank.contains('copper ore')
     assert not bank.contains('coal')

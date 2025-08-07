@@ -1,11 +1,9 @@
 from .Item import Item
-from ..player.Bank import BankKey
+from ..player.BankKey import BankKey
 
-from . import (
-    Armor,
-    Weapon,
-    Tool,
-)
+from .Armor import Armor
+from .Weapon import Weapon
+from .Tool import Tool
 from .skilling import (
     Collectable,
     Cookable,
@@ -20,7 +18,7 @@ from .skilling import (
 
 from ...lib.misc_items import MISC_ITEMS
 from ...lib.equipment import (
-    HEADS,
+    HELMS,
     BODIES,
     LEGS,
     BOOTS,
@@ -50,7 +48,7 @@ class ItemRegistry(dict):
     def load_from_dict(self, item_dict: dict[str, dict], item_cls: type[Item]):
         for item_id, item_kwargs in item_dict.items():
             item = item_cls(item_id=item_id, **item_kwargs)
-            self.register(item_id, item)
+            self.register(f'{item_cls.__name__} {item_id}', item)
 
     def get_by_key(self, bank_key: BankKey) -> Item:
         return self.get(bank_key.item_id)
@@ -65,7 +63,7 @@ class ItemRegistry(dict):
 
 ITEM_REGISTRY = ItemRegistry()
 
-ITEM_REGISTRY.load_from_dict(HEADS, item_cls=Armor)
+ITEM_REGISTRY.load_from_dict(HELMS, item_cls=Armor)
 ITEM_REGISTRY.load_from_dict(BODIES, item_cls=Armor)
 ITEM_REGISTRY.load_from_dict(LEGS, item_cls=Armor)
 ITEM_REGISTRY.load_from_dict(BOOTS, item_cls=Armor)

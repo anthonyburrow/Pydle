@@ -1,8 +1,10 @@
+from ...util.player.EquipmentSlot import EquipmentSlot
 
 
 LEGS = {
     'copper platelegs': {
         'name': 'copper platelegs',
+        'equipment_slot': EquipmentSlot.LEGS,
         'tier': 1,
         'stats': {
             'physical_defense': 2,
@@ -12,6 +14,7 @@ LEGS = {
     },
     'iron platelegs': {
         'name': 'iron platelegs',
+        'equipment_slot': EquipmentSlot.LEGS,
         'tier': 10,
         'stats': {
             'physical_defense': 4,
@@ -21,6 +24,7 @@ LEGS = {
     },
     'steel platelegs': {
         'name': 'steel platelegs',
+        'equipment_slot': EquipmentSlot.LEGS,
         'tier': 15,
         'stats': {
             'physical_defense': 6,
@@ -30,6 +34,7 @@ LEGS = {
     },
     'adamant platelegs': {
         'name': 'adamant platelegs',
+        'equipment_slot': EquipmentSlot.LEGS,
         'tier': 30,
         'stats': {
             'physical_defense': 11,

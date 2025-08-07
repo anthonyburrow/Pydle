@@ -1,8 +1,10 @@
+from ...util.player.EquipmentSlot import EquipmentSlot
 
 
 BOOTS = {
     'copper boots': {
         'name': 'copper boots',
+        'equipment_slot': EquipmentSlot.BOOTS,
         'tier': 1,
         'stats': {
             'physical_defense': 0,
@@ -12,6 +14,7 @@ BOOTS = {
     },
     'iron boots': {
         'name': 'iron boots',
+        'equipment_slot': EquipmentSlot.BOOTS,
         'tier': 10,
         'stats': {
             'physical_defense': 2,
@@ -21,6 +24,7 @@ BOOTS = {
     },
     'steel boots': {
         'name': 'steel boots',
+        'equipment_slot': EquipmentSlot.BOOTS,
         'tier': 15,
         'stats': {
             'physical_defense': 2,
@@ -30,6 +34,7 @@ BOOTS = {
     },
     'adamant boots': {
         'name': 'adamant boots',
+        'equipment_slot': EquipmentSlot.BOOTS,
         'tier': 30,
         'stats': {
             'physical_defense': 4,

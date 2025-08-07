@@ -1,8 +1,9 @@
 from ....lib.areas import AREAS
 from ....util.items.Item import Item, ItemInstance
 from ....util.items.ItemParser import ITEM_PARSER
-from ....util.player.Bank import Bank, BankKey
-from ....util.player.Tools import ToolSlot
+from ....util.player.Bank import Bank
+from ....util.player.BankKey import BankKey
+from ....util.player.ToolSlot import ToolSlot
 from ....util.structures.Activity import (
     Activity,
     ActivitySetupResult,

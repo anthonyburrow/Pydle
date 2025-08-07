@@ -1,8 +1,10 @@
+from ...util.player.EquipmentSlot import EquipmentSlot
 
 
 GLOVES = {
     'copper gauntlets': {
         'name': 'copper gauntlets',
+        'equipment_slot': EquipmentSlot.GLOVES,
         'tier': 1,
         'stats': {
             'physical_defense': 0,
@@ -12,6 +14,7 @@ GLOVES = {
     },
     'iron gauntlets': {
         'name': 'iron gauntlets',
+        'equipment_slot': EquipmentSlot.GLOVES,
         'tier': 10,
         'stats': {
             'physical_defense': 2,
@@ -21,6 +24,7 @@ GLOVES = {
     },
     'steel gauntlets': {
         'name': 'steel gauntlets',
+        'equipment_slot': EquipmentSlot.GLOVES,
         'tier': 15,
         'stats': {
             'physical_defense': 2,
@@ -30,6 +34,7 @@ GLOVES = {
     },
     'adamant gauntlets': {
         'name': 'adamant gauntlets',
+        'equipment_slot': EquipmentSlot.GLOVES,
         'tier': 30,
         'stats': {
             'physical_defense': 4,

@@ -1,24 +1,9 @@
-from dataclasses import dataclass
 from typing import Self
 
+from .BankKey import BankKey
 from ..colors import color, color_theme
 from ..visuals import centered_title
-from ..items.Quality import Quality
 from ..items.ItemInstance import ItemInstance
-
-
-@dataclass(frozen=True)
-class BankKey:
-    item_id: str
-    quality: Quality | None = None
-
-    def __str__(self) -> str:
-        if not self.quality:
-            return self.item_id
-        return f'{self.quality} {self.item_id}'
-
-    def __hash__(self):
-        return hash((self.item_id, self.quality))
 
 
 class Bank(dict):

@@ -1,8 +1,10 @@
+from ...util.player.EquipmentSlot import EquipmentSlot
 
 
 WEAPONS = {
     'copper longsword': {
         'name': 'copper longsword',
+        'equipment_slot': EquipmentSlot.WEAPON,
         'tier': 1,
         'attack_speed': 3,
         'stats': {
@@ -13,6 +15,7 @@ WEAPONS = {
     },
     'iron longsword': {
         'name': 'iron longsword',
+        'equipment_slot': EquipmentSlot.WEAPON,
         'tier': 10,
         'attack_speed': 3,
         'stats': {
@@ -23,6 +26,7 @@ WEAPONS = {
     },
     'steel longsword': {
         'name': 'steel longsword',
+        'equipment_slot': EquipmentSlot.WEAPON,
         'tier': 15,
         'attack_speed': 3,
         'stats': {
@@ -33,6 +37,7 @@ WEAPONS = {
     },
     'adamant longsword': {
         'name': 'adamant longsword',
+        'equipment_slot': EquipmentSlot.WEAPON,
         'tier': 30,
         'attack_speed': 3,
         'stats': {

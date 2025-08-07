@@ -1,7 +1,7 @@
 from .Item import Item
 from .Quality import Quality
 from ..colors import color, color_theme
-from ..player.Equipment import EquipmentSlot
+from ..player.EquipmentSlot import EquipmentSlot
 from ..player.Stats import Stats
 
 

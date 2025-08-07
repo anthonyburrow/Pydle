@@ -1,24 +1,9 @@
-from enum import Enum, auto
-from typing import Self
-
+from .EquipmentSlot import EquipmentSlot
 from .Player import Player
 from .Stats import Stats
 from ..Result import Result
 from ..visuals import centered_title
 from ..items.ItemInstance import ItemInstance
-
-
-class EquipmentSlot(Enum):
-    WEAPON = auto()
-    OFFHAND = auto()
-    HELM = auto()
-    BODY = auto()
-    LEGS = auto()
-    GLOVES = auto()
-    BOOTS = auto()
-
-    def __str__(self) -> str:
-        return self.name.title()
 
 
 class Equipment(dict):

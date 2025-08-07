@@ -5,7 +5,7 @@ from ....util.items.ItemParser import ITEM_PARSER
 from ....util.items.ItemRegistry import ITEM_REGISTRY
 from ....util.items.skilling.Ore import Ore
 from ....util.player.Bank import Bank
-from ....util.player.Tools import ToolSlot
+from ....util.player.ToolSlot import ToolSlot
 from ....util.structures.Activity import (
     Activity,
     ActivitySetupResult,

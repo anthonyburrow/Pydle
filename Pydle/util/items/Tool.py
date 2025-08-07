@@ -1,6 +1,6 @@
 from .Item import Item
 from ..colors import color, color_theme
-from ..player.Tools import ToolSlot
+from ..player.ToolSlot import ToolSlot
 
 
 class Tool(Item):
