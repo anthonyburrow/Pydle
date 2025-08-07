@@ -1,3 +1,4 @@
+from .Monster import MonsterInstance
 from ..ticks import Ticks
 from ..colors import color, color_theme
 from ..items.Item import ItemInstance
@@ -42,8 +43,8 @@ class Area:
 
         return time_ticks
 
-    def contains_monster(self, monster: str) -> bool:
-        return monster in self.monsters
+    def contains_monster(self, monster_instance: MonsterInstance) -> bool:
+        return monster_instance.name in self.monsters
 
     def contains_collectable(self, item_instance: ItemInstance) -> bool:
         return item_instance.name in self.collectables

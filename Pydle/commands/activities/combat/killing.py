@@ -1,3 +1,4 @@
+from ....util.MonsterParser import MONSTER_PARSER
 from ....util.structures.Activity import (
     Activity,
     ActivitySetupResult,
@@ -5,10 +6,10 @@ from ....util.structures.Activity import (
     ActivityTickResult
 )
 from ....util.structures.Bank import Bank
-from ....util.structures.Monster import Monster
+from ....util.structures.Monster import Monster, MonsterInstance
 from ....util.structures.CombatEngine import CombatEngine
 from ....util.structures.Area import Area
-from ....lib.monsters import MONSTERS
+from ....util.structures.Equipment import EquipmentSlot
 from ....lib.areas import AREAS
 
 
@@ -17,14 +18,11 @@ class KillingActivity(Activity):
     def __init__(self, *args):
         super().__init__(*args)
 
-        if self.argument in MONSTERS:
-            self.monster_key = self.argument
-            self.monster: Monster = Monster(**MONSTERS[self.monster_key])
-        else:
-            self.monster: Monster = None
+        self.monster: MonsterInstance | None = \
+            MONSTER_PARSER.get_instance_by_command(self.command)
+        self.combat_engine: CombatEngine = CombatEngine(self.player, self.monster)
 
         self.description: str = 'killing'
-        self.combat_engine: CombatEngine = CombatEngine(self.player, self.monster)
 
     def setup_inherited(self) -> ActivitySetupResult:
         if self.monster is None:
@@ -33,14 +31,20 @@ class KillingActivity(Activity):
                 msg='A valid monster was not given.'
             )
 
+        if not isinstance(self.monster.base, Monster):
+            return ActivitySetupResult(
+                success=False,
+                msg=f'{self.monster} is not a valid monster.'
+            )
+
         area: Area = AREAS[self.player.area]
-        if not area.contains_monster(self.monster_key):
+        if not area.contains_monster(self.monster):
             return ActivitySetupResult(
                 success=False,
                 msg=f'{area} does not have a {self.monster} anywhere.'
             )
 
-        if self.player.equipment['weapon'] is None:
+        if not self.player.equipment[EquipmentSlot.WEAPON]:
             return ActivitySetupResult(
                 success=False,
                 msg=f'{self.player} needs a weapon to fight!'
@@ -54,7 +58,6 @@ class KillingActivity(Activity):
 
     def update_inherited(self) -> ActivityTickResult:
         '''Processing during each tick.'''
-        # Do checks
         if self.player.hitpoints <= 0:
             return ActivityTickResult(
                 msg=f'{self.player} was defeated.',
@@ -64,14 +67,14 @@ class KillingActivity(Activity):
         if self.monster.hitpoints <= 0:
             items: Bank = self.monster.loot_table.roll()
 
-            self.monster.reset()
+            # Make new monster instance when killed
+            self.monster = MONSTER_PARSER.get_instance_by_command(self.command)
 
             return ActivityTickResult(
                 msg=f'Killed {self.monster}!',
                 items=items,
             )
 
-        # Processing
         result_combat = self.combat_engine.tick(self.tick_count)
         if not result_combat:
             return ActivityTickResult(

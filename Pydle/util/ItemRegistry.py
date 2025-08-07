@@ -16,9 +16,6 @@ class ItemRegistry(dict):
             item = item_cls(item_id=item_id, **item_kwargs)
             self.register(item_id, item)
 
-    def get(self, item_id: str) -> Item:
-        return self[item_id]
-
     def get_by_key(self, bank_key: BankKey) -> Item:
         return self.get(bank_key.item_id)
 
@@ -28,11 +25,6 @@ class ItemRegistry(dict):
     def verify(self, item_id: str) -> None:
         if not self.contains(item_id):
             raise KeyError(f"'{item_id}' not in item registry.")
-
-    # def display_name(self, key: ItemKey) -> str:
-    #     item = self.get(key.item_id)
-    #     name = getattr(item, "name", key.item_id)
-    #     return f"{key.quality} {name}".strip().title() if key.quality else name
 
 
 ITEM_REGISTRY = ItemRegistry()

@@ -9,7 +9,7 @@ from ....util.structures.Tools import ToolSlot
 from ....util.structures.LootTable import LootTable
 from ....util.structures.Bank import Bank, BankKey
 from ....util.structures.Area import Area
-from ....util.items.Item import ItemInstance
+from ....util.items.Item import Item, ItemInstance
 from ....lib.areas import AREAS
 
 
@@ -37,8 +37,8 @@ class ForagingActivity(Activity):
         skill_level: int = self.player.get_level('foraging')
 
         for collectable_name in self.area.collectables:
-            item_instance: ItemInstance = ITEM_PARSER.get_instance(collectable_name)
-            if skill_level >= item_instance.level:
+            item: Item = ITEM_PARSER.get_base(collectable_name)
+            if skill_level >= item.level:
                 break
         else:
             return ActivitySetupResult(

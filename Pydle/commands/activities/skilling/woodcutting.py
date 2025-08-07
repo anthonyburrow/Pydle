@@ -21,7 +21,8 @@ class WoodcuttingActivity(Activity):
     def __init__(self, *args):
         super().__init__(*args)
 
-        self.log: ItemInstance | None = ITEM_PARSER.get_instance(self.command)
+        self.log: ItemInstance | None = \
+            ITEM_PARSER.get_instance_by_command(self.command)
         self.log.set_quantity(self.log.n_per_gather)
 
         self.axe: ItemInstance = self.player.get_tool(ToolSlot.AXE)
@@ -36,7 +37,7 @@ class WoodcuttingActivity(Activity):
                 msg='A valid log was not given.'
             )
 
-        if not isinstance(self.log, Log):
+        if not isinstance(self.log.base, Log):
             return ActivitySetupResult(
                 success=False,
                 msg=f'{self.log} is not a valid log.'

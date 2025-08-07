@@ -21,6 +21,7 @@ class Item(ABC):
 
 
 class ItemInstance:
+
     def __init__(
         self,
         item_id: str,
@@ -29,10 +30,11 @@ class ItemInstance:
     ):
         ITEM_REGISTRY.verify(item_id)
 
+        self.item_id: str = item_id
         self.quantity: int = quantity
         self.quality: Quality | None = quality
 
-        self.get_name = self.get_name(self.name, self.quality)
+        self.name = self.get_name(self.name, self.quality)
 
     def to_dict(self) -> dict:
         return {

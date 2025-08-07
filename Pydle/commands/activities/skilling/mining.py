@@ -21,7 +21,8 @@ class MiningActivity(Activity):
     def __init__(self, *args):
         super().__init__(*args)
 
-        self.ore: ItemInstance | None = ITEM_PARSER.get_instance(self.command)
+        self.ore: ItemInstance | None = \
+            ITEM_PARSER.get_instance_by_command(self.command)
         self.ore.set_quantity(self.ore.n_per_gather)
 
         self.pickaxe: ItemInstance | None = self.player.get_tool(ToolSlot.PICKAXE)
@@ -36,7 +37,7 @@ class MiningActivity(Activity):
                 msg='A valid ore was not given.'
             )
 
-        if not isinstance(self.ore, Ore):
+        if not isinstance(self.ore.base, Ore):
             return ActivitySetupResult(
                 success=False,
                 msg=f'{self.ore} is not a valid ore.'
