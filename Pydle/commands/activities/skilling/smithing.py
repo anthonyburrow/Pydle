@@ -1,3 +1,5 @@
+from ....util.ItemRegistry import ITEM_REGISTRY
+from ....util.ItemParser import ITEM_PARSER
 from ....util.structures.Activity import (
     Activity,
     ActivitySetupResult,
@@ -6,6 +8,7 @@ from ....util.structures.Activity import (
 )
 from ....util.structures.LootTable import LootTable
 from ....util.structures.Bank import Bank
+from ....util.items.Item import ItemInstance
 from ....util.items.skilling.Smithable import Smithable
 from ....lib.skilling.smithing import SMITHABLES
 from ....lib.skilling.woodcutting import LOGS
@@ -19,20 +22,28 @@ class SmithingActivity(Activity):
     def __init__(self, *args):
         super().__init__(*args)
 
-        if self.argument in SMITHABLES:
-            self.smithable: Smithable = SMITHABLES[self.argument]
-        else:
-            self.smithable: Smithable = None
-
-        self.description: str = 'smithing'
+        self.smithable: ItemInstance | None = \
+            ITEM_PARSER.get_instance_by_command(self.command)
+        self.required_items: list[ItemInstance] = [
+            ITEM_PARSER.get_instance(item_name, quantity)
+            for item_name, quantity in self.smithable.items_required.items()
+        ]
 
         self.loot_table: LootTable = None
+
+        self.description: str = 'smithing'
 
     def setup_inherited(self) -> ActivitySetupResult:
         if self.smithable is None:
             return ActivitySetupResult(
                 success=False,
                 msg='A valid item was not given.'
+            )
+
+        if not isinstance(self.smithable.base, Smithable):
+            return ActivitySetupResult(
+                success=False,
+                msg=f'{self.smithable} is not a valid smithable item.'
             )
 
         skill_level: int = self.player.get_level('smithing')
@@ -43,22 +54,24 @@ class SmithingActivity(Activity):
             )
 
         if not self.player.has_effect(fire_effect):
-            for log_key, log in LOGS.items():
-                if self.player.has(log.name):
+            for item_id in LOGS:
+                item_instance: ItemInstance = \
+                    ITEM_PARSER.get_instance_by_id(item_id)
+                if self.player.has(item_instance):
                     break
             else:
                 return ActivitySetupResult(
                     success=False,
-                    msg=f'{self.player} has no logs to fuel a furnace.'
+                    msg=f'{self.player} has no logs to make a fire.'
                 )
 
-        for item, quantity in self.smithable.items_required.items():
-            if self.player.has(item, quantity):
+        for item_instance in self.items_required:
+            if self.player.has(item_instance):
                 continue
 
             return ActivitySetupResult(
                 success=False,
-                msg=f'{self.player} does not have {quantity}x {item}.'
+                msg=f'{self.player} does not have {item_instance.quantity}x {item_instance}.'
             )
 
         self._setup_loot_table()
@@ -67,7 +80,6 @@ class SmithingActivity(Activity):
 
     def update_inherited(self) -> ActivityTickResult:
         '''Processing during each tick.'''
-        # Do checks
         ticks_per_action = self.smithable.ticks_per_action
         if self.tick_count % ticks_per_action:
             return ActivityTickResult(
@@ -75,20 +87,22 @@ class SmithingActivity(Activity):
                 msg_type=ActivityMsgType.WAITING,
             )
 
-        for item, quantity in self.smithable.items_required.items():
-            if self.player.has(item, quantity):
+        for item_instance in self.items_required:
+            if self.player.has(item_instance):
                 continue
 
             return ActivityTickResult(
-                msg=f'{self.player} ran out of {item}.',
+                msg=f'{self.player} ran out of {item_instance}.',
                 exit=True,
             )
 
         if not self.player.has_effect(fire_effect):
-            for log_key, log in LOGS.items():
-                if self.player.has(log.name):
-                    self.player.remove(log.name, 1)
-                    self.player.add_effect(fire_effect, log.ticks_per_fire)
+            for item_id in LOGS:
+                item_instance: ItemInstance = \
+                    ITEM_PARSER.get_instance_by_id(item_id)
+                if self.player.has(item_instance):
+                    self.player.remove(item_instance)
+                    self.player.add_effect(fire_effect, item_instance.ticks_per_fire)
                     break
             else:
                 return ActivityTickResult(
@@ -96,9 +110,8 @@ class SmithingActivity(Activity):
                     exit=True,
                 )
 
-        # Process the item
-        for item, quantity in self.smithable.items_required.items():
-            self.player.remove(item, quantity)
+        for item_instance in self.items_required:
+            self.player.remove(item_instance)
 
         items: Bank = self.loot_table.roll()
 
@@ -129,9 +142,9 @@ class SmithingActivity(Activity):
         return f'{self.player} finished {self.description}.'
 
     def _setup_loot_table(self):
-        self.loot_table = LootTable()
-        self.loot_table.every(
-            self.smithable.name, 1
+        self.loot_table = (
+            LootTable()
+            .every(self.smithable)
         )
 
         # Add more stuff (pets, etc)
@@ -146,8 +159,8 @@ def detailed_info():
     msg.append('')
 
     msg.append('Available items:')
-    for smithable in SMITHABLES:
-        name = str(smithable).capitalize()
-        msg.append(f'- {name}')
+    for item_id in SMITHABLES:
+        smithable: Smithable = ITEM_REGISTRY[item_id]
+        msg.append(f'- {smithable}')
 
     return '\n'.join(msg)

@@ -37,18 +37,22 @@ class ItemParser:
 
         return ITEM_REGISTRY[item_id]
 
-    def get_instance(self, item_name: str) -> ItemInstance | None:
+    def get_instance(self, item_name: str, quantity: int = 1) -> ItemInstance | None:
         instance_kwargs: dict = self._name_map.get(item_name.lower())
 
         if not instance_kwargs:
             return None
 
+        instance_kwargs['quantity'] = quantity
         item_instance = ItemInstance(**instance_kwargs)
 
         return item_instance
 
     def get_instance_by_command(self, command: Command) -> ItemInstance | None:
-        return self.get_instance(command.argument)
+        return self.get_instance(command.argument, command.quantity)
+
+    def get_instance_by_id(self, item_id: str) -> ItemInstance | None:
+        return ItemInstance(item_id=item_id)
 
 
 ITEM_PARSER = ItemParser(ITEM_REGISTRY)

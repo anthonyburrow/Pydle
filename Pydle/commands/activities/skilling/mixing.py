@@ -1,3 +1,5 @@
+from ....util.ItemRegistry import ITEM_REGISTRY
+from ....util.ItemParser import ITEM_PARSER
 from ....util.structures.Activity import (
     Activity,
     ActivitySetupResult,
@@ -6,6 +8,7 @@ from ....util.structures.Activity import (
 )
 from ....util.structures.LootTable import LootTable
 from ....util.structures.Bank import Bank
+from ....util.items.Item import ItemInstance
 from ....util.items.skilling.Mixable import Mixable
 from ....lib.skilling.herblore import MIXABLES
 
@@ -15,20 +18,28 @@ class MixingActivity(Activity):
     def __init__(self, *args):
         super().__init__(*args)
 
-        if self.argument in MIXABLES:
-            self.mixable: Mixable = MIXABLES[self.argument]
-        else:
-            self.mixable: Mixable = None
-
-        self.description: str = 'mixing'
+        self.mixable: ItemInstance | None = \
+            ITEM_PARSER.get_instance_by_command(self.command)
+        self.required_items: list[ItemInstance] = [
+            ITEM_PARSER.get_instance(item_name, quantity)
+            for item_name, quantity in self.mixable.items_required.items()
+        ]
 
         self.loot_table: LootTable = None
+
+        self.description: str = 'mixing'
 
     def setup_inherited(self) -> ActivitySetupResult:
         if self.mixable is None:
             return ActivitySetupResult(
                 success=False,
                 msg='A valid item was not given.'
+            )
+
+        if not isinstance(self.mixable.base, Mixable):
+            return ActivitySetupResult(
+                success=False,
+                msg=f'{self.mixable} is not a valid mixable item.'
             )
 
         skill_level: int = self.player.get_level('herblore')
@@ -38,13 +49,13 @@ class MixingActivity(Activity):
                 msg=f'{self.player} must have Level {self.mixable.level} Herblore to mix a {self.mixable}.'
             )
 
-        for item, quantity in self.mixable.items_required.items():
-            if self.player.has(item, quantity):
+        for item_instance in self.items_required:
+            if self.player.has(item_instance):
                 continue
 
             return ActivitySetupResult(
                 success=False,
-                msg=f'{self.player} does not have any {item}.'
+                msg=f'{self.player} does not have {item_instance.quantity}x {item_instance}.'
             )
 
         self._setup_loot_table()
@@ -53,7 +64,6 @@ class MixingActivity(Activity):
 
     def update_inherited(self) -> ActivityTickResult:
         '''Processing during each tick.'''
-        # Do checks
         ticks_per_action = self.mixable.ticks_per_action
         if self.tick_count % ticks_per_action:
             return ActivityTickResult(
@@ -61,18 +71,17 @@ class MixingActivity(Activity):
                 msg_type=ActivityMsgType.WAITING,
             )
 
-        for item, quantity in self.mixable.items_required.items():
-            if self.player.has(item, quantity):
+        for item_instance in self.items_required:
+            if self.player.has(item_instance):
                 continue
 
             return ActivityTickResult(
-                msg=f'{self.player} ran out of {item}.',
+                msg=f'{self.player} ran out of {item_instance}.',
                 exit=True,
             )
 
-        # Process the item
-        for item, quantity in self.mixable.items_required.items():
-            self.player.remove(item, quantity)
+        for item_instance in self.items_required:
+            self.player.remove(item_instance)
 
         items: Bank = self.loot_table.roll()
 
@@ -103,9 +112,9 @@ class MixingActivity(Activity):
         return f'{self.player} finished {self.description}.'
 
     def _setup_loot_table(self):
-        self.loot_table = LootTable()
-        self.loot_table.every(
-            self.mixable.name, self.mixable.n_doses
+        self.loot_table = (
+            LootTable()
+            .every(self.mixable)
         )
 
         # Add more stuff (pets, etc)
@@ -120,8 +129,8 @@ def detailed_info():
     msg.append('')
 
     msg.append('Available potions:')
-    for mixable in MIXABLES:
-        name = str(mixable).capitalize()
-        msg.append(f'- {name}')
+    for item_id in MIXABLES:
+        mixable: Mixable = ITEM_REGISTRY[item_id]
+        msg.append(f'- {mixable}')
 
     return '\n'.join(msg)
