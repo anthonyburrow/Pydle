@@ -1,6 +1,5 @@
 from enum import Enum
 
-from .MonsterRegistry import MONSTER_REGISTRY
 from ..colors import color, color_theme
 from ..player.Stats import Stats
 from ..structures.LootTable import LootTable
@@ -51,28 +50,3 @@ class Monster:
             theme: str = 'monster_boss'
 
         return color(self.name, color_theme[theme])
-
-
-class MonsterInstance:
-
-    def __init__(self, monster_id: str):
-        MONSTER_REGISTRY.verify(monster_id)
-
-        self.monster_id: str = monster_id
-        self.hitpoints: int = self.base.hitpoints
-
-    def damage(self, amount: int) -> None:
-        self.hitpoints = max(0, self.hitpoints - amount)
-
-    @property
-    def base(self) -> Monster:
-        return MONSTER_REGISTRY[self.monster_id]
-
-    def __getattr__(self, name):
-        try:
-            return getattr(self.base, name)
-        except AttributeError:
-            raise AttributeError(
-                f"'{self.__class__.__name__}' object or its underlying "
-                f"'{self.base.__class__.__name__}' object has no attribute '{name}'"
-            )

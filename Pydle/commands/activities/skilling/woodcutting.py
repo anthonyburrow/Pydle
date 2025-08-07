@@ -1,6 +1,6 @@
 from ....lib.areas import AREAS
 from ....lib.skilling.woodcutting import LOGS
-from ....util.items.Item import ItemInstance
+from ....util.items.ItemInstance import ItemInstance
 from ....util.items.ItemParser import ITEM_PARSER
 from ....util.items.ItemRegistry import ITEM_REGISTRY
 from ....util.items.skilling.Log import Log

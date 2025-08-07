@@ -5,7 +5,7 @@ from .Player import Player
 from .Stats import Stats
 from ..Result import Result
 from ..visuals import centered_title
-from ..items.Item import ItemInstance
+from ..items.ItemInstance import ItemInstance
 
 
 class EquipmentSlot(Enum):
@@ -85,7 +85,7 @@ class Equipment(dict):
 
         return equipment_dict
 
-    def load_from_dict(self, equipment_dict: dict) -> Self:
+    def load_from_dict(self, equipment_dict: dict) -> None:
         for equipment_slot in EquipmentSlot:
             instance_dict: dict | None = equipment_dict.get(equipment_slot.name)
 

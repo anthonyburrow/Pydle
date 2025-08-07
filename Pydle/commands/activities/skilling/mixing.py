@@ -1,5 +1,5 @@
 from ....lib.skilling.herblore import MIXABLES
-from ....util.items.Item import ItemInstance
+from ....util.items.ItemInstance import ItemInstance
 from ....util.items.ItemParser import ITEM_PARSER
 from ....util.items.ItemRegistry import ITEM_REGISTRY
 from ....util.items.skilling.Mixable import Mixable

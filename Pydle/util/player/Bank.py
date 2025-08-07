@@ -4,7 +4,7 @@ from typing import Self
 from ..colors import color, color_theme
 from ..visuals import centered_title
 from ..items.Quality import Quality
-from ..items.Item import ItemInstance
+from ..items.ItemInstance import ItemInstance
 
 
 @dataclass(frozen=True)
@@ -23,17 +23,19 @@ class BankKey:
 
 class Bank(dict):
 
-    def __init__(self, items: ItemInstance | Self = None):
-        if items:
-            self.add(items)
+    def __init__(self, bank_dict: dict | None = None):
+        bank_dict = bank_dict or {}
+        self.load_from_dict(bank_dict)
 
-    def add(self, items: ItemInstance | Self) -> None:
+    def add(self, items: ItemInstance | Self) -> Self:
         if isinstance(items, ItemInstance):
             return self._add_instance(items)
         elif isinstance(items, Bank):
             return self._add_bank(items)
 
-    def _add_instance(self, item_instance: ItemInstance):
+        return self
+
+    def _add_instance(self, item_instance: ItemInstance) -> Self:
         bank_key: BankKey = item_instance.get_key()
 
         if self.contains(item_instance):
@@ -42,17 +44,23 @@ class Bank(dict):
 
         self[bank_key] = item_instance
 
-    def _add_bank(self, item_bank: Self):
+        return self
+
+    def _add_bank(self, item_bank: Self) -> Self:
         for item_instance in item_bank.values():
             self._add_instance(item_instance)
 
-    def remove(self, items: ItemInstance | Self):
+        return self
+
+    def remove(self, items: ItemInstance | Self) -> Self:
         if isinstance(items, ItemInstance):
             return self._remove_instance(items)
         elif isinstance(items, Bank):
             return self._remove_bank(items)
 
-    def _remove_instance(self, item_instance: ItemInstance):
+        return self
+
+    def _remove_instance(self, item_instance: ItemInstance) -> Self:
         bank_key: BankKey = item_instance.get_key()
         quantity: int = item_instance.quantity
 
@@ -68,9 +76,13 @@ class Bank(dict):
 
         self[bank_key].quantity = new_quantity
 
-    def _remove_bank(self, item_bank: Self):
+        return self
+
+    def _remove_bank(self, item_bank: Self) -> Self:
         for item_instance in item_bank.values():
             self._remove_instance(item_instance)
+
+        return self
 
     def contains(
         self,
@@ -116,14 +128,11 @@ class Bank(dict):
             for bank_key, item_instance in self.items()
         }
 
-    @classmethod
-    def from_dict(cls, data: dict[str, dict]) -> Self:
-        bank = cls()
+    def load_from_dict(self, data: dict[str, dict]) -> None:
         for instance_dict in data.values():
             item_instance = ItemInstance.from_dict(instance_dict)
             bank_key: BankKey = item_instance.get_key()
-            bank[bank_key] = item_instance
-        return bank
+            self[bank_key] = item_instance
 
     def list_concise(self) -> str:
         list_str: list = []

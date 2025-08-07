@@ -1,7 +1,7 @@
 from ..colors import color, color_theme
 from ..ticks import Ticks
-from ..items.Item import ItemInstance
-from ..monsters.Monster import MonsterInstance
+from ..items.ItemInstance import ItemInstance
+from ..monsters.MonsterInstance import MonsterInstance
 from ...lib.skilling.fishing import FISH
 from ...lib.skilling.foraging import COLLECTABLES
 from ...lib.skilling.mining import ORES

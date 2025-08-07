@@ -11,9 +11,9 @@ from .operations import tools
 from .operations import testing
 
 from ..util.colors import color, color_theme
-from ..util.commands import KEY_CANCEL, CMD_EXIT
+from ..util.Command import CMD_EXIT
 from ..util.player.Player import Player
-from ..util.structures.UserInterface import UserInterface
+from ..util.structures.UserInterface import UserInterface, KEY_CANCEL
 
 
 def interface_help(player: Player, ui: UserInterface, *args):

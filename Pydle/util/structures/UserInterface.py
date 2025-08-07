@@ -6,7 +6,6 @@ try:
 except ImportError:
     pass
 
-from ..commands import COMMAND_PREFIX, KEY_CANCEL
 from ..platform import SYS_PLATFORM, Platform
 
 
@@ -14,6 +13,10 @@ if SYS_PLATFORM == Platform.WINDOWS:
     import win32gui
 elif SYS_PLATFORM == Platform.LINUX:
     from Xlib import display as xdisplay
+
+
+COMMAND_PREFIX: str = '> '
+KEY_CANCEL: str = 'c'
 
 
 class UserInterface:

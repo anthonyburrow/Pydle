@@ -18,6 +18,7 @@ from .skilling import (
     Smithable,
 )
 
+from ...lib.misc_items import MISC_ITEMS
 from ...lib.equipment import (
     HEADS,
     BODIES,
@@ -86,3 +87,5 @@ ITEM_REGISTRY.load_from_dict(ORES, item_cls=Ore)
 ITEM_REGISTRY.load_from_dict(SMELTABLES, item_cls=Smeltable)
 ITEM_REGISTRY.load_from_dict(SMITHABLES, item_cls=Smithable)
 ITEM_REGISTRY.load_from_dict(LOGS, item_cls=Log)
+
+ITEM_REGISTRY.load_from_dict(MISC_ITEMS, item_cls=Item)

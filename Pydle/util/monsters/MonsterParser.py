@@ -1,4 +1,4 @@
-from .Monster import MonsterInstance
+from .MonsterInstance import MonsterInstance
 from .MonsterRegistry import MonsterRegistry, MONSTER_REGISTRY
 from ..Command import Command
 

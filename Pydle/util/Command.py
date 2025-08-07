@@ -1,7 +1,6 @@
 from enum import Enum, auto
 from typing import Callable
 
-from .commands import CMD_EXIT
 from .structures.Activity import Activity
 from ..commands.command_map import map_activity, map_operations, alias_to_command
 
@@ -19,6 +18,8 @@ SUBCOMMANDS: dict[str, set[str]] = {
     'tools': {'equip', 'unequip'},
     'testing': {'skilling'},
 }
+
+CMD_EXIT: str = 'exit'
 
 
 class Command:

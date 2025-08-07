@@ -4,7 +4,7 @@ from typing import Self
 from .Player import Player
 from ..Result import Result
 from ..visuals import centered_title
-from ..items.Item import ItemInstance
+from ..items.ItemInstance import ItemInstance
 from ..items.Tool import Tool
 
 

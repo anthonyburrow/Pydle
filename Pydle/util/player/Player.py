@@ -11,9 +11,9 @@ from .Stats import Stats
 from .Tools import Tools
 from .UpdatedEffects import UpdatedEffects
 from ..colors import color, color_theme
-from ..commands import COMMAND_PREFIX
 from ..Result import Result
-from ..items.Item import ItemInstance
+from ..items.ItemInstance import ItemInstance
+from ..structures.UserInterface import COMMAND_PREFIX
 from ...lib.areas import HOME_AREA
 from ...lib.item_sets import NEW_PLAYER_ITEMS
 
@@ -172,7 +172,7 @@ class Player:
     def load_new_player(self, name: str = None, *args, **kwargs):
         self._name: str = name or input(f'Character name?\n{COMMAND_PREFIX}')
         self._area: str = HOME_AREA
-        self._bank: Bank = Bank(NEW_PLAYER_ITEMS)
+        self._bank: Bank = Bank().add(NEW_PLAYER_ITEMS)
         self._skills: Skills = Skills()
         self._tools: Tools = Tools(self)
         self._equipment: Equipment = Equipment(self)
@@ -193,7 +193,7 @@ class Player:
 
         self._name: str = save_data.name
         self._area: str = save_data.area
-        self._bank: Bank = Bank.from_dict(save_data.items)
+        self._bank: Bank = Bank(save_data.items)
         self._skills: Skills = Skills(save_data.skills)
         self._tools: Tools = Tools(self, save_data.tools)
         self._equipment: Equipment = Equipment(self, save_data.equipment)

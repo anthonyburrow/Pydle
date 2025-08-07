@@ -1,7 +1,7 @@
 import numpy as np
 from typing import Self
 
-from ..items.Item import ItemInstance
+from ..items.ItemInstance import ItemInstance
 from ..player.Bank import Bank
 
 
