@@ -1,6 +1,6 @@
-from .Item import Item, ItemInstance
+from .Item import Item
+from .ItemInstance import ItemInstance
 from .ItemRegistry import ItemRegistry, ITEM_REGISTRY
-from ..Command import Command
 
 
 class ItemParser:
@@ -21,7 +21,7 @@ class ItemParser:
                 continue
 
             for quality in item.supported_qualities:
-                name: str = ItemInstance.get_name().lower()
+                name: str = ItemInstance.get_name(item.name, quality).lower()
                 self._name_map[name] = {
                     'item_id': item_id,
                     'quality': quality,
@@ -47,9 +47,6 @@ class ItemParser:
         item_instance = ItemInstance(**instance_kwargs)
 
         return item_instance
-
-    def get_instance_by_command(self, command: Command) -> ItemInstance | None:
-        return self.get_instance(command.argument, command.quantity)
 
     def get_instance_by_id(self, item_id: str) -> ItemInstance | None:
         return ItemInstance(item_id=item_id)

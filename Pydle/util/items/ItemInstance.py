@@ -30,7 +30,7 @@ class ItemInstance:
             'quality': self.quality.value if self.quality is not None else None
         }
 
-    @staticmethod
+    @classmethod
     def from_dict(cls, data: dict) -> Self:
         return cls(
             item_id=data['item_id'],

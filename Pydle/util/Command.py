@@ -1,7 +1,9 @@
 from enum import Enum, auto
-from typing import Callable
 
-from .structures.Activity import Activity
+from .items.ItemInstance import ItemInstance
+from .items.ItemParser import ITEM_PARSER
+from .monsters.MonsterInstance import MonsterInstance
+from .monsters.MonsterParser import MONSTER_PARSER
 from ..commands.command_map import map_activity, map_operations, alias_to_command
 
 
@@ -33,11 +35,15 @@ class Command:
         self.argument: str | None = None
 
         self.type: CommandType = None
-        self.activity: Activity | None = None
-        self.function: Callable | None = None
 
         self._parse()
         self._get_command_info()
+
+    def get_item_instance(self) -> ItemInstance | None:
+        return ITEM_PARSER.get_instance(self.argument, self.quantity)
+
+    def get_monster_instance(self) -> MonsterInstance | None:
+        return MONSTER_PARSER.get_instance(self.argument)
 
     def _parse(self) -> None:
         tokens = self.raw.strip().lower().split()
@@ -65,13 +71,11 @@ class Command:
 
         self.argument = ' '.join(tokens)
 
-    def _get_command_info(self):
+    def _get_command_info(self) -> None:
         if self.command in map_activity:
             self.type = CommandType.ACTIVITY
-            self.activity = map_activity[self.command]['function']
         elif self.command in map_operations:
             self.type = CommandType.OPERATION
-            self.function = map_operations[self.command]['function']
         elif self.command == CMD_EXIT:
             self.type = CommandType.EXIT
         elif self.command:

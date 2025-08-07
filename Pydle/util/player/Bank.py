@@ -115,7 +115,7 @@ class Bank(dict):
 
     def load_from_dict(self, data: dict[str, dict]) -> None:
         for instance_dict in data.values():
-            item_instance = ItemInstance.from_dict(instance_dict)
+            item_instance: ItemInstance = ItemInstance.from_dict(instance_dict)
             bank_key: BankKey = item_instance.get_key()
             self[bank_key] = item_instance
 

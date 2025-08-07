@@ -48,7 +48,7 @@ class ItemRegistry(dict):
     def load_from_dict(self, item_dict: dict[str, dict], item_cls: type[Item]):
         for item_id, item_kwargs in item_dict.items():
             item = item_cls(item_id=item_id, **item_kwargs)
-            self.register(f'{item_cls.__name__} {item_id}', item)
+            self.register(f'<{item_cls.__name__}> {item_id}', item)
 
     def get_by_key(self, bank_key: BankKey) -> Item:
         return self.get(bank_key.item_id)

@@ -1,6 +1,5 @@
 from .MonsterInstance import MonsterInstance
 from .MonsterRegistry import MonsterRegistry, MONSTER_REGISTRY
-from ..Command import Command
 
 
 class MonsterParser:
@@ -28,9 +27,6 @@ class MonsterParser:
         monster_instance = MonsterInstance(**instance_kwargs)
 
         return monster_instance
-
-    def get_instance_by_command(self, command: Command) -> MonsterInstance | None:
-        return self.get_instance(command.argument)
 
 
 MONSTER_PARSER = MonsterParser(MONSTER_REGISTRY)

@@ -7,7 +7,7 @@ from .UserInterface import UserInterface
 from ..Command import Command, CommandType
 from ..ticks import Ticks
 from ..player.Player import Player
-
+from ...commands.command_map import map_activity, map_operations
 
 class Controller:
 
@@ -41,7 +41,7 @@ class Controller:
             self.ui.print('Unknown command.')
 
     def control_activity(self, command: Command):
-        activity: Activity = command.command_activity(
+        activity: Activity = map_activity[command.command]['function'](
             self.player, self.ui, command
         )
 
@@ -66,4 +66,6 @@ class Controller:
         time.sleep(Ticks(4))
 
     def control_operation(self, command: Command):
-        command.command_function(self.player, self.ui, command)
+        map_operations[command.command]['function'](
+            self.player, self.ui, command
+        )

@@ -21,8 +21,7 @@ class FishingActivity(Activity):
     def __init__(self, *args):
         super().__init__(*args)
 
-        self.fish: ItemInstance | None = \
-            ITEM_PARSER.get_instance_by_command(self.command)
+        self.fish: ItemInstance | None = self.command.get_item_instance()
         self.fish.set_quantity(self.fish.n_per_gather)
 
         self.fishing_rod: ItemInstance | None = self.player.get_tool(ToolSlot.FISHING_ROD)

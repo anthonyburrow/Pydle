@@ -18,8 +18,7 @@ class KillingActivity(Activity):
     def __init__(self, *args):
         super().__init__(*args)
 
-        self.monster: MonsterInstance | None = \
-            MONSTER_PARSER.get_instance_by_command(self.command)
+        self.monster: MonsterInstance | None = self.command.get_monster_instance()
         self.combat_engine: CombatEngine = CombatEngine(self.player, self.monster)
 
         self.description: str = 'killing'
@@ -68,7 +67,7 @@ class KillingActivity(Activity):
             items: Bank = self.monster.loot_table.roll()
 
             # Make new monster instance when killed
-            self.monster = MONSTER_PARSER.get_instance_by_command(self.command)
+            self.monster = self.command.get_monster_instance()
 
             return ActivityTickResult(
                 msg=f'Killed {self.monster}!',

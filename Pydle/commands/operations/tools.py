@@ -17,8 +17,7 @@ def interface_tools(player: Player, ui: UserInterface, command: Command):
     if command.quantity != 1:
         return ui.print('Only one item can be equipped or unequipped at a time.')
 
-    item_instance: ItemInstance | None = \
-        ITEM_PARSER.get_instance_by_command(command)
+    item_instance: ItemInstance | None = command.get_item_instance()
 
     if not item_instance:
         return ui.print(f"Item '{command.argument}' is not a valid argument.")

@@ -22,8 +22,7 @@ class CookingActivity(Activity):
     def __init__(self, *args):
         super().__init__(*args)
 
-        self.cookable: ItemInstance | None = \
-            ITEM_PARSER.get_instance_by_command(self.command)
+        self.cookable: ItemInstance | None = self.command.get_item_instance()
         self.required_items: list[ItemInstance] = [
             ITEM_PARSER.get_instance(item_name, quantity)
             for item_name, quantity in self.cookable.items_required.items()

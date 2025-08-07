@@ -22,8 +22,7 @@ class SmithingActivity(Activity):
     def __init__(self, *args):
         super().__init__(*args)
 
-        self.smithable: ItemInstance | None = \
-            ITEM_PARSER.get_instance_by_command(self.command)
+        self.smithable: ItemInstance | None = self.command.get_item_instance()
         self.required_items: list[ItemInstance] = [
             ITEM_PARSER.get_instance(item_name, quantity)
             for item_name, quantity in self.smithable.items_required.items()

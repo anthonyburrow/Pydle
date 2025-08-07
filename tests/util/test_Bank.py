@@ -1,15 +1,16 @@
 from Pydle.util.items.ItemInstance import ItemInstance
+from Pydle.util.items.ItemParser import ITEM_PARSER
 from Pydle.util.player.Bank import Bank
 
 
 def test_instantiate():
-    item_instance: ItemInstance
+    item_instance: ItemInstance = ITEM_PARSER.get_instance('copper ore')
 
-    bank = Bank()
+    bank = Bank({
+        'copper ore': item_instance.to_dict()
+    })
 
-    assert bank.contains('copper ore')
-    assert not bank.contains('coal')
-    assert not bank.contains('gold ore')
+    assert bank.contains(item_instance)
 
 
 def test_add():

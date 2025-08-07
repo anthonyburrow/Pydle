@@ -21,8 +21,7 @@ class MiningActivity(Activity):
     def __init__(self, *args):
         super().__init__(*args)
 
-        self.ore: ItemInstance | None = \
-            ITEM_PARSER.get_instance_by_command(self.command)
+        self.ore: ItemInstance | None = self.command.get_item_instance()
         self.ore.set_quantity(self.ore.n_per_gather)
 
         self.pickaxe: ItemInstance | None = self.player.get_tool(ToolSlot.PICKAXE)

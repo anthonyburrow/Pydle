@@ -18,8 +18,7 @@ class CraftingActivity(Activity):
     def __init__(self, *args):
         super().__init__(*args)
 
-        self.craftable: ItemInstance | None = \
-            ITEM_PARSER.get_instance_by_command(self.command)
+        self.craftable: ItemInstance | None = self.command.get_item_instance()
         self.required_items: list[ItemInstance] = [
             ITEM_PARSER.get_instance(item_name, quantity)
             for item_name, quantity in self.craftable.items_required.items()
