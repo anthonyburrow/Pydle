@@ -25,7 +25,7 @@ class Bank(dict):
 
         if self.contains(item_instance):
             self[bank_key].quantity += item_instance.quantity
-            return
+            return self
 
         self[bank_key] = item_instance
 
@@ -57,7 +57,7 @@ class Bank(dict):
 
         if new_quantity <= 0:
             self.pop(bank_key)
-            return
+            return self
 
         self[bank_key].quantity = new_quantity
 
@@ -106,6 +106,14 @@ class Bank(dict):
                 return False
 
         return True
+
+    def quantity(self, bank_key: BankKey) -> int:
+        if bank_key not in self:
+            return 0
+
+        item_instance: ItemInstance = self[bank_key]
+
+        return item_instance.quantity
 
     def to_dict(self) -> dict[str, dict]:
         return {
