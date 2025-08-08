@@ -1,12 +1,16 @@
+from __future__ import annotations
+from typing import TYPE_CHECKING
+
 from dataclasses import dataclass
 from enum import Enum
 
 from .UserInterface import UserInterface
-from ..Command import Command
 from ..colors import color, color_theme
 from ..player.Bank import Bank
 from ..player.Player import Player
-from ..player.Skill import level_up_msg
+
+if TYPE_CHECKING:
+    from ..Command import Command
 
 
 @dataclass

@@ -3,6 +3,8 @@ import pytest
 
 from Pydle.util.items.ItemParser import ITEM_PARSER
 from Pydle.util.player.Bank import Bank
+from Pydle.util.player.Player import Player
+from Pydle.util.structures.UserInterface import NullUserInterface
 
 
 @pytest.fixture
@@ -15,3 +17,13 @@ def sample_bank():
         .add(ITEM_PARSER.get_instance('coal', 4))
     )
     return bank
+
+
+@pytest.fixture
+def test_player():
+    return Player(name='TestPlayer')
+
+
+@pytest.fixture
+def test_ui():
+    return NullUserInterface()

@@ -8,15 +8,14 @@ MONSTERS = {
         'name': 'goblin',
         'level': 1,
         'tier': MonsterTier.BASIC,
-        'xp': 10.,
         'loot_table': (
             LootTable()
             .every(ITEM_PARSER.get_instance('bones'))
             .tertiary(ITEM_PARSER.get_instance('coins'), 0.5)
         ),
-        'hitpoints': 100,
+        'max_hitpoints': 100,
         'attack_speed': 4,
-        'stats': {
+        'stats_dict': {
             'physical_strength': 1,
             'physical_defense': 1,
         },

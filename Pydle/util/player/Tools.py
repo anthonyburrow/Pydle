@@ -1,9 +1,14 @@
-from .Player import Player
+from __future__ import annotations
+from typing import TYPE_CHECKING
+
 from .ToolSlot import ToolSlot
 from ..Result import Result
 from ..visuals import centered_title
 from ..items.ItemInstance import ItemInstance
 from ..items.Tool import Tool
+
+if TYPE_CHECKING:
+    from .Player import Player
 
 
 class Tools(dict):

@@ -1,6 +1,6 @@
 from ....lib.areas import AREAS
-from ....util.monsters.Monster import Monster, MonsterInstance
-from ....util.monsters.MonsterParser import MONSTER_PARSER
+from ....util.monsters.Monster import Monster
+from ....util.monsters.MonsterInstance import MonsterInstance
 from ....util.player.Bank import Bank
 from ....util.player.EquipmentSlot import EquipmentSlot
 from ....util.structures.Activity import (
