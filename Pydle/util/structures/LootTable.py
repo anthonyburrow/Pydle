@@ -13,7 +13,7 @@ class LootTable:
         self._weighted_probabilities: np.ndarray | None = None
         self._needs_reset: bool = True
 
-        self._every_items = list[ItemInstance] = []
+        self._every_items: list[ItemInstance] = []
         self._tertiary_items: list[tuple[ItemInstance, float]] = []
 
     def add(self, item_instance: ItemInstance, weight: float = 1.) -> Self:
@@ -80,6 +80,7 @@ class LootTable:
         loot: Bank = Bank()
         for i in index:
             item_instance: ItemInstance | None = self._weighted_items[i]
+
             if item_instance is None:
                 continue
 

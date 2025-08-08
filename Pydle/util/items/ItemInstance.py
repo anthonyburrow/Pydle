@@ -56,9 +56,9 @@ class ItemInstance:
         return f'{quality} {base_name}'
 
     def copy(self, **overrides):
-        data = self.__dict__.copy()
+        data = self.to_dict()
         data.update(overrides)
-        return ItemInstance(**data)
+        return ItemInstance.from_dict(data)
 
     def __str__(self) -> str:
         if not self.quality:

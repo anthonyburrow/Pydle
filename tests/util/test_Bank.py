@@ -9,7 +9,7 @@ from Pydle.util.player.Bank import BankKey
 def test_instantiate():
     item_instance: ItemInstance = ITEM_PARSER.get_instance('copper ore')
 
-    bank = Bank({
+    bank: Bank = Bank({
         'copper ore': item_instance.to_dict()
     })
 
@@ -17,7 +17,7 @@ def test_instantiate():
 
 
 def test_add():
-    bank = (
+    bank: Bank = (
         Bank()
         .add(ITEM_PARSER.get_instance('copper ore'))
         .add(ITEM_PARSER.get_instance('iron ore', 2))
@@ -53,7 +53,7 @@ def test_contains(sample_bank):
     assert sample_bank.contains(sample_bank)
     assert sample_bank.contains(sample_bank, check_quantity=True)
 
-    bank = (
+    bank: Bank = (
         Bank()
         .add(ITEM_PARSER.get_instance('copper ore', 1))
         .add(ITEM_PARSER.get_instance('silver ore', 2))
@@ -71,7 +71,7 @@ def test_quantity(sample_bank):
 
 
 def test_empty(sample_bank):
-    bank = Bank()
+    bank: Bank = Bank()
     assert not bank
 
     assert sample_bank

@@ -27,7 +27,7 @@ class Bank(dict):
             self[bank_key].quantity += item_instance.quantity
             return self
 
-        self[bank_key] = item_instance
+        self[bank_key] = item_instance.copy()
 
         return self
 
