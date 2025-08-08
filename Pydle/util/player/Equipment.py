@@ -1,9 +1,14 @@
+from __future__ import annotations
+from typing import TYPE_CHECKING
+
 from .EquipmentSlot import EquipmentSlot
-from .Player import Player
 from .Stats import Stats
 from ..Result import Result
 from ..visuals import centered_title
 from ..items.ItemInstance import ItemInstance
+
+if TYPE_CHECKING:
+    from .Player import Player
 
 
 class Equipment(dict):

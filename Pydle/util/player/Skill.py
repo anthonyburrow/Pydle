@@ -1,6 +1,5 @@
 import numpy as np
 
-from .Player import Player
 from ..colors import color, color_theme
 
 
@@ -16,18 +15,6 @@ def level_to_xp(level):
 
 
 XP_TABLE = {lvl: level_to_xp(lvl) for lvl in range(1, MAX_LEVEL + 1)}
-
-
-def level_up_msg(player: Player, skill_key: str):
-    skill = player.get_skill(skill_key)
-
-    level = skill.level
-    if level >= 99:
-        level = color(level, color_theme['skill_lvl99'])
-
-    msg = f"{player}'s {skill} level has increased to Level {level}!"
-
-    return msg
 
 
 class Skill:

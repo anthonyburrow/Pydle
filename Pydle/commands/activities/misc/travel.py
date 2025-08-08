@@ -66,12 +66,6 @@ class TravelingActivity(Activity):
             exit=True,
         )
 
-    def finish_inherited(self):
-        pass
-
-    def reset_on_levelup(self):
-        pass
-
     @property
     def startup_text(self) -> str:
         return f'{self.player} is now traveling to {self.area}.'

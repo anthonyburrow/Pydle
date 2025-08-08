@@ -3,6 +3,7 @@ from enum import Enum
 
 from .UserInterface import UserInterface
 from ..Command import Command
+from ..colors import color, color_theme
 from ..player.Bank import Bank
 from ..player.Player import Player
 from ..player.Skill import level_up_msg
@@ -67,12 +68,16 @@ class Activity:
             self.player.give(result_tick.items)
 
         if result_tick.xp:
+            leveled_up: bool = False
             for skill, amount in result_tick.xp.items():
                 xp_status = self.player.add_xp(skill, amount)
 
                 if xp_status['leveled_up']:
-                    self.ui.print(level_up_msg(self.player, skill))
-                    self.reset_on_levelup()
+                    leveled_up = True
+                    self._level_up_msg(skill)
+
+            if leveled_up:
+                self._on_levelup()
 
         # Global updates
         self.player.update_effects()
@@ -93,3 +98,15 @@ class Activity:
         self.ui.stop_keyboard_listener()
 
         self.finish_inherited()
+
+    def _on_levelup(self):
+        self._level_up_msg()
+
+    def _level_up_msg(self, skill_key: str) -> None:
+        skill = self.player.get_skill(skill_key)
+
+        level = skill.level
+        if level >= 99:
+            level = color(level, color_theme['skill_lvl99'])
+
+        self.ui.print(f"{self.player}'s {skill} level has increased to Level {level}!")

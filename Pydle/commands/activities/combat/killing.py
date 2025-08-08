@@ -99,8 +99,7 @@ class KillingActivity(Activity):
     def finish_inherited(self):
         self.player.heal_full()
 
-    def reset_on_levelup(self):
-        # Recalculate hit chance/max hit on levelup
+    def _on_levelup(self):
         self.combat_engine.calculate_values()
 
     @property

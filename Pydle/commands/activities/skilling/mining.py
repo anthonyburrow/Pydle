@@ -90,10 +90,7 @@ class MiningActivity(Activity):
             },
         )
 
-    def finish_inherited(self):
-        pass
-
-    def reset_on_levelup(self):
+    def _on_levelup(self):
         self._setup_loot_table()
 
     @property
