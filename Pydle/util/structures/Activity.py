@@ -100,7 +100,7 @@ class Activity:
         self.finish_inherited()
 
     def _on_levelup(self):
-        self._level_up_msg()
+        pass
 
     def _level_up_msg(self, skill_key: str) -> None:
         skill = self.player.get_skill(skill_key)

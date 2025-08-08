@@ -66,6 +66,9 @@ class TravelingActivity(Activity):
             exit=True,
         )
 
+    def finish_inherited(self):
+        pass
+
     @property
     def startup_text(self) -> str:
         return f'{self.player} is now traveling to {self.area}.'

@@ -92,6 +92,9 @@ class CraftingActivity(Activity):
             },
         )
 
+    def finish_inherited(self):
+        pass
+
     def _on_levelup(self):
         self._setup_loot_table()
 
