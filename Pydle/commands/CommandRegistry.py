@@ -1,12 +1,12 @@
 from __future__ import annotations
 from typing import Type, TYPE_CHECKING
 
-from ..util.CommandType import CommandType
+from .CommandType import CommandType
 
 if TYPE_CHECKING:
-    from ..util.structures.Activity import Activity
-    from ..util.structures.CommandBase import CommandBase
-    from ..util.structures.Operation import Operation
+    from .Activity import Activity
+    from .CommandBase import CommandBase
+    from .Operation import Operation
 
 
 class CommandRegistry:

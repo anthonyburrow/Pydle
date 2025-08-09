@@ -1,4 +1,4 @@
-from ....util.structures.Activity import (
+from ...Activity import (
     Activity,
     ActivitySetupResult,
     ActivityMsgType,

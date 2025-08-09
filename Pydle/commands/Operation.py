@@ -1,8 +1,8 @@
 from abc import abstractmethod
 
 from .CommandBase import CommandBase
-from ..CommandType import CommandType
-from ...commands.CommandRegistry import COMMAND_REGISTRY
+from .CommandRegistry import COMMAND_REGISTRY
+from .CommandType import CommandType
 
 
 class Operation(CommandBase):

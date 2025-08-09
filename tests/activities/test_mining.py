@@ -1,5 +1,5 @@
 from Pydle.commands.activities.skilling.mining import MiningActivity
-from Pydle.util.Command import Command
+from Pydle.commands.Command import Command
 from Pydle.util.items.ItemParser import ITEM_PARSER
 
 

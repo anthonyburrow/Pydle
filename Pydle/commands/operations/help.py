@@ -1,10 +1,10 @@
 from typing import Type
 
+from ..Command import CMD_EXIT
+from ..CommandBase import CommandBase
 from ..CommandRegistry import COMMAND_REGISTRY
+from ..Operation import Operation
 from ...util.colors import color, color_theme
-from ...util.Command import CMD_EXIT
-from ...util.structures.CommandBase import CommandBase
-from ...util.structures.Operation import Operation
 from ...util.structures.UserInterface import KEY_CANCEL
 
 

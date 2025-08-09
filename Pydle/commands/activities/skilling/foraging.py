@@ -1,3 +1,9 @@
+from ...Activity import (
+    Activity,
+    ActivitySetupResult,
+    ActivityMsgType,
+    ActivityTickResult
+)
 from ....lib.areas import AREAS
 from ....util.items.Item import Item
 from ....util.items.ItemInstance import ItemInstance
@@ -5,12 +11,6 @@ from ....util.items.ItemParser import ITEM_PARSER
 from ....util.player.Bank import Bank
 from ....util.player.BankKey import BankKey
 from ....util.player.ToolSlot import ToolSlot
-from ....util.structures.Activity import (
-    Activity,
-    ActivitySetupResult,
-    ActivityMsgType,
-    ActivityTickResult
-)
 from ....util.structures.Area import Area
 from ....util.structures.LootTable import LootTable
 

@@ -1,15 +1,15 @@
 from __future__ import annotations
 from typing import TYPE_CHECKING
 
+from .CommandRegistry import COMMAND_REGISTRY
 from .CommandType import CommandType
-from .items.ItemInstance import ItemInstance
-from .items.ItemParser import ITEM_PARSER
-from .monsters.MonsterInstance import MonsterInstance
-from .monsters.MonsterParser import MONSTER_PARSER
-from ..commands.CommandRegistry import COMMAND_REGISTRY
+from ..util.items.ItemInstance import ItemInstance
+from ..util.items.ItemParser import ITEM_PARSER
+from ..util.monsters.MonsterInstance import MonsterInstance
+from ..util.monsters.MonsterParser import MONSTER_PARSER
 
 if TYPE_CHECKING:
-    from .structures.CommandBase import CommandBase
+    from .CommandBase import CommandBase
 
 
 CMD_EXIT: str = 'exit'

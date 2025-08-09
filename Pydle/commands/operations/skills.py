@@ -1,4 +1,4 @@
-from ...util.structures.Operation import Operation
+from ..Operation import Operation
 
 
 class SkillsOperation(Operation):

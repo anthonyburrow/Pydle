@@ -1,5 +1,5 @@
+from ..Operation import Operation
 from ..testing.skilling import testing_skilling
-from ...util.structures.Operation import Operation
 
 
 class TestingOperation(Operation):

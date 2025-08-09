@@ -2,12 +2,14 @@ import sys
 import threading
 import time
 
-from .Activity import Activity, ActivitySetupResult
-from .Operation import Operation
 from .UserInterface import UserInterface
-from ..Command import Command, CommandType
 from ..ticks import Ticks
 from ..player.Player import Player
+from ...commands.Activity import Activity, ActivitySetupResult
+from ...commands.Command import Command
+from ...commands.CommandType import CommandType
+from ...commands.Operation import Operation
+
 
 class Controller:
 

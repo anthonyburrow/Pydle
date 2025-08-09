@@ -2,10 +2,10 @@ from dataclasses import dataclass
 from enum import Enum
 
 from .CommandBase import CommandBase
-from ..colors import color, color_theme
-from ..CommandType import CommandType
-from ..player.Bank import Bank
-from ...commands.CommandRegistry import COMMAND_REGISTRY
+from .CommandRegistry import COMMAND_REGISTRY
+from .CommandType import CommandType
+from ..util.colors import color, color_theme
+from ..util.player.Bank import Bank
 
 
 @dataclass

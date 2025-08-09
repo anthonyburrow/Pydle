@@ -1,7 +1,7 @@
+from ..Operation import Operation
 from ...util.Result import Result
 from ...util.items.Equippable import Equippable
 from ...util.items.ItemInstance import ItemInstance
-from ...util.structures.Operation import Operation
 
 
 class EquipmentOperation(Operation):

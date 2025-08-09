@@ -1,3 +1,9 @@
+from ...Activity import (
+    Activity,
+    ActivitySetupResult,
+    ActivityMsgType,
+    ActivityTickResult
+)
 from ....lib.areas import AREAS
 from ....lib.skilling.fishing import FISH
 from ....util.items.ItemInstance import ItemInstance
@@ -5,12 +11,6 @@ from ....util.items.ItemRegistry import ITEM_REGISTRY
 from ....util.items.skilling.Fish import Fish
 from ....util.player.Bank import Bank
 from ....util.player.ToolSlot import ToolSlot
-from ....util.structures.Activity import (
-    Activity,
-    ActivitySetupResult,
-    ActivityMsgType,
-    ActivityTickResult
-)
 from ....util.structures.Area import Area
 from ....util.structures.LootTable import LootTable
 

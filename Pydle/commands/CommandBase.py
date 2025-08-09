@@ -1,8 +1,8 @@
 from abc import ABC, abstractmethod
 
-from .UserInterface import UserInterface
-from ..player.Player import Player
-from ..Command import Command
+from .Command import Command
+from ..util.structures.UserInterface import UserInterface
+from ..util.player.Player import Player
 
 
 class CommandBase(ABC):

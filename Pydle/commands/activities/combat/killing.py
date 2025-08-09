@@ -1,14 +1,14 @@
-from ....lib.areas import AREAS
-from ....util.monsters.Monster import Monster
-from ....util.monsters.MonsterInstance import MonsterInstance
-from ....util.player.Bank import Bank
-from ....util.player.EquipmentSlot import EquipmentSlot
-from ....util.structures.Activity import (
+from ...Activity import (
     Activity,
     ActivitySetupResult,
     ActivityMsgType,
     ActivityTickResult
 )
+from ....lib.areas import AREAS
+from ....util.monsters.Monster import Monster
+from ....util.monsters.MonsterInstance import MonsterInstance
+from ....util.player.Bank import Bank
+from ....util.player.EquipmentSlot import EquipmentSlot
 from ....util.structures.Area import Area
 from ....util.structures.CombatEngine import CombatEngine
 

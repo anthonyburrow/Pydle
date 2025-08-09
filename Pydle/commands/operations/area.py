@@ -1,5 +1,5 @@
+from ..Operation import Operation
 from ...lib.areas import AREAS
-from ...util.structures.Operation import Operation
 
 
 class AreaOperation(Operation):

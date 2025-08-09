@@ -1,3 +1,9 @@
+from ...Activity import (
+    Activity,
+    ActivitySetupResult,
+    ActivityMsgType,
+    ActivityTickResult
+)
 from ....lib.skilling.smithing import SMITHABLES
 from ....lib.skilling.woodcutting import LOGS
 from ....util.items.ItemInstance import ItemInstance
@@ -5,12 +11,6 @@ from ....util.items.ItemParser import ITEM_PARSER
 from ....util.items.ItemRegistry import ITEM_REGISTRY
 from ....util.items.skilling.Smithable import Smithable
 from ....util.player.Bank import Bank
-from ....util.structures.Activity import (
-    Activity,
-    ActivitySetupResult,
-    ActivityMsgType,
-    ActivityTickResult
-)
 from ....util.structures.LootTable import LootTable
 
 
