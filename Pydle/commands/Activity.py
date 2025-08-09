@@ -1,3 +1,4 @@
+from abc import abstractmethod
 from dataclasses import dataclass
 from enum import Enum
 
@@ -100,6 +101,18 @@ class Activity(CommandBase):
         self.ui.stop_keyboard_listener()
 
         self.finish_inherited()
+
+    @abstractmethod
+    def setup_inherited(self) -> ActivitySetupResult:
+        pass
+
+    @abstractmethod
+    def update_inherited(self) -> ActivityTickResult:
+        pass
+
+    @abstractmethod
+    def finish_inherited(self):
+        pass
 
     def _on_levelup(self):
         pass

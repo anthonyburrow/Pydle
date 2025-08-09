@@ -46,7 +46,6 @@ class TravelingActivity(Activity):
 
         return '\n'.join(msg)
 
-
     def setup_inherited(self) -> ActivitySetupResult:
         if self.area is None:
             return ActivitySetupResult(
