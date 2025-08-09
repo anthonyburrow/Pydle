@@ -28,12 +28,7 @@ class ItemParser:
                 }
 
     def get_base(self, item_name: str) -> Item | None:
-        instance_kwargs: dict = self._name_map.get(item_name.lower())
-
-        if not instance_kwargs:
-            return None
-
-        item_id: str = instance_kwargs['item_id']
+        item_id: str = self.get_id_by_name(item_name)
 
         return ITEM_REGISTRY[item_id]
 

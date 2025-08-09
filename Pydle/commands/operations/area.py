@@ -17,9 +17,9 @@ class AreaOperation(Operation):
         msg: list[str] = []
 
         msg.append('Use cases:')
-        msg.append(f'- area')
-        msg.append(f'- area list')
-        msg.append(f'- area [area]')
+        msg.append('- area')
+        msg.append('- area list')
+        msg.append('- area [area]')
 
         return '\n'.join(msg)
 

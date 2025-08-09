@@ -23,8 +23,8 @@ class HelpOperation(Operation):
         msg: list[str] = []
 
         msg.append('Use cases:')
-        msg.append(f'- help')
-        msg.append(f'- help [command]')
+        msg.append('- help')
+        msg.append('- help [command]')
 
         return '\n'.join(msg)
 
