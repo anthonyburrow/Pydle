@@ -1,44 +1,52 @@
-from ...util.Command import Command
 from ...util.Result import Result
 from ...util.items.ItemInstance import ItemInstance
 from ...util.items.ItemParser import ITEM_PARSER
 from ...util.items.Tool import Tool
-from ...util.player.Player import Player
-from ...util.structures.UserInterface import UserInterface
+from ...util.structures.Operation import Operation
 
 
-def interface_tools(player: Player, ui: UserInterface, command: Command):
-    if not command.subcommand and not command.argument:
-        return ui.print(str(player.tools), multiline=True)
+class ToolsOperation(Operation):
 
-    if not command.argument:
-        return ui.print('A tool argument was not given.')
+    name: str = 'tools'
+    aliases: list[str] = ['t', 'tool']
+    subcommands: list[str] = ['equip', 'unequip']
+    help_info: str = "Display and equip the player's tools."
 
-    if command.quantity != 1:
-        return ui.print('Only one item can be equipped or unequipped at a time.')
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
-    item_instance: ItemInstance | None = command.get_item_instance()
+    @classmethod
+    def usage(cls) -> str:
+        msg: list[str] = []
 
-    if not item_instance:
-        return ui.print(f"Item '{command.argument}' is not a valid argument.")
+        msg.append('Use cases:')
+        msg.append('- tools')
+        msg.append('- tools equip [tool]')
+        msg.append('- tools unequip [tool]')
 
-    if not isinstance(item_instance.base, Tool):
-        return ui.print(f"Item '{item_instance}' is not equippable.")
+        return '\n'.join(msg)
 
-    if command.subcommand == 'equip':
-        result: Result = player.equip_tool(item_instance)
-    elif command.subcommand == 'unequip':
-        result: Result = player.unequip_tool(item_instance)
+    def execute(self):
+        if not self.command.subcommand and not self.command.argument:
+            return self.ui.print(str(self.player.tools), multiline=True)
 
-    ui.print(result.msg)
+        if not self.command.argument:
+            return self.ui.print('A tool argument was not given.')
 
+        if self.command.quantity != 1:
+            return self.ui.print('Only one item can be equipped or unequipped at a time.')
 
-def detailed_info():
-    msg: list = []
+        item_instance: ItemInstance | None = self.command.get_item_instance()
 
-    msg.append('Use cases:')
-    msg.append('- tools')
-    msg.append('- tools equip [tool]')
-    msg.append('- tools unequip [tool]')
+        if not item_instance:
+            return self.ui.print(f"Item '{self.command.argument}' is not a valid argument.")
 
-    return '\n'.join(msg)
+        if not isinstance(item_instance.base, Tool):
+            return self.ui.print(f"Item '{item_instance}' is not equippable.")
+
+        if self.command.subcommand == 'equip':
+            result: Result = self.player.equip_tool(item_instance)
+        elif self.command.subcommand == 'unequip':
+            result: Result = self.player.unequip_tool(item_instance)
+
+        self.ui.print(result.msg)

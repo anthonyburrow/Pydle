@@ -10,6 +10,9 @@ from ....lib.areas import AREAS
 
 class TravelingActivity(Activity):
 
+    name: str = 'travel'
+    help_info: str = 'Begin traveling to a different area.'
+
     def __init__(self, *args):
         super().__init__(*args)
 
@@ -26,6 +29,23 @@ class TravelingActivity(Activity):
             self.travel_ticks = self.area.travel_ticks(
                 current_area.coordinates
             )
+
+    @classmethod
+    def usage(cls) -> str:
+        msg: list[str] = []
+
+        msg.append('Use cases:')
+        msg.append('- travel [area]')
+
+        msg.append('')
+
+        msg.append('Available areas:')
+        for area in AREAS:
+            name = str(area).capitalize()
+            msg.append(f'- {name}')
+
+        return '\n'.join(msg)
+
 
     def setup_inherited(self) -> ActivitySetupResult:
         if self.area is None:
@@ -80,19 +100,3 @@ class TravelingActivity(Activity):
     @property
     def finish_text(self) -> str:
         return ''
-
-
-def detailed_info():
-    msg: list = []
-
-    msg.append('Use cases:')
-    msg.append('- travel [area]')
-
-    msg.append('')
-
-    msg.append('Available areas:')
-    for area in AREAS:
-        name = str(area).capitalize()
-        msg.append(f'- {name}')
-
-    return '\n'.join(msg)

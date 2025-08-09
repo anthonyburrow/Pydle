@@ -15,6 +15,9 @@ from ....util.structures.CombatEngine import CombatEngine
 
 class KillingActivity(Activity):
 
+    name: str = 'kill'
+    help_info: str = 'Begin killing a monster.'
+
     def __init__(self, *args):
         super().__init__(*args)
 
@@ -22,6 +25,22 @@ class KillingActivity(Activity):
         self.combat_engine: CombatEngine = CombatEngine(self.player, self.monster)
 
         self.description: str = 'killing'
+
+    @classmethod
+    def usage(cls) -> str:
+        msg: list[str] = []
+
+        msg.append('Use cases:')
+        msg.append('- kill [monster]')
+
+        # msg.append('')
+
+        # msg.append('Available monsters:')
+        # for monster in MONSTERS:
+        #     name = str(monster['name']).capitalize()
+        #     msg.append(f'- {name}')
+
+        return '\n'.join(msg)
 
     def setup_inherited(self) -> ActivitySetupResult:
         if self.monster is None:
@@ -115,19 +134,3 @@ class KillingActivity(Activity):
         if self.player.hitpoints <= 0:
             return ''
         return f'{self.player} finished {self.description}.'
-
-
-def detailed_info():
-    msg: list = []
-
-    msg.append('Use cases:')
-    msg.append('- kill [monster]')
-
-    # msg.append('')
-
-    # msg.append('Available monsters:')
-    # for monster in MONSTERS:
-    #     name = str(monster['name']).capitalize()
-    #     msg.append(f'- {name}')
-
-    return '\n'.join(msg)

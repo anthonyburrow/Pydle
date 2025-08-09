@@ -15,6 +15,9 @@ from ....util.structures.LootTable import LootTable
 
 class MixingActivity(Activity):
 
+    name: str = 'mix'
+    help_info: str = 'Begin mixing potions.'
+
     def __init__(self, *args):
         super().__init__(*args)
 
@@ -27,6 +30,22 @@ class MixingActivity(Activity):
         self.loot_table: LootTable = None
 
         self.description: str = 'mixing'
+
+    @classmethod
+    def usage(cls) -> str:
+        msg: list[str] = []
+
+        msg.append('Use cases:')
+        msg.append('- mix [potion]')
+
+        msg.append('')
+
+        msg.append('Available potions:')
+        for item_id in MIXABLES:
+            mixable: Mixable = ITEM_REGISTRY[item_id]
+            msg.append(f'- {mixable}')
+
+        return '\n'.join(msg)
 
     def setup_inherited(self) -> ActivitySetupResult:
         if self.mixable is None:
@@ -117,19 +136,3 @@ class MixingActivity(Activity):
         )
 
         # Add more stuff (pets, etc)
-
-
-def detailed_info():
-    msg: list = []
-
-    msg.append('Use cases:')
-    msg.append('- mix [potion]')
-
-    msg.append('')
-
-    msg.append('Available potions:')
-    for item_id in MIXABLES:
-        mixable: Mixable = ITEM_REGISTRY[item_id]
-        msg.append(f'- {mixable}')
-
-    return '\n'.join(msg)

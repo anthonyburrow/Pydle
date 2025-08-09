@@ -17,6 +17,9 @@ from ....util.structures.LootTable import LootTable
 
 class ForagingActivity(Activity):
 
+    name: str = 'collect'
+    help_info: str = 'Begin collecting resources from the area.'
+
     def __init__(self, *args):
         super().__init__(*args)
 
@@ -28,6 +31,15 @@ class ForagingActivity(Activity):
         self.loot_table: LootTable = None
 
         self._xp_table: dict[BankKey, float] = {}
+
+    @classmethod
+    def usage(cls) -> str:
+        msg: list[str] = []
+
+        msg.append('Use cases:')
+        msg.append('- collect')
+
+        return '\n'.join(msg)
 
     def setup_inherited(self) -> ActivitySetupResult:
         if not self.area.collectables:
@@ -121,6 +133,7 @@ class ForagingActivity(Activity):
 
         for collectable_name, area_weight in self.area.collectables.items():
             item_instance: ItemInstance = ITEM_PARSER.get_instance(collectable_name)
+            item_instance.set_quantity(item_instance.n_per_gather)
 
             if self.player.get_level('foraging') < item_instance.level:
                 continue
@@ -140,12 +153,3 @@ class ForagingActivity(Activity):
         self.loot_table.add_empty(weight=empty_weight)
 
         # Add more stuff (pets, etc)
-
-
-def detailed_info():
-    msg: list = []
-
-    msg.append('Use cases:')
-    msg.append('- collect')
-
-    return '\n'.join(msg)

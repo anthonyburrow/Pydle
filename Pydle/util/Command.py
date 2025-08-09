@@ -1,25 +1,16 @@
-from enum import Enum, auto
+from __future__ import annotations
+from typing import TYPE_CHECKING
 
+from .CommandType import CommandType
 from .items.ItemInstance import ItemInstance
 from .items.ItemParser import ITEM_PARSER
 from .monsters.MonsterInstance import MonsterInstance
 from .monsters.MonsterParser import MONSTER_PARSER
-from ..commands.command_map import map_activity, map_operations, alias_to_command
+from ..commands.CommandRegistry import COMMAND_REGISTRY
 
+if TYPE_CHECKING:
+    from .structures.CommandBase import CommandBase
 
-class CommandType(Enum):
-    UNKNOWN = auto()
-    OPERATION = auto()
-    ACTIVITY = auto()
-    EXIT = auto()
-
-
-SUBCOMMANDS: dict[str, set[str]] = {
-    'area': {'list'},
-    'equipment': {'equip', 'unequip', 'stats'},
-    'tools': {'equip', 'unequip'},
-    'testing': {'skilling'},
-}
 
 CMD_EXIT: str = 'exit'
 
@@ -35,9 +26,10 @@ class Command:
         self.argument: str | None = None
 
         self.type: CommandType = None
+        self.action: CommandBase = None
 
         self._parse()
-        self._get_command_info()
+        self._set_info()
 
     def get_item_instance(self) -> ItemInstance | None:
         return ITEM_PARSER.get_instance(self.argument, self.quantity)
@@ -49,12 +41,14 @@ class Command:
         tokens = self.raw.strip().lower().split()
 
         self.command = tokens.pop(0)
-        self.command = alias_to_command(self.command)
+        self.action = COMMAND_REGISTRY.get(self.command)
 
         if not tokens:
             return
 
-        if self.command in SUBCOMMANDS and tokens[0] in SUBCOMMANDS[self.command]:
+        subcommands: list[str] = self.action.subcommands
+
+        if tokens[0] in subcommands:
             self.subcommand = tokens.pop(0)
 
         if not tokens:
@@ -66,15 +60,15 @@ class Command:
         except ValueError:
             self.quantity = 1
 
-        if tokens:
+        if not tokens:
             return
 
         self.argument = ' '.join(tokens)
 
-    def _get_command_info(self) -> None:
-        if self.command in map_activity:
+    def _set_info(self):
+        if self.command in COMMAND_REGISTRY.activities:
             self.type = CommandType.ACTIVITY
-        elif self.command in map_operations:
+        elif self.command in COMMAND_REGISTRY.operations:
             self.type = CommandType.OPERATION
         elif self.command == CMD_EXIT:
             self.type = CommandType.EXIT

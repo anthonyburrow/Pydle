@@ -19,6 +19,9 @@ fire_effect = 'smithing fire'
 
 class SmeltingActivity(Activity):
 
+    name: str = 'smelt'
+    help_info: str = 'Begin smelting ores into bars.'
+
     def __init__(self, *args):
         super().__init__(*args)
 
@@ -31,6 +34,22 @@ class SmeltingActivity(Activity):
         self.loot_table: LootTable = None
 
         self.description: str = 'smelting'
+
+    @classmethod
+    def usage(cls) -> str:
+        msg: list[str] = []
+
+        msg.append('Use cases:')
+        msg.append('- smelt [ore]')
+
+        msg.append('')
+
+        msg.append('Available ores:')
+        for item_id in SMELTABLES:
+            smeltable: Smeltable = ITEM_REGISTRY[item_id]
+            msg.append(f'- {smeltable}')
+
+        return '\n'.join(msg)
 
     def setup_inherited(self) -> ActivitySetupResult:
         if self.smeltable is None:
@@ -147,19 +166,3 @@ class SmeltingActivity(Activity):
         )
 
         # Add more stuff (pets, etc)
-
-
-def detailed_info():
-    msg: list = []
-
-    msg.append('Use cases:')
-    msg.append('- smelt [ore]')
-
-    msg.append('')
-
-    msg.append('Available ores:')
-    for item_id in SMELTABLES:
-        smeltable: Smeltable = ITEM_REGISTRY[item_id]
-        msg.append(f'- {smeltable}')
-
-    return '\n'.join(msg)

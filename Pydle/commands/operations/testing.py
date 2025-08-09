@@ -1,23 +1,31 @@
 from ..testing.skilling import testing_skilling
-from ...util.Command import Command
-from ...util.player.Player import Player
-from ...util.structures.UserInterface import UserInterface
+from ...util.structures.Operation import Operation
 
 
-def interface_testing(player: Player, ui: UserInterface, command: Command):
-    if not command.subcommand and not command.argument:
-        return ui.print('A subcommand for `testing` is needed.')
+class TestingOperation(Operation):
 
-    if command.subcommand == 'skilling':
-        testing_skilling(player)
-    else:
-        ui.print(f'Unknown subcommand `{command.subcommand}`')
+    name: str = 'testing'
+    aliases: list[str] = ['test']
+    subcommands: list[str] = ['skilling']
+    help_info: str = 'Non-production testing commands.'
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
-def detailed_info():
-    msg: list = []
+    @classmethod
+    def usage(cls) -> str:
+        msg: list[str] = []
 
-    msg.append('Use cases:')
-    msg.append('- testing skilling')
+        msg.append('Use cases:')
+        msg.append('- testing skilling')
 
-    return '\n'.join(msg)
+        return '\n'.join(msg)
+
+    def execute(self):
+        if not self.command.subcommand and not self.command.argument:
+            return self.ui.print('A subcommand for `testing` is needed.')
+
+        if self.command.subcommand == 'skilling':
+            testing_skilling(self.player)
+        else:
+            self.ui.print(f'Unknown subcommand `{self.command.subcommand}`')

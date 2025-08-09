@@ -1,16 +1,11 @@
-from __future__ import annotations
-from typing import TYPE_CHECKING
-
 from dataclasses import dataclass
 from enum import Enum
 
-from .UserInterface import UserInterface
+from .CommandBase import CommandBase
 from ..colors import color, color_theme
+from ..CommandType import CommandType
 from ..player.Bank import Bank
-from ..player.Player import Player
-
-if TYPE_CHECKING:
-    from ..Command import Command
+from ...commands.CommandRegistry import COMMAND_REGISTRY
 
 
 @dataclass
@@ -34,12 +29,15 @@ class ActivityTickResult:
     xp: dict = None
 
 
-class Activity:
+class Activity(CommandBase):
 
-    def __init__(self, player: Player, ui: UserInterface, command: Command):
-        self.player: Player = player
-        self.ui: UserInterface = ui
-        self.command: Command = command
+    def __init_subclass__(cls, **kwargs):
+        super().__init_subclass__(**kwargs)
+
+        COMMAND_REGISTRY.register(cls, CommandType.ACTIVITY)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
         self.tick_count: int = 0
         self.is_active: bool = False

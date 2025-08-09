@@ -19,6 +19,9 @@ fire_effect = 'cooking fire'
 
 class CookingActivity(Activity):
 
+    name: str = 'cook'
+    help_info: str = 'Begin cooking food.'
+
     def __init__(self, *args):
         super().__init__(*args)
 
@@ -31,6 +34,22 @@ class CookingActivity(Activity):
         self.loot_table: LootTable = None
 
         self.description: str = 'cooking'
+
+    @classmethod
+    def usage(cls) -> str:
+        msg: list[str] = []
+
+        msg.append('Use cases:')
+        msg.append('- cook [food]')
+
+        msg.append('')
+
+        msg.append('Available foods:')
+        for item_id in COOKABLES:
+            cookable: Cookable = ITEM_REGISTRY[item_id]
+            msg.append(f'- {cookable}')
+
+        return '\n'.join(msg)
 
     def setup_inherited(self) -> ActivitySetupResult:
         if self.cookable is None:
@@ -160,19 +179,3 @@ class CookingActivity(Activity):
         )
 
         # Add more stuff (pets, etc)
-
-
-def detailed_info():
-    msg: list = []
-
-    msg.append('Use cases:')
-    msg.append('- cook [food]')
-
-    msg.append('')
-
-    msg.append('Available foods:')
-    for item_id in COOKABLES:
-        cookable: Cookable = ITEM_REGISTRY[item_id]
-        msg.append(f'- {cookable}')
-
-    return '\n'.join(msg)

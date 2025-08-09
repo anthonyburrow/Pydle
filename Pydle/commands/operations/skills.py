@@ -1,23 +1,31 @@
-from ...util.Command import Command
-from ...util.player.Player import Player
-from ...util.structures.UserInterface import UserInterface
+from ...util.structures.Operation import Operation
 
 
-def interface_skills(player: Player, ui: UserInterface, command: Command):
-    if not command.subcommand and not command.argument:
-        return ui.print(str(player.skills), multiline=True)
+class SkillsOperation(Operation):
 
-    try:
-        ui.print(player.get_skill(command.argument).details())
-    except KeyError:
-        ui.print(f'{command.argument} is not a valid skill.')
+    name: str = 'skills'
+    aliases: list[str] = ['s', 'skill']
+    subcommands: list[str] = []
+    help_info: str = "Display the player's skills."
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
-def detailed_info():
-    msg: list = []
+    @classmethod
+    def usage(cls) -> str:
+        msg: list[str] = []
 
-    msg.append('Use cases:')
-    msg.append('- skills')
-    msg.append('- skills [skill]')
+        msg.append('Use cases:')
+        msg.append('- skills')
+        msg.append('- skills [skill]')
 
-    return '\n'.join(msg)
+        return '\n'.join(msg)
+
+    def execute(self):
+        if not self.command.subcommand and not self.command.argument:
+            return self.ui.print(str(self.player.skills), multiline=True)
+
+        try:
+            self.ui.print(self.player.get_skill(self.command.argument).details())
+        except KeyError:
+            self.ui.print(f'{self.command.argument} is not a valid skill.')

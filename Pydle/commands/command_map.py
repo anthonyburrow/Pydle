@@ -144,7 +144,7 @@ map_activity = {
 
 map_operations = {
     'area': {
-        'function': area.interface_area,
+        'function': area.AreaOperation,
         'aliases': ('a', 'location', 'loc'),
         'help_info': "Display the player's current location.",
         'detailed_info': area.detailed_info,

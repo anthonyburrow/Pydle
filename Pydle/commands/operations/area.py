@@ -1,33 +1,41 @@
 from ...lib.areas import AREAS
-from ...util.Command import Command
-from ...util.player.Player import Player
-from ...util.structures.UserInterface import UserInterface
+from ...util.structures.Operation import Operation
 
 
-def interface_area(player: Player, ui: UserInterface, command: Command):
-    if not command.subcommand and not command.argument:
-        current_area = AREAS[player.area]
-        return ui.print(f'{player} is currently at {current_area}.')
+class AreaOperation(Operation):
 
-    if command.subcommand == 'list':
-        msg = []
-        msg.append('Available areas:')
-        for area in AREAS.values():
-            msg.append(f'- {area}')
-        return ui.print('\n'.join(msg), multiline=True)
+    name: str = 'area'
+    aliases: list[str] = ['a', 'location', 'loc']
+    subcommands: list[str] = ['list']
+    help_info: str = "Display the player's current location."
 
-    if command.argument not in AREAS:
-        return ui.print(f'{command.argument} is not a valid area.')
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
-    ui.print(AREAS[command.argument].detailed_info(), multiline=True)
+    @classmethod
+    def usage(cls) -> str:
+        msg: list[str] = []
 
+        msg.append('Use cases:')
+        msg.append(f'- area')
+        msg.append(f'- area list')
+        msg.append(f'- area [area]')
 
-def detailed_info():
-    msg: list = []
+        return '\n'.join(msg)
 
-    msg.append('Use cases:')
-    msg.append('- area')
-    msg.append('- area list')
-    msg.append('- area [area]')
+    def execute(self):
+        if not self.command.subcommand and not self.command.argument:
+            current_area = AREAS[self.player.area]
+            return self.ui.print(f'{self.player} is currently at {current_area}.')
 
-    return '\n'.join(msg)
+        if self.command.subcommand == 'list':
+            msg = []
+            msg.append('Available areas:')
+            for area in AREAS.values():
+                msg.append(f'- {area}')
+            return self.ui.print('\n'.join(msg), multiline=True)
+
+        if self.command.argument not in AREAS:
+            return self.ui.print(f'{self.command.argument} is not a valid area.')
+
+        self.ui.print(AREAS[self.command.argument].detailed_info(), multiline=True)

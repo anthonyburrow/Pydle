@@ -19,6 +19,9 @@ fire_effect = 'smithing fire'
 
 class SmithingActivity(Activity):
 
+    name: str = 'smith'
+    help_info: str = 'Begin smithing items.'
+
     def __init__(self, *args):
         super().__init__(*args)
 
@@ -31,6 +34,22 @@ class SmithingActivity(Activity):
         self.loot_table: LootTable = None
 
         self.description: str = 'smithing'
+
+    @classmethod
+    def usage(cls) -> str:
+        msg: list[str] = []
+
+        msg.append('Use cases:')
+        msg.append('- smith [item]')
+
+        msg.append('')
+
+        msg.append('Available items:')
+        for item_id in SMITHABLES:
+            smithable: Smithable = ITEM_REGISTRY[item_id]
+            msg.append(f'- {smithable}')
+
+        return '\n'.join(msg)
 
     def setup_inherited(self) -> ActivitySetupResult:
         if self.smithable is None:
@@ -147,19 +166,3 @@ class SmithingActivity(Activity):
         )
 
         # Add more stuff (pets, etc)
-
-
-def detailed_info():
-    msg: list = []
-
-    msg.append('Use cases:')
-    msg.append('- smith [item]')
-
-    msg.append('')
-
-    msg.append('Available items:')
-    for item_id in SMITHABLES:
-        smithable: Smithable = ITEM_REGISTRY[item_id]
-        msg.append(f'- {smithable}')
-
-    return '\n'.join(msg)

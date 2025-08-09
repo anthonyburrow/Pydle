@@ -15,6 +15,9 @@ from ....util.structures.LootTable import LootTable
 
 class CraftingActivity(Activity):
 
+    name: str = 'craft'
+    help_info: str = 'Begin crafting an item.'
+
     def __init__(self, *args):
         super().__init__(*args)
 
@@ -27,6 +30,22 @@ class CraftingActivity(Activity):
         self.loot_table: LootTable = None
 
         self.description: str = 'crafting'
+
+    @classmethod
+    def usage(cls) -> str:
+        msg: list[str] = []
+
+        msg.append('Use cases:')
+        msg.append('- craft [item]')
+
+        msg.append('')
+
+        msg.append('Available items:')
+        for item_id in CRAFTABLES:
+            craftable: Craftable = ITEM_REGISTRY[item_id]
+            msg.append(f'- {craftable}')
+
+        return '\n'.join(msg)
 
     def setup_inherited(self) -> ActivitySetupResult:
         if self.craftable is None:
@@ -117,19 +136,3 @@ class CraftingActivity(Activity):
         )
 
         # Add more stuff (pets, etc)
-
-
-def detailed_info():
-    msg: list = []
-
-    msg.append('Use cases:')
-    msg.append('- craft [item]')
-
-    msg.append('')
-
-    msg.append('Available items:')
-    for item_id in CRAFTABLES:
-        craftable: Craftable = ITEM_REGISTRY[item_id]
-        msg.append(f'- {craftable}')
-
-    return '\n'.join(msg)

@@ -1,7 +1,6 @@
 from ....lib.areas import AREAS
 from ....lib.skilling.mining import ORES
 from ....util.items.ItemInstance import ItemInstance
-from ....util.items.ItemParser import ITEM_PARSER
 from ....util.items.ItemRegistry import ITEM_REGISTRY
 from ....util.items.skilling.Ore import Ore
 from ....util.player.Bank import Bank
@@ -18,16 +17,34 @@ from ....util.structures.LootTable import LootTable
 
 class MiningActivity(Activity):
 
+    name: str = 'mine'
+    help_info: str = 'Begin mining for ores.'
+
     def __init__(self, *args):
         super().__init__(*args)
 
         self.ore: ItemInstance | None = self.command.get_item_instance()
-        self.ore.set_quantity(self.ore.n_per_gather)
 
         self.pickaxe: ItemInstance | None = self.player.get_tool(ToolSlot.PICKAXE)
         self.loot_table: LootTable = None
 
         self.description: str = 'mining'
+
+    @classmethod
+    def usage(cls) -> str:
+        msg: list[str] = []
+
+        msg.append('Use cases:')
+        msg.append('- mine [ore]')
+
+        msg.append('')
+
+        msg.append('Available ores:')
+        for item_id in ORES:
+            ore: Ore = ITEM_REGISTRY[item_id]
+            msg.append(f'- {ore}')
+
+        return '\n'.join(msg)
 
     def setup_inherited(self) -> ActivitySetupResult:
         if self.ore is None:
@@ -115,25 +132,11 @@ class MiningActivity(Activity):
         }
         prob_success = self.ore.prob_success(**mining_args)
 
+        self.ore.set_quantity(self.ore.n_per_gather)
+
         self.loot_table = (
             LootTable()
             .tertiary(self.ore, prob_success)
         )
 
         # Add more stuff (pets, etc)
-
-
-def detailed_info():
-    msg: list = []
-
-    msg.append('Use cases:')
-    msg.append('- mine [ore]')
-
-    msg.append('')
-
-    msg.append('Available ores:')
-    for item_id in ORES:
-        ore: Ore = ITEM_REGISTRY[item_id]
-        msg.append(f'- {ore}')
-
-    return '\n'.join(msg)

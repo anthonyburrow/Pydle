@@ -1,17 +1,25 @@
-from ...util.Command import Command
-from ...util.player.Player import Player
-from ...util.structures.UserInterface import UserInterface
+from ...util.structures.Operation import Operation
 
 
-def interface_effects(player: Player, ui: UserInterface, command: Command):
-    if not command.subcommand and not command.argument:
-        return ui.print(str(player.updated_effects), multiline=True)
+class EffectsOperation(Operation):
 
+    name: str = 'effects'
+    aliases: list[str] = ['effect']
+    subcommands: list[str] = []
+    help_info: str = "Display and equip the player's ongoing effects."
 
-def detailed_info():
-    msg: list = []
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
-    msg.append('Use cases:')
-    msg.append('- effects')
+    @classmethod
+    def usage(cls) -> str:
+        msg: list[str] = []
 
-    return '\n'.join(msg)
+        msg.append('Use cases:')
+        msg.append('- effects')
+
+        return '\n'.join(msg)
+
+    def execute(self):
+        if not self.command.subcommand and not self.command.argument:
+            return self.ui.print(str(self.player.updated_effects), multiline=True)

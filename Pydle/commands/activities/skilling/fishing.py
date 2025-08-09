@@ -1,7 +1,6 @@
 from ....lib.areas import AREAS
 from ....lib.skilling.fishing import FISH
 from ....util.items.ItemInstance import ItemInstance
-from ....util.items.ItemParser import ITEM_PARSER
 from ....util.items.ItemRegistry import ITEM_REGISTRY
 from ....util.items.skilling.Fish import Fish
 from ....util.player.Bank import Bank
@@ -18,16 +17,34 @@ from ....util.structures.LootTable import LootTable
 
 class FishingActivity(Activity):
 
+    name: str = 'fish'
+    help_info: str = 'Begin fishing for fish.'
+
     def __init__(self, *args):
         super().__init__(*args)
 
         self.fish: ItemInstance | None = self.command.get_item_instance()
-        self.fish.set_quantity(self.fish.n_per_gather)
 
         self.fishing_rod: ItemInstance | None = self.player.get_tool(ToolSlot.FISHING_ROD)
         self.loot_table: LootTable = None
 
         self.description: str = 'fishing'
+
+    @classmethod
+    def usage(cls) -> str:
+        msg: list[str] = []
+
+        msg.append('Use cases:')
+        msg.append('- fish [fish]')
+
+        msg.append('')
+
+        msg.append('Available fish:')
+        for item_id in FISH:
+            fish: Fish = ITEM_REGISTRY[item_id]
+            msg.append(f'- {fish}')
+
+        return '\n'.join(msg)
 
     def setup_inherited(self) -> ActivitySetupResult:
         if self.fish is None:
@@ -115,25 +132,11 @@ class FishingActivity(Activity):
         }
         prob_success = self.fish.prob_success(**fishing_args)
 
+        self.fish.set_quantity(self.fish.n_per_gather)
+
         self.loot_table = (
             LootTable()
             .tertiary(self.fish, prob_success)
         )
 
         # Add more stuff (pets, etc)
-
-
-def detailed_info():
-    msg: list = []
-
-    msg.append('Use cases:')
-    msg.append('- fish [fish]')
-
-    msg.append('')
-
-    msg.append('Available fish:')
-    for item_id in FISH:
-        fish: Fish = ITEM_REGISTRY[item_id]
-        msg.append(f'- {fish}')
-
-    return '\n'.join(msg)
