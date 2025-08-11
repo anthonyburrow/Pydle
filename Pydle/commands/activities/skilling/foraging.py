@@ -1,6 +1,6 @@
 from ...Activity import (
     Activity,
-    ActivitySetupResult,
+    ActivityCheckResult,
     ActivityMsgType,
     ActivityTickResult
 )
@@ -37,13 +37,13 @@ class ForagingActivity(Activity):
 
         return '\n'.join(msg)
 
-    def setup(self) -> ActivitySetupResult:
-        result: ActivitySetupResult = super().setup()
+    def check(self) -> ActivityCheckResult:
+        result: ActivityCheckResult = super().check()
         if not result.success:
             return result
 
         if not self.area.collectables:
-            return ActivitySetupResult(
+            return ActivityCheckResult(
                 success=False,
                 msg=f'There is nothing to be found in {self.area}.'
             )
@@ -53,7 +53,7 @@ class ForagingActivity(Activity):
             if self._has_level_requirement('foraging', item.level):
                 break
         else:
-            return ActivitySetupResult(
+            return ActivityCheckResult(
                 success=False,
                 msg=(
                     f'{self.player} does not have a high enough Foraging level'
@@ -62,12 +62,12 @@ class ForagingActivity(Activity):
             )
 
         if not self.secateurs:
-            return ActivitySetupResult(
+            return ActivityCheckResult(
                 success=False,
                 msg=f'{self.player} does not have any secateurs.'
             )
 
-        return ActivitySetupResult(success=True)
+        return ActivityCheckResult(success=True)
 
     def begin(self) -> None:
         self._setup_loot_table()

@@ -1,6 +1,6 @@
 from ...Activity import (
     Activity,
-    ActivitySetupResult,
+    ActivityCheckResult,
     ActivityMsgType,
     ActivityTickResult
 )
@@ -40,32 +40,32 @@ class KillingActivity(Activity):
 
         return '\n'.join(msg)
 
-    def setup(self) -> ActivitySetupResult:
-        result: ActivitySetupResult = super().setup()
+    def check(self) -> ActivityCheckResult:
+        result: ActivityCheckResult = super().check()
         if not result.success:
             return result
 
         if self.monster is None:
-            return ActivitySetupResult(
+            return ActivityCheckResult(
                 success=False,
                 msg='A valid monster was not given.'
             )
 
         if not isinstance(self.monster.base, Monster):
-            return ActivitySetupResult(
+            return ActivityCheckResult(
                 success=False,
                 msg=f'{self.monster} is not a valid monster.'
             )
 
         area: Area = AREAS[self.player.area]
         if not area.contains_monster(self.monster):
-            return ActivitySetupResult(
+            return ActivityCheckResult(
                 success=False,
                 msg=f'{area} does not have a {self.monster} anywhere.'
             )
 
         if not self.player.equipment[EquipmentSlot.WEAPON]:
-            return ActivitySetupResult(
+            return ActivityCheckResult(
                 success=False,
                 msg=f'{self.player} needs a weapon to fight!'
             )
@@ -74,7 +74,7 @@ class KillingActivity(Activity):
         #   - "slayer" level/rank
         #   - items required to do monster/boss
 
-        return ActivitySetupResult(success=True)
+        return ActivityCheckResult(success=True)
 
     def begin(self) -> None:
         super().begin()
@@ -113,18 +113,18 @@ class KillingActivity(Activity):
             xp=result_combat.xp,
         )
 
-    def _recheck(self) -> ActivitySetupResult:
-        result: ActivitySetupResult = super()._recheck()
+    def _recheck(self) -> ActivityCheckResult:
+        result: ActivityCheckResult = super()._recheck()
         if not result.success:
             return result
 
         if self.player.hitpoints <= 0:
-            return ActivitySetupResult(
+            return ActivityCheckResult(
                 success=False,
                 msg=f'{self.player} was defeated.',
             )
 
-        return ActivitySetupResult(success=True)
+        return ActivityCheckResult(success=True)
 
     def finish(self) -> None:
         super().finish()

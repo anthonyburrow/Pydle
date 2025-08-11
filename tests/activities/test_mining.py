@@ -12,18 +12,18 @@ def test_missing_pickaxe(test_player, test_ui):
 
     # Test no pickaxe
     activity = MiningActivity(test_player, test_ui, command)
-    result_setup = activity.setup()
+    result_check = activity.check()
 
-    assert not result_setup.success
+    assert not result_check.success
 
     # Test has pickaxe
     test_player.give(ITEM_PARSER.get_instance('poor iron pickaxe'))
     test_player.equip_tool(ITEM_PARSER.get_instance('poor iron pickaxe'))
 
     activity = MiningActivity(test_player, test_ui, command)
-    result_setup = activity.setup()
+    result_check = activity.check()
 
-    assert result_setup.success
+    assert result_check.success
 
 
 def test_misspelled_ore(test_player, test_ui):
@@ -37,6 +37,6 @@ def test_misspelled_ore(test_player, test_ui):
     test_player.equip_tool(ITEM_PARSER.get_instance('poor iron pickaxe'))
 
     activity = MiningActivity(test_player, test_ui, command)
-    result_setup = activity.setup()
+    result_check = activity.check()
 
-    assert not result_setup.success
+    assert not result_check.success

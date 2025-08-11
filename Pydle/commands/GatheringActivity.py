@@ -3,7 +3,7 @@ from abc import ABC, abstractmethod
 from .Activity import (
     Activity,
     ActivityMsgType,
-    ActivitySetupResult,
+    ActivityCheckResult,
     ActivityTickResult,
 )
 from .CommandRegistry import COMMAND_REGISTRY
@@ -30,18 +30,18 @@ class GatheringActivity(Activity, ABC):
     def tool(self) -> ItemInstance | None:
         pass
 
-    def setup(self) -> ActivitySetupResult:
-        result: ActivitySetupResult = super().setup()
+    def check(self) -> ActivityCheckResult:
+        result: ActivityCheckResult = super().check()
         if not result.success:
             return result
 
         if self.gatherable is None:
-            return ActivitySetupResult(
+            return ActivityCheckResult(
                 success=False,
                 msg='A valid item was not given.'
             )
 
-        return ActivitySetupResult(success=True)
+        return ActivityCheckResult(success=True)
 
     def begin(self) -> None:
         self._setup_loot_table()
@@ -62,12 +62,12 @@ class GatheringActivity(Activity, ABC):
     def _perform_action(self) -> ActivityTickResult:
         pass
 
-    def _recheck(self) -> ActivitySetupResult:
-        result: ActivitySetupResult = super()._recheck()
+    def _recheck(self) -> ActivityCheckResult:
+        result: ActivityCheckResult = super()._recheck()
         if not result.success:
             return result
 
-        return ActivitySetupResult(success=True)
+        return ActivityCheckResult(success=True)
 
     def finish(self) -> None:
         super().finish()

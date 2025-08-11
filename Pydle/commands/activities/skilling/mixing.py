@@ -1,5 +1,5 @@
 from ...Activity import (
-    ActivitySetupResult,
+    ActivityCheckResult,
     ActivityTickResult
 )
 from ...ProductionActivity import ProductionActivity
@@ -33,24 +33,24 @@ class MixingActivity(ProductionActivity):
 
         return '\n'.join(msg)
 
-    def setup(self) -> ActivitySetupResult:
-        result: ActivitySetupResult = super().setup()
+    def check(self) -> ActivityCheckResult:
+        result: ActivityCheckResult = super().check()
         if not result.success:
             return result
 
         if not isinstance(self.produceable.base, Mixable):
-            return ActivitySetupResult(
+            return ActivityCheckResult(
                 success=False,
                 msg=f'{self.produceable} is not a valid mixable item.'
             )
 
         if not self._has_level_requirement('herblore', self.produceable.level):
-            return ActivitySetupResult(
+            return ActivityCheckResult(
                 success=False,
                 msg=f'{self.player} must have Level {self.produceable.level} Herblore to mix a {self.produceable}.'
             )
 
-        return ActivitySetupResult(success=True)
+        return ActivityCheckResult(success=True)
 
     def begin(self) -> None:
         super().begin()
@@ -70,12 +70,12 @@ class MixingActivity(ProductionActivity):
             },
         )
 
-    def _recheck(self) -> ActivitySetupResult:
-        result: ActivitySetupResult = super()._recheck()
+    def _recheck(self) -> ActivityCheckResult:
+        result: ActivityCheckResult = super()._recheck()
         if not result.success:
             return result
 
-        return ActivitySetupResult(success=True)
+        return ActivityCheckResult(success=True)
 
     def finish(self) -> None:
         super().finish()

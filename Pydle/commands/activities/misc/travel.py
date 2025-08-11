@@ -1,6 +1,6 @@
 from ...Activity import (
     Activity,
-    ActivitySetupResult,
+    ActivityCheckResult,
     ActivityMsgType,
     ActivityTickResult
 )
@@ -43,19 +43,19 @@ class TravelingActivity(Activity):
 
         return '\n'.join(msg)
 
-    def setup(self) -> ActivitySetupResult:
-        result: ActivitySetupResult = super().setup()
+    def check(self) -> ActivityCheckResult:
+        result: ActivityCheckResult = super().check()
         if not result.success:
             return result
 
         if self.area is None:
-            return ActivitySetupResult(
+            return ActivityCheckResult(
                 success=False,
                 msg='A valid area was not given.'
             )
 
         if self.area_key == self.player.area:
-            return ActivitySetupResult(
+            return ActivityCheckResult(
                 success=False,
                 msg=f'{self.player} is already at {self.area}.'
             )
@@ -64,12 +64,12 @@ class TravelingActivity(Activity):
             if req(self.player):
                 continue
 
-            return ActivitySetupResult(
+            return ActivityCheckResult(
                 success=False,
                 msg=f'{self.player} is missing requirements to travel to {self.area}.'
             )
 
-        return ActivitySetupResult(success=True)
+        return ActivityCheckResult(success=True)
 
     def begin(self) -> None:
         super().begin()
@@ -82,18 +82,18 @@ class TravelingActivity(Activity):
             msg_type=ActivityMsgType.WAITING,
         )
 
-    def _recheck(self) -> ActivitySetupResult:
-        result: ActivitySetupResult = super()._recheck()
+    def _recheck(self) -> ActivityCheckResult:
+        result: ActivityCheckResult = super()._recheck()
         if not result.success:
             return result
 
         if self.tick_count >= self.travel_ticks:
-            return ActivitySetupResult(
+            return ActivityCheckResult(
                 success=False,
                 msg='',
             )
 
-        return ActivitySetupResult(success=True)
+        return ActivityCheckResult(success=True)
 
     def finish(self) -> None:
         super().finish()

@@ -1,5 +1,5 @@
 from ...Activity import (
-    ActivitySetupResult,
+    ActivityCheckResult,
     ActivityMsgType,
     ActivityTickResult
 )
@@ -42,37 +42,37 @@ class FishingActivity(GatheringActivity):
     def tool(self) -> ItemInstance | None:
         return self.player.get_tool(ToolSlot.FISHING_ROD)
 
-    def setup(self) -> ActivitySetupResult:
-        result: ActivitySetupResult = super().setup()
+    def check(self) -> ActivityCheckResult:
+        result: ActivityCheckResult = super().check()
         if not result.success:
             return result
 
         if not isinstance(self.gatherable.base, Fish):
-            return ActivitySetupResult(
+            return ActivityCheckResult(
                 success=False,
                 msg=f'{self.gatherable} is not a valid fish.'
             )
 
         if not self._has_level_requirement('fishing', self.gatherable.level):
-            return ActivitySetupResult(
+            return ActivityCheckResult(
                 success=False,
                 msg=f'You must have Level {self.gatherable.level} Fishing to fish {self.gatherable}.'
             )
 
         area: Area = AREAS[self.player.area]
         if not area.contains_fish(self.gatherable):
-            return ActivitySetupResult(
+            return ActivityCheckResult(
                 success=False,
                 msg=f'{area} does not have {self.gatherable} anywhere.'
             )
 
         if not self.tool:
-            return ActivitySetupResult(
+            return ActivityCheckResult(
                 success=False,
                 msg=f'{self.player} does not have a fishing rod equipped.'
             )
 
-        return ActivitySetupResult(success=True)
+        return ActivityCheckResult(success=True)
 
     def begin(self) -> None:
         super().begin()
@@ -93,12 +93,12 @@ class FishingActivity(GatheringActivity):
             },
         )
 
-    def _recheck(self) -> ActivitySetupResult:
-        result: ActivitySetupResult = super()._recheck()
+    def _recheck(self) -> ActivityCheckResult:
+        result: ActivityCheckResult = super()._recheck()
         if not result.success:
             return result
 
-        return ActivitySetupResult(success=True)
+        return ActivityCheckResult(success=True)
 
     def finish(self) -> None:
         super().finish()

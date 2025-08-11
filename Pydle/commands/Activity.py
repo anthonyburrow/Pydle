@@ -17,7 +17,7 @@ class ActivityMsgType(Enum):
 
 
 @dataclass
-class ActivitySetupResult:
+class ActivityCheckResult:
     success: bool = True
     msg: str = ''
 
@@ -45,9 +45,9 @@ class Activity(CommandBase, ABC):
         self.is_active: bool = False
         self._previous_msg_type = ActivityMsgType.RESULT
 
-    def setup(self) -> ActivitySetupResult:
+    def check(self) -> ActivityCheckResult:
         '''Check to see if requirements are met to perform activity.'''
-        return ActivitySetupResult(success=True)
+        return ActivityCheckResult(success=True)
 
     def begin(self) -> None:
         self.is_active = True
@@ -91,14 +91,14 @@ class Activity(CommandBase, ABC):
         if not self.tick_count % 50:
             self.player.save()
 
-        result_recheck: ActivitySetupResult = self._recheck()
+        result_recheck: ActivityCheckResult = self._recheck()
         if not result_recheck.success or not self.ui.activity_running:
             self.is_active = False
 
         self.tick_count += 1
 
-    def _recheck(self) -> ActivitySetupResult:
-        return ActivitySetupResult(success=True)
+    def _recheck(self) -> ActivityCheckResult:
+        return ActivityCheckResult(success=True)
 
     def finish(self) -> None:
         self.ui.print(self.finish_text)

@@ -1,5 +1,5 @@
 from ...Activity import (
-    ActivitySetupResult,
+    ActivityCheckResult,
     ActivityTickResult
 )
 from ...ProductionActivity import ProductionActivity
@@ -39,19 +39,19 @@ class SmeltingActivity(ProductionActivity):
 
         return '\n'.join(msg)
 
-    def setup(self) -> ActivitySetupResult:
-        result: ActivitySetupResult = super().setup()
+    def check(self) -> ActivityCheckResult:
+        result: ActivityCheckResult = super().check()
         if not result.success:
             return result
 
         if not isinstance(self.produceable.base, Smeltable):
-            return ActivitySetupResult(
+            return ActivityCheckResult(
                 success=False,
                 msg=f'{self.produceable} is not a valid smeltable item.'
             )
 
         if not self._has_level_requirement('smithing', self.produceable.level):
-            return ActivitySetupResult(
+            return ActivityCheckResult(
                 success=False,
                 msg=f'{self.player} must have Level {self.produceable.level} Smithing to smelt a {self.produceable}.'
             )
@@ -63,12 +63,12 @@ class SmeltingActivity(ProductionActivity):
                 if self.player.has(item_instance):
                     break
             else:
-                return ActivitySetupResult(
+                return ActivityCheckResult(
                     success=False,
                     msg=f'{self.player} has no logs to make a fire.'
                 )
 
-        return ActivitySetupResult(success=True)
+        return ActivityCheckResult(success=True)
 
     def begin(self) -> None:
         super().begin()
@@ -88,8 +88,8 @@ class SmeltingActivity(ProductionActivity):
             },
         )
 
-    def _recheck(self) -> ActivitySetupResult:
-        result: ActivitySetupResult = super()._recheck()
+    def _recheck(self) -> ActivityCheckResult:
+        result: ActivityCheckResult = super()._recheck()
         if not result.success:
             return result
 
@@ -102,12 +102,12 @@ class SmeltingActivity(ProductionActivity):
                     self.player.add_effect(fire_effect, item_instance.ticks_per_fire)
                     break
             else:
-                return ActivitySetupResult(
+                return ActivityCheckResult(
                     msg=f'{self.player} ran out of logs.',
                     success=False,
                 )
 
-        return ActivitySetupResult(success=True)
+        return ActivityCheckResult(success=True)
 
     def finish(self) -> None:
         super().finish()

@@ -5,7 +5,7 @@ import time
 from .UserInterface import UserInterface
 from ..ticks import Ticks
 from ..player.Player import Player
-from ...commands.Activity import Activity, ActivitySetupResult
+from ...commands.Activity import Activity, ActivityCheckResult
 from ...commands.Command import Command
 from ...commands.CommandType import CommandType
 from ...commands.Operation import Operation
@@ -47,9 +47,9 @@ class Controller:
             self.player, self.ui, command
         )
 
-        result_setup: ActivitySetupResult = activity.setup()
-        if not result_setup.success:
-            self.ui.print(result_setup.msg)
+        result_check: ActivityCheckResult = activity.check()
+        if not result_check.success:
+            self.ui.print(result_check.msg)
             return
 
         activity.begin()

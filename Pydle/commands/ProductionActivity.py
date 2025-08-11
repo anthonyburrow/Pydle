@@ -3,7 +3,7 @@ from abc import ABC, abstractmethod
 from .Activity import (
     Activity,
     ActivityMsgType,
-    ActivitySetupResult,
+    ActivityCheckResult,
     ActivityTickResult,
 )
 from .CommandRegistry import COMMAND_REGISTRY
@@ -27,13 +27,13 @@ class ProductionActivity(Activity, ABC):
         self.items_required: list[ItemInstance] = []
         self.loot_table: LootTable = LootTable()
 
-    def setup(self) -> ActivitySetupResult:
-        result: ActivitySetupResult = super().setup()
+    def check(self) -> ActivityCheckResult:
+        result: ActivityCheckResult = super().check()
         if not result.success:
             return result
 
         if self.produceable is None:
-            return ActivitySetupResult(
+            return ActivityCheckResult(
                 success=False,
                 msg='A valid item was not given.'
             )
@@ -42,12 +42,12 @@ class ProductionActivity(Activity, ABC):
         for item_instance in self.items_required:
             if self.player.has(item_instance):
                 continue
-            return ActivitySetupResult(
+            return ActivityCheckResult(
                 success=False,
                 msg=f'{self.player} does not have {item_instance.quantity}x {item_instance}.'
             )
 
-        return ActivitySetupResult(success=True)
+        return ActivityCheckResult(success=True)
 
     def begin(self) -> None:
         self._setup_loot_table()
@@ -68,20 +68,20 @@ class ProductionActivity(Activity, ABC):
     def _perform_action(self) -> ActivityTickResult:
         pass
 
-    def _recheck(self) -> ActivitySetupResult:
-        result: ActivitySetupResult = super()._recheck()
+    def _recheck(self) -> ActivityCheckResult:
+        result: ActivityCheckResult = super()._recheck()
         if not result.success:
             return result
 
         for item_instance in self.items_required:
             if self.player.has(item_instance):
                 continue
-            return ActivitySetupResult(
+            return ActivityCheckResult(
                 msg=f'{self.player} ran out of {item_instance}.',
                 success=False,
             )
 
-        return ActivitySetupResult(success=True)
+        return ActivityCheckResult(success=True)
 
     def finish(self) -> None:
         super().finish()
