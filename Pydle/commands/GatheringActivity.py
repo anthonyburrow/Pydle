@@ -49,8 +49,8 @@ class GatheringActivity(Activity, ABC):
         super().begin()
 
     def _process_tick(self) -> ActivityTickResult:
-        ticks_per_use = self.tool.ticks_per_use
-        if self.tick_count % ticks_per_use:
+        ticks_per_action = self.tool.ticks_per_action
+        if self.tick_count % ticks_per_action:
             return ActivityTickResult(
                 msg=self.standby_text,
                 msg_type=ActivityMsgType.WAITING,

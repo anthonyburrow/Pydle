@@ -13,7 +13,7 @@ class Tool(Item):
         tool_slot: ToolSlot, 
         level: int,
         power: float = None,
-        ticks_per_use: int = 3,
+        ticks_per_action: int = 3,
         supported_qualities: list[Quality] = None
     ):
         super().__init__(item_id, name)
@@ -22,7 +22,7 @@ class Tool(Item):
         self.level: int = level
 
         self.power: float = self._default_power() if power is None else power
-        self.ticks_per_use: int = ticks_per_use
+        self.ticks_per_action: int = ticks_per_action
 
         self.supported_qualities: list[Quality] = \
             supported_qualities or list(Quality)
