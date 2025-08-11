@@ -99,7 +99,7 @@ class Tools(dict):
         msg.append(centered_title('TOOLS', total_length))
 
         for tool_slot, item_instance in self.items():
-            tool_str = item_instance or '---'
+            tool_str: str = item_instance or '---'
             msg.append(f'{tool_slot:>{max_type_length}} | {tool_str}')
 
         msg = '\n'.join(msg)

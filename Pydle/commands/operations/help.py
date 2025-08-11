@@ -33,7 +33,7 @@ class HelpOperation(Operation):
                 COMMAND_REGISTRY.get(self.command.argument)
 
             if command_cls:
-                self.ui.print(command_cls.usage())
+                self.ui.print(command_cls.usage(), multiline=True)
             else:
                 self.ui.print(f"No help available for '{self.command.argument}'.")
 

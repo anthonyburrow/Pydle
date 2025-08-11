@@ -75,6 +75,9 @@ class ItemInstance:
 
         return color(self.name.title(), color_theme[theme])
 
+    def __format__(self, format_spec):
+        return format(str(self), format_spec)
+
     def __getattr__(self, name):
         try:
             return getattr(self.base, name)

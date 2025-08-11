@@ -59,7 +59,6 @@ class CommandRegistry:
     def get_type(self, name: str) -> CommandType:
         if name in self.aliases:
             name = self.aliases[name]
-            print(name)
 
         if name in self.activities:
             return CommandType.ACTIVITY

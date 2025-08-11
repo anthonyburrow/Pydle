@@ -147,7 +147,7 @@ class Bank(dict):
         if not self:
             return '\n'.join(msg)
 
-        for item_instance in self.value():
+        for item_instance in self.values():
             qty_str = color(
                 f'[{item_instance.quantity}]'.rjust(max_qty_length + 2),
                 color_theme['UI_1']

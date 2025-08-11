@@ -8,4 +8,4 @@ class ToolSlot(Enum):
     FISHING_ROD = auto()
 
     def __str__(self) -> str:
-        return self.name.title()
+        return self.name.replace('_', ' ').title()
