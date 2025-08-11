@@ -10,7 +10,7 @@ class Quality(Enum):
     MASTER = auto()
 
     @classmethod
-    def from_value(cls, value: int) -> Self | None:
+    def from_value(cls, value: int | None) -> Self | None:
         if value is None:
             return None
         return cls(value)

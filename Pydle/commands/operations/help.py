@@ -56,14 +56,13 @@ class HelpOperation(Operation):
 
             alias_str: str = ''
             if command_cls.aliases:
-                alias_str = [
+                alias_str = ', '.join([
                     color(alias, color_theme['UI_1'])
                     for alias in command_cls.aliases
-                ]
-                alias_str = ', '.join(alias_str)
-                alias_str = f"({alias_str}) "
+                ])
+                alias_str = f'({alias_str}) '
 
-            msg.append(f"  - {command_str} {alias_str}: {command_cls.help_info}")
+            msg.append(f'  - {command_str} {alias_str}: {command_cls.help_info}')
 
         msg.append('')
         msg.append('Activities:')
@@ -73,14 +72,13 @@ class HelpOperation(Operation):
 
             alias_str: str = ''
             if command_cls.aliases:
-                alias_str = [
+                alias_str = ', '.join([
                     color(alias, color_theme['UI_1'])
                     for alias in command_cls.aliases
-                ]
-                alias_str = ', '.join(alias_str)
-                alias_str = f"({alias_str}) "
+                ])
+                alias_str = f'({alias_str}) '
 
-            msg.append(f"  - {command_str} {alias_str}: {command_cls.help_info}")
+            msg.append(f'  - {command_str} {alias_str}: {command_cls.help_info}')
 
         msg.append('')
         msg.append('Other:')

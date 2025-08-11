@@ -25,7 +25,7 @@ class ToolsOperation(Operation):
 
         return '\n'.join(msg)
 
-    def execute(self):
+    def execute(self) -> None:
         if not self.command.subcommand and not self.command.argument:
             return self.ui.print(str(self.player.tools), multiline=True)
 
@@ -47,5 +47,7 @@ class ToolsOperation(Operation):
             result: Result = self.player.equip_tool(item_instance)
         elif self.command.subcommand == 'unequip':
             result: Result = self.player.unequip_tool(item_instance)
+        else:
+            return
 
         self.ui.print(result.msg)

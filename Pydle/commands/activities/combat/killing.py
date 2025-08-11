@@ -24,8 +24,6 @@ class KillingActivity(Activity):
         self.monster: MonsterInstance | None = self.command.get_monster_instance()
         self.combat_engine: CombatEngine = CombatEngine(self.player, self.monster)
 
-        self.description: str = 'killing'
-
     @classmethod
     def usage(cls) -> str:
         msg: list[str] = []
@@ -42,7 +40,11 @@ class KillingActivity(Activity):
 
         return '\n'.join(msg)
 
-    def setup_inherited(self) -> ActivitySetupResult:
+    def setup(self) -> ActivitySetupResult:
+        result: ActivitySetupResult = super().setup()
+        if not result.success:
+            return result
+
         if self.monster is None:
             return ActivitySetupResult(
                 success=False,
@@ -74,14 +76,10 @@ class KillingActivity(Activity):
 
         return ActivitySetupResult(success=True)
 
-    def update_inherited(self) -> ActivityTickResult:
-        '''Processing during each tick.'''
-        if self.player.hitpoints <= 0:
-            return ActivityTickResult(
-                msg=f'{self.player} was defeated.',
-                exit=True,
-            )
+    def begin(self) -> None:
+        super().begin()
 
+    def _process_tick(self) -> ActivityTickResult:
         if self.monster.hitpoints <= 0:
             items: Bank = self.monster.loot_table.roll()
 
@@ -115,11 +113,23 @@ class KillingActivity(Activity):
             xp=result_combat.xp,
         )
 
-    def finish_inherited(self):
-        self.player.heal_full()
+    def _recheck(self) -> ActivitySetupResult:
+        result: ActivitySetupResult = super()._recheck()
+        if not result.success:
+            return result
 
-    def _on_levelup(self):
-        self.combat_engine.calculate_values()
+        if self.player.hitpoints <= 0:
+            return ActivitySetupResult(
+                success=False,
+                msg=f'{self.player} was defeated.',
+            )
+
+        return ActivitySetupResult(success=True)
+
+    def finish(self) -> None:
+        super().finish()
+
+        self.player.heal_full()
 
     @property
     def startup_text(self) -> str:
@@ -133,4 +143,9 @@ class KillingActivity(Activity):
     def finish_text(self) -> str:
         if self.player.hitpoints <= 0:
             return ''
-        return f'{self.player} finished {self.description}.'
+        return f'{self.player} finished killing {self.monster}.'
+
+    def _on_levelup(self):
+        super()._on_levelup()
+
+        self.combat_engine.calculate_values()

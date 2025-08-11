@@ -43,7 +43,7 @@ class Controller:
             self.ui.print('Unknown command.')
 
     def control_activity(self, command: Command):
-        activity: Activity = self.command.action(
+        activity: Activity = command.action(
             self.player, self.ui, command
         )
 
@@ -68,7 +68,7 @@ class Controller:
         time.sleep(Ticks(4))
 
     def control_operation(self, command: Command):
-        operation: Operation = self.command.action(
+        operation: Operation = command.action(
             self.player, self.ui, command
         )
         operation.execute()

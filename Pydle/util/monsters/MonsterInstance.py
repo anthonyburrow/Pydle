@@ -8,7 +8,7 @@ class MonsterInstance:
         MONSTER_REGISTRY.verify(monster_id)
 
         self.monster_id: str = monster_id
-        self.hitpoints: int = self.base.hitpoints
+        self.hitpoints: int = self.base.max_hitpoints
 
     def damage(self, amount: int) -> None:
         self.hitpoints = max(0, self.hitpoints - amount)

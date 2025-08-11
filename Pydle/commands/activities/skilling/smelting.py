@@ -1,9 +1,8 @@
 from ...Activity import (
-    Activity,
     ActivitySetupResult,
-    ActivityMsgType,
     ActivityTickResult
 )
+from ...ProductionActivity import ProductionActivity
 from ....lib.skilling.smithing import SMELTABLES
 from ....lib.skilling.woodcutting import LOGS
 from ....util.items.ItemInstance import ItemInstance
@@ -11,29 +10,18 @@ from ....util.items.ItemParser import ITEM_PARSER
 from ....util.items.ItemRegistry import ITEM_REGISTRY
 from ....util.items.skilling.Smeltable import Smeltable
 from ....util.player.Bank import Bank
-from ....util.structures.LootTable import LootTable
 
 
 fire_effect = 'smithing fire'
 
 
-class SmeltingActivity(Activity):
+class SmeltingActivity(ProductionActivity):
 
     name: str = 'smelt'
     help_info: str = 'Begin smelting ores into bars.'
 
     def __init__(self, *args):
         super().__init__(*args)
-
-        self.smeltable: ItemInstance | None = self.command.get_item_instance()
-        self.required_items: list[ItemInstance] = [
-            ITEM_PARSER.get_instance(item_name, quantity)
-            for item_name, quantity in self.smeltable.items_required.items()
-        ]
-
-        self.loot_table: LootTable = None
-
-        self.description: str = 'smelting'
 
     @classmethod
     def usage(cls) -> str:
@@ -51,24 +39,21 @@ class SmeltingActivity(Activity):
 
         return '\n'.join(msg)
 
-    def setup_inherited(self) -> ActivitySetupResult:
-        if self.smeltable is None:
+    def setup(self) -> ActivitySetupResult:
+        result: ActivitySetupResult = super().setup()
+        if not result.success:
+            return result
+
+        if not isinstance(self.produceable.base, Smeltable):
             return ActivitySetupResult(
                 success=False,
-                msg='A valid item was not given.'
+                msg=f'{self.produceable} is not a valid smeltable item.'
             )
 
-        if not isinstance(self.smeltable.base, Smeltable):
+        if not self._has_level_requirement('smithing', self.produceable.level):
             return ActivitySetupResult(
                 success=False,
-                msg=f'{self.smeltable} is not a valid smeltable item.'
-            )
-
-        skill_level: int = self.player.get_level('smithing')
-        if skill_level < self.smeltable.level:
-            return ActivitySetupResult(
-                success=False,
-                msg=f'{self.player} must have Level {self.smeltable.level} Smithing to smelt a {self.smeltable}.'
+                msg=f'{self.player} must have Level {self.produceable.level} Smithing to smelt a {self.produceable}.'
             )
 
         if not self.player.has_effect(fire_effect):
@@ -83,73 +68,53 @@ class SmeltingActivity(Activity):
                     msg=f'{self.player} has no logs to make a fire.'
                 )
 
-        for item_instance in self.items_required:
-            if self.player.has(item_instance):
-                continue
-
-            return ActivitySetupResult(
-                success=False,
-                msg=f'{self.player} does not have {item_instance.quantity}x {item_instance}.'
-            )
-
-        self._setup_loot_table()
-
         return ActivitySetupResult(success=True)
 
-    def update_inherited(self) -> ActivityTickResult:
-        '''Processing during each tick.'''
-        ticks_per_action = self.smeltable.ticks_per_action
-        if self.tick_count % ticks_per_action:
-            return ActivityTickResult(
-                msg=self.standby_text,
-                msg_type=ActivityMsgType.WAITING,
-            )
+    def begin(self) -> None:
+        super().begin()
 
+    def _perform_action(self) -> ActivityTickResult:
         for item_instance in self.items_required:
-            if self.player.has(item_instance):
-                continue
+            self.player.remove(item_instance)
 
-            return ActivityTickResult(
-                msg=f'{self.player} ran out of {item_instance}.',
-                exit=True,
-            )
+        items: Bank = self.loot_table.roll()
+        xp: float = self.produceable.xp if self.produceable else 0.
+
+        return ActivityTickResult(
+            msg=f'Smelted a {self.produceable}!',
+            items=items,
+            xp={
+                'smithing': xp,
+            },
+        )
+
+    def _recheck(self) -> ActivitySetupResult:
+        result: ActivitySetupResult = super()._recheck()
+        if not result.success:
+            return result
 
         if not self.player.has_effect(fire_effect):
             for item_id in LOGS:
-                item_instance: ItemInstance = \
+                item_instance: ItemInstance | None = \
                     ITEM_PARSER.get_instance_by_id(item_id)
                 if self.player.has(item_instance):
                     self.player.remove(item_instance)
                     self.player.add_effect(fire_effect, item_instance.ticks_per_fire)
                     break
             else:
-                return ActivityTickResult(
+                return ActivitySetupResult(
                     msg=f'{self.player} ran out of logs.',
-                    exit=True,
+                    success=False,
                 )
 
-        for item_instance in self.items_required:
-            self.player.remove(item_instance)
+        return ActivitySetupResult(success=True)
 
-        items: Bank = self.loot_table.roll()
-
-        return ActivityTickResult(
-            msg=f'Smelted a {self.smeltable}!',
-            items=items,
-            xp={
-                'smithing': self.smeltable.xp,
-            },
-        )
-
-    def finish_inherited(self):
-        pass
-
-    def _on_levelup(self):
-        self._setup_loot_table()
+    def finish(self) -> None:
+        super().finish()
 
     @property
     def startup_text(self) -> str:
-        return f'{self.player} is now smelting a {self.smeltable}.'
+        return f'{self.player} is now smelting a {self.produceable}.'
 
     @property
     def standby_text(self) -> str:
@@ -157,12 +122,12 @@ class SmeltingActivity(Activity):
 
     @property
     def finish_text(self) -> str:
-        return f'{self.player} finished {self.description}.'
+        return f'{self.player} finished smelting.'
 
     def _setup_loot_table(self):
         self.loot_table = (
-            LootTable()
-            .every(self.smeltable)
+            self.loot_table
+            .every(self.produceable)
         )
 
         # Add more stuff (pets, etc)

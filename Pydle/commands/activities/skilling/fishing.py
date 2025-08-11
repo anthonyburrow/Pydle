@@ -1,9 +1,9 @@
 from ...Activity import (
-    Activity,
     ActivitySetupResult,
     ActivityMsgType,
     ActivityTickResult
 )
+from ...GatheringActivity import GatheringActivity
 from ....lib.areas import AREAS
 from ....lib.skilling.fishing import FISH
 from ....util.items.ItemInstance import ItemInstance
@@ -12,23 +12,15 @@ from ....util.items.skilling.Fish import Fish
 from ....util.player.Bank import Bank
 from ....util.player.ToolSlot import ToolSlot
 from ....util.structures.Area import Area
-from ....util.structures.LootTable import LootTable
 
 
-class FishingActivity(Activity):
+class FishingActivity(GatheringActivity):
 
     name: str = 'fish'
     help_info: str = 'Begin fishing for fish.'
 
     def __init__(self, *args):
         super().__init__(*args)
-
-        self.fish: ItemInstance | None = self.command.get_item_instance()
-
-        self.fishing_rod: ItemInstance | None = self.player.get_tool(ToolSlot.FISHING_ROD)
-        self.loot_table: LootTable = None
-
-        self.description: str = 'fishing'
 
     @classmethod
     def usage(cls) -> str:
@@ -46,52 +38,46 @@ class FishingActivity(Activity):
 
         return '\n'.join(msg)
 
-    def setup_inherited(self) -> ActivitySetupResult:
-        if self.fish is None:
+    @property
+    def tool(self) -> ItemInstance | None:
+        return self.player.get_tool(ToolSlot.FISHING_ROD)
+
+    def setup(self) -> ActivitySetupResult:
+        result: ActivitySetupResult = super().setup()
+        if not result.success:
+            return result
+
+        if not isinstance(self.gatherable.base, Fish):
             return ActivitySetupResult(
                 success=False,
-                msg='A valid item was not given.'
+                msg=f'{self.gatherable} is not a valid fish.'
             )
 
-        if not isinstance(self.fish.base, Fish):
+        if not self._has_level_requirement('fishing', self.gatherable.level):
             return ActivitySetupResult(
                 success=False,
-                msg=f'{self.fish} is not a valid fish.'
-            )
-
-        skill_level: int = self.player.get_level('fishing')
-        if skill_level < self.fish.level:
-            return ActivitySetupResult(
-                success=False,
-                msg=f'You must have Level {self.fish.level} Fishing to fish {self.fish}.'
+                msg=f'You must have Level {self.gatherable.level} Fishing to fish {self.gatherable}.'
             )
 
         area: Area = AREAS[self.player.area]
-        if not area.contains_fish(self.fish):
+        if not area.contains_fish(self.gatherable):
             return ActivitySetupResult(
                 success=False,
-                msg=f'{area} does not have {self.fish} anywhere.'
+                msg=f'{area} does not have {self.gatherable} anywhere.'
             )
 
-        if not self.fishing_rod:
+        if not self.tool:
             return ActivitySetupResult(
                 success=False,
                 msg=f'{self.player} does not have a fishing rod equipped.'
             )
 
-        self._setup_loot_table()
-
         return ActivitySetupResult(success=True)
 
-    def update_inherited(self) -> ActivityTickResult:
-        '''Processing during each tick.'''
-        ticks_per_use = self.fishing_rod.ticks_per_use
-        if self.tick_count % ticks_per_use:
-            return ActivityTickResult(
-                msg=self.standby_text,
-                msg_type=ActivityMsgType.WAITING,
-            )
+    def begin(self) -> None:
+        super().begin()
 
+    def _perform_action(self) -> ActivityTickResult:
         items: Bank = self.loot_table.roll()
         if not items:
             return ActivityTickResult(
@@ -103,19 +89,23 @@ class FishingActivity(Activity):
             msg=f'Fished {items.list_concise()}!',
             items=items,
             xp={
-                'fishing': self.fish.xp,
+                'fishing': self.gatherable.xp,
             },
         )
 
-    def finish_inherited(self):
-        pass
+    def _recheck(self) -> ActivitySetupResult:
+        result: ActivitySetupResult = super()._recheck()
+        if not result.success:
+            return result
 
-    def _on_levelup(self):
-        self._setup_loot_table()
+        return ActivitySetupResult(success=True)
+
+    def finish(self) -> None:
+        super().finish()
 
     @property
     def startup_text(self) -> str:
-        return f'{self.player} is now fishing {self.fish}.'
+        return f'{self.player} is now fishing {self.gatherable}.'
 
     @property
     def standby_text(self) -> str:
@@ -123,20 +113,22 @@ class FishingActivity(Activity):
 
     @property
     def finish_text(self) -> str:
-        return f'{self.player} finished {self.description}.'
+        return f'{self.player} finished fishing.'
 
     def _setup_loot_table(self):
+        super()._setup_loot_table()
+
         fishing_args = {
             'level': self.player.get_level('fishing'),
-            'tool': self.fishing_rod,
+            'tool': self.tool,
         }
-        prob_success = self.fish.prob_success(**fishing_args)
+        prob_success = self.gatherable.prob_success(**fishing_args)
 
-        self.fish.set_quantity(self.fish.n_per_gather)
+        self.gatherable.set_quantity(self.gatherable.n_per_gather)
 
         self.loot_table = (
-            LootTable()
-            .tertiary(self.fish, prob_success)
+            self.loot_table
+            .tertiary(self.gatherable, prob_success)
         )
 
         # Add more stuff (pets, etc)

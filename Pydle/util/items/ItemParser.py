@@ -1,6 +1,7 @@
 from .Item import Item
 from .ItemInstance import ItemInstance
 from .ItemRegistry import ItemRegistry, ITEM_REGISTRY
+from .Quality import Quality
 
 
 class ItemParser:
@@ -8,7 +9,7 @@ class ItemParser:
     def __init__(self, item_registry: ItemRegistry):
         self._item_registry: ItemRegistry = item_registry
 
-        self._name_map: dict[str, dict] = {}
+        self._name_map: dict[str, dict[str, str | int | Quality]] = {}
         self._build_lookup_map()
 
     def _build_lookup_map(self) -> None:
@@ -28,12 +29,13 @@ class ItemParser:
                 }
 
     def get_base(self, item_name: str) -> Item | None:
-        item_id: str = self.get_id_by_name(item_name)
+        item_id: str | None = self.get_id_by_name(item_name)
 
-        return ITEM_REGISTRY[item_id]
+        return ITEM_REGISTRY.get(item_id)
 
     def get_instance(self, item_name: str, quantity: int = 1) -> ItemInstance | None:
-        instance_kwargs: dict = self._name_map.get(item_name.lower())
+        instance_kwargs: dict[str, str | Quality | int] | None = \
+            self._name_map.get(item_name.lower())
 
         if not instance_kwargs:
             return None
@@ -47,7 +49,8 @@ class ItemParser:
         return ItemInstance(item_id=item_id)
 
     def get_id_by_name(self, item_name: str) -> str | None:
-        instance_kwargs: dict = self._name_map.get(item_name.lower())
+        instance_kwargs: dict[str, str | Quality | int] | None = \
+            self._name_map.get(item_name.lower())
 
         if not instance_kwargs:
             return None

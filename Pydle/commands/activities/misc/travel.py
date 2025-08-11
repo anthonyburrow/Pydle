@@ -16,19 +16,16 @@ class TravelingActivity(Activity):
     def __init__(self, *args):
         super().__init__(*args)
 
-        if self.argument in AREAS:
-            self.area: Area = AREAS[self.command.argument]
-            self.area_key: str = self.command.argument
-        else:
-            self.area: Area = None
+        self.area: Area | None = AREAS.get(self.command.argument)
+        self.area_key: str = self.command.argument
 
-        self.description: str = 'traveling'
+        if self.area is None:
+            return
 
-        if self.area is not None:
-            current_area = AREAS[self.player.area]
-            self.travel_ticks = self.area.travel_ticks(
-                current_area.coordinates
-            )
+        current_area = AREAS[self.player.area]
+        self.travel_ticks = self.area.travel_ticks(
+            current_area.coordinates
+        )
 
     @classmethod
     def usage(cls) -> str:
@@ -46,7 +43,11 @@ class TravelingActivity(Activity):
 
         return '\n'.join(msg)
 
-    def setup_inherited(self) -> ActivitySetupResult:
+    def setup(self) -> ActivitySetupResult:
+        result: ActivitySetupResult = super().setup()
+        if not result.success:
+            return result
+
         if self.area is None:
             return ActivitySetupResult(
                 success=False,
@@ -70,23 +71,34 @@ class TravelingActivity(Activity):
 
         return ActivitySetupResult(success=True)
 
-    def update_inherited(self) -> ActivityTickResult:
-        '''Processing during each tick.'''
-        if self.tick_count < self.travel_ticks:
-            return ActivityTickResult(
-                msg=self.standby_text,
-                msg_type=ActivityMsgType.WAITING,
-            )
+    def begin(self) -> None:
+        super().begin()
 
-        self.player.set_area(self.area_key)
+    def _process_tick(self) -> ActivityTickResult:
+        # Do more with agility (?) xp
 
         return ActivityTickResult(
-            msg=f'{self.player} arrived at {self.area}.',
-            exit=True,
+            msg=self.standby_text,
+            msg_type=ActivityMsgType.WAITING,
         )
 
-    def finish_inherited(self):
-        pass
+    def _recheck(self) -> ActivitySetupResult:
+        result: ActivitySetupResult = super()._recheck()
+        if not result.success:
+            return result
+
+        if self.tick_count >= self.travel_ticks:
+            return ActivitySetupResult(
+                success=False,
+                msg='',
+            )
+
+        return ActivitySetupResult(success=True)
+
+    def finish(self) -> None:
+        super().finish()
+
+        self.player.set_area(self.area_key)
 
     @property
     def startup_text(self) -> str:
@@ -98,4 +110,4 @@ class TravelingActivity(Activity):
 
     @property
     def finish_text(self) -> str:
-        return ''
+        return f'{self.player} has arrived at {self.area}.'

@@ -1,9 +1,9 @@
 from ...Activity import (
-    Activity,
     ActivitySetupResult,
     ActivityMsgType,
     ActivityTickResult
 )
+from ...GatheringActivity import GatheringActivity
 from ....lib.areas import AREAS
 from ....lib.skilling.mining import ORES
 from ....util.items.ItemInstance import ItemInstance
@@ -12,23 +12,15 @@ from ....util.items.skilling.Ore import Ore
 from ....util.player.Bank import Bank
 from ....util.player.ToolSlot import ToolSlot
 from ....util.structures.Area import Area
-from ....util.structures.LootTable import LootTable
 
 
-class MiningActivity(Activity):
+class MiningActivity(GatheringActivity):
 
     name: str = 'mine'
     help_info: str = 'Begin mining for ores.'
 
     def __init__(self, *args):
         super().__init__(*args)
-
-        self.ore: ItemInstance | None = self.command.get_item_instance()
-
-        self.pickaxe: ItemInstance | None = self.player.get_tool(ToolSlot.PICKAXE)
-        self.loot_table: LootTable = None
-
-        self.description: str = 'mining'
 
     @classmethod
     def usage(cls) -> str:
@@ -46,52 +38,46 @@ class MiningActivity(Activity):
 
         return '\n'.join(msg)
 
-    def setup_inherited(self) -> ActivitySetupResult:
-        if self.ore is None:
+    @property
+    def tool(self) -> ItemInstance | None:
+        return self.player.get_tool(ToolSlot.PICKAXE)
+
+    def setup(self) -> ActivitySetupResult:
+        result: ActivitySetupResult = super().setup()
+        if not result.success:
+            return result
+
+        if not isinstance(self.gatherable.base, Ore):
             return ActivitySetupResult(
                 success=False,
-                msg='A valid ore was not given.'
+                msg=f'{self.gatherable} is not a valid ore.'
             )
 
-        if not isinstance(self.ore.base, Ore):
+        if not self._has_level_requirement('mining', self.gatherable.level):
             return ActivitySetupResult(
                 success=False,
-                msg=f'{self.ore} is not a valid ore.'
-            )
-
-        skill_level: int = self.player.get_level('mining')
-        if skill_level < self.ore.level:
-            return ActivitySetupResult(
-                success=False,
-                msg=f'You must have Level {self.ore.level} Mining to mine {self.ore}.'
+                msg=f'You must have Level {self.gatherable.level} Mining to mine {self.gatherable}.'
             )
 
         area: Area = AREAS[self.player.area]
-        if not area.contains_ore(self.ore):
+        if not area.contains_ore(self.gatherable):
             return ActivitySetupResult(
                 success=False,
-                msg=f'{area} does not have {self.ore} anywhere.'
+                msg=f'{area} does not have {self.gatherable} anywhere.'
             )
 
-        if not self.pickaxe:
+        if not self.tool:
             return ActivitySetupResult(
                 success=False,
                 msg=f'{self.player} does not have a pickaxe equipped.'
             )
 
-        self._setup_loot_table()
-
         return ActivitySetupResult(success=True)
 
-    def update_inherited(self) -> ActivityTickResult:
-        '''Processing during each tick.'''
-        ticks_per_use = self.pickaxe.ticks_per_use
-        if self.tick_count % ticks_per_use:
-            return ActivityTickResult(
-                msg=self.standby_text,
-                msg_type=ActivityMsgType.WAITING,
-            )
+    def begin(self) -> None:
+        super().begin()
 
+    def _perform_action(self) -> ActivityTickResult:
         items: Bank = self.loot_table.roll()
         if not items:
             return ActivityTickResult(
@@ -103,19 +89,23 @@ class MiningActivity(Activity):
             msg=f'Mined {items.list_concise()}!',
             items=items,
             xp={
-                'mining': self.ore.xp,
+                'mining': self.gatherable.xp,
             },
         )
 
-    def finish_inherited(self):
-        pass
+    def _recheck(self) -> ActivitySetupResult:
+        result: ActivitySetupResult = super()._recheck()
+        if not result.success:
+            return result
 
-    def _on_levelup(self):
-        self._setup_loot_table()
+        return ActivitySetupResult(success=True)
+
+    def finish(self) -> None:
+        super().finish()
 
     @property
     def startup_text(self) -> str:
-        return f'{self.player} is now mining {self.ore}.'
+        return f'{self.player} is now mining {self.gatherable}.'
 
     @property
     def standby_text(self) -> str:
@@ -123,20 +113,20 @@ class MiningActivity(Activity):
 
     @property
     def finish_text(self) -> str:
-        return f'{self.player} finished {self.description}.'
+        return f'{self.player} finished mining.'
 
     def _setup_loot_table(self):
         mining_args = {
             'level': self.player.get_level('mining'),
-            'tool': self.pickaxe,
+            'tool': self.tool,
         }
-        prob_success = self.ore.prob_success(**mining_args)
+        prob_success = self.gatherable.prob_success(**mining_args)
 
-        self.ore.set_quantity(self.ore.n_per_gather)
+        self.gatherable.set_quantity(self.gatherable.n_per_gather)
 
         self.loot_table = (
-            LootTable()
-            .tertiary(self.ore, prob_success)
+            self.loot_table
+            .tertiary(self.gatherable, prob_success)
         )
 
         # Add more stuff (pets, etc)

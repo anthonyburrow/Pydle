@@ -1,9 +1,9 @@
 from ...Activity import (
-    Activity,
     ActivitySetupResult,
     ActivityMsgType,
     ActivityTickResult
 )
+from ...GatheringActivity import GatheringActivity
 from ....lib.areas import AREAS
 from ....lib.skilling.woodcutting import LOGS
 from ....util.items.ItemInstance import ItemInstance
@@ -12,23 +12,15 @@ from ....util.items.skilling.Log import Log
 from ....util.player.Bank import Bank
 from ....util.player.ToolSlot import ToolSlot
 from ....util.structures.Area import Area
-from ....util.structures.LootTable import LootTable
 
 
-class WoodcuttingActivity(Activity):
+class WoodcuttingActivity(GatheringActivity):
 
     name: str = 'chop'
     help_info: str = 'Begin chopping wood.'
 
     def __init__(self, *args):
         super().__init__(*args)
-
-        self.log: ItemInstance | None = self.command.get_item_instance()
-
-        self.axe: ItemInstance = self.player.get_tool(ToolSlot.AXE)
-        self.loot_table: LootTable = None
-
-        self.description: str = 'woodcutting'
 
     @classmethod
     def usage(cls) -> str:
@@ -46,52 +38,46 @@ class WoodcuttingActivity(Activity):
 
         return '\n'.join(msg)
 
-    def setup_inherited(self) -> ActivitySetupResult:
-        if self.log is None:
+    @property
+    def tool(self) -> ItemInstance | None:
+        return self.player.get_tool(ToolSlot.AXE)
+
+    def setup(self) -> ActivitySetupResult:
+        result: ActivitySetupResult = super().setup()
+        if not result.success:
+            return result
+
+        if not isinstance(self.gatherable.base, Log):
             return ActivitySetupResult(
                 success=False,
-                msg='A valid log was not given.'
+                msg=f'{self.gatherable} is not a valid log.'
             )
 
-        if not isinstance(self.log.base, Log):
+        if not self._has_level_requirement('woodcutting', self.gatherable.level):
             return ActivitySetupResult(
                 success=False,
-                msg=f'{self.log} is not a valid log.'
-            )
-
-        skill_level: int = self.player.get_level('woodcutting')
-        if skill_level < self.log.level:
-            return ActivitySetupResult(
-                success=False,
-                msg=f'You must have Level {self.log.level} Woodcutting to chop {self.log}.'
+                msg=f'You must have Level {self.gatherable.level} Woodcutting to chop {self.gatherable}.'
             )
 
         area: Area = AREAS[self.player.area]
-        if not area.contains_log(self.log):
+        if not area.contains_log(self.gatherable):
             return ActivitySetupResult(
                 success=False,
-                msg=f'{area} does not have {self.log} anywhere.'
+                msg=f'{area} does not have {self.gatherable} anywhere.'
             )
 
-        if not self.axe:
+        if not self.tool:
             return ActivitySetupResult(
                 success=False,
                 msg=f'{self.player} does not have an axe.'
             )
 
-        self._setup_loot_table()
-
         return ActivitySetupResult(success=True)
 
-    def update_inherited(self) -> ActivityTickResult:
-        '''Processing during each tick.'''
-        ticks_per_use = self.axe.ticks_per_use
-        if self.tick_count % ticks_per_use:
-            return ActivityTickResult(
-                msg=self.standby_text,
-                msg_type=ActivityMsgType.WAITING,
-            )
+    def begin(self) -> None:
+        super().begin()
 
+    def _perform_action(self) -> ActivityTickResult:
         items: Bank = self.loot_table.roll()
         if not items:
             return ActivityTickResult(
@@ -107,15 +93,19 @@ class WoodcuttingActivity(Activity):
             },
         )
 
-    def finish_inherited(self):
-        pass
+    def _recheck(self) -> ActivitySetupResult:
+        result: ActivitySetupResult = super()._recheck()
+        if not result.success:
+            return result
 
-    def _on_levelup(self):
-        self._setup_loot_table()
+        return ActivitySetupResult(success=True)
+
+    def finish(self) -> None:
+        super().finish()
 
     @property
     def startup_text(self) -> str:
-        return f'{self.player} is now chopping {self.log}.'
+        return f'{self.player} is now chopping {self.gatherable}.'
 
     @property
     def standby_text(self) -> str:
@@ -123,20 +113,20 @@ class WoodcuttingActivity(Activity):
 
     @property
     def finish_text(self) -> str:
-        return f'{self.player} finished {self.description}.'
+        return f'{self.player} finished chopping.'
 
     def _setup_loot_table(self):
         woodcutting_args = {
             'level': self.player.get_level('woodcutting'),
-            'tool': self.axe,
+            'tool': self.tool,
         }
-        prob_success = self.log.prob_success(**woodcutting_args)
+        prob_success = self.gatherable.prob_success(**woodcutting_args)
 
-        self.log.set_quantity(self.log.n_per_gather)
+        self.gatherable.set_quantity(self.gatherable.n_per_gather)
 
         self.loot_table = (
-            LootTable()
-            .tertiary(self.log, prob_success)
+            self.loot_table
+            .tertiary(self.gatherable, prob_success)
         )
 
         # Add more stuff (pets, etc)

@@ -1,4 +1,5 @@
 from colorama import Fore, Style
+from typing import Any
 
 
 BLACK = Fore.BLACK
@@ -12,7 +13,7 @@ WHITE = Fore.WHITE
 END = Style.RESET_ALL
 
 
-def color(text: str, color: str, justify: int = 0, just_type: str = 'right'):
+def color(text: Any, color: str, justify: int = 0, just_type: str = 'right') -> str:
     out_text = f'{color}{text}{END}'
 
     if not justify:
@@ -29,7 +30,7 @@ def color(text: str, color: str, justify: int = 0, just_type: str = 'right'):
 
 
 # THEME:
-color_theme = {
+color_theme: dict[str, str] = {
     # UI elements
     'UI_1': MAGENTA,
     # Player

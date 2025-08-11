@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Type
 
 from .CommandRegistry import COMMAND_REGISTRY
 from .CommandType import CommandType
@@ -20,25 +20,32 @@ class Command:
     def __init__(self, raw: str):
         self.raw: str = raw
 
-        self.command: str = None
+        self.command: str | None = None
         self.subcommand: str | None = None
-        self.quantity: int | None = None
+        self.quantity: int = 1
         self.argument: str | None = None
 
-        self.type: CommandType = None
-        self.action: CommandBase = None
+        self.type: CommandType = CommandType.UNKNOWN
+        self.action: Type[CommandBase] | None = None
 
         self._parse()
         self._set_info()
 
     def get_item_instance(self) -> ItemInstance | None:
+        if not self.argument:
+            return None
         return ITEM_PARSER.get_instance(self.argument, self.quantity)
 
     def get_monster_instance(self) -> MonsterInstance | None:
+        if not self.argument:
+            return None
         return MONSTER_PARSER.get_instance(self.argument)
 
     def _parse(self) -> None:
-        tokens = self.raw.strip().lower().split()
+        tokens: list[str] = self.raw.strip().lower().split()
+
+        if not tokens:
+            return
 
         self.command = tokens.pop(0)
         self.action = COMMAND_REGISTRY.get(self.command)
@@ -46,8 +53,7 @@ class Command:
         if not tokens:
             return
 
-        subcommands: list[str] = self.action.subcommands
-
+        subcommands: list[str] = self.action.subcommands if self.action else []
         if tokens[0] in subcommands:
             self.subcommand = tokens.pop(0)
 
@@ -72,5 +78,5 @@ class Command:
             self.type = CommandType.OPERATION
         elif self.command == CMD_EXIT:
             self.type = CommandType.EXIT
-        elif self.command:
+        else:
             self.type = CommandType.UNKNOWN

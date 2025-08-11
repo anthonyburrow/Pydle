@@ -3,6 +3,7 @@ from typing import Type, TYPE_CHECKING
 
 from .CommandType import CommandType
 
+
 if TYPE_CHECKING:
     from .Activity import Activity
     from .CommandBase import CommandBase
@@ -17,7 +18,7 @@ class CommandRegistry:
 
         self.aliases: dict[str, str] = {}
 
-    def register(self, command_cls: Type[CommandBase], command_type: CommandType):
+    def register(self, command_cls: Type[CommandBase], command_type: CommandType) -> None:
         if command_type == CommandType.ACTIVITY:
             self.activities[command_cls.name] = command_cls
         elif command_type == CommandType.OPERATION:
@@ -34,7 +35,7 @@ class CommandRegistry:
                 )
             self.aliases[alias] = command_cls.name
 
-    def get(self, name) -> CommandBase | None:
+    def get(self, name: str) -> Type[CommandBase] | None:
         if name in self.aliases:
             name = self.aliases[name]
 

@@ -1,8 +1,12 @@
+from __future__ import annotations
+from typing import TYPE_CHECKING
 from abc import ABC, abstractmethod
 
-from .Command import Command
 from ..util.structures.UserInterface import UserInterface
 from ..util.player.Player import Player
+
+if TYPE_CHECKING:
+    from .Command import Command
 
 
 class CommandBase(ABC):

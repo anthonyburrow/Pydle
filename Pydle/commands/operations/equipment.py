@@ -51,5 +51,7 @@ class EquipmentOperation(Operation):
             result: Result = self.player.equip(item_instance)
         elif self.command.subcommand == 'unequip':
             result: Result = self.player.unequip(item_instance)
+        else:
+            return
 
         self.ui.print(result.msg)

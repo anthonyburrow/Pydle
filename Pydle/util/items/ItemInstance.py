@@ -49,7 +49,7 @@ class ItemInstance:
         return BankKey(self.item_id, self.quality)
 
     @staticmethod
-    def get_name(base_name: str, quality: Quality) -> str:
+    def get_name(base_name: str, quality: Quality | None) -> str:
         if not quality:
             return base_name
 
@@ -70,6 +70,8 @@ class ItemInstance:
             theme: str = 'quality_good'
         elif self.quality == Quality.MASTER:
             theme: str = 'quality_master'
+        else:
+            theme: str = 'UI_1'
 
         return color(self.name.title(), color_theme[theme])
 

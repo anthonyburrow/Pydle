@@ -24,12 +24,8 @@ class ForagingActivity(Activity):
         super().__init__(*args)
 
         self.area: Area = AREAS[self.player.area]
-
-        self.description: str = 'foraging'
-
         self.secateurs: ItemInstance = self.player.get_tool(ToolSlot.SECATEURS)
-        self.loot_table: LootTable = None
-
+        self.loot_table: LootTable = LootTable()
         self._xp_table: dict[BankKey, float] = {}
 
     @classmethod
@@ -41,25 +37,27 @@ class ForagingActivity(Activity):
 
         return '\n'.join(msg)
 
-    def setup_inherited(self) -> ActivitySetupResult:
+    def setup(self) -> ActivitySetupResult:
+        result: ActivitySetupResult = super().setup()
+        if not result.success:
+            return result
+
         if not self.area.collectables:
             return ActivitySetupResult(
                 success=False,
                 msg=f'There is nothing to be found in {self.area}.'
             )
 
-        skill_level: int = self.player.get_level('foraging')
-
         for collectable_name in self.area.collectables:
             item: Item = ITEM_PARSER.get_base(collectable_name)
-            if skill_level >= item.level:
+            if self._has_level_requirement('foraging', item.level):
                 break
         else:
             return ActivitySetupResult(
                 success=False,
                 msg=(
                     f'{self.player} does not have a high enough Foraging level'
-                    f'to find items in this area.'
+                    f'to find any items in this area.'
                 )
             )
 
@@ -69,19 +67,24 @@ class ForagingActivity(Activity):
                 msg=f'{self.player} does not have any secateurs.'
             )
 
-        self._setup_loot_table()
-
         return ActivitySetupResult(success=True)
 
-    def update_inherited(self) -> ActivityTickResult:
-        '''Processing during each tick.'''
+    def begin(self) -> None:
+        self._setup_loot_table()
+
+        super().begin()
+
+    def _process_tick(self) -> ActivityTickResult:
         ticks_per_use = self.secateurs.ticks_per_use
         if self.tick_count % ticks_per_use:
             return ActivityTickResult(
                 msg=self.standby_text,
                 msg_type=ActivityMsgType.WAITING,
             )
+        
+        return self._perform_action()
 
+    def _perform_action(self) -> ActivityTickResult:
         items: Bank = self.loot_table.roll()
         if not items:
             return ActivityTickResult(
@@ -102,10 +105,12 @@ class ForagingActivity(Activity):
             },
         )
 
-    def finish_inherited(self):
-        pass
+    def finish(self) -> None:
+        super().finish()
 
     def _on_levelup(self):
+        super()._on_levelup()
+
         self._setup_loot_table()
 
     @property
@@ -118,15 +123,13 @@ class ForagingActivity(Activity):
 
     @property
     def finish_text(self) -> str:
-        return f'{self.player} finished {self.description}.'
+        return f'{self.player} finished foraging.'
 
     def _setup_loot_table(self):
         foraging_args = {
             'level': self.player.get_level('foraging'),
             'tool': self.secateurs,
         }
-
-        self.loot_table = LootTable()
 
         empty_weight: float = 1.
         total_area_weight: int = sum(self.area.collectables.values())
@@ -135,7 +138,7 @@ class ForagingActivity(Activity):
             item_instance: ItemInstance = ITEM_PARSER.get_instance(collectable_name)
             item_instance.set_quantity(item_instance.n_per_gather)
 
-            if self.player.get_level('foraging') < item_instance.level:
+            if not self._has_level_requirement('foraging', item_instance.level):
                 continue
 
             prob_success = item_instance.prob_success(**foraging_args)

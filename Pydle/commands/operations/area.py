@@ -23,13 +23,13 @@ class AreaOperation(Operation):
 
         return '\n'.join(msg)
 
-    def execute(self):
+    def execute(self) -> None:
         if not self.command.subcommand and not self.command.argument:
             current_area = AREAS[self.player.area]
             return self.ui.print(f'{self.player} is currently at {current_area}.')
 
         if self.command.subcommand == 'list':
-            msg = []
+            msg: list[str] = []
             msg.append('Available areas:')
             for area in AREAS.values():
                 msg.append(f'- {area}')

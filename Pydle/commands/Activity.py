@@ -1,18 +1,14 @@
-from abc import abstractmethod
+from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from enum import Enum
+from inspect import isabstract
 
 from .CommandBase import CommandBase
 from .CommandRegistry import COMMAND_REGISTRY
 from .CommandType import CommandType
 from ..util.colors import color, color_theme
 from ..util.player.Bank import Bank
-
-
-@dataclass
-class ActivitySetupResult:
-    success: bool = True
-    msg: str = ''
+from ..util.player.Skill import Skill
 
 
 class ActivityMsgType(Enum):
@@ -21,34 +17,37 @@ class ActivityMsgType(Enum):
 
 
 @dataclass
+class ActivitySetupResult:
+    success: bool = True
+    msg: str = ''
+
+
+@dataclass
 class ActivityTickResult:
     msg: str = ''
     msg_type: ActivityMsgType = ActivityMsgType.RESULT
-    exit: bool = False
-    #
-    items: Bank = None
-    xp: dict = None
+    items: Bank | None = None
+    xp: dict | None = None
 
 
-class Activity(CommandBase):
+class Activity(CommandBase, ABC):
 
     def __init_subclass__(cls, **kwargs):
         super().__init_subclass__(**kwargs)
 
-        COMMAND_REGISTRY.register(cls, CommandType.ACTIVITY)
+        if not isabstract(cls):
+            COMMAND_REGISTRY.register(cls, CommandType.ACTIVITY)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self.tick_count: int = 0
+        self.tick_count: int = 1
         self.is_active: bool = False
         self._previous_msg_type = ActivityMsgType.RESULT
 
-    def setup(self) -> dict:
+    def setup(self) -> ActivitySetupResult:
         '''Check to see if requirements are met to perform activity.'''
-        result_setup = self.setup_inherited()
-
-        return result_setup
+        return ActivitySetupResult(success=True)
 
     def begin(self) -> None:
         self.is_active = True
@@ -56,9 +55,12 @@ class Activity(CommandBase):
 
         self.ui.print(self.startup_text)
 
+    @abstractmethod
+    def _process_tick(self) -> ActivityTickResult:
+        pass
+
     def update(self) -> None:
-        '''Processing during the tick.'''
-        result_tick: ActivityTickResult = self.update_inherited()
+        result_tick: ActivityTickResult = self._process_tick()
 
         if (
             result_tick.msg_type == ActivityMsgType.RESULT or
@@ -86,42 +88,49 @@ class Activity(CommandBase):
         self.player.update_effects()
 
         # End of tick
-        if result_tick.exit or not self.ui.activity_running:
-            self.is_active = False
-
-        if not result_tick.exit and not self.tick_count % 50:
+        if not self.tick_count % 50:
             self.player.save()
+
+        result_recheck: ActivitySetupResult = self._recheck()
+        if not result_recheck.success or not self.ui.activity_running:
+            self.is_active = False
 
         self.tick_count += 1
 
+    def _recheck(self) -> ActivitySetupResult:
+        return ActivitySetupResult(success=True)
+
     def finish(self) -> None:
         self.ui.print(self.finish_text)
-        self.ui.print(f'{self.player} is returning from {self.description}...')
 
         self.ui.stop_keyboard_listener()
 
-        self.finish_inherited()
-
+    @property
     @abstractmethod
-    def setup_inherited(self) -> ActivitySetupResult:
-        pass
+    def startup_text(self) -> str:
+        return ''
 
+    @property
     @abstractmethod
-    def update_inherited(self) -> ActivityTickResult:
-        pass
+    def standby_text(self) -> str:
+        return ''
 
+    @property
     @abstractmethod
-    def finish_inherited(self):
-        pass
+    def finish_text(self) -> str:
+        return ''
 
-    def _on_levelup(self):
+    def _has_level_requirement(self, skill_key: str, level_req: int) -> bool:
+        return self.player.get_level(skill_key) >= level_req
+
+    def _on_levelup(self) -> None:
         pass
 
     def _level_up_msg(self, skill_key: str) -> None:
-        skill = self.player.get_skill(skill_key)
+        skill: Skill = self.player.get_skill(skill_key)
 
-        level = skill.level
-        if level >= 99:
+        level: str = str(skill.level)
+        if skill.level >= 99:
             level = color(level, color_theme['skill_lvl99'])
 
         self.ui.print(f"{self.player}'s {skill} level has increased to Level {level}!")
