@@ -4,6 +4,7 @@ from pathlib import Path
 from .util.player.Player import Player
 from .util.structures.Controller import Controller
 from .util.structures.UserInterface import UserInterface
+from .commands.CommandRegistry import COMMAND_REGISTRY
 
 
 APP_NAME = 'Pydle'
@@ -16,6 +17,8 @@ def main():
 
     character_file: str = str(path_save / 'player.json')
     player: Player = Player(save_file=character_file)
+
+    COMMAND_REGISTRY.load_commands()
 
     # Setup UI
     ui: UserInterface = UserInterface()

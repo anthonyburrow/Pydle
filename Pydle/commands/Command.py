@@ -12,9 +12,6 @@ if TYPE_CHECKING:
     from .CommandBase import CommandBase
 
 
-CMD_EXIT: str = 'exit'
-
-
 class Command:
 
     def __init__(self, raw: str):
@@ -29,7 +26,6 @@ class Command:
         self.action: Type[CommandBase] | None = None
 
         self._parse()
-        self._set_info()
 
     def get_item_instance(self) -> ItemInstance | None:
         if not self.argument:
@@ -49,6 +45,7 @@ class Command:
 
         self.command = tokens.pop(0)
         self.action = COMMAND_REGISTRY.get(self.command)
+        self.type = COMMAND_REGISTRY.get_type(self.command)
 
         if not tokens:
             return
@@ -70,13 +67,3 @@ class Command:
             return
 
         self.argument = ' '.join(tokens)
-
-    def _set_info(self):
-        if self.command in COMMAND_REGISTRY.activities:
-            self.type = CommandType.ACTIVITY
-        elif self.command in COMMAND_REGISTRY.operations:
-            self.type = CommandType.OPERATION
-        elif self.command == CMD_EXIT:
-            self.type = CommandType.EXIT
-        else:
-            self.type = CommandType.UNKNOWN
