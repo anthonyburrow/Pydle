@@ -67,3 +67,6 @@ class Command:
             return
 
         self.argument = ' '.join(tokens)
+
+    def __bool__(self) -> bool:
+        return bool(self.command)

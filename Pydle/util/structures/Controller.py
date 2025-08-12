@@ -33,6 +33,9 @@ class Controller:
         raw_in: str = self.ui.get_input()
         command: Command = Command(raw_in)
 
+        if not command:
+            return
+
         if command.type == CommandType.ACTIVITY:
             self.control_activity(command)
         elif command.type == CommandType.OPERATION:

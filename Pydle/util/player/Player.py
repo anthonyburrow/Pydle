@@ -139,6 +139,9 @@ class Player:
     def unequip(self, *args, **kwargs) -> Result:
         return self._equipment.unequip(*args, **kwargs)
 
+    def get_equipment(self, *args, **kwargs) -> ItemInstance | None:
+        return self._equipment.get(*args, **kwargs)
+
     @property
     def equipment(self) -> Equipment:
         return self._equipment

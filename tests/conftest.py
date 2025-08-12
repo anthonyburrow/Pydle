@@ -1,6 +1,7 @@
 # conftest.py
 import pytest
 
+from Pydle.lib.item_sets import NEW_PLAYER_ITEMS
 from Pydle.util.items.ItemParser import ITEM_PARSER
 from Pydle.util.player.Bank import Bank
 from Pydle.util.player.Player import Player
@@ -21,7 +22,9 @@ def sample_bank():
 
 @pytest.fixture
 def test_player():
-    return Player(name='TestPlayer')
+    player: Player = Player(name='TestPlayer')
+    player.remove(NEW_PLAYER_ITEMS)
+    return player
 
 
 @pytest.fixture
