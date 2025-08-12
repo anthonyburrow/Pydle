@@ -46,3 +46,10 @@ save file for this character, which is loaded anytime the game starts again.
 For a list of available commands, use `help` or `?`.
 
 The the CLI and game can be closed with the `exit` command.
+
+If you want to delete your save file and start a new character, run the game
+with:
+
+```
+pydle --new
+```

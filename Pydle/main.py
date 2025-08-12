@@ -29,23 +29,23 @@ def main():
     path_save: Path = Path(user_data_dir(APP_NAME))
     path_save.mkdir(parents=True, exist_ok=True)
 
-    if args.new:
-        ui.print((
-            'Are you sure you want to make a new character? [Y/n]'
-            'This will delete your previous file.'
+    character_file: Path = path_save / 'player.json'
+
+    if args.new and character_file.exists():
+        print((
+            'Are you sure you want to make a new character? '
+            'This will delete your previous file. [y/N]'
         ))
-        answer: str = ui.get_input.lower()
+        answer: str = ui.get_input().lower()
 
-        if answer in ('y', 'yes'):
-            #delete
+        if not answer or answer in ('n', 'no'):
             pass
-        elif answer in ('n', 'no'):
-            pass
+        elif answer in ('y', 'yes'):
+            character_file.unlink()
         else:
-            ui.print('Unknown response')
+            ui.print('Unknown response. Aborting character deletion.')
 
-    character_file: str = str(path_save / 'player.json')
-    player: Player = Player(save_file=character_file)
+    player: Player = Player(save_file=str(character_file))
 
     # Load command metadata
     COMMAND_REGISTRY.load_commands()

@@ -77,8 +77,8 @@ class Tools(dict):
                 self[tool_slot] = None
                 continue
 
-            tool_instance: Tool = Tool.from_dict(instance_dict)
-            self[tool_slot] = tool_instance
+            item_instance: ItemInstance = ItemInstance.from_dict(instance_dict)
+            self[tool_slot] = item_instance
 
         return self
 
