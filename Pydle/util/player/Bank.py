@@ -148,12 +148,13 @@ class Bank(dict):
             return '\n'.join(msg)
 
         for item_instance in self.values():
-            qty_str = color(
+            color_pad: int = len(str(item_instance)) - len(item_instance.name)
+            qty_str: str = color(
                 f'[{item_instance.quantity}]'.rjust(max_qty_length + 2),
                 color_theme['UI_1']
             )
             msg.append(
-                f'* {item_instance:<{max_item_length}}  {qty_str}'
+                f'* {item_instance:<{max_item_length +color_pad}}  {qty_str}'
             )
 
         msg = '\n'.join(msg)
