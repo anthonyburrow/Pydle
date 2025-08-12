@@ -24,7 +24,7 @@ SKILLS = {
 
 class Skills(dict):
 
-    def __init__(self, skills_dict: dict[SkillType, float] = None):
+    def __init__(self, skills_dict: dict[str, float] = None):
         skills_dict = skills_dict or {}
         self.load_from_dict(skills_dict)
 
@@ -42,13 +42,13 @@ class Skills(dict):
 
     def to_dict(self) -> dict[str, float]:
         return {
-            skill_key.name: float(self[skill_key].xp)
-            for skill_key in SKILLS
+            skill_type.name: float(self[skill_type].xp)
+            for skill_type in SKILLS
         }
 
-    def load_from_dict(self, skills_dict: dict[SkillType, float]) -> None:
+    def load_from_dict(self, skills_dict: dict[str, float]) -> None:
         for skill_type, skill_category in SKILLS.items():
-            xp: float = skills_dict.get(skill_type, 0.)
+            xp: float = skills_dict.get(skill_type.name, 0.)
             self[skill_type] = Skill(skill_type, skill_category, xp=xp)
 
     def __str__(self) -> str:

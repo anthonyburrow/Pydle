@@ -29,5 +29,5 @@ class SkillsOperation(Operation):
         try:
             skill_type: SkillType = SkillType.from_string(self.command.argument)
             self.ui.print(self.player.get_skill(skill_type).details())
-        except KeyError:
+        except ValueError:
             self.ui.print(f'{self.command.argument} is not a valid skill.')

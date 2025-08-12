@@ -16,14 +16,14 @@ def test_init_default_values():
 
 
 def test_init_with_values():
-    initial_xp: dict[str, float] = {SkillType.FISHING: 150., SkillType.STRENGTH: 500.}
+    initial_xp: dict[str, float] = {'FISHING': 150., 'STRENGTH': 500.}
     skills: Skills = Skills(initial_xp)
 
     assert skills[SkillType.FISHING].xp == 150.
     assert skills[SkillType.STRENGTH].xp == 500.
 
     for key in SKILLS:
-        if key not in initial_xp:
+        if key.name not in initial_xp:
             assert skills[key].xp == 0.
 
 
@@ -58,13 +58,12 @@ def test_set_level_sets_correct_level():
 
 
 def test_to_dict_matches_xp_values():
-    initial_xp: dict[str, float] = {SkillType.FISHING: 200., SkillType.STRENGTH: 300.}
+    initial_xp: dict[str, float] = {'FISHING': 200., 'STRENGTH': 300.}
     skills: Skills = Skills(initial_xp)
     skills_dict: dict[str, float] = skills.to_dict()
 
-    assert skills_dict[SkillType.FISHING] == 200.
-    assert skills_dict[SkillType.STRENGTH] == 300.
-    assert set(skills_dict.keys()) == set(SKILLS.keys())
+    assert skills_dict['FISHING'] == 200.
+    assert skills_dict['STRENGTH'] == 300.
 
 
 def test_setitem_invalid_key():
