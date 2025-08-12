@@ -28,7 +28,7 @@ class Tools(dict):
 
         tool_slot: ToolSlot = item_instance.tool_slot
 
-        previous_instance: Tool | None = self.get(tool_slot)
+        previous_instance: Tool | None = self[tool_slot]
         if previous_instance:
             self._player.give(previous_instance)
 
@@ -43,7 +43,7 @@ class Tools(dict):
     def unequip(self, item_instance: ItemInstance) -> Result:
         tool_slot: ToolSlot = item_instance.tool_slot
 
-        previous_instance: Tool | None = self.get(tool_slot)
+        previous_instance: Tool | None = self[tool_slot]
         if not previous_instance or previous_instance != item_instance:
             return Result(
                 success=False,

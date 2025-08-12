@@ -30,7 +30,7 @@ class Equipment(dict):
 
         equipment_slot: EquipmentSlot = item_instance.equipment_slot
 
-        previous_instance: ItemInstance | None = self.get(equipment_slot)
+        previous_instance: ItemInstance | None = self[equipment_slot]
         if previous_instance:
             self._player.give(previous_instance)
 
@@ -47,7 +47,7 @@ class Equipment(dict):
     def unequip(self, item_instance: ItemInstance) -> Result:
         equipment_slot: EquipmentSlot = item_instance.equipment_slot
 
-        previous_instance: ItemInstance | None = self.get(equipment_slot)
+        previous_instance: ItemInstance | None = self[equipment_slot]
         if not previous_instance or previous_instance != item_instance:
             return Result(
                 success=False,
@@ -95,7 +95,7 @@ class Equipment(dict):
     def _calculate_stats(self):
         self._stats.reset()
 
-        for equippable_slot, item_instance in self.items():
+        for item_instance in self.values():
             if not item_instance:
                 continue
             self._stats += item_instance.stats
@@ -120,7 +120,7 @@ class Equipment(dict):
             equippable_str = item_instance or '---'
             msg.append(f'{equippable_slot:>{max_type_length}} | {equippable_str}')
 
-        weapon_instance: ItemInstance | None = self.get(EquipmentSlot.WEAPON)
+        weapon_instance: ItemInstance | None = self[EquipmentSlot.WEAPON]
         attack_speed_str = weapon_instance.attack_speed if weapon_instance else 'N/A'
         msg.append(f'\nWeapon tick speed: {attack_speed_str}')
 

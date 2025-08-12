@@ -5,11 +5,13 @@ from typing import Self
 
 from .Bank import Bank
 from .Equipment import Equipment
+from .EquipmentSlot import EquipmentSlot
 from .Skill import Skill
 from .Skills import Skills
 from .SkillType import SkillType
 from .Stats import Stats
 from .Tools import Tools
+from .ToolSlot import ToolSlot
 from .UpdatedEffects import UpdatedEffects
 from ..colors import color, color_theme
 from ..Result import Result
@@ -106,42 +108,46 @@ class Player:
         self._hitpoints = max(0, self._hitpoints - amount)
 
     # Items
-    def give(self, *args, **kwargs):
-        self._bank.add(*args, **kwargs)
+    def give(self, items: ItemInstance | Bank):
+        self._bank.add(items)
 
-    def remove(self, *args, **kwargs):
-        self._bank.remove(*args, **kwargs)
+    def remove(self, items: ItemInstance | Bank):
+        self._bank.remove(items)
 
-    def has(self, *args, **kwargs) -> bool:
-        return self._bank.contains(*args, **kwargs)
+    def has(
+        self,
+        items: ItemInstance | Bank,
+        check_quantity: bool = False
+    ) -> bool:
+        return self._bank.contains(items, check_quantity=check_quantity)
 
     @property
     def bank(self) -> Bank:
         return self._bank
 
     # Tools
-    def equip_tool(self, *args, **kwargs) -> Result:
-        return self._tools.equip(*args, **kwargs)
+    def equip_tool(self, item_instance: ItemInstance) -> Result:
+        return self._tools.equip(item_instance)
 
-    def unequip_tool(self, *args, **kwargs) -> Result:
-        return self._tools.unequip(*args, **kwargs)
+    def unequip_tool(self, item_instance: ItemInstance) -> Result:
+        return self._tools.unequip(item_instance)
 
-    def get_tool(self, *args, **kwargs) -> ItemInstance | None:
-        return self._tools.get(*args, **kwargs)
+    def get_tool(self, tool_slot: ToolSlot) -> ItemInstance | None:
+        return self._tools[tool_slot]
 
     @property
     def tools(self) -> Tools:
         return self._tools
 
     # Equipment
-    def equip(self, *args, **kwargs) -> Result:
-        return self._equipment.equip(*args, **kwargs)
+    def equip(self, item_instance: ItemInstance) -> Result:
+        return self._equipment.equip(item_instance)
 
-    def unequip(self, *args, **kwargs) -> Result:
-        return self._equipment.unequip(*args, **kwargs)
+    def unequip(self, item_instance: ItemInstance) -> Result:
+        return self._equipment.unequip(item_instance)
 
-    def get_equipment(self, *args, **kwargs) -> ItemInstance | None:
-        return self._equipment.get(*args, **kwargs)
+    def get_equipment(self, equipment_slot: EquipmentSlot) -> ItemInstance | None:
+        return self._equipment[equipment_slot]
 
     @property
     def equipment(self) -> Equipment:
