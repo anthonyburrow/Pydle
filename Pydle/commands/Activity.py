@@ -9,6 +9,7 @@ from .CommandType import CommandType
 from ..util.colors import color, color_theme
 from ..util.player.Bank import Bank
 from ..util.player.Skill import Skill
+from ..util.player.SkillType import SkillType
 
 
 class ActivityMsgType(Enum):
@@ -120,14 +121,14 @@ class Activity(CommandBase, ABC):
     def finish_text(self) -> str:
         return ''
 
-    def _has_level_requirement(self, skill_key: str, level_req: int) -> bool:
-        return self.player.get_level(skill_key) >= level_req
+    def _has_level_requirement(self, skill_type: SkillType, level_req: int) -> bool:
+        return self.player.get_level(skill_type) >= level_req
 
     def _on_levelup(self) -> None:
         pass
 
-    def _level_up_msg(self, skill_key: str) -> None:
-        skill: Skill = self.player.get_skill(skill_key)
+    def _level_up_msg(self, skill_type: SkillType) -> None:
+        skill: Skill = self.player.get_skill(skill_type)
 
         level: str = str(skill.level)
         if skill.level >= 99:

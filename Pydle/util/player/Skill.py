@@ -1,5 +1,6 @@
 import numpy as np
 
+from .SkillType import SkillType
 from ..colors import color, color_theme
 
 
@@ -19,9 +20,9 @@ XP_TABLE = {lvl: level_to_xp(lvl) for lvl in range(1, MAX_LEVEL + 1)}
 
 class Skill:
 
-    def __init__(self, name: str, skill_type: str, xp: float = 0.):
-        self.name: str = name
-        self.skill_type: str = skill_type
+    def __init__(self, skill_type: SkillType, skill_category: str, xp: float = 0.):
+        self.skill_type: SkillType = skill_type
+        self.skill_category: str = skill_category
 
         self.xp: float = 0.
         self.level: int = 1
@@ -67,7 +68,7 @@ class Skill:
         return msg
 
     def __str__(self) -> str:
-        return color(self.name, color_theme[f'skill_{self.skill_type}'])
+        return color(self.skill_type, color_theme[f'skill_{self.skill_category}'])
 
     def _adjust_level(self) -> dict[str, bool]:
         current_lvl: int = self.level

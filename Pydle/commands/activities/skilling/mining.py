@@ -10,6 +10,7 @@ from ....util.items.ItemInstance import ItemInstance
 from ....util.items.ItemRegistry import ITEM_REGISTRY
 from ....util.items.skilling.Ore import Ore
 from ....util.player.Bank import Bank
+from ....util.player.SkillType import SkillType
 from ....util.player.ToolSlot import ToolSlot
 from ....util.structures.Area import Area
 
@@ -53,7 +54,7 @@ class MiningActivity(GatheringActivity):
                 msg=f'{self.gatherable} is not a valid ore.'
             )
 
-        if not self._has_level_requirement('mining', self.gatherable.level):
+        if not self._has_level_requirement(SkillType.MINING, self.gatherable.level):
             return ActivityCheckResult(
                 success=False,
                 msg=f'You must have Level {self.gatherable.level} Mining to mine {self.gatherable}.'
@@ -89,7 +90,7 @@ class MiningActivity(GatheringActivity):
             msg=f'Mined {items.list_concise()}!',
             items=items,
             xp={
-                'mining': self.gatherable.xp,
+                SkillType.MINING: self.gatherable.xp,
             },
         )
 
@@ -117,7 +118,7 @@ class MiningActivity(GatheringActivity):
 
     def _setup_loot_table(self):
         mining_args = {
-            'level': self.player.get_level('mining'),
+            'level': self.player.get_level(SkillType.MINING),
             'tool': self.tool,
         }
         prob_success = self.gatherable.prob_success(**mining_args)

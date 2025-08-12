@@ -7,6 +7,7 @@ from .Bank import Bank
 from .Equipment import Equipment
 from .Skill import Skill
 from .Skills import Skills
+from .SkillType import SkillType
 from .Stats import Stats
 from .Tools import Tools
 from .UpdatedEffects import UpdatedEffects
@@ -67,20 +68,20 @@ class Player:
         self._area = area
 
     # Skills and Experience
-    def add_xp(self, *args, **kwargs) -> dict:
-        return self._skills.add_xp(*args, **kwargs)
+    def add_xp(self, skill_type: SkillType, xp: float) -> dict:
+        return self._skills.add_xp(skill_type, xp)
 
-    def set_xp(self, *args, **kwargs):
-        return self._skills.set_xp(*args, **kwargs)
+    def set_xp(self, skill_type: SkillType, xp: float):
+        return self._skills.set_xp(skill_type, xp)
 
-    def set_level(self, *args, **kwargs):
-        return self._skills.set_level(*args, **kwargs)
+    def get_level(self, skill_type: SkillType) -> int:
+        return self._skills.get_level(skill_type)
 
-    def get_skill(self, *args, **kwargs) -> Skill:
-        return self._skills.get_skill(*args, **kwargs)
+    def set_level(self, skill_type: SkillType, level: int):
+        return self._skills.set_level(skill_type, level)
 
-    def get_level(self, *args, **kwargs) -> int:
-        return self._skills.get_level(*args, **kwargs)
+    def get_skill(self, skill_type: SkillType) -> Skill:
+        return self._skills[skill_type]
 
     @property
     def skills(self) -> Skills:
@@ -92,7 +93,7 @@ class Player:
         return self._hitpoints
 
     def get_max_hitpoints(self) -> int:
-        return 90 + 10 * self.get_skill('hitpoints').level
+        return 90 + 10 * self.get_skill(SkillType.HITPOINTS).level
 
     def heal(self, amount: int) -> None:
         max_hp = self.get_max_hitpoints()

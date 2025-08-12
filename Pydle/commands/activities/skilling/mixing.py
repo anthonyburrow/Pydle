@@ -7,6 +7,7 @@ from ....lib.skilling.herblore import MIXABLES
 from ....util.items.ItemRegistry import ITEM_REGISTRY
 from ....util.items.skilling.Mixable import Mixable
 from ....util.player.Bank import Bank
+from ....util.player.SkillType import SkillType
 
 
 class MixingActivity(ProductionActivity):
@@ -44,7 +45,7 @@ class MixingActivity(ProductionActivity):
                 msg=f'{self.produceable} is not a valid mixable item.'
             )
 
-        if not self._has_level_requirement('herblore', self.produceable.level):
+        if not self._has_level_requirement(SkillType.HERBLORE, self.produceable.level):
             return ActivityCheckResult(
                 success=False,
                 msg=f'{self.player} must have Level {self.produceable.level} Herblore to mix a {self.produceable}.'
@@ -66,7 +67,7 @@ class MixingActivity(ProductionActivity):
             msg=f'Mixed a {self.produceable}!',
             items=items,
             xp={
-                'herblore': xp,
+                SkillType.HERBLORE: xp,
             },
         )
 

@@ -4,6 +4,7 @@ from numpy.random import rand, randint
 
 from ..monsters.Monster import Monster
 from ..player.Player import Player
+from ..player.SkillType import SkillType
 
 
 @dataclass
@@ -30,7 +31,7 @@ class CombatEngine:
     def calculate_values(self):
         # Player hit chance
         accuracy: int = self._calculate_effective_level(
-            self.player.get_level('accuracy'),
+            self.player.get_level(SkillType.ACCURACY),
             self.player.get_stat('accuracy')
         )
 
@@ -44,7 +45,7 @@ class CombatEngine:
         accuracy: int = self.monster.get_stat('accuracy')
 
         evasiveness: int = self._calculate_effective_level(
-            self.player.get_level('evasiveness'),
+            self.player.get_level(SkillType.EVASIVENESS),
             self.player.get_stat('evasiveness')
         )
 
@@ -54,7 +55,7 @@ class CombatEngine:
 
         # Player max hit
         physical_strength: int = self._calculate_effective_level(
-            self.player.get_level('strength'),
+            self.player.get_level(SkillType.STRENGTH),
             self.player.get_stat('physical_strength')
         )
         physical_defense: int = self.monster.get_stat('physical_defense')
@@ -64,7 +65,7 @@ class CombatEngine:
         )
 
         magical_power: int = self._calculate_effective_level(
-            self.player.get_level('magic'),
+            self.player.get_level(SkillType.MAGIC),
             self.player.get_stat('magical_power')
         )
         magical_barrier: int = self.monster.get_stat('magical_barrier')
@@ -76,7 +77,7 @@ class CombatEngine:
         # Monster max hit
         physical_strength: int = self.monster.get_stat('physical_strength')
         physical_defense: int = self._calculate_effective_level(
-            self.player.get_level('defense'),
+            self.player.get_level(SkillType.DEFENSE),
             self.player.get_stat('physical_defense')
         )
 
@@ -86,7 +87,7 @@ class CombatEngine:
 
         magical_power: int = self.monster.get_stat('magical_power')
         magical_barrier: int = self._calculate_effective_level(
-            self.player.get_level('barrier'),
+            self.player.get_level(SkillType.BARRIER),
             self.player.get_stat('magical_barrier')
         )
 
@@ -121,14 +122,14 @@ class CombatEngine:
             self.player.damage(player_damage)
 
             xp_defense = int(float(dmg_strength) * xp_per_dmg)
-            xp['defense'] = float(xp_defense)
+            xp[SkillType.DEFENSE] = float(xp_defense)
 
             xp_barrier = int(float(dmg_magical) * xp_per_dmg)
-            xp['barrier'] = float(xp_barrier)
+            xp[SkillType.BARRIER] = float(xp_barrier)
 
             xp_evasiveness = float(monster_damage) * xp_per_dmg
             xp_evasiveness *= self.monster_hit_chance
-            xp['evasiveness'] = float(xp_evasiveness)
+            xp[SkillType.EVASIVENESS] = float(xp_evasiveness)
 
         if player_attacks:
             dmg_strength, dmg_magical = self._calculate_damage(
@@ -141,17 +142,17 @@ class CombatEngine:
             self.monster.damage(monster_damage)
 
             xp_strength = int(dmg_strength * xp_per_dmg)
-            xp['strength'] = float(xp_strength)
+            xp[SkillType.STRENGTH] = float(xp_strength)
 
             xp_magical = int(dmg_magical * xp_per_dmg)
-            xp['magic'] = float(xp_magical)
+            xp[SkillType.MAGIC] = float(xp_magical)
 
             xp_accuracy = monster_damage * xp_per_dmg
             xp_accuracy *= 1. - self.player_hit_chance
-            xp['accuracy'] = float(xp_accuracy)
+            xp[SkillType.ACCURACY] = float(xp_accuracy)
 
             xp_hitpoints = int(monster_damage * xp_per_dmg * 0.5)
-            xp['hitpoints'] = float(xp_hitpoints)
+            xp[SkillType.HITPOINTS] = float(xp_hitpoints)
 
         return CombatResult(
             player_damage=player_damage,

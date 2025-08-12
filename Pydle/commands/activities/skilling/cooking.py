@@ -10,6 +10,7 @@ from ....util.items.ItemParser import ITEM_PARSER
 from ....util.items.ItemRegistry import ITEM_REGISTRY
 from ....util.items.skilling.Cookable import Cookable
 from ....util.player.Bank import Bank
+from ....util.player.SkillType import SkillType
 
 
 fire_effect = 'cooking fire'
@@ -50,7 +51,7 @@ class CookingActivity(ProductionActivity):
                 msg=f'{self.produceable} is not a valid cookable item.'
             )
 
-        if not self._has_level_requirement('cooking', self.produceable.level):
+        if not self._has_level_requirement(SkillType.COOKING, self.produceable.level):
             return ActivityCheckResult(
                 success=False,
                 msg=f'{self.player} must have Level {self.produceable.level} Cooking to cook {self.produceable}.'
@@ -84,7 +85,7 @@ class CookingActivity(ProductionActivity):
             return ActivityTickResult(
                 msg=f'Burned {self.produceable}...',
                 xp={
-                    'cooking': xp * 0.5,
+                    SkillType.COOKING: xp * 0.5,
                 },
             )
 
@@ -92,7 +93,7 @@ class CookingActivity(ProductionActivity):
             msg=f'Cooked {self.produceable}!',
             items=items,
             xp={
-                'cooking': xp,
+                SkillType.COOKING: xp,
             },
         )
 
@@ -136,7 +137,7 @@ class CookingActivity(ProductionActivity):
         super()._setup_loot_table()
 
         cooking_args = {
-            'level': self.player.get_level('cooking'),
+            'level': self.player.get_level(SkillType.COOKING),
         }
         prob_success = self.produceable.prob_success(**cooking_args)
 

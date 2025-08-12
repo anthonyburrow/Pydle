@@ -10,6 +10,7 @@ from ....util.items.ItemParser import ITEM_PARSER
 from ....util.items.ItemRegistry import ITEM_REGISTRY
 from ....util.items.skilling.Smeltable import Smeltable
 from ....util.player.Bank import Bank
+from ....util.player.SkillType import SkillType
 
 
 fire_effect = 'smithing fire'
@@ -50,7 +51,7 @@ class SmeltingActivity(ProductionActivity):
                 msg=f'{self.produceable} is not a valid smeltable item.'
             )
 
-        if not self._has_level_requirement('smithing', self.produceable.level):
+        if not self._has_level_requirement(SkillType.SMITHING, self.produceable.level):
             return ActivityCheckResult(
                 success=False,
                 msg=f'{self.player} must have Level {self.produceable.level} Smithing to smelt a {self.produceable}.'
@@ -84,7 +85,7 @@ class SmeltingActivity(ProductionActivity):
             msg=f'Smelted a {self.produceable}!',
             items=items,
             xp={
-                'smithing': xp,
+                SkillType.SMITHING: xp,
             },
         )
 

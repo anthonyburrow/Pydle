@@ -10,6 +10,7 @@ from ....util.items.ItemInstance import ItemInstance
 from ....util.items.ItemParser import ITEM_PARSER
 from ....util.player.Bank import Bank
 from ....util.player.BankKey import BankKey
+from ....util.player.SkillType import SkillType
 from ....util.player.ToolSlot import ToolSlot
 from ....util.structures.Area import Area
 from ....util.structures.LootTable import LootTable
@@ -50,7 +51,7 @@ class ForagingActivity(Activity):
 
         for collectable_name in self.area.collectables:
             item: Item = ITEM_PARSER.get_base(collectable_name)
-            if self._has_level_requirement('foraging', item.level):
+            if self._has_level_requirement(SkillType.FORAGING, item.level):
                 break
         else:
             return ActivityCheckResult(
@@ -101,7 +102,7 @@ class ForagingActivity(Activity):
             msg=f'Collected {items.list_concise()}!',
             items=items,
             xp={
-                'foraging': xp,
+                SkillType.FORAGING: xp,
             },
         )
 
@@ -127,7 +128,7 @@ class ForagingActivity(Activity):
 
     def _setup_loot_table(self):
         foraging_args = {
-            'level': self.player.get_level('foraging'),
+            'level': self.player.get_level(SkillType.FORAGING),
             'tool': self.secateurs,
         }
 
@@ -138,7 +139,7 @@ class ForagingActivity(Activity):
             item_instance: ItemInstance = ITEM_PARSER.get_instance(collectable_name)
             item_instance.set_quantity(item_instance.n_per_gather)
 
-            if not self._has_level_requirement('foraging', item_instance.level):
+            if not self._has_level_requirement(SkillType.FORAGING, item_instance.level):
                 continue
 
             prob_success = item_instance.prob_success(**foraging_args)

@@ -1,11 +1,12 @@
 from Pydle.commands.activities.skilling.mining import MiningActivity
 from Pydle.commands.Command import Command
 from Pydle.util.items.ItemParser import ITEM_PARSER
+from Pydle.util.player.SkillType import SkillType
 
 
 def test_missing_pickaxe(test_player, test_ui):
     # Setup
-    test_player.set_level('mining', 99)
+    test_player.set_level(SkillType.MINING, 99)
 
     raw_in: str = 'mine copper ore'
     command: Command = Command(raw_in)
@@ -28,7 +29,7 @@ def test_missing_pickaxe(test_player, test_ui):
 
 def test_misspelled_ore(test_player, test_ui):
     # Setup
-    test_player.set_level('mining', 99)
+    test_player.set_level(SkillType.MINING, 99)
 
     raw_in: str = 'mine irn ore'
     command: Command = Command(raw_in)

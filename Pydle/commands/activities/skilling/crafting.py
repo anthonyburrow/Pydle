@@ -7,6 +7,7 @@ from ....lib.skilling.crafting import CRAFTABLES
 from ....util.items.ItemRegistry import ITEM_REGISTRY
 from ....util.items.skilling.Craftable import Craftable
 from ....util.player.Bank import Bank
+from ....util.player.SkillType import SkillType
 
 
 class CraftingActivity(ProductionActivity):
@@ -44,7 +45,7 @@ class CraftingActivity(ProductionActivity):
                 msg=f'{self.produceable} is not a valid craftable item.'
             )
 
-        if not self._has_level_requirement('crafting', self.produceable.level):
+        if not self._has_level_requirement(SkillType.CRAFTING, self.produceable.level):
             return ActivityCheckResult(
                 success=False,
                 msg=f'{self.player} must have Level {self.produceable.level} Crafting to craft a {self.produceable}.'
@@ -66,7 +67,7 @@ class CraftingActivity(ProductionActivity):
             msg=f'Crafted a {self.produceable}!',
             items=items,
             xp={
-                'crafting': xp,
+                SkillType.CRAFTING: xp,
             },
         )
 

@@ -10,6 +10,7 @@ from ....util.items.ItemInstance import ItemInstance
 from ....util.items.ItemRegistry import ITEM_REGISTRY
 from ....util.items.skilling.Log import Log
 from ....util.player.Bank import Bank
+from ....util.player.SkillType import SkillType
 from ....util.player.ToolSlot import ToolSlot
 from ....util.structures.Area import Area
 
@@ -53,7 +54,7 @@ class WoodcuttingActivity(GatheringActivity):
                 msg=f'{self.gatherable} is not a valid log.'
             )
 
-        if not self._has_level_requirement('woodcutting', self.gatherable.level):
+        if not self._has_level_requirement(SkillType.WOODCUTTING, self.gatherable.level):
             return ActivityCheckResult(
                 success=False,
                 msg=f'You must have Level {self.gatherable.level} Woodcutting to chop {self.gatherable}.'
@@ -117,7 +118,7 @@ class WoodcuttingActivity(GatheringActivity):
 
     def _setup_loot_table(self):
         woodcutting_args = {
-            'level': self.player.get_level('woodcutting'),
+            'level': self.player.get_level(SkillType.WOODCUTTING),
             'tool': self.tool,
         }
         prob_success = self.gatherable.prob_success(**woodcutting_args)

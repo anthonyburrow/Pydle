@@ -10,6 +10,7 @@ from ....util.items.ItemInstance import ItemInstance
 from ....util.items.ItemRegistry import ITEM_REGISTRY
 from ....util.items.skilling.Fish import Fish
 from ....util.player.Bank import Bank
+from ....util.player.SkillType import SkillType
 from ....util.player.ToolSlot import ToolSlot
 from ....util.structures.Area import Area
 
@@ -53,7 +54,7 @@ class FishingActivity(GatheringActivity):
                 msg=f'{self.gatherable} is not a valid fish.'
             )
 
-        if not self._has_level_requirement('fishing', self.gatherable.level):
+        if not self._has_level_requirement(SkillType.FISHING, self.gatherable.level):
             return ActivityCheckResult(
                 success=False,
                 msg=f'You must have Level {self.gatherable.level} Fishing to fish {self.gatherable}.'
@@ -89,7 +90,7 @@ class FishingActivity(GatheringActivity):
             msg=f'Fished {items.list_concise()}!',
             items=items,
             xp={
-                'fishing': self.gatherable.xp,
+                SkillType.FISHING: self.gatherable.xp,
             },
         )
 
@@ -119,7 +120,7 @@ class FishingActivity(GatheringActivity):
         super()._setup_loot_table()
 
         fishing_args = {
-            'level': self.player.get_level('fishing'),
+            'level': self.player.get_level(SkillType.FISHING),
             'tool': self.tool,
         }
         prob_success = self.gatherable.prob_success(**fishing_args)

@@ -1,4 +1,5 @@
 from ..Operation import Operation
+from ...util.player.SkillType import SkillType
 
 
 class SkillsOperation(Operation):
@@ -26,6 +27,7 @@ class SkillsOperation(Operation):
             return self.ui.print(str(self.player.skills), multiline=True)
 
         try:
-            self.ui.print(self.player.get_skill(self.command.argument).details())
+            skill_type: SkillType = SkillType.from_string(self.command.argument)
+            self.ui.print(self.player.get_skill(skill_type).details())
         except KeyError:
             self.ui.print(f'{self.command.argument} is not a valid skill.')
