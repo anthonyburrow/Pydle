@@ -16,9 +16,11 @@ AREAS = {
         },
         fish={
             'raw shrimp',
+            'raw anchovy',
         },
         logs={
             'pine log',
+            'birch log',
         },
         ores={
             'copper ore',
