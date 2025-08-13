@@ -1,4 +1,5 @@
 import pytest
+
 from Pydle.util.Result import Result
 from Pydle.util.items.ItemInstance import ItemInstance
 from Pydle.util.items.ItemParser import ITEM_PARSER

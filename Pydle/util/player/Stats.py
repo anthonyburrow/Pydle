@@ -60,6 +60,13 @@ class Stats(dict):
             self[stat] += other_stats[stat]
         return self
 
+    def __eq__(self, other):
+        if isinstance(other, Stats):
+            return dict(self) == dict(other)
+        if isinstance(other, dict):
+            return dict(self) == other
+        return NotImplemented
+
     def __setitem__(self, key, value):
         if key not in STATS:
             raise KeyError(f'Invalid skill key: "{key}"')

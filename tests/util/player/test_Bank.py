@@ -3,7 +3,7 @@ import pytest
 from Pydle.util.items.ItemInstance import ItemInstance
 from Pydle.util.items.ItemParser import ITEM_PARSER
 from Pydle.util.player.Bank import Bank
-from Pydle.util.player.Bank import BankKey
+from Pydle.util.player.BankKey import BankKey
 
 
 def test_instantiate():

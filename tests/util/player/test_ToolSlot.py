@@ -1,4 +1,5 @@
 import pytest
+
 from Pydle.util.player.ToolSlot import ToolSlot
 
 
