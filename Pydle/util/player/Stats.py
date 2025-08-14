@@ -25,24 +25,26 @@ STATS = {
 
 class Stats(dict):
 
-    def __init__(self, stats_dict: dict = None, *arg, **kwargs):
+    def __init__(self, stats_dict: dict[str, int] = None, *arg, **kwargs):
         super().__init__(*arg, **kwargs)
 
         stats_dict = stats_dict or {}
-
-        for stat_key in STATS:
-            self[stat_key] = stats_dict.get(stat_key, 0)
+        self.load_from_dict(stats_dict)
 
     def reset(self):
         for stat_key in STATS:
             self[stat_key] = 0
+
+    def load_from_dict(self, stats_dict: dict):
+        for stat_key in STATS:
+            self[stat_key] = stats_dict.get(stat_key, 0)
 
     def __str__(self):
         msg: list = []
 
         max_stat_length: int = max([len(x) for x in self])
         max_value_length: int = max([len(str(x)) for x in self.values()])
-        total_length = max_stat_length + max_value_length + 3
+        total_length: int = max_stat_length + max_value_length + 3
 
         msg.append(centered_title('STATS', total_length))
 
