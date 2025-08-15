@@ -1,11 +1,16 @@
-import traceback
 from colorama import just_fix_windows_console
+from prompt_toolkit import PromptSession
+from prompt_toolkit.history import InMemoryHistory
+from prompt_toolkit.key_binding import KeyBindings
+import traceback
+
 
 try:
     from pynput import keyboard
 except ImportError:
     pass
 
+from .CommandSuggestion import CommandSuggestion
 from ..platform import SYS_PLATFORM, Platform
 
 
@@ -17,6 +22,17 @@ elif SYS_PLATFORM == Platform.LINUX:
 
 COMMAND_PREFIX: str = '> '
 KEY_CANCEL: str = 'c'
+
+
+BINDINGS = KeyBindings()
+
+@BINDINGS.add('tab')
+def _(event):
+    b = event.app.current_buffer
+    if b.suggestion:
+        b.insert_text(b.suggestion.text)
+    else:
+        b.insert_text('\t')
 
 
 class UserInterface:
@@ -50,7 +66,12 @@ class UserInterface:
         print(traceback.format_exc())
 
     def get_input(self) -> str:
-        return input(COMMAND_PREFIX)
+        session: PromptSession = PromptSession(
+            auto_suggest=CommandSuggestion(),
+            key_bindings=BINDINGS,
+            history=InMemoryHistory(max_length=20),
+        )
+        return session.prompt(COMMAND_PREFIX)
 
     def flush_input(self):
         try:

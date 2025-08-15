@@ -9,21 +9,21 @@ class ItemParser:
     def __init__(self, item_registry: ItemRegistry):
         self._item_registry: ItemRegistry = item_registry
 
-        self._name_map: dict[str, dict[str, str | int | Quality]] = {}
+        self.name_map: dict[str, dict[str, str | int | Quality]] = {}
         self._build_lookup_map()
 
     def _build_lookup_map(self) -> None:
         for item_id, item in self._item_registry.items():
             if not item.supported_qualities:
                 name: str = item.name.lower()
-                self._name_map[name] = {
+                self.name_map[name] = {
                     'item_id': item_id,
                 }
                 continue
 
             for quality in item.supported_qualities:
                 name: str = ItemInstance.get_name(item.name, quality).lower()
-                self._name_map[name] = {
+                self.name_map[name] = {
                     'item_id': item_id,
                     'quality': quality,
                 }
@@ -35,7 +35,7 @@ class ItemParser:
 
     def get_instance(self, item_name: str, quantity: int = 1) -> ItemInstance | None:
         instance_kwargs: dict[str, str | Quality | int] | None = \
-            self._name_map.get(item_name.lower())
+            self.name_map.get(item_name.lower())
 
         if not instance_kwargs:
             return None
@@ -50,7 +50,7 @@ class ItemParser:
 
     def get_id_by_name(self, item_name: str) -> str | None:
         instance_kwargs: dict[str, str | Quality | int] | None = \
-            self._name_map.get(item_name.lower())
+            self.name_map.get(item_name.lower())
 
         if not instance_kwargs:
             return None

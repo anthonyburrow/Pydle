@@ -1,8 +1,7 @@
 import argparse
-from pathlib import Path
-from platformdirs import user_data_dir
 
 from .commands.CommandRegistry import COMMAND_REGISTRY
+from .util.files import PLAYER_SAVE_FILE
 from .util.player.Player import Player
 from .util.structures.Controller import Controller
 from .util.structures.UserInterface import UserInterface
@@ -26,12 +25,7 @@ def main():
     ui: UserInterface = UserInterface()
 
     # Setup/load player
-    path_save: Path = Path(user_data_dir(APP_NAME))
-    path_save.mkdir(parents=True, exist_ok=True)
-
-    character_file: Path = path_save / 'player.json'
-
-    if args.new and character_file.exists():
+    if args.new and PLAYER_SAVE_FILE.exists():
         print((
             'Are you sure you want to make a new character? '
             'This will delete your previous file. [y/N]'
@@ -41,11 +35,11 @@ def main():
         if not answer or answer in ('n', 'no'):
             pass
         elif answer in ('y', 'yes'):
-            character_file.unlink()
+            PLAYER_SAVE_FILE.unlink()
         else:
             ui.print('Unknown response. Aborting character deletion.')
 
-    player: Player = Player(save_file=str(character_file))
+    player: Player = Player(save_file=str(PLAYER_SAVE_FILE))
 
     # Load command metadata
     COMMAND_REGISTRY.load_commands()

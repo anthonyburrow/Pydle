@@ -24,6 +24,7 @@ classifiers=[
 dependencies = [
     "numpy",
     "pynput",
+    "prompt_toolkit",
     "pywin32; sys_platform == 'win32'",
     "python-xlib; sys_platform == 'linux'",
     "colorama",
