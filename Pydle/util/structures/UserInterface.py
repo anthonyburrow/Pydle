@@ -1,7 +1,9 @@
 from colorama import just_fix_windows_console
 from prompt_toolkit import PromptSession
 from prompt_toolkit.history import InMemoryHistory
+from prompt_toolkit.keys import Keys
 from prompt_toolkit.key_binding import KeyBindings
+from prompt_toolkit.key_binding.defaults import load_key_bindings
 import traceback
 
 
@@ -26,6 +28,7 @@ KEY_CANCEL: str = 'c'
 
 BINDINGS = KeyBindings()
 
+
 @BINDINGS.add('tab')
 def _(event):
     b = event.app.current_buffer
@@ -33,6 +36,16 @@ def _(event):
         b.insert_text(b.suggestion.text)
     else:
         b.insert_text('\t')
+
+
+@BINDINGS.add(Keys.Up)
+def _(event):
+    event.app.current_buffer.auto_up()
+
+
+@BINDINGS.add(Keys.Down)
+def _(event):
+    event.app.current_buffer.auto_down()
 
 
 class UserInterface:
@@ -54,22 +67,19 @@ class UserInterface:
         if not multiline:
             return print(f'{self.indent}{message}')
 
-        message = message.split('\n')
-        message = f'\n{self.indent}'.join(message)
-        print(f'\n{self.indent}{message}\n')
+        message_split: list[str] = message.split('\n')
+        message_indented: str = f'\n{self.indent}'.join(message_split)
+        print(f'\n{self.indent}{message_indented}\n')
 
-    def print_error(self, message: str) -> None:
-        if not message:
-            return
-
-        print(f'Error: {message}')
+    def print_exception(self, exception: Exception) -> None:
+        print(f'Error: {exception}')
         print(traceback.format_exc())
 
     def get_input(self) -> str:
         session: PromptSession = PromptSession(
             auto_suggest=CommandSuggestion(),
             key_bindings=BINDINGS,
-            history=InMemoryHistory(max_length=20),
+            history=InMemoryHistory(),
         )
         return session.prompt(COMMAND_PREFIX)
 
@@ -93,6 +103,11 @@ class UserInterface:
         self.activity_running = True
 
     def stop_keyboard_listener(self):
+        if not self.keyboard_listener:
+            raise RuntimeError(
+                'UserInterface.start_keyboard_listener() must be called' \
+                'before UserInterface.stop_keyboard_listener().'
+            )
         self.keyboard_listener.stop()
         self.keyboard_listener = None
 
@@ -117,12 +132,14 @@ class UserInterface:
             window = d.get_input_focus().focus
             return window.id
 
+        raise NotImplementedError('Unsupported platform.')
+
 
 class NullUserInterface(UserInterface):
     def __init__(self):
         pass
     def print(self, message: str): pass
-    def print_error(self, message: str): pass
+    def print_exception(self, exception: Exception): pass
     def get_command(self, prompt: str) -> str:
         return ''
     def _get_client_ID(self) -> int:

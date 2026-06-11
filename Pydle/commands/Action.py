@@ -1,15 +1,15 @@
 from __future__ import annotations
-from typing import TYPE_CHECKING
 from abc import ABC, abstractmethod
+from typing import TYPE_CHECKING
 
-from ..util.structures.UserInterface import UserInterface
 from ..util.player.Player import Player
+from ..util.structures.UserInterface import UserInterface
 
 if TYPE_CHECKING:
     from .Command import Command
 
 
-class CommandBase(ABC):
+class Action(ABC):
     name: str
     aliases: list[str] = []
     subcommands: list[str] = []
@@ -22,7 +22,7 @@ class CommandBase(ABC):
 
     @classmethod
     @abstractmethod
-    def usage(self) -> str:
+    def usage(cls) -> str:
         pass
 
     def print_usage(self) -> None:

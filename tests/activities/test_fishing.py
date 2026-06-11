@@ -10,7 +10,7 @@ def test_missing_fishing_rod(test_player, test_ui) -> None:
     test_player.set_level(SkillType.FISHING, 99)
 
     raw_in: str = 'fish raw shrimp'
-    command: Command = Command(raw_in)
+    command: Command = Command.parse(raw_in)
 
     activity: FishingActivity = FishingActivity(test_player, test_ui, command)
     result_check: ActivityCheckResult = activity.check()
@@ -29,7 +29,7 @@ def test_misspelled_fish(test_player, test_ui) -> None:
     test_player.set_level(SkillType.FISHING, 99)
 
     raw_in: str = 'fish raw shrmp'
-    command: Command = Command(raw_in)
+    command: Command = Command.parse(raw_in)
 
     rod: ItemInstance = ITEM_PARSER.get_instance('poor copper fishing rod')
     test_player.give(rod)
@@ -44,7 +44,7 @@ def test_low_level_requirement(test_player, test_ui) -> None:
     test_player.set_level(SkillType.FISHING, 1)
 
     raw_in: str = 'fish raw anchovy'
-    command: Command = Command(raw_in)
+    command: Command = Command.parse(raw_in)
 
     rod: ItemInstance = ITEM_PARSER.get_instance('poor copper fishing rod')
     test_player.give(rod)
@@ -60,7 +60,7 @@ def test_fish_not_in_area(test_player, test_ui) -> None:
     test_player.set_area('eastveil')
 
     raw_in: str = 'fish raw shrimp'
-    command: Command = Command(raw_in)
+    command: Command = Command.parse(raw_in)
 
     rod: ItemInstance = ITEM_PARSER.get_instance('poor copper fishing rod')
     test_player.give(rod)
@@ -75,7 +75,7 @@ def test_check_passes_with_all_requirements(test_player, test_ui) -> None:
     test_player.set_level(SkillType.FISHING, 99)
 
     raw_in: str = 'fish raw shrimp'
-    command: Command = Command(raw_in)
+    command: Command = Command.parse(raw_in)
 
     rod: ItemInstance = ITEM_PARSER.get_instance('poor copper fishing rod')
     test_player.give(rod)

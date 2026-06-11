@@ -1,6 +1,7 @@
 from __future__ import annotations
-from typing import TYPE_CHECKING, Type
+from dataclasses import dataclass
 
+from .Action import Action
 from .CommandRegistry import COMMAND_REGISTRY
 from .CommandType import CommandType
 from ..util.items.ItemInstance import ItemInstance
@@ -8,28 +9,28 @@ from ..util.items.ItemParser import ITEM_PARSER
 from ..util.monsters.MonsterInstance import MonsterInstance
 from ..util.monsters.MonsterParser import MONSTER_PARSER
 
-if TYPE_CHECKING:
-    from .CommandBase import CommandBase
+
+class InvalidCommandError(ValueError):
+    pass
 
 
+class EmptyCommandError(InvalidCommandError):
+    pass
+
+
+@dataclass(slots=True)
 class Command:
-
-    def __init__(self, raw: str):
-        self.raw: str = raw
-
-        self.command: str | None = None
-        self.subcommand: str | None = None
-        self.quantity: int = 1
-        self.argument: str | None = None
-
-        self.type: CommandType = CommandType.UNKNOWN
-        self.action: Type[CommandBase] | None = None
-
-        self._parse()
+    command: str
+    subcommand: str | None
+    quantity: int
+    argument: str | None
+    type: CommandType
+    action: type[Action]
 
     def get_item_instance(self) -> ItemInstance | None:
         if not self.argument:
             return None
+
         return ITEM_PARSER.get_instance(self.argument, self.quantity)
 
     def get_monster_instance(self) -> MonsterInstance | None:
@@ -37,36 +38,50 @@ class Command:
             return None
         return MONSTER_PARSER.get_instance(self.argument)
 
-    def _parse(self) -> None:
-        tokens: list[str] = self.raw.strip().lower().split()
-
-        if not tokens:
-            return
-
-        self.command = tokens.pop(0)
-        self.action = COMMAND_REGISTRY.get(self.command)
-        self.type = COMMAND_REGISTRY.get_type(self.command)
-
-        if not tokens:
-            return
-
-        subcommands: list[str] = self.action.subcommands if self.action else []
-        if tokens[0] in subcommands:
-            self.subcommand = tokens.pop(0)
-
-        if not tokens:
-            return
-
+    @staticmethod
+    def get_action(command_name: str) -> type[Action]:
         try:
-            self.quantity = int(tokens[0])
-            tokens.pop(0)
-        except ValueError:
-            self.quantity = 1
+            return COMMAND_REGISTRY.get_action(command_name)
+        except KeyError as exc:
+            raise InvalidCommandError() from exc
+
+    @classmethod
+    def parse(cls, raw: str) -> Command:
+        tokens: list[str] = raw.strip().lower().split()
 
         if not tokens:
-            return
+            raise EmptyCommandError()
 
-        self.argument = ' '.join(tokens)
+        command: str = tokens.pop(0)
+        command_action: type[Action] = cls.get_action(command)
+        command_type: CommandType = COMMAND_REGISTRY.get_type(command)
+
+        subcommand: str | None = None
+        quantity: int = 1
+        argument: str | None = None
+
+        subcommands: list[str] = command_action.subcommands
+        if tokens and tokens[0] in subcommands:
+            subcommand = tokens.pop(0)
+
+        if tokens:
+            try:
+                quantity = int(tokens[0])
+                tokens.pop(0)
+            except ValueError:
+                quantity = 1
+
+        if tokens:
+            argument = ' '.join(tokens)
+
+        return cls(
+            command=command,
+            subcommand=subcommand,
+            quantity=quantity,
+            argument=argument,
+            type=command_type,
+            action=command_action,
+        )
 
     def __bool__(self) -> bool:
         return bool(self.command)

@@ -1,12 +1,12 @@
-import sys
 import threading
 import time
+from typing import cast
 
 from .UserInterface import UserInterface
 from ..ticks import Ticks
 from ..player.Player import Player
 from ...commands.Activity import Activity, ActivityCheckResult
-from ...commands.Command import Command
+from ...commands.Command import Command, EmptyCommandError, InvalidCommandError
 from ...commands.CommandType import CommandType
 from ...commands.Operation import Operation
 
@@ -22,7 +22,7 @@ class Controller:
             try:
                 self.listen()
             except Exception as e:
-                self.ui.print_error(e)
+                self.ui.print_exception(e)
                 continue
 
             self.player.save()
@@ -31,22 +31,22 @@ class Controller:
         self.ui.flush_input()
 
         raw_in: str = self.ui.get_input()
-        command: Command = Command(raw_in)
-
-        if not command:
+        try:
+            command: Command = Command.parse(raw_in)
+        except EmptyCommandError:
+            return
+        except InvalidCommandError:
+            self.ui.print('Unknown command.')
             return
 
         if command.type == CommandType.ACTIVITY:
             self.control_activity(command)
         elif command.type == CommandType.OPERATION:
             self.control_operation(command)
-        elif command.type == CommandType.EXIT:
-            sys.exit()
-        elif command.type == CommandType.UNKNOWN:
-            self.ui.print('Unknown command.')
 
     def control_activity(self, command: Command):
-        activity: Activity = command.action(
+        activity_cls: type[Activity] = cast(type[Activity], command.action)
+        activity: Activity = activity_cls(
             self.player, self.ui, command
         )
 
@@ -71,7 +71,8 @@ class Controller:
         time.sleep(Ticks(4))
 
     def control_operation(self, command: Command):
-        operation: Operation = command.action(
+        operation_cls: type[Operation] = cast(type[Operation], command.action)
+        operation: Operation = operation_cls(
             self.player, self.ui, command
         )
         operation.execute()

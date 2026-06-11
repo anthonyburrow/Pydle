@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from enum import Enum
 from inspect import isabstract
 
-from .CommandBase import CommandBase
+from .Action import Action
 from .CommandRegistry import COMMAND_REGISTRY
 from .CommandType import CommandType
 from ..util.colors import color, color_theme
@@ -31,7 +31,7 @@ class ActivityTickResult:
     xp: dict | None = None
 
 
-class Activity(CommandBase, ABC):
+class Activity(Action, ABC):
 
     def __init_subclass__(cls, **kwargs):
         super().__init_subclass__(**kwargs)

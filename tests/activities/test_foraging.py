@@ -11,7 +11,7 @@ def test_no_collectables_in_area(test_player, test_ui) -> None:
     test_player.set_area('eastveil')
 
     raw_in: str = 'collect'
-    command: Command = Command(raw_in)
+    command: Command = Command.parse(raw_in)
 
     secateurs: ItemInstance = ITEM_PARSER.get_instance('poor copper secateurs')
     test_player.give(secateurs)
@@ -26,7 +26,7 @@ def test_no_collectables_in_area(test_player, test_ui) -> None:
 #     test_player.set_level(SkillType.FORAGING, 1)
 
 #     raw_in: str = 'collect'
-#     command: Command = Command(raw_in)
+#     command: Command = Command.parse(raw_in)
 
 #     secateurs: ItemInstance = ITEM_PARSER.get_instance('poor copper secateurs')
 #     test_player.give(secateurs)
@@ -41,7 +41,7 @@ def test_missing_secateurs(test_player, test_ui) -> None:
     test_player.set_level(SkillType.FORAGING, 99)
 
     raw_in: str = 'collect'
-    command: Command = Command(raw_in)
+    command: Command = Command.parse(raw_in)
 
     activity: ForagingActivity = ForagingActivity(test_player, test_ui, command)
     result_check: ActivityCheckResult = activity.check()
@@ -52,7 +52,7 @@ def test_check_passes_with_all_requirements(test_player, test_ui) -> None:
     test_player.set_level(SkillType.FORAGING, 99)
 
     raw_in: str = 'collect'
-    command: Command = Command(raw_in)
+    command: Command = Command.parse(raw_in)
 
     secateurs: ItemInstance = ITEM_PARSER.get_instance('poor copper secateurs')
     test_player.give(secateurs)

@@ -1,11 +1,11 @@
 from abc import abstractmethod
 
-from .CommandBase import CommandBase
+from .Action import Action
 from .CommandRegistry import COMMAND_REGISTRY
 from .CommandType import CommandType
 
 
-class Operation(CommandBase):
+class Operation(Action):
 
     def __init_subclass__(cls, **kwargs):
         super().__init_subclass__(**kwargs)

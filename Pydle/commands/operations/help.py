@@ -1,7 +1,7 @@
-from typing import Type
-
-from ..CommandBase import CommandBase
+from ..Action import Action
+from ..Command import InvalidCommandError
 from ..CommandRegistry import COMMAND_REGISTRY, CMD_EXIT
+from ..Command import Command
 from ..Operation import Operation
 from ...util.colors import color, color_theme
 from ...util.structures.UserInterface import KEY_CANCEL
@@ -29,12 +29,11 @@ class HelpOperation(Operation):
 
     def execute(self) -> None:
         if self.command.argument:
-            command_cls: Type[CommandBase] | None = \
-                COMMAND_REGISTRY.get(self.command.argument)
-
-            if command_cls:
-                self.ui.print(command_cls.usage(), multiline=True)
-            else:
+            try:
+                command_action: type[Action] = \
+                    Command.get_action(self.command.argument)
+                self.ui.print(command_action.usage(), multiline=True)
+            except InvalidCommandError:
                 self.ui.print(f"No help available for '{self.command.argument}'.")
 
             return
@@ -47,37 +46,37 @@ class HelpOperation(Operation):
         msg.append('')
         msg.append('Operations:')
 
-        for command_name, command_cls in COMMAND_REGISTRY.operations.items():
+        for command_name, command_action in COMMAND_REGISTRY.operations.items():
             if command_name == 'testing':
                 continue
 
             command_str = color(command_name, color_theme['UI_1'])
 
             alias_str: str = ''
-            if command_cls.aliases:
+            if command_action.aliases:
                 alias_str = ', '.join([
                     color(alias, color_theme['UI_1'])
-                    for alias in command_cls.aliases
+                    for alias in command_action.aliases
                 ])
                 alias_str = f'({alias_str}) '
 
-            msg.append(f'  - {command_str} {alias_str}: {command_cls.help_info}')
+            msg.append(f'  - {command_str} {alias_str}: {command_action.help_info}')
 
         msg.append('')
         msg.append('Activities:')
 
-        for command_name, command_cls in COMMAND_REGISTRY.activities.items():
+        for command_name, command_action in COMMAND_REGISTRY.activities.items():
             command_str = color(command_name, color_theme['UI_1'])
 
             alias_str: str = ''
-            if command_cls.aliases:
+            if command_action.aliases:
                 alias_str = ', '.join([
                     color(alias, color_theme['UI_1'])
-                    for alias in command_cls.aliases
+                    for alias in command_action.aliases
                 ])
                 alias_str = f'({alias_str}) '
 
-            msg.append(f'  - {command_str} {alias_str}: {command_cls.help_info}')
+            msg.append(f'  - {command_str} {alias_str}: {command_action.help_info}')
 
         msg.append('')
         msg.append('Other:')
