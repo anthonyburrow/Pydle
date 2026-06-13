@@ -1,11 +1,12 @@
-from Pydle.util.player.Skill import Skill, MAX_XP, MAX_LEVEL
+from Pydle.util.player.Skill import Skill, ExpGainResult, MAX_XP, MAX_LEVEL
+from Pydle.util.player.SkillType import SkillType
 
 
 BIG_XP = 100_000_000_000
 
 
 def test_leveling():
-    skill = Skill('mining', 'gathering')
+    skill = Skill(SkillType.MINING, 'gathering')
 
     skill.add_xp(82)
     assert skill.level == 1
@@ -37,17 +38,17 @@ def test_leveling():
 
 
 def test_loaded_xp():
-    skill = Skill('mining', 'gathering', xp=50_000)
+    skill = Skill(SkillType.MINING, 'gathering', xp=50_000)
     assert skill.level == 42
     assert skill.xp == 50_000
 
-    skill = Skill('mining', 'gathering', xp=BIG_XP)
+    skill = Skill(SkillType.MINING, 'gathering', xp=BIG_XP)
     assert skill.level == MAX_LEVEL
     assert skill.xp == MAX_XP
 
 
 def test_set_level():
-    skill = Skill('mining', 'gathering')
+    skill = Skill(SkillType.MINING, 'gathering')
 
     skill.set_level(3)
     assert skill.level == 3
@@ -60,3 +61,12 @@ def test_set_level():
     skill.set_level(126)
     assert skill.level == 126
     assert skill.xp == 188_884_740
+
+
+def test_add_xp_returns_exp_gain_result():
+    skill = Skill(SkillType.MINING, 'gathering')
+
+    result = skill.add_xp(83)
+
+    assert isinstance(result, ExpGainResult)
+    assert result.leveled_up

@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Generic, TypeVar, cast
+from typing import Generic, TypeVar
 
 from .Activity import (
     Activity,
@@ -31,12 +31,12 @@ class GatheringActivity(Activity, Generic[T_Gatherable], ABC):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self._gatherable: T_Gatherable | None = None
+        self._gatherable: ItemInstance | None = None
         self._tool: ItemInstance | None = None
         self.loot_table: LootTable = LootTable()
 
     @property
-    def gatherable(self) -> T_Gatherable:
+    def gatherable(self) -> ItemInstance:
         if self._gatherable is None:
             raise RuntimeError('gatherable is not initialized; call check() before begin().')
 
@@ -62,13 +62,13 @@ class GatheringActivity(Activity, Generic[T_Gatherable], ABC):
 
         gatherable: ItemInstance = self.command.get_item_instance()
         expected_type: type[T_Gatherable] = self.gatherable_cls
-        if not isinstance(gatherable, expected_type):
+        if not isinstance(gatherable.base, expected_type):
             return ActivityCheckResult(
                 success=False,
                 msg=f'{gatherable} is not a valid {expected_type.__name__.lower()}.'
             )
 
-        self._gatherable = cast(T_Gatherable, gatherable)
+        self._gatherable = gatherable
 
         tool: ItemInstance | None = self.player.get_tool(self.tool_slot)
         if not tool:
