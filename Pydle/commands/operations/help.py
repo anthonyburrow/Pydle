@@ -84,7 +84,4 @@ class HelpOperation(Operation):
         command_str = color(KEY_CANCEL, color_theme['UI_1'])
         msg.append(f'  - Press "{command_str}" to cancel an ongoing activity.')
 
-        command_str = color(CMD_EXIT, color_theme['UI_1'])
-        msg.append(f'  - {command_str}: Exit the game.')
-
         self.ui.print('\n'.join(msg), multiline=True)
