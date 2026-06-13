@@ -4,6 +4,7 @@ from dataclasses import dataclass
 from .Action import Action
 from .CommandRegistry import COMMAND_REGISTRY
 from .CommandType import CommandType
+from ..util.items.Item import Item
 from ..util.items.ItemInstance import ItemInstance
 from ..util.items.ItemParser import ITEM_PARSER
 from ..util.monsters.MonsterInstance import MonsterInstance
@@ -21,21 +22,22 @@ class EmptyCommandError(InvalidCommandError):
 @dataclass(slots=True)
 class Command:
     command: str
-    subcommand: str | None
+    subcommand: str
     quantity: int
-    argument: str | None
+    argument: str
     type: CommandType
     action: type[Action]
 
-    def get_item_instance(self) -> ItemInstance | None:
-        if not self.argument:
-            return None
+    def has_valid_item_argument(self) -> bool:
+        return bool(self.argument) and ITEM_PARSER.is_valid_item_name(self.argument)
 
+    def get_item_base(self) -> Item:
+        return ITEM_PARSER.get_base(self.argument)
+
+    def get_item_instance(self) -> ItemInstance:
         return ITEM_PARSER.get_instance(self.argument, self.quantity)
 
-    def get_monster_instance(self) -> MonsterInstance | None:
-        if not self.argument:
-            return None
+    def get_monster_instance(self) -> MonsterInstance:
         return MONSTER_PARSER.get_instance(self.argument)
 
     @staticmethod
@@ -56,9 +58,9 @@ class Command:
         command_action: type[Action] = cls.get_action(command)
         command_type: CommandType = COMMAND_REGISTRY.get_type(command)
 
-        subcommand: str | None = None
+        subcommand: str = ''
         quantity: int = 1
-        argument: str | None = None
+        argument: str = ''
 
         subcommands: list[str] = command_action.subcommands
         if tokens and tokens[0] in subcommands:

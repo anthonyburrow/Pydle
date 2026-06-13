@@ -1,19 +1,23 @@
+from typing import cast
+
 from ...Activity import (
     ActivityCheckResult,
     ActivityTickResult
 )
 from ...ProductionActivity import ProductionActivity
 from ....lib.skilling.crafting import CRAFTABLES
+from ....util.items.ItemInstance import ItemInstance
 from ....util.items.ItemRegistry import ITEM_REGISTRY
 from ....util.items.skilling.Craftable import Craftable
 from ....util.player.Bank import Bank
 from ....util.player.SkillType import SkillType
 
 
-class CraftingActivity(ProductionActivity):
+class CraftingActivity(ProductionActivity[Craftable]):
 
     name: str = 'craft'
     help_info: str = 'Begin crafting an item.'
+    produceable_cls = Craftable
 
     def __init__(self, *args):
         super().__init__(*args)
@@ -29,7 +33,9 @@ class CraftingActivity(ProductionActivity):
 
         msg.append('Available items:')
         for item_id in CRAFTABLES:
-            craftable: Craftable = ITEM_REGISTRY[item_id]
+            craftable: Craftable = cast(
+                Craftable, ITEM_REGISTRY.get(item_id, Craftable)
+            )
             msg.append(f'- {craftable}')
 
         return '\n'.join(msg)
@@ -38,12 +44,6 @@ class CraftingActivity(ProductionActivity):
         result: ActivityCheckResult = super().check()
         if not result.success:
             return result
-
-        if not isinstance(self.produceable.base, Craftable):
-            return ActivityCheckResult(
-                success=False,
-                msg=f'{self.produceable} is not a valid craftable item.'
-            )
 
         if not self._has_level_requirement(SkillType.CRAFTING, self.produceable.level):
             return ActivityCheckResult(
@@ -96,9 +96,14 @@ class CraftingActivity(ProductionActivity):
     def _setup_loot_table(self):
         super()._setup_loot_table()
 
+        produced: ItemInstance = ItemInstance(
+            item_id=self.produceable.item_id,
+            quantity=self.produceable.n_per_produce,
+        )
+
         self.loot_table = (
             self.loot_table
-            .every(self.produceable)
+            .every(produced)
         )
 
         # Add more stuff (pets, etc)

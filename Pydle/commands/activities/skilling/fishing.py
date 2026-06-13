@@ -1,3 +1,5 @@
+from typing import cast
+
 from ...Activity import (
     ActivityCheckResult,
     ActivityMsgType,
@@ -19,6 +21,9 @@ class FishingActivity(GatheringActivity):
 
     name: str = 'fish'
     help_info: str = 'Begin fishing for fish.'
+    gatherable_cls = Fish
+    tool_slot = ToolSlot.FISHING_ROD
+    tool_description = 'a fishing rod'
 
     def __init__(self, *args):
         super().__init__(*args)
@@ -34,25 +39,17 @@ class FishingActivity(GatheringActivity):
 
         msg.append('Available fish:')
         for item_id in FISH:
-            fish: Fish = ITEM_REGISTRY[item_id]
+            fish: Fish = cast(
+                Fish, ITEM_REGISTRY.get(item_id, Fish)
+            )
             msg.append(f'- {fish}')
 
         return '\n'.join(msg)
-
-    @property
-    def tool(self) -> ItemInstance | None:
-        return self.player.get_tool(ToolSlot.FISHING_ROD)
 
     def check(self) -> ActivityCheckResult:
         result: ActivityCheckResult = super().check()
         if not result.success:
             return result
-
-        if not isinstance(self.gatherable.base, Fish):
-            return ActivityCheckResult(
-                success=False,
-                msg=f'{self.gatherable} is not a valid fish.'
-            )
 
         if not self._has_level_requirement(SkillType.FISHING, self.gatherable.level):
             return ActivityCheckResult(
@@ -65,12 +62,6 @@ class FishingActivity(GatheringActivity):
             return ActivityCheckResult(
                 success=False,
                 msg=f'{area} does not have {self.gatherable} anywhere.'
-            )
-
-        if not self.tool:
-            return ActivityCheckResult(
-                success=False,
-                msg=f'{self.player} does not have a fishing rod equipped.'
             )
 
         return ActivityCheckResult(success=True)

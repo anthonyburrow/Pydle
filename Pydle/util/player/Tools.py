@@ -11,13 +11,16 @@ if TYPE_CHECKING:
     from .Player import Player
 
 
-class Tools(dict):
+class Tools(dict[ToolSlot, ItemInstance | None]):
 
-    def __init__(self, player: Player, tools_dict: dict | None = None):
+    def __init__(
+            self,
+            player: Player,
+            tools_dict: dict[ToolSlot, ItemInstance | None] | None = None
+        ):
         self._player: Player = player
 
-        tools_dict = tools_dict or {}
-        self.load_from_dict(tools_dict)
+        self.load_from_dict(tools_dict or {})
 
     def equip(self, item_instance: ItemInstance) -> Result:
         if not self._player.has(item_instance):
@@ -28,7 +31,7 @@ class Tools(dict):
 
         tool_slot: ToolSlot = item_instance.tool_slot
 
-        previous_instance: Tool | None = self[tool_slot]
+        previous_instance: ItemInstance | None = self[tool_slot]
         if previous_instance:
             self._player.give(previous_instance)
 
@@ -43,7 +46,7 @@ class Tools(dict):
     def unequip(self, item_instance: ItemInstance) -> Result:
         tool_slot: ToolSlot = item_instance.tool_slot
 
-        previous_instance: Tool | None = self[tool_slot]
+        previous_instance: ItemInstance | None = self[tool_slot]
         if not previous_instance or previous_instance != item_instance:
             return Result(
                 success=False,
@@ -80,8 +83,6 @@ class Tools(dict):
             item_instance: ItemInstance = ItemInstance.from_dict(instance_dict)
             self[tool_slot] = item_instance
 
-        return self
-
     def __str__(self) -> str:
         msg: list = []
 
@@ -99,12 +100,10 @@ class Tools(dict):
         msg.append(centered_title('TOOLS', total_length))
 
         for tool_slot, item_instance in self.items():
-            tool_str: str = item_instance or '---'
+            tool_str: str = str(item_instance) or '---'
             msg.append(f'{tool_slot:>{max_type_length}} | {tool_str}')
 
-        msg = '\n'.join(msg)
-
-        return msg
+        return '\n'.join(msg)
 
     def __setitem__(self, key, value):
         if key not in ToolSlot:

@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from typing import Generic, TypeVar, cast
 
 from .Activity import (
     Activity,
@@ -8,12 +9,18 @@ from .Activity import (
 )
 from .CommandRegistry import COMMAND_REGISTRY
 from .CommandType import CommandType
+from ..util.items.Item import Item
 from ..util.items.ItemInstance import ItemInstance
 from ..util.items.ItemParser import ITEM_PARSER
+from ..util.items.Produceable import Produceable
 from ..util.structures.LootTable import LootTable
 
 
-class ProductionActivity(Activity, ABC):
+T_Produceable = TypeVar('T_Produceable', bound=Produceable)
+
+
+class ProductionActivity(Activity, Generic[T_Produceable], ABC):
+    produceable_cls: type[T_Produceable]
 
     def __init_subclass__(cls, **kwargs):
         super().__init_subclass__(**kwargs)
@@ -23,22 +30,44 @@ class ProductionActivity(Activity, ABC):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self.produceable: ItemInstance | None = self.command.get_item_instance()
+        self._produceable: T_Produceable | None = None
         self.items_required: list[ItemInstance] = []
         self.loot_table: LootTable = LootTable()
+
+    @property
+    def produceable(self) -> T_Produceable:
+        if self._produceable is None:
+            raise RuntimeError('produceable is not initialized; call check() before begin().')
+
+        return self._produceable
 
     def check(self) -> ActivityCheckResult:
         result: ActivityCheckResult = super().check()
         if not result.success:
             return result
 
-        if self.produceable is None:
+        if not self.command.has_valid_item_argument():
             return ActivityCheckResult(
                 success=False,
                 msg='A valid item was not given.'
             )
 
-        self._setup_items_required()
+        base_item: Item = self.command.get_item_base()
+        expected_type: type[T_Produceable] = self.produceable_cls
+        if not isinstance(base_item, expected_type):
+            return ActivityCheckResult(
+                success=False,
+                msg=f'{base_item} is not a valid {expected_type.__name__.lower()} item.'
+            )
+
+        self._produceable = cast(T_Produceable, base_item)
+
+        self.items_required = []
+        for item_name, quantity in self.produceable.items_required.items():
+            self.items_required.append(
+                ITEM_PARSER.get_instance(item_name, quantity)
+            )
+
         for item_instance in self.items_required:
             if self.player.has(item_instance):
                 continue
@@ -55,7 +84,7 @@ class ProductionActivity(Activity, ABC):
         super().begin()
 
     def _process_tick(self) -> ActivityTickResult:
-        ticks_per_action = self.produceable.ticks_per_action if self.produceable else 1
+        ticks_per_action = self.produceable.ticks_per_action
         if self.tick_count % ticks_per_action:
             return ActivityTickResult(
                 msg=self.standby_text,
@@ -93,13 +122,3 @@ class ProductionActivity(Activity, ABC):
 
     def _setup_loot_table(self) -> None:
         pass
-
-    def _setup_items_required(self) -> None:
-        if not (self.produceable and self.produceable.items_required):
-            return
-
-        for item_name, quantity in self.produceable.items_required.items():
-            item_instance: ItemInstance | None = ITEM_PARSER.get_instance(item_name, quantity)
-            if not item_instance:
-                raise ValueError(f'Invalid item {item_name} in items_required for {self.produceable}.')
-            self.items_required.append(item_instance)

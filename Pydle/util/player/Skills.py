@@ -1,4 +1,4 @@
-from .Skill import Skill
+from .Skill import Skill, ExpGainResult
 from .SkillType import SkillType
 from ..colors import color, color_theme
 from ..visuals import centered_title
@@ -24,11 +24,10 @@ SKILLS = {
 
 class Skills(dict):
 
-    def __init__(self, skills_dict: dict[str, float] = None):
-        skills_dict = skills_dict or {}
-        self.load_from_dict(skills_dict)
+    def __init__(self, skills_dict: dict[str, float] | None = None):
+        self.load_from_dict(skills_dict or {})
 
-    def add_xp(self, skill_type: SkillType, xp: float):
+    def add_xp(self, skill_type: SkillType, xp: float) -> ExpGainResult:
         return self[skill_type].add_xp(xp)
 
     def set_xp(self, skill_type: SkillType, xp: float):
@@ -72,9 +71,7 @@ class Skills(dict):
             skill_line: str = f'{name} | Lvl {skill.level:>{max_level_length}} | {exp_str:>{max_exp_length}} Exp'
             msg.append(skill_line)
 
-        msg = '\n'.join(msg)
-
-        return msg
+        return '\n'.join(msg)
 
     def __setitem__(self, key, value):
         if key not in SKILLS:

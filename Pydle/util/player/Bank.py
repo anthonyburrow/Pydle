@@ -157,6 +157,4 @@ class Bank(dict):
                 f'* {item_instance:<{max_item_length +color_pad}}  {qty_str}'
             )
 
-        msg = '\n'.join(msg)
-
-        return msg
+        return '\n'.join(msg)

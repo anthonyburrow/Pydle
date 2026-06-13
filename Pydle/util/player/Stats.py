@@ -25,11 +25,10 @@ STATS = {
 
 class Stats(dict):
 
-    def __init__(self, stats_dict: dict[str, int] = None, *arg, **kwargs):
+    def __init__(self, stats_dict: dict[str, int] | None = None, *arg, **kwargs):
         super().__init__(*arg, **kwargs)
 
-        stats_dict = stats_dict or {}
-        self.load_from_dict(stats_dict)
+        self.load_from_dict(stats_dict or {})
 
     def reset(self):
         for stat_key in STATS:
@@ -53,9 +52,7 @@ class Stats(dict):
             value = self[stat_key]
             msg.append(f'{stat_name:>{max_stat_length}} | {value:>{max_value_length}}')
 
-        msg = '\n'.join(msg)
-
-        return msg
+        return '\n'.join(msg)
 
     def __add__(self, other_stats):
         for stat in STATS:

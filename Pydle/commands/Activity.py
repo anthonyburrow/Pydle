@@ -8,7 +8,7 @@ from .CommandRegistry import COMMAND_REGISTRY
 from .CommandType import CommandType
 from ..util.colors import color, color_theme
 from ..util.player.Bank import Bank
-from ..util.player.Skill import Skill
+from ..util.player.Skill import Skill, ExpGainResult
 from ..util.player.SkillType import SkillType
 
 
@@ -76,9 +76,9 @@ class Activity(Action, ABC):
         if result_tick.xp:
             leveled_up: bool = False
             for skill, amount in result_tick.xp.items():
-                xp_status = self.player.add_xp(skill, amount)
+                xp_status: ExpGainResult = self.player.add_xp(skill, amount)
 
-                if xp_status['leveled_up']:
+                if xp_status.leveled_up:
                     leveled_up = True
                     self._level_up_msg(skill)
 

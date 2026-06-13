@@ -12,9 +12,9 @@ class Tool(Item):
         name: str,
         tool_slot: ToolSlot, 
         level: int,
-        power: float = None,
+        power: float | None = None,
         ticks_per_action: int = 3,
-        supported_qualities: list[Quality] = None
+        supported_qualities: list[Quality] | None = None,
     ):
         super().__init__(item_id, name)
 

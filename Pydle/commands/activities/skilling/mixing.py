@@ -1,19 +1,23 @@
+from typing import cast
+
 from ...Activity import (
     ActivityCheckResult,
     ActivityTickResult
 )
 from ...ProductionActivity import ProductionActivity
 from ....lib.skilling.herblore import MIXABLES
+from ....util.items.ItemInstance import ItemInstance
 from ....util.items.ItemRegistry import ITEM_REGISTRY
 from ....util.items.skilling.Mixable import Mixable
 from ....util.player.Bank import Bank
 from ....util.player.SkillType import SkillType
 
 
-class MixingActivity(ProductionActivity):
+class MixingActivity(ProductionActivity[Mixable]):
 
     name: str = 'mix'
     help_info: str = 'Begin mixing potions.'
+    produceable_cls = Mixable
 
     def __init__(self, *args):
         super().__init__(*args)
@@ -29,7 +33,9 @@ class MixingActivity(ProductionActivity):
 
         msg.append('Available potions:')
         for item_id in MIXABLES:
-            mixable: Mixable = ITEM_REGISTRY[item_id]
+            mixable: Mixable = cast(
+                Mixable, ITEM_REGISTRY.get(item_id, Mixable)
+            )
             msg.append(f'- {mixable}')
 
         return '\n'.join(msg)
@@ -38,12 +44,6 @@ class MixingActivity(ProductionActivity):
         result: ActivityCheckResult = super().check()
         if not result.success:
             return result
-
-        if not isinstance(self.produceable.base, Mixable):
-            return ActivityCheckResult(
-                success=False,
-                msg=f'{self.produceable} is not a valid mixable item.'
-            )
 
         if not self._has_level_requirement(SkillType.HERBLORE, self.produceable.level):
             return ActivityCheckResult(
@@ -83,7 +83,7 @@ class MixingActivity(ProductionActivity):
 
     @property
     def startup_text(self) -> str:
-        return f'{self.player} is now mixing a {self.mixabproduceablele}.'
+        return f'{self.player} is now mixing a {self.produceable}.'
 
     @property
     def standby_text(self) -> str:
@@ -96,9 +96,16 @@ class MixingActivity(ProductionActivity):
     def _setup_loot_table(self):
         super()._setup_loot_table()
 
+        produced: ItemInstance = ItemInstance(
+            item_id=self.produceable.item_id,
+            quantity=self.produceable.n_per_produce,
+        )
+
         self.loot_table = (
             self.loot_table
-            .every(self.produceable)
+            .every(produced)
         )
+
+        # % chance for number of doses
 
         # Add more stuff (pets, etc)

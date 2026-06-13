@@ -12,6 +12,7 @@ class Produceable(Item):
         level: int,
         ticks_per_action: int,
         items_required: dict,
+        n_per_produce: int = 1,
     ):
         super().__init__(item_id, name)
 
@@ -19,6 +20,7 @@ class Produceable(Item):
         self.level: int = level
         self.ticks_per_action: int = ticks_per_action
         self.items_required: dict = items_required
+        self.n_per_produce: int = n_per_produce
 
     def __str__(self):
         return color(self.name.title(), color_theme['skill_artisan'])

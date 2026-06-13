@@ -1,3 +1,5 @@
+from typing import cast
+
 from ...Activity import (
     ActivityCheckResult,
     ActivityTickResult
@@ -8,6 +10,7 @@ from ....lib.skilling.woodcutting import LOGS
 from ....util.items.ItemInstance import ItemInstance
 from ....util.items.ItemParser import ITEM_PARSER
 from ....util.items.ItemRegistry import ITEM_REGISTRY
+from ....util.items.Quality import Quality
 from ....util.items.skilling.Smithable import Smithable
 from ....util.player.Bank import Bank
 from ....util.player.SkillType import SkillType
@@ -16,10 +19,11 @@ from ....util.player.SkillType import SkillType
 fire_effect = 'smithing fire'
 
 
-class SmithingActivity(ProductionActivity):
+class SmithingActivity(ProductionActivity[Smithable]):
 
     name: str = 'smith'
     help_info: str = 'Begin smithing items.'
+    produceable_cls = Smithable
 
     def __init__(self, *args):
         super().__init__(*args)
@@ -35,7 +39,9 @@ class SmithingActivity(ProductionActivity):
 
         msg.append('Available items:')
         for item_id in SMITHABLES:
-            smithable: Smithable = ITEM_REGISTRY[item_id]
+            smithable: Smithable = cast(
+                Smithable, ITEM_REGISTRY.get(item_id, Smithable)
+            )
             msg.append(f'- {smithable}')
 
         return '\n'.join(msg)
@@ -44,12 +50,6 @@ class SmithingActivity(ProductionActivity):
         result: ActivityCheckResult = super().check()
         if not result.success:
             return result
-
-        if not isinstance(self.produceable.base, Smithable):
-            return ActivityCheckResult(
-                success=False,
-                msg=f'{self.produceable} is not a valid smithable item.'
-            )
 
         if not self._has_level_requirement(SkillType.SMITHING, self.produceable.level):
             return ActivityCheckResult(
@@ -123,12 +123,20 @@ class SmithingActivity(ProductionActivity):
 
     @property
     def finish_text(self) -> str:
-        return f'{self.player} finished {self.description}.'
+        return f'{self.player} finished smithing.'
 
     def _setup_loot_table(self):
+        item_kwargs: dict = {
+            'item_id': self.produceable.item_id,
+            'quantity': self.produceable.n_per_produce,
+        }
         self.loot_table = (
             self.loot_table
-            .every(self.produceable)
+            .add(ItemInstance(quality=Quality.POOR, **item_kwargs), 1.)
+            .add(ItemInstance(quality=Quality.GOOD, **item_kwargs), 1.)
+            .add(ItemInstance(quality=Quality.GREAT, **item_kwargs), 1.)
+            .add(ItemInstance(quality=Quality.SUPERIOR, **item_kwargs), 1.)
+            .add(ItemInstance(quality=Quality.MASTER, **item_kwargs), 1.)
         )
 
         # Add more stuff (pets, etc)

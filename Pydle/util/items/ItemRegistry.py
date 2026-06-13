@@ -36,7 +36,7 @@ from ...lib.skilling.smithing import SMELTABLES, SMITHABLES
 from ...lib.skilling.woodcutting import LOGS, AXES
 
 
-class ItemRegistry(dict):
+class ItemRegistry(dict[str, Item]):
     def __init__(self):
         pass
 
@@ -50,8 +50,8 @@ class ItemRegistry(dict):
             item = item_cls(item_id=item_id, **item_kwargs)
             self.register(f'<{item_cls.__name__}> {item_id}', item)
 
-    def get_by_key(self, bank_key: BankKey) -> Item:
-        return self.get(bank_key.item_id)
+    def get(self, item_id: str, item_cls: type[Item]) -> Item:
+        return self[f'<{item_cls.__name__}> {item_id}']
 
     def contains(self, item_id: str) -> bool:
         return item_id in self

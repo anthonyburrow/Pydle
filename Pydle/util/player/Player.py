@@ -6,7 +6,7 @@ from typing import Self
 from .Bank import Bank
 from .Equipment import Equipment
 from .EquipmentSlot import EquipmentSlot
-from .Skill import Skill
+from .Skill import Skill, ExpGainResult
 from .Skills import Skills
 from .SkillType import SkillType
 from .Stats import Stats
@@ -49,8 +49,8 @@ class PlayerSaveData:
 
 class Player:
 
-    def __init__(self, save_file: str = None, *args, **kwargs):
-        self.save_file: str = save_file
+    def __init__(self, save_file: str | None = None, *args, **kwargs):
+        self.save_file: str | None = save_file
 
         self.load(*args, **kwargs)
 
@@ -70,7 +70,7 @@ class Player:
         self._area = area
 
     # Skills and Experience
-    def add_xp(self, skill_type: SkillType, xp: float) -> dict:
+    def add_xp(self, skill_type: SkillType, xp: float) -> ExpGainResult:
         return self._skills.add_xp(skill_type, xp)
 
     def set_xp(self, skill_type: SkillType, xp: float):
@@ -179,7 +179,7 @@ class Player:
         return self._updated_effects
 
     # Management
-    def load_new_player(self, name: str = None, *args, **kwargs):
+    def load_new_player(self, name: str | None = None, *args, **kwargs):
         self._name: str = name or input(f'Character name?\n{COMMAND_PREFIX}')
         self._area: str = HOME_AREA
         self._bank: Bank = Bank().add(NEW_PLAYER_ITEMS)

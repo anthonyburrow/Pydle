@@ -4,7 +4,13 @@ from .Quality import Quality
 
 
 class Item(ABC):
-    def __init__(self, item_id: str, name: str, supported_qualities=None):
+
+    def __init__(
+            self,
+            item_id: str,
+            name: str,
+            supported_qualities: list[Quality] | None = None
+        ):
         self.item_id: str = item_id
         self.name: str = name
         self.supported_qualities: list[Quality] = supported_qualities or []

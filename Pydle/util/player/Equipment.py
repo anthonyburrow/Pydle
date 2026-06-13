@@ -11,15 +11,18 @@ if TYPE_CHECKING:
     from .Player import Player
 
 
-class Equipment(dict):
+class Equipment(dict[EquipmentSlot, ItemInstance | None]):
 
-    def __init__(self, player: Player, equipment_dict: dict | None = None):
+    def __init__(
+            self,
+            player: Player,
+            equipment_dict: dict[EquipmentSlot, ItemInstance | None] | None = None
+        ):
         self._player: Player = player
 
         self._stats: Stats = Stats()
 
-        equipment_dict = equipment_dict or {}
-        self.load_from_dict(equipment_dict)
+        self.load_from_dict(equipment_dict or {})
 
     def equip(self, item_instance: ItemInstance) -> Result:
         if not self._player.has(item_instance):
@@ -124,9 +127,7 @@ class Equipment(dict):
         attack_speed_str = weapon_instance.attack_speed if weapon_instance else 'N/A'
         msg.append(f'\nWeapon tick speed: {attack_speed_str}')
 
-        msg = '\n'.join(msg)
-
-        return msg
+        return '\n'.join(msg)
 
     def __setitem__(self, key, value):
         if key not in EquipmentSlot:

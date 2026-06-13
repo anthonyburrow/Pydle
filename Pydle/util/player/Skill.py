@@ -1,4 +1,5 @@
 import numpy as np
+from dataclasses import dataclass
 
 from .SkillType import SkillType
 from ..colors import color, color_theme
@@ -8,19 +9,31 @@ MAX_LEVEL: int = 126
 MAX_XP: float = 2e8
 
 
-def level_to_xp(level):
+def level_to_xp(level: int) -> float:
     prev_levels = np.arange(1, level)
     inner = np.floor(prev_levels + 300. * 2.**(prev_levels / 7.))
     xp = int(0.25 * inner.sum())
-    return xp
+    return float(xp)
 
 
-XP_TABLE = {lvl: level_to_xp(lvl) for lvl in range(1, MAX_LEVEL + 1)}
+XP_TABLE: dict[int, float] = {
+    lvl: level_to_xp(lvl) for lvl in range(1, MAX_LEVEL + 1)
+}
+
+
+@dataclass
+class ExpGainResult:
+    leveled_up: bool = False
 
 
 class Skill:
 
-    def __init__(self, skill_type: SkillType, skill_category: str, xp: float = 0.):
+    def __init__(
+            self,
+            skill_type: SkillType,
+            skill_category: str,
+            xp: float = 0.
+        ):
         self.skill_type: SkillType = skill_type
         self.skill_category: str = skill_category
 
@@ -29,9 +42,9 @@ class Skill:
         if xp > 0.:
             self.set_xp(xp)
 
-    def add_xp(self, amount: float) -> dict:
+    def add_xp(self, amount: float) -> ExpGainResult:
         if self.xp >= MAX_XP:
-            return
+            return ExpGainResult(leveled_up=False)
 
         new_xp = self.xp + amount
         if new_xp < MAX_XP:
@@ -53,14 +66,15 @@ class Skill:
         self.xp = XP_TABLE[level]
 
     def details(self) -> str:
-        level = self.level
+        level: int = self.level
+        level_display: str = str(level)
         if level >= 99:
-            level = color(level, color_theme['skill_lvl99'])
+            level_display = color(level, color_theme['skill_lvl99'])
 
-        msg = f'{str(self)}: Lvl {level}'
+        msg: str = f'{str(self)}: Lvl {level_display}'
 
         if level < MAX_LEVEL:
-            xp_to_next = XP_TABLE[level + 1] - self.xp
+            xp_to_next: float = XP_TABLE[level + 1] - self.xp
             msg = f'{msg} | {xp_to_next:.0f} EXP to next level'
         else:
             msg = f'{msg} | {self.xp:.0f} EXP'
@@ -70,7 +84,7 @@ class Skill:
     def __str__(self) -> str:
         return color(self.skill_type, color_theme[f'skill_{self.skill_category}'])
 
-    def _adjust_level(self) -> dict[str, bool]:
+    def _adjust_level(self) -> ExpGainResult:
         current_lvl: int = self.level
         leveled_up: bool = False
         for lvl in range(current_lvl + 1, MAX_LEVEL + 1):
@@ -83,6 +97,4 @@ class Skill:
 
             leveled_up = True
 
-        return {
-            'leveled_up': leveled_up,
-        }
+        return ExpGainResult(leveled_up=leveled_up)

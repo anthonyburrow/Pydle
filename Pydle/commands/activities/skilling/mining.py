@@ -1,3 +1,5 @@
+from typing import cast
+
 from ...Activity import (
     ActivityCheckResult,
     ActivityMsgType,
@@ -19,6 +21,9 @@ class MiningActivity(GatheringActivity):
 
     name: str = 'mine'
     help_info: str = 'Begin mining for ores.'
+    gatherable_cls = Ore
+    tool_slot = ToolSlot.PICKAXE
+    tool_description = 'a pickaxe'
 
     def __init__(self, *args):
         super().__init__(*args)
@@ -34,25 +39,17 @@ class MiningActivity(GatheringActivity):
 
         msg.append('Available ores:')
         for item_id in ORES:
-            ore: Ore = ITEM_REGISTRY[item_id]
+            ore: Ore = cast(
+                Ore, ITEM_REGISTRY.get(item_id, Ore)
+            )
             msg.append(f'- {ore}')
 
         return '\n'.join(msg)
-
-    @property
-    def tool(self) -> ItemInstance | None:
-        return self.player.get_tool(ToolSlot.PICKAXE)
 
     def check(self) -> ActivityCheckResult:
         result: ActivityCheckResult = super().check()
         if not result.success:
             return result
-
-        if not isinstance(self.gatherable.base, Ore):
-            return ActivityCheckResult(
-                success=False,
-                msg=f'{self.gatherable} is not a valid ore.'
-            )
 
         if not self._has_level_requirement(SkillType.MINING, self.gatherable.level):
             return ActivityCheckResult(
@@ -65,12 +62,6 @@ class MiningActivity(GatheringActivity):
             return ActivityCheckResult(
                 success=False,
                 msg=f'{area} does not have {self.gatherable} anywhere.'
-            )
-
-        if not self.tool:
-            return ActivityCheckResult(
-                success=False,
-                msg=f'{self.player} does not have a pickaxe equipped.'
             )
 
         return ActivityCheckResult(success=True)

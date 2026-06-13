@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from typing import Generic, TypeVar, cast
 
 from .Activity import (
     Activity,
@@ -9,10 +10,18 @@ from .Activity import (
 from .CommandRegistry import COMMAND_REGISTRY
 from .CommandType import CommandType
 from ..util.items.ItemInstance import ItemInstance
+from ..util.items.Gatherable import Gatherable
 from ..util.structures.LootTable import LootTable
+from ..util.player.ToolSlot import ToolSlot
 
 
-class GatheringActivity(Activity, ABC):
+T_Gatherable = TypeVar('T_Gatherable', bound=Gatherable)
+
+
+class GatheringActivity(Activity, Generic[T_Gatherable], ABC):
+    gatherable_cls: type[T_Gatherable]
+    tool_slot: ToolSlot
+    tool_description: str
 
     def __init_subclass__(cls, **kwargs):
         super().__init_subclass__(**kwargs)
@@ -22,24 +31,53 @@ class GatheringActivity(Activity, ABC):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self.gatherable: ItemInstance | None = self.command.get_item_instance()
+        self._gatherable: T_Gatherable | None = None
+        self._tool: ItemInstance | None = None
         self.loot_table: LootTable = LootTable()
 
     @property
-    @abstractmethod
-    def tool(self) -> ItemInstance | None:
-        pass
+    def gatherable(self) -> T_Gatherable:
+        if self._gatherable is None:
+            raise RuntimeError('gatherable is not initialized; call check() before begin().')
+
+        return self._gatherable
+
+    @property
+    def tool(self) -> ItemInstance:
+        if self._tool is None:
+            raise RuntimeError('tool is not initialized; call check() before begin().')
+
+        return self._tool
 
     def check(self) -> ActivityCheckResult:
         result: ActivityCheckResult = super().check()
         if not result.success:
             return result
 
-        if self.gatherable is None:
+        if not self.command.has_valid_item_argument():
             return ActivityCheckResult(
                 success=False,
                 msg='A valid item was not given.'
             )
+
+        gatherable: ItemInstance = self.command.get_item_instance()
+        expected_type: type[T_Gatherable] = self.gatherable_cls
+        if not isinstance(gatherable, expected_type):
+            return ActivityCheckResult(
+                success=False,
+                msg=f'{gatherable} is not a valid {expected_type.__name__.lower()}.'
+            )
+
+        self._gatherable = cast(T_Gatherable, gatherable)
+
+        tool: ItemInstance | None = self.player.get_tool(self.tool_slot)
+        if not tool:
+            return ActivityCheckResult(
+                success=False,
+                msg=f'{self.player} does not have {self.tool_description} equipped.'
+            )
+
+        self._tool = tool
 
         return ActivityCheckResult(success=True)
 

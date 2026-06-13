@@ -2,7 +2,9 @@ from dataclasses import dataclass
 from numpy import exp
 from numpy.random import rand, randint
 
-from ..monsters.Monster import Monster
+from ..items.ItemInstance import ItemInstance
+from ..monsters.MonsterInstance import MonsterInstance
+from ..player.EquipmentSlot import EquipmentSlot
 from ..player.Player import Player
 from ..player.SkillType import SkillType
 
@@ -15,9 +17,9 @@ class CombatResult:
 
 
 class CombatEngine:
-    def __init__(self, player: Player, monster: Monster):
+    def __init__(self, player: Player, monster: MonsterInstance):
         self.player: Player = player
-        self.monster: Monster = monster
+        self.monster: MonsterInstance = monster
 
         self.player_hit_chance: float = 0.
         self.player_max_hit_strength: int = 1
@@ -97,9 +99,13 @@ class CombatEngine:
 
     def tick(self, tick_count: int) -> CombatResult | None:
         monster_speed: int = self.monster.attack_speed
-        player_speed: int = self.player.equipment['weapon'].attack_speed
+        weapon: ItemInstance | None = self.player.equipment[EquipmentSlot.WEAPON]
 
-        player_attacks: bool = tick_count % player_speed == 0
+        player_attacks: bool = False
+        if weapon:
+            player_speed: int = weapon.attack_speed
+            player_attacks = tick_count % player_speed == 0
+
         monster_attacks: bool = (tick_count - 1) % monster_speed == 0
 
         if not player_attacks and not monster_attacks:
@@ -165,7 +171,7 @@ class CombatEngine:
             hit_chance: float,
             max_hit_strength: int,
             max_hit_magical: int,
-        ) -> tuple[int]:
+        ) -> tuple[int, int]:
         if rand() > hit_chance:
             return 0, 0
 

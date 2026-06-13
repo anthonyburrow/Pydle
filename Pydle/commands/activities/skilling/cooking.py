@@ -1,3 +1,5 @@
+from typing import cast
+
 from ...Activity import (
     ActivityCheckResult,
     ActivityTickResult
@@ -16,10 +18,11 @@ from ....util.player.SkillType import SkillType
 fire_effect = 'cooking fire'
 
 
-class CookingActivity(ProductionActivity):
+class CookingActivity(ProductionActivity[Cookable]):
 
     name: str = 'cook'
     help_info: str = 'Begin cooking food.'
+    produceable_cls = Cookable
 
     def __init__(self, *args):
         super().__init__(*args)
@@ -35,7 +38,9 @@ class CookingActivity(ProductionActivity):
 
         msg.append('Available foods:')
         for item_id in COOKABLES:
-            cookable: Cookable = ITEM_REGISTRY[item_id]
+            cookable: Cookable = cast(
+                Cookable, ITEM_REGISTRY.get(item_id, Cookable)
+            )
             msg.append(f'- {cookable}')
 
         return '\n'.join(msg)
@@ -44,12 +49,6 @@ class CookingActivity(ProductionActivity):
         result: ActivityCheckResult = super().check()
         if not result.success:
             return result
-
-        if not isinstance(self.produceable.base, Cookable):
-            return ActivityCheckResult(
-                success=False,
-                msg=f'{self.produceable} is not a valid cookable item.'
-            )
 
         if not self._has_level_requirement(SkillType.COOKING, self.produceable.level):
             return ActivityCheckResult(
@@ -136,6 +135,11 @@ class CookingActivity(ProductionActivity):
     def _setup_loot_table(self):
         super()._setup_loot_table()
 
+        produced: ItemInstance = ItemInstance(
+            item_id=self.produceable.item_id,
+            quantity=self.produceable.n_per_produce,
+        )
+
         cooking_args = {
             'level': self.player.get_level(SkillType.COOKING),
         }
@@ -143,7 +147,7 @@ class CookingActivity(ProductionActivity):
 
         self.loot_table = (
             self.loot_table
-            .tertiary(self.produceable, prob_success)
+            .tertiary(produced, prob_success)
         )
 
         # Add more stuff (pets, etc)

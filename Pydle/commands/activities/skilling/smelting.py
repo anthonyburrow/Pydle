@@ -1,3 +1,5 @@
+from typing import cast
+
 from ...Activity import (
     ActivityCheckResult,
     ActivityTickResult
@@ -16,10 +18,11 @@ from ....util.player.SkillType import SkillType
 fire_effect = 'smithing fire'
 
 
-class SmeltingActivity(ProductionActivity):
+class SmeltingActivity(ProductionActivity[Smeltable]):
 
     name: str = 'smelt'
     help_info: str = 'Begin smelting ores into bars.'
+    produceable_cls = Smeltable
 
     def __init__(self, *args):
         super().__init__(*args)
@@ -35,7 +38,9 @@ class SmeltingActivity(ProductionActivity):
 
         msg.append('Available ores:')
         for item_id in SMELTABLES:
-            smeltable: Smeltable = ITEM_REGISTRY[item_id]
+            smeltable: Smeltable = cast(
+                Smeltable, ITEM_REGISTRY.get(item_id, Smeltable)
+            )
             msg.append(f'- {smeltable}')
 
         return '\n'.join(msg)
@@ -44,12 +49,6 @@ class SmeltingActivity(ProductionActivity):
         result: ActivityCheckResult = super().check()
         if not result.success:
             return result
-
-        if not isinstance(self.produceable.base, Smeltable):
-            return ActivityCheckResult(
-                success=False,
-                msg=f'{self.produceable} is not a valid smeltable item.'
-            )
 
         if not self._has_level_requirement(SkillType.SMITHING, self.produceable.level):
             return ActivityCheckResult(
@@ -96,7 +95,7 @@ class SmeltingActivity(ProductionActivity):
 
         if not self.player.has_effect(fire_effect):
             for item_id in LOGS:
-                item_instance: ItemInstance | None = \
+                item_instance: ItemInstance = \
                     ITEM_PARSER.get_instance_by_id(item_id)
                 if self.player.has(item_instance):
                     self.player.remove(item_instance)
@@ -126,9 +125,13 @@ class SmeltingActivity(ProductionActivity):
         return f'{self.player} finished smelting.'
 
     def _setup_loot_table(self):
+        produced: ItemInstance = ItemInstance(
+            item_id=self.produceable.item_id,
+            quantity=self.produceable.n_per_produce,
+        )
         self.loot_table = (
             self.loot_table
-            .every(self.produceable)
+            .every(produced)
         )
 
         # Add more stuff (pets, etc)

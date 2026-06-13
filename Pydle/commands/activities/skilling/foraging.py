@@ -1,3 +1,5 @@
+from typing import cast
+
 from ...Activity import (
     Activity,
     ActivityCheckResult,
@@ -8,6 +10,7 @@ from ....lib.areas import AREAS
 from ....util.items.Item import Item
 from ....util.items.ItemInstance import ItemInstance
 from ....util.items.ItemParser import ITEM_PARSER
+from ....util.items.skilling.Collectable import Collectable
 from ....util.player.Bank import Bank
 from ....util.player.BankKey import BankKey
 from ....util.player.SkillType import SkillType
@@ -25,9 +28,16 @@ class ForagingActivity(Activity):
         super().__init__(*args)
 
         self.area: Area = AREAS[self.player.area]
-        self.secateurs: ItemInstance = self.player.get_tool(ToolSlot.SECATEURS)
+        self._secateurs: ItemInstance | None = None
         self.loot_table: LootTable = LootTable()
         self._xp_table: dict[BankKey, float] = {}
+
+    @property
+    def secateurs(self) -> ItemInstance:
+        if self._secateurs is None:
+            raise RuntimeError('secateurs is not initialized; call check() before begin().')
+
+        return self._secateurs
 
     @classmethod
     def usage(cls) -> str:
@@ -50,7 +60,9 @@ class ForagingActivity(Activity):
             )
 
         for collectable_name in self.area.collectables:
-            item: Item = ITEM_PARSER.get_base(collectable_name)
+            item: Collectable = cast(
+                Collectable, ITEM_PARSER.get_base(collectable_name)
+            )
             if self._has_level_requirement(SkillType.FORAGING, item.level):
                 break
         else:
@@ -62,11 +74,14 @@ class ForagingActivity(Activity):
                 )
             )
 
-        if not self.secateurs:
+        secateurs: ItemInstance | None = self.player.get_tool(ToolSlot.SECATEURS)
+        if not secateurs:
             return ActivityCheckResult(
                 success=False,
                 msg=f'{self.player} does not have any secateurs.'
             )
+
+        self._secateurs = secateurs
 
         return ActivityCheckResult(success=True)
 

@@ -13,8 +13,8 @@ class Equippable(Item):
         name: str,
         equipment_slot: EquipmentSlot,
         tier: int,
-        stats: dict = None,
-        supported_qualities: list[Quality] = None
+        stats: dict | None = None,
+        supported_qualities: list[Quality] | None = None
     ):
         super().__init__(item_id, name)
 

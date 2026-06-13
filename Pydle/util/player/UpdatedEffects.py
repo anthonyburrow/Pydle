@@ -3,9 +3,8 @@ from ..colors import color
 
 class UpdatedEffects(dict):
 
-    def __init__(self, effects_dict: dict[str, int] = None):
-        effects_dict = effects_dict or {}
-        self.load_from_dict(effects_dict)
+    def __init__(self, effects_dict: dict[str, int] | None = None):
+        self.load_from_dict(effects_dict or {})
 
     def add_effect(self, effect_key: str, effect_ticks: int):
         self[effect_key] = effect_ticks
@@ -35,10 +34,9 @@ class UpdatedEffects(dict):
         for effect_key, effect_ticks in effects_dict.items():
             self[effect_key] = effect_ticks
 
-    def __str__(self):
+    def __str__(self) -> str:
         if not self:
-            msg = 'No ongoing effects.'
-            return msg
+            return 'No ongoing effects.'
 
         msg: list = []
         just_amount: int = max([len(s) for s in self])
@@ -50,6 +48,4 @@ class UpdatedEffects(dict):
             )
             msg.append(f'{name} : {effect_ticks}')
 
-        msg = '\n'.join(msg)
-
-        return msg
+        return '\n'.join(msg)

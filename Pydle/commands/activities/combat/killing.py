@@ -21,7 +21,7 @@ class KillingActivity(Activity):
     def __init__(self, *args):
         super().__init__(*args)
 
-        self.monster: MonsterInstance | None = self.command.get_monster_instance()
+        self.monster: MonsterInstance = self.command.get_monster_instance()
         self.combat_engine: CombatEngine = CombatEngine(self.player, self.monster)
 
     @classmethod
@@ -83,8 +83,8 @@ class KillingActivity(Activity):
         if self.monster.hitpoints <= 0:
             items: Bank = self.monster.loot_table.roll()
 
-            # Make new monster instance when killed
-            self.monster = self.command.get_monster_instance()
+            # Reset monster state when it is killed
+            self.monster.refresh()
 
             return ActivityTickResult(
                 msg=f'Killed {self.monster}!',

@@ -1,3 +1,6 @@
+from collections.abc import Callable
+from typing import TYPE_CHECKING
+
 from ..colors import color, color_theme
 from ..ticks import Ticks
 from ..items.ItemInstance import ItemInstance
@@ -8,33 +11,38 @@ from ...lib.skilling.mining import ORES
 from ...lib.skilling.woodcutting import LOGS
 
 
+if TYPE_CHECKING:
+    from ..player.Player import Player
+
+
+# Make dataclass
 class Area:
 
     def __init__(
         self,
         name: str,
-        coordinates: tuple[int],
-        requirements: list[callable] = None,
+        coordinates: tuple[int, int],
+        requirements: list[Callable[[Player], bool]] | None = None,
         # Combat
-        monsters: set[str] = None,
+        monsters: set[str] | None = None,
         # Gatherables
-        collectables: set[str] = None,
-        fish: set[str] = None,
-        logs: set[str] = None,
-        ores: set[str] = None,
+        collectables: dict[str, int] | None = None,
+        fish: set[str] | None = None,
+        logs: set[str] | None = None,
+        ores: set[str] | None = None,
     ):
         self.name: str = name
-        self.coordinates: tuple[int] = coordinates
-        self.requirements: list = requirements or []
+        self.coordinates: tuple[int, int] = coordinates
+        self.requirements: list[Callable[[Player], bool]] = requirements or []
         # Combat
         self.monsters: set[str] = monsters or set()
         # Gatherables
-        self.collectables: dict = collectables or dict()
+        self.collectables: dict[str, int] = collectables or dict()
         self.fish: set[str] = fish or set()
         self.logs: set[str] = logs or set()
         self.ores: set[str] = ores or set()
 
-    def travel_ticks(self, current_coordinates: tuple[int]) -> int:
+    def travel_ticks(self, current_coordinates: tuple[int, int]) -> int:
         x0, y0 = current_coordinates
         x, y = self.coordinates
 

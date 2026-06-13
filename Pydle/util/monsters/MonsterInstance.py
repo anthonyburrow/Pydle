@@ -13,6 +13,9 @@ class MonsterInstance:
     def damage(self, amount: int) -> None:
         self.hitpoints = max(0, self.hitpoints - amount)
 
+    def refresh(self) -> None:
+        self.hitpoints = self.base.max_hitpoints
+
     @property
     def base(self) -> Monster:
         return MONSTER_REGISTRY[self.monster_id]

@@ -1,3 +1,5 @@
+from typing import cast
+
 from ...Activity import (
     ActivityCheckResult,
     ActivityMsgType,
@@ -19,6 +21,9 @@ class WoodcuttingActivity(GatheringActivity):
 
     name: str = 'chop'
     help_info: str = 'Begin chopping wood.'
+    gatherable_cls = Log
+    tool_slot = ToolSlot.AXE
+    tool_description = 'an axe'
 
     def __init__(self, *args):
         super().__init__(*args)
@@ -34,25 +39,17 @@ class WoodcuttingActivity(GatheringActivity):
 
         msg.append('Available logs:')
         for item_id in LOGS:
-            log: Log = ITEM_REGISTRY[item_id]
+            log: Log = cast(
+                Log, ITEM_REGISTRY.get(item_id, Log)
+            )
             msg.append(f'- {log}')
 
         return '\n'.join(msg)
-
-    @property
-    def tool(self) -> ItemInstance | None:
-        return self.player.get_tool(ToolSlot.AXE)
 
     def check(self) -> ActivityCheckResult:
         result: ActivityCheckResult = super().check()
         if not result.success:
             return result
-
-        if not isinstance(self.gatherable.base, Log):
-            return ActivityCheckResult(
-                success=False,
-                msg=f'{self.gatherable} is not a valid log.'
-            )
 
         if not self._has_level_requirement(SkillType.WOODCUTTING, self.gatherable.level):
             return ActivityCheckResult(
@@ -65,12 +62,6 @@ class WoodcuttingActivity(GatheringActivity):
             return ActivityCheckResult(
                 success=False,
                 msg=f'{area} does not have {self.gatherable} anywhere.'
-            )
-
-        if not self.tool:
-            return ActivityCheckResult(
-                success=False,
-                msg=f'{self.player} does not have an axe.'
             )
 
         return ActivityCheckResult(success=True)
@@ -90,7 +81,7 @@ class WoodcuttingActivity(GatheringActivity):
             msg=f'Chopped {items.list_concise()}!',
             items=items,
             xp={
-                'woodcutting': self.log.xp,
+                'woodcutting': self.gatherable.xp,
             },
         )
 

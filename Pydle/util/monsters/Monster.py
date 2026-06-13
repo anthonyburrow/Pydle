@@ -20,11 +20,11 @@ class Monster:
         name: str,
         level: int = 1,
         tier: MonsterTier = MonsterTier.BASIC,
-        loot_table: LootTable = None,
+        loot_table: LootTable | None = None,
         # Combat
         max_hitpoints: int = 100,
         attack_speed: int = 3,
-        stats_dict: dict[str, int] = None,
+        stats_dict: dict[str, int] | None = None,
     ):
         # Info
         self.monster_id: str = monster_id
@@ -36,7 +36,7 @@ class Monster:
         # Combat
         self.max_hitpoints: int = max_hitpoints
         self.attack_speed: int = attack_speed
-        self.stats: Stats = Stats(stats_dict)
+        self.stats: Stats = Stats(stats_dict or {})
 
     def get_stat(self, stat_key: str) -> int:
         return self.stats[stat_key]
