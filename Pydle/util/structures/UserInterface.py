@@ -58,6 +58,12 @@ class UserInterface:
         self.keyboard_listener = None
         self.activity_running: bool = False
 
+        self.prompt_session: PromptSession = PromptSession(
+            auto_suggest=CommandSuggestion(),
+            key_bindings=BINDINGS,
+            history=InMemoryHistory(),
+        )
+
     def print(self, message: str, multiline: bool = False) -> None:
         if not message:
             return
@@ -74,12 +80,7 @@ class UserInterface:
         print(traceback.format_exc())
 
     def get_input(self) -> str:
-        session: PromptSession = PromptSession(
-            auto_suggest=CommandSuggestion(),
-            key_bindings=BINDINGS,
-            history=InMemoryHistory(),
-        )
-        return session.prompt(COMMAND_PREFIX)
+        return self.prompt_session.prompt(COMMAND_PREFIX)
 
     def flush_input(self):
         try:
