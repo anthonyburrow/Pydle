@@ -1,13 +1,12 @@
 from typing import Self
 
-from .BankKey import BankKey
 from ..colors import color, color_theme
-from ..visuals import centered_title
 from ..items.ItemInstance import ItemInstance
+from ..visuals import centered_title
+from .BankKey import BankKey
 
 
 class Bank(dict):
-
     def __init__(self, bank_dict: dict | None = None):
         bank_dict = bank_dict or {}
         self.load_from_dict(bank_dict)
@@ -69,13 +68,19 @@ class Bank(dict):
 
         return self
 
+    def remove_all_items(self) -> Self:
+        self.clear()
+        return self
+
     def contains(
         self,
         items: ItemInstance | Self,
-        check_quantity: bool = False
+        check_quantity: bool = False,
     ) -> bool:
         if isinstance(items, ItemInstance):
-            return self._contains_instance(items, check_quantity=check_quantity)
+            return self._contains_instance(
+                items, check_quantity=check_quantity
+            )
         elif isinstance(items, Bank):
             return self._contains_bank(items, check_quantity=check_quantity)
 
@@ -151,10 +156,10 @@ class Bank(dict):
             color_pad: int = len(str(item_instance)) - len(item_instance.name)
             qty_str: str = color(
                 f'[{item_instance.quantity}]'.rjust(max_qty_length + 2),
-                color_theme['UI_1']
+                color_theme['UI_1'],
             )
             msg.append(
-                f'* {item_instance:<{max_item_length +color_pad}}  {qty_str}'
+                f'* {item_instance:<{max_item_length + color_pad}}  {qty_str}'
             )
 
         return '\n'.join(msg)

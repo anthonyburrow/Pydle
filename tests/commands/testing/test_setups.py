@@ -1,4 +1,5 @@
 from Pydle.commands.testing.setups import SetupManager
+from Pydle.util.items.ItemInstance import ItemInstance
 from Pydle.util.items.ItemParser import ITEM_PARSER
 
 
@@ -12,10 +13,22 @@ def test_names_and_has_setup():
 
 def test_apply_skilling_setup_gives_expected_items(test_player):
     manager = SetupManager()
-    pickaxe = ITEM_PARSER.get_instance('poor copper pickaxe')
+    pickaxe: ItemInstance = ITEM_PARSER.get_instance('poor copper pickaxe')
 
     assert not test_player.has(pickaxe)
 
-    manager.apply(test_player, 'skilling')
+    manager.apply(test_player, 'tools')
 
     assert test_player.has(pickaxe)
+
+
+def test_apply_restart(test_player):
+    manager = SetupManager()
+
+    manager.apply(test_player, 'tools')
+
+    assert test_player.bank  # Bank should not be empty
+
+    manager.apply(test_player, 'restart')
+
+    assert not test_player.bank  # Bank should be empty after removal

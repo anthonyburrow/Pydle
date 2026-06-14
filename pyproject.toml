@@ -47,3 +47,9 @@ pydle = "Pydle.main:main"
 [tool.setuptools.packages.find]
 where = ["."]
 include = ["Pydle", "Pydle.*"]
+
+[tool.ruff]
+line-length = 79
+
+[tool.ruff.format]
+quote-style = "single"

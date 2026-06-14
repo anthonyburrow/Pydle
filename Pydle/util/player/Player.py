@@ -1,24 +1,24 @@
-from dataclasses import dataclass, asdict
 import json
+from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import Self
 
+from ...lib.areas import HOME_AREA
+from ...lib.item_sets import NEW_PLAYER_ITEMS
+from ..colors import color, color_theme
+from ..items.ItemInstance import ItemInstance
+from ..Result import Result
+from ..structures.UserInterface import COMMAND_PREFIX
 from .Bank import Bank
 from .Equipment import Equipment
 from .EquipmentSlot import EquipmentSlot
-from .Skill import Skill, ExpGainResult
+from .Skill import ExpGainResult, Skill
 from .Skills import Skills
 from .SkillType import SkillType
 from .Stats import Stats
 from .Tools import Tools
 from .ToolSlot import ToolSlot
 from .UpdatedEffects import UpdatedEffects
-from ..colors import color, color_theme
-from ..Result import Result
-from ..items.ItemInstance import ItemInstance
-from ..structures.UserInterface import COMMAND_PREFIX
-from ...lib.areas import HOME_AREA
-from ...lib.item_sets import NEW_PLAYER_ITEMS
 
 
 @dataclass
@@ -48,7 +48,6 @@ class PlayerSaveData:
 
 
 class Player:
-
     def __init__(self, save_file: str | None = None, *args, **kwargs):
         self.save_file: str | None = save_file
 
@@ -114,10 +113,11 @@ class Player:
     def remove(self, items: ItemInstance | Bank):
         self._bank.remove(items)
 
+    def remove_all_items(self):
+        self._bank.remove_all_items()
+
     def has(
-        self,
-        items: ItemInstance | Bank,
-        check_quantity: bool = False
+        self, items: ItemInstance | Bank, check_quantity: bool = False
     ) -> bool:
         return self._bank.contains(items, check_quantity=check_quantity)
 
@@ -146,7 +146,9 @@ class Player:
     def unequip(self, item_instance: ItemInstance) -> Result:
         return self._equipment.unequip(item_instance)
 
-    def get_equipment(self, equipment_slot: EquipmentSlot) -> ItemInstance | None:
+    def get_equipment(
+        self, equipment_slot: EquipmentSlot
+    ) -> ItemInstance | None:
         return self._equipment[equipment_slot]
 
     @property
@@ -207,7 +209,9 @@ class Player:
         self._skills: Skills = Skills(save_data.skills)
         self._tools: Tools = Tools(self, save_data.tools)
         self._equipment: Equipment = Equipment(self, save_data.equipment)
-        self._updated_effects: UpdatedEffects = UpdatedEffects(save_data.updated_effects)
+        self._updated_effects: UpdatedEffects = UpdatedEffects(
+            save_data.updated_effects
+        )
 
     def save(self):
         if not self.save_file:
