@@ -1,12 +1,13 @@
 from ..Operation import Operation
 from ..testing.setups import SETUP_MANAGER
+from ...util.player.SkillType import SkillType
 
 
 class TestingOperation(Operation):
 
     name: str = 'testing'
     aliases: list[str] = ['test']
-    subcommands: list[str] = ['setup']
+    subcommands: list[str] = ['setup', 'set_level']
     help_info: str = 'Non-production testing commands.'
 
     def __init__(self, *args, **kwargs):
@@ -18,6 +19,7 @@ class TestingOperation(Operation):
 
         msg.append('Use cases:')
         msg.append('- testing setup [name]')
+        msg.append('- testing set_level [skill] [level]')
         msg.append('')
         msg.append('Available setups:')
         for setup_name in SETUP_MANAGER.names():
@@ -43,5 +45,29 @@ class TestingOperation(Operation):
             SETUP_MANAGER.apply(self.player, self.command.argument)
 
             return self.ui.print(f'Applied testing setup `{self.command.argument}`.')
+
+        if self.command.subcommand == 'set_level':
+            args: list[str] = self.command.argument.split()
+            if len(args) != 2:
+                return self.ui.print('Usage: `testing set_level [skill] [level]`.')
+
+            skill_name, level_str = args
+
+            try:
+                skill_type: SkillType = SkillType.from_string(skill_name)
+            except ValueError:
+                return self.ui.print(f'Invalid skill `{skill_name}`.')
+
+            try:
+                level: int = int(level_str)
+            except ValueError:
+                return self.ui.print(f'Invalid level `{level_str}`.')
+
+            try:
+                self.player.set_level(skill_type, level)
+            except KeyError:
+                return self.ui.print(f'Invalid level `{level}`.')
+
+            return self.ui.print(f'Set {skill_type} to level {level}.')
 
         self.ui.print(f'Unknown subcommand `{self.command.subcommand}`')
