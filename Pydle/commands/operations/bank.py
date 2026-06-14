@@ -2,7 +2,6 @@ from ..Operation import Operation
 
 
 class BankOperation(Operation):
-
     name: str = 'bank'
     aliases: list[str] = ['b']
     subcommands: list[str] = []

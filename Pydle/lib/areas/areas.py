@@ -1,6 +1,5 @@
 from ...util.structures.Area import Area
 
-
 HOME_AREA = 'hearthmere'
 
 AREAS = {

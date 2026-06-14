@@ -2,7 +2,6 @@ from ...util.items.ItemParser import ITEM_PARSER
 from ...util.monsters.Monster import MonsterTier
 from ...util.structures.LootTable import LootTable
 
-
 MONSTERS = {
     'goblin': {
         'name': 'goblin',

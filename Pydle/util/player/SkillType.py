@@ -1,6 +1,7 @@
 from enum import Enum, auto
 from typing import Self
 
+
 class SkillType(Enum):
     # Combat skills
     HITPOINTS = auto()

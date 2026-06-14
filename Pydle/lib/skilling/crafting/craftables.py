@@ -1,10 +1,8 @@
-
-
 CRAFTABLES = {
     'leather': {
         'name': 'leather',
         'level': 1,
-        'xp': 6.,
+        'xp': 6.0,
         'items_required': {
             'raw hide': 1,
         },
@@ -13,7 +11,7 @@ CRAFTABLES = {
     'leather gloves': {
         'name': 'leather gloves',
         'level': 1,
-        'xp': 15.,
+        'xp': 15.0,
         'items_required': {
             'leather': 1,
         },

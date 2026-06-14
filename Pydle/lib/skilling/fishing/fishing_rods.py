@@ -1,6 +1,5 @@
 from ....util.player.ToolSlot import ToolSlot
 
-
 FISHING_RODS = {
     'copper fishing rod': {
         'name': 'copper fishing rod',

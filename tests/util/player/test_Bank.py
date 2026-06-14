@@ -9,9 +9,7 @@ from Pydle.util.player.BankKey import BankKey
 def test_instantiate():
     item_instance: ItemInstance = ITEM_PARSER.get_instance('copper ore')
 
-    bank: Bank = Bank({
-        'copper ore': item_instance.to_dict()
-    })
+    bank: Bank = Bank({'copper ore': item_instance.to_dict()})
 
     assert bank.contains(item_instance)
 
@@ -24,7 +22,9 @@ def test_add():
         .add(ITEM_PARSER.get_instance('copper ore', 2))
     )
 
-    assert bank.quantity(BankKey(ITEM_PARSER.get_id_by_name('copper ore'))) == 3
+    assert (
+        bank.quantity(BankKey(ITEM_PARSER.get_id_by_name('copper ore'))) == 3
+    )
     assert bank.quantity(BankKey(ITEM_PARSER.get_id_by_name('iron ore'))) == 2
     assert bank.quantity(BankKey(ITEM_PARSER.get_id_by_name('coal'))) == 0
 
@@ -36,17 +36,29 @@ def test_remove(sample_bank):
         sample_bank.remove(ITEM_PARSER.get_instance('iron ore', 4))
 
     assert not sample_bank.contains(ITEM_PARSER.get_instance('copper ore'))
-    assert sample_bank.quantity(BankKey(ITEM_PARSER.get_id_by_name('silver ore'))) == 1
-    assert sample_bank.quantity(BankKey(ITEM_PARSER.get_id_by_name('iron ore'))) == 3
-    assert sample_bank.quantity(BankKey(ITEM_PARSER.get_id_by_name('coal'))) == 4
+    assert (
+        sample_bank.quantity(BankKey(ITEM_PARSER.get_id_by_name('silver ore')))
+        == 1
+    )
+    assert (
+        sample_bank.quantity(BankKey(ITEM_PARSER.get_id_by_name('iron ore')))
+        == 3
+    )
+    assert (
+        sample_bank.quantity(BankKey(ITEM_PARSER.get_id_by_name('coal'))) == 4
+    )
 
 
 def test_contains(sample_bank):
     assert sample_bank.contains(ITEM_PARSER.get_instance('copper ore'))
     assert sample_bank.contains(ITEM_PARSER.get_instance('copper ore', 1))
     assert sample_bank.contains(ITEM_PARSER.get_instance('copper ore', 2))
-    assert not sample_bank.contains(ITEM_PARSER.get_instance('copper ore', 2), check_quantity=True)
-    assert sample_bank.contains(ITEM_PARSER.get_instance('silver ore', 2), check_quantity=True)
+    assert not sample_bank.contains(
+        ITEM_PARSER.get_instance('copper ore', 2), check_quantity=True
+    )
+    assert sample_bank.contains(
+        ITEM_PARSER.get_instance('silver ore', 2), check_quantity=True
+    )
 
     assert not sample_bank.contains(ITEM_PARSER.get_instance('adamantite ore'))
 
@@ -65,9 +77,20 @@ def test_contains(sample_bank):
 
 
 def test_quantity(sample_bank):
-    assert sample_bank.quantity(BankKey(ITEM_PARSER.get_id_by_name('copper ore'))) == 1
-    assert sample_bank.quantity(BankKey(ITEM_PARSER.get_id_by_name('silver ore'))) == 2
-    assert sample_bank.quantity(BankKey(ITEM_PARSER.get_id_by_name('adamantite ore'))) == 0
+    assert (
+        sample_bank.quantity(BankKey(ITEM_PARSER.get_id_by_name('copper ore')))
+        == 1
+    )
+    assert (
+        sample_bank.quantity(BankKey(ITEM_PARSER.get_id_by_name('silver ore')))
+        == 2
+    )
+    assert (
+        sample_bank.quantity(
+            BankKey(ITEM_PARSER.get_id_by_name('adamantite ore'))
+        )
+        == 0
+    )
 
 
 def test_empty(sample_bank):

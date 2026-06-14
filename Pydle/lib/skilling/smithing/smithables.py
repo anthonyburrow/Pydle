@@ -1,12 +1,10 @@
-
-
 SMITHABLES = {
     #
     # Copper
     #
     'copper longsword': {
         'name': 'copper longsword',
-        'xp': 16.,
+        'xp': 16.0,
         'level': 1,
         'ticks_per_action': 6,
         'items_required': {
@@ -15,7 +13,7 @@ SMITHABLES = {
     },
     'copper kiteshield': {
         'name': 'copper kiteshield',
-        'xp': 16.,
+        'xp': 16.0,
         'level': 1,
         'ticks_per_action': 6,
         'items_required': {
@@ -24,7 +22,7 @@ SMITHABLES = {
     },
     'copper helm': {
         'name': 'copper helm',
-        'xp': 16.,
+        'xp': 16.0,
         'level': 1,
         'ticks_per_action': 6,
         'items_required': {
@@ -33,7 +31,7 @@ SMITHABLES = {
     },
     'copper chestplate': {
         'name': 'copper chestplate',
-        'xp': 24.,
+        'xp': 24.0,
         'level': 1,
         'ticks_per_action': 6,
         'items_required': {
@@ -42,7 +40,7 @@ SMITHABLES = {
     },
     'copper platelegs': {
         'name': 'copper platelegs',
-        'xp': 24.,
+        'xp': 24.0,
         'level': 1,
         'ticks_per_action': 6,
         'items_required': {
@@ -51,7 +49,7 @@ SMITHABLES = {
     },
     'copper gauntlets': {
         'name': 'copper gauntlets',
-        'xp': 8.,
+        'xp': 8.0,
         'level': 1,
         'ticks_per_action': 6,
         'items_required': {
@@ -60,7 +58,7 @@ SMITHABLES = {
     },
     'copper boots': {
         'name': 'copper boots',
-        'xp': 8.,
+        'xp': 8.0,
         'level': 1,
         'ticks_per_action': 6,
         'items_required': {
@@ -69,7 +67,7 @@ SMITHABLES = {
     },
     'copper pickaxe': {
         'name': 'copper pickaxe',
-        'xp': 24.,
+        'xp': 24.0,
         'level': 1,
         'ticks_per_action': 6,
         'items_required': {
@@ -79,7 +77,7 @@ SMITHABLES = {
     },
     'copper axe': {
         'name': 'copper axe',
-        'xp': 16.,
+        'xp': 16.0,
         'level': 1,
         'ticks_per_action': 6,
         'items_required': {
@@ -92,7 +90,7 @@ SMITHABLES = {
     #
     'iron longsword': {
         'name': 'iron longsword',
-        'xp': 40.,
+        'xp': 40.0,
         'level': 10,
         'ticks_per_action': 6,
         'items_required': {
@@ -101,7 +99,7 @@ SMITHABLES = {
     },
     'iron kiteshield': {
         'name': 'iron kiteshield',
-        'xp': 40.,
+        'xp': 40.0,
         'level': 10,
         'ticks_per_action': 6,
         'items_required': {
@@ -110,7 +108,7 @@ SMITHABLES = {
     },
     'iron helm': {
         'name': 'iron helm',
-        'xp': 40.,
+        'xp': 40.0,
         'level': 10,
         'ticks_per_action': 6,
         'items_required': {
@@ -119,7 +117,7 @@ SMITHABLES = {
     },
     'iron chestplate': {
         'name': 'iron chestplate',
-        'xp': 60.,
+        'xp': 60.0,
         'level': 10,
         'ticks_per_action': 6,
         'items_required': {
@@ -128,7 +126,7 @@ SMITHABLES = {
     },
     'iron platelegs': {
         'name': 'iron platelegs',
-        'xp': 60.,
+        'xp': 60.0,
         'level': 10,
         'ticks_per_action': 6,
         'items_required': {
@@ -137,7 +135,7 @@ SMITHABLES = {
     },
     'iron gauntlets': {
         'name': 'iron gauntlets',
-        'xp': 20.,
+        'xp': 20.0,
         'level': 10,
         'ticks_per_action': 6,
         'items_required': {
@@ -146,7 +144,7 @@ SMITHABLES = {
     },
     'iron boots': {
         'name': 'iron boots',
-        'xp': 20.,
+        'xp': 20.0,
         'level': 10,
         'ticks_per_action': 6,
         'items_required': {
@@ -155,7 +153,7 @@ SMITHABLES = {
     },
     'iron pickaxe': {
         'name': 'iron pickaxe',
-        'xp': 60.,
+        'xp': 60.0,
         'level': 10,
         'ticks_per_action': 6,
         'items_required': {
@@ -165,7 +163,7 @@ SMITHABLES = {
     },
     'iron axe': {
         'name': 'iron axe',
-        'xp': 40.,
+        'xp': 40.0,
         'level': 10,
         'ticks_per_action': 6,
         'items_required': {
@@ -178,7 +176,7 @@ SMITHABLES = {
     #
     'steel longsword': {
         'name': 'steel longsword',
-        'xp': 72.,
+        'xp': 72.0,
         'level': 15,
         'ticks_per_action': 6,
         'items_required': {
@@ -187,7 +185,7 @@ SMITHABLES = {
     },
     'steel kiteshield': {
         'name': 'steel kiteshield',
-        'xp': 72.,
+        'xp': 72.0,
         'level': 15,
         'ticks_per_action': 6,
         'items_required': {
@@ -196,7 +194,7 @@ SMITHABLES = {
     },
     'steel helm': {
         'name': 'steel helm',
-        'xp': 72.,
+        'xp': 72.0,
         'level': 15,
         'ticks_per_action': 6,
         'items_required': {
@@ -205,7 +203,7 @@ SMITHABLES = {
     },
     'steel chestplate': {
         'name': 'steel chestplate',
-        'xp': 108.,
+        'xp': 108.0,
         'level': 15,
         'ticks_per_action': 6,
         'items_required': {
@@ -214,7 +212,7 @@ SMITHABLES = {
     },
     'steel platelegs': {
         'name': 'steel platelegs',
-        'xp': 108.,
+        'xp': 108.0,
         'level': 15,
         'ticks_per_action': 6,
         'items_required': {
@@ -223,7 +221,7 @@ SMITHABLES = {
     },
     'steel gauntlets': {
         'name': 'steel gauntlets',
-        'xp': 36.,
+        'xp': 36.0,
         'level': 15,
         'ticks_per_action': 6,
         'items_required': {
@@ -232,7 +230,7 @@ SMITHABLES = {
     },
     'steel boots': {
         'name': 'steel boots',
-        'xp': 36.,
+        'xp': 36.0,
         'level': 15,
         'ticks_per_action': 6,
         'items_required': {
@@ -241,7 +239,7 @@ SMITHABLES = {
     },
     'steel pickaxe': {
         'name': 'steel pickaxe',
-        'xp': 108.,
+        'xp': 108.0,
         'level': 15,
         'ticks_per_action': 6,
         'items_required': {
@@ -251,7 +249,7 @@ SMITHABLES = {
     },
     'steel axe': {
         'name': 'steel axe',
-        'xp': 72.,
+        'xp': 72.0,
         'level': 15,
         'ticks_per_action': 6,
         'items_required': {
@@ -264,7 +262,7 @@ SMITHABLES = {
     #
     'adamant longsword': {
         'name': 'adamant longsword',
-        'xp': 208.,
+        'xp': 208.0,
         'level': 30,
         'ticks_per_action': 6,
         'items_required': {
@@ -273,7 +271,7 @@ SMITHABLES = {
     },
     'adamant kiteshield': {
         'name': 'adamant kiteshield',
-        'xp': 208.,
+        'xp': 208.0,
         'level': 30,
         'ticks_per_action': 6,
         'items_required': {
@@ -282,7 +280,7 @@ SMITHABLES = {
     },
     'adamant helm': {
         'name': 'adamant helm',
-        'xp': 208.,
+        'xp': 208.0,
         'level': 30,
         'ticks_per_action': 6,
         'items_required': {
@@ -291,7 +289,7 @@ SMITHABLES = {
     },
     'adamant chestplate': {
         'name': 'adamant chestplate',
-        'xp': 312.,
+        'xp': 312.0,
         'level': 30,
         'ticks_per_action': 6,
         'items_required': {
@@ -300,7 +298,7 @@ SMITHABLES = {
     },
     'adamant platelegs': {
         'name': 'adamant platelegs',
-        'xp': 312.,
+        'xp': 312.0,
         'level': 30,
         'ticks_per_action': 6,
         'items_required': {
@@ -309,7 +307,7 @@ SMITHABLES = {
     },
     'adamant gauntlets': {
         'name': 'adamant gauntlets',
-        'xp': 104.,
+        'xp': 104.0,
         'level': 30,
         'ticks_per_action': 6,
         'items_required': {
@@ -318,7 +316,7 @@ SMITHABLES = {
     },
     'adamant boots': {
         'name': 'adamant boots',
-        'xp': 104.,
+        'xp': 104.0,
         'level': 30,
         'ticks_per_action': 6,
         'items_required': {
@@ -327,7 +325,7 @@ SMITHABLES = {
     },
     'adamant pickaxe': {
         'name': 'adamant pickaxe',
-        'xp': 312.,
+        'xp': 312.0,
         'level': 30,
         'ticks_per_action': 6,
         'items_required': {
@@ -337,7 +335,7 @@ SMITHABLES = {
     },
     'adamant axe': {
         'name': 'adamant axe',
-        'xp': 208.,
+        'xp': 208.0,
         'level': 30,
         'ticks_per_action': 6,
         'items_required': {

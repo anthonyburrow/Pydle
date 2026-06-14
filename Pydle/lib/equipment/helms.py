@@ -1,6 +1,5 @@
 from ...util.player.EquipmentSlot import EquipmentSlot
 
-
 HELMS = {
     'copper helm': {
         'name': 'copper helm',

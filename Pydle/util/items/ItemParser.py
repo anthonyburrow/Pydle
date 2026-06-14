@@ -1,11 +1,10 @@
 from .Item import Item
 from .ItemInstance import ItemInstance
-from .ItemRegistry import ItemRegistry, ITEM_REGISTRY
+from .ItemRegistry import ITEM_REGISTRY, ItemRegistry
 from .Quality import Quality
 
 
 class ItemParser:
-
     def __init__(self, item_registry: ItemRegistry):
         self._item_registry: ItemRegistry = item_registry
 
@@ -38,12 +37,15 @@ class ItemParser:
 
         return item_instance
 
-    def get_instance_by_id(self, item_id: str, quantity: int = 1) -> ItemInstance:
+    def get_instance_by_id(
+        self, item_id: str, quantity: int = 1
+    ) -> ItemInstance:
         return ItemInstance(item_id=item_id, quantity=quantity)
 
     def get_id_by_name(self, item_name: str) -> str:
-        instance_data: tuple[str, Quality | None] = \
-            self.name_map[item_name.lower()]
+        instance_data: tuple[str, Quality | None] = self.name_map[
+            item_name.lower()
+        ]
 
         return instance_data[0]
 

@@ -1,6 +1,6 @@
-from Pydle.commands.Command import Command
-from Pydle.commands.Activity import ActivityCheckResult
 from Pydle.commands.activities.skilling.woodcutting import WoodcuttingActivity
+from Pydle.commands.Activity import ActivityCheckResult
+from Pydle.commands.Command import Command
 from Pydle.util.items.ItemInstance import ItemInstance
 from Pydle.util.items.ItemParser import ITEM_PARSER
 from Pydle.util.player.SkillType import SkillType
@@ -12,7 +12,9 @@ def test_missing_axe(test_player, test_ui) -> None:
     raw_in: str = 'chop pine log'
     command: Command = Command.parse(raw_in)
 
-    activity: WoodcuttingActivity = WoodcuttingActivity(test_player, test_ui, command)
+    activity: WoodcuttingActivity = WoodcuttingActivity(
+        test_player, test_ui, command
+    )
     result_check: ActivityCheckResult = activity.check()
     assert not result_check.success
 

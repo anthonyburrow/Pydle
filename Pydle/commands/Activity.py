@@ -3,13 +3,13 @@ from dataclasses import dataclass
 from enum import Enum
 from inspect import isabstract
 
+from ..util.colors import color, color_theme
+from ..util.player.Bank import Bank
+from ..util.player.Skill import ExpGainResult, Skill
+from ..util.player.SkillType import SkillType
 from .Action import Action
 from .CommandRegistry import COMMAND_REGISTRY
 from .CommandType import CommandType
-from ..util.colors import color, color_theme
-from ..util.player.Bank import Bank
-from ..util.player.Skill import Skill, ExpGainResult
-from ..util.player.SkillType import SkillType
 
 
 class ActivityMsgType(Enum):
@@ -32,7 +32,6 @@ class ActivityTickResult:
 
 
 class Activity(Action, ABC):
-
     def __init_subclass__(cls, **kwargs):
         super().__init_subclass__(**kwargs)
 
@@ -47,7 +46,7 @@ class Activity(Action, ABC):
         self._previous_msg_type = ActivityMsgType.RESULT
 
     def check(self) -> ActivityCheckResult:
-        '''Check to see if requirements are met to perform activity.'''
+        """Check to see if requirements are met to perform activity."""
         return ActivityCheckResult(success=True)
 
     def begin(self) -> None:
@@ -64,8 +63,8 @@ class Activity(Action, ABC):
         result_tick: ActivityTickResult = self._process_tick()
 
         if (
-            result_tick.msg_type == ActivityMsgType.RESULT or
-            self._previous_msg_type != ActivityMsgType.WAITING
+            result_tick.msg_type == ActivityMsgType.RESULT
+            or self._previous_msg_type != ActivityMsgType.WAITING
         ):
             self.ui.print(result_tick.msg)
         self._previous_msg_type = result_tick.msg_type
@@ -121,7 +120,9 @@ class Activity(Action, ABC):
     def finish_text(self) -> str:
         return ''
 
-    def _has_level_requirement(self, skill_type: SkillType, level_req: int) -> bool:
+    def _has_level_requirement(
+        self, skill_type: SkillType, level_req: int
+    ) -> bool:
         return self.player.get_level(skill_type) >= level_req
 
     def _on_levelup(self) -> None:
@@ -134,4 +135,6 @@ class Activity(Action, ABC):
         if skill.level >= 99:
             level = color(level, color_theme['skill_lvl99'])
 
-        self.ui.print(f"{self.player}'s {skill} level has increased to Level {level}!")
+        self.ui.print(
+            f"{self.player}'s {skill} level has increased to Level {level}!"
+        )

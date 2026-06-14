@@ -1,5 +1,3 @@
-
-
 def centered_title(title: str, total_length: int) -> str:
     pad = total_length - len(title) - 4
     left = pad // 2

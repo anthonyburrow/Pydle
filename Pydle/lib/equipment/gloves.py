@@ -1,6 +1,5 @@
 from ...util.player.EquipmentSlot import EquipmentSlot
 
-
 GLOVES = {
     'copper gauntlets': {
         'name': 'copper gauntlets',

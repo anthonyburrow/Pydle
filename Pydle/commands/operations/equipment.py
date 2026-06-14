@@ -1,11 +1,10 @@
-from ..Operation import Operation
-from ...util.Result import Result
 from ...util.items.Equippable import Equippable
 from ...util.items.ItemInstance import ItemInstance
+from ...util.Result import Result
+from ..Operation import Operation
 
 
 class EquipmentOperation(Operation):
-
     name: str = 'equipment'
     aliases: list[str] = ['e', 'equip']
     subcommands: list[str] = ['equip', 'unequip', 'stats']
@@ -37,12 +36,16 @@ class EquipmentOperation(Operation):
             return self.ui.print('An item argument was not given.')
 
         if self.command.quantity != 1:
-            return self.ui.print('Only one item can be equipped or unequipped at a time.')
+            return self.ui.print(
+                'Only one item can be equipped or unequipped at a time.'
+            )
 
         item_instance: ItemInstance | None = self.command.get_item_instance()
 
         if not item_instance:
-            return self.ui.print(f"Item '{self.command.argument}' is not a valid argument.")
+            return self.ui.print(
+                f"Item '{self.command.argument}' is not a valid argument."
+            )
 
         if not isinstance(item_instance.base, Equippable):
             return self.ui.print(f"Item '{item_instance}' is not equippable.")

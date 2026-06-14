@@ -1,23 +1,23 @@
 from __future__ import annotations
+
 from typing import TYPE_CHECKING
 
-from .ToolSlot import ToolSlot
-from ..Result import Result
-from ..visuals import centered_title
 from ..items.ItemInstance import ItemInstance
 from ..items.Tool import Tool
+from ..Result import Result
+from ..visuals import centered_title
+from .ToolSlot import ToolSlot
 
 if TYPE_CHECKING:
     from .Player import Player
 
 
 class Tools(dict[ToolSlot, ItemInstance | None]):
-
     def __init__(
-            self,
-            player: Player,
-            tools_dict: dict[ToolSlot, ItemInstance | None] | None = None
-        ):
+        self,
+        player: Player,
+        tools_dict: dict[ToolSlot, ItemInstance | None] | None = None,
+    ):
         self._player: Player = player
 
         self.load_from_dict(tools_dict or {})
@@ -40,7 +40,7 @@ class Tools(dict[ToolSlot, ItemInstance | None]):
 
         return Result(
             success=True,
-            msg=f"{item_instance} was equipped to {self._player}'s toolbelt."
+            msg=f"{item_instance} was equipped to {self._player}'s toolbelt.",
         )
 
     def unequip(self, item_instance: ItemInstance) -> Result:

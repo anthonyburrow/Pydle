@@ -1,20 +1,19 @@
+import traceback
+
 from colorama import just_fix_windows_console
 from prompt_toolkit import PromptSession
 from prompt_toolkit.history import InMemoryHistory
-from prompt_toolkit.keys import Keys
 from prompt_toolkit.key_binding import KeyBindings
 from prompt_toolkit.key_binding.defaults import load_key_bindings
-import traceback
-
+from prompt_toolkit.keys import Keys
 
 try:
     from pynput import keyboard
 except ImportError:
     pass
 
-from .CommandSuggestion import CommandSuggestion
 from ..platform import SYS_PLATFORM, Platform
-
+from .CommandSuggestion import CommandSuggestion
 
 if SYS_PLATFORM == Platform.WINDOWS:
     import win32gui
@@ -49,7 +48,6 @@ def _(event):
 
 
 class UserInterface:
-
     def __init__(self):
         # Allow Colorama/termcolor to work on Windows (does nothing if Unix/Mac)
         just_fix_windows_console()
@@ -86,12 +84,14 @@ class UserInterface:
     def flush_input(self):
         try:
             import msvcrt
+
             while msvcrt.kbhit():
                 msvcrt.getch()
         except ImportError:
             # for linux/unix
             import sys
             import termios
+
             termios.tcflush(sys.stdin, termios.TCIOFLUSH)
 
     def start_keyboard_listener(self):
@@ -105,7 +105,7 @@ class UserInterface:
     def stop_keyboard_listener(self):
         if not self.keyboard_listener:
             raise RuntimeError(
-                'UserInterface.start_keyboard_listener() must be called' \
+                'UserInterface.start_keyboard_listener() must be called'
                 'before UserInterface.stop_keyboard_listener().'
             )
         self.keyboard_listener.stop()
@@ -138,13 +138,24 @@ class UserInterface:
 class NullUserInterface(UserInterface):
     def __init__(self):
         pass
-    def print(self, message: str): pass
-    def print_exception(self, exception: Exception): pass
+
+    def print(self, message: str):
+        pass
+
+    def print_exception(self, exception: Exception):
+        pass
+
     def get_command(self, prompt: str) -> str:
         return ''
+
     def _get_client_ID(self) -> int:
         return 0
+
     def client_focused(self) -> bool:
         return True
-    def start_keyboard_listener(self): pass
-    def stop_keyboard_listener(self): pass
+
+    def start_keyboard_listener(self):
+        pass
+
+    def stop_keyboard_listener(self):
+        pass

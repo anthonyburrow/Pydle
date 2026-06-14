@@ -1,19 +1,15 @@
 from typing import Self
 
+from ..colors import color, color_theme
+from ..player.BankKey import BankKey
 from .Item import Item
 from .ItemRegistry import ITEM_REGISTRY
 from .Quality import Quality
-from ..colors import color, color_theme
-from ..player.BankKey import BankKey
 
 
 class ItemInstance:
-
     def __init__(
-        self,
-        item_id: str,
-        quantity: int = 1,
-        quality: Quality | None = None
+        self, item_id: str, quantity: int = 1, quality: Quality | None = None
     ):
         ITEM_REGISTRY.verify(item_id)
 
@@ -27,7 +23,9 @@ class ItemInstance:
         return {
             'item_id': self.item_id,
             'quantity': self.quantity,
-            'quality': self.quality.value if self.quality is not None else None
+            'quality': self.quality.value
+            if self.quality is not None
+            else None,
         }
 
     @classmethod
@@ -35,7 +33,7 @@ class ItemInstance:
         return cls(
             item_id=data['item_id'],
             quantity=data['quantity'],
-            quality=Quality.from_value(data.get('quality'))
+            quality=Quality.from_value(data.get('quality')),
         )
 
     @property
@@ -92,7 +90,7 @@ class ItemInstance:
             return False
 
         return (
-            self.item_id == other.item_id and
-            self.quantity == other.quantity and
-            self.quality == other.quality
+            self.item_id == other.item_id
+            and self.quantity == other.quantity
+            and self.quality == other.quality
         )

@@ -1,10 +1,9 @@
+from ...util.player.SkillType import SkillType
 from ..Operation import Operation
 from ..testing.setups import SETUP_MANAGER
-from ...util.player.SkillType import SkillType
 
 
 class TestingOperation(Operation):
-
     name: str = 'testing'
     aliases: list[str] = ['test']
     subcommands: list[str] = ['setup', 'set_level']
@@ -33,7 +32,9 @@ class TestingOperation(Operation):
 
         if self.command.subcommand == 'setup':
             if not self.command.argument:
-                msg: str = 'A setup name is needed. Use `testing setup [name]`.'
+                msg: str = (
+                    'A setup name is needed. Use `testing setup [name]`.'
+                )
                 return self.ui.print(msg)
 
             if not SETUP_MANAGER.has_setup(self.command.argument):
@@ -44,12 +45,16 @@ class TestingOperation(Operation):
 
             SETUP_MANAGER.apply(self.player, self.command.argument)
 
-            return self.ui.print(f'Applied testing setup `{self.command.argument}`.')
+            return self.ui.print(
+                f'Applied testing setup `{self.command.argument}`.'
+            )
 
         if self.command.subcommand == 'set_level':
             args: list[str] = self.command.argument.split()
             if len(args) != 2:
-                return self.ui.print('Usage: `testing set_level [skill] [level]`.')
+                return self.ui.print(
+                    'Usage: `testing set_level [skill] [level]`.'
+                )
 
             skill_name, level_str = args
 

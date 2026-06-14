@@ -4,7 +4,6 @@ from ..Operation import Operation
 
 
 class ExitOperation(Operation):
-
     name: str = 'exit'
     aliases: list[str] = ['quit']
     subcommands: list[str] = []

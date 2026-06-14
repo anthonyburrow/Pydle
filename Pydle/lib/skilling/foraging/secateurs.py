@@ -1,6 +1,5 @@
 from ....util.player.ToolSlot import ToolSlot
 
-
 SECATEURS = {
     'copper secateurs': {
         'name': 'copper secateurs',

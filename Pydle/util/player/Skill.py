@@ -1,9 +1,9 @@
-import numpy as np
 from dataclasses import dataclass
 
-from .SkillType import SkillType
-from ..colors import color, color_theme
+import numpy as np
 
+from ..colors import color, color_theme
+from .SkillType import SkillType
 
 MAX_LEVEL: int = 126
 MAX_XP: float = 2e8
@@ -11,7 +11,7 @@ MAX_XP: float = 2e8
 
 def level_to_xp(level: int) -> float:
     prev_levels = np.arange(1, level)
-    inner = np.floor(prev_levels + 300. * 2.**(prev_levels / 7.))
+    inner = np.floor(prev_levels + 300.0 * 2.0 ** (prev_levels / 7.0))
     xp = int(0.25 * inner.sum())
     return float(xp)
 
@@ -27,19 +27,15 @@ class ExpGainResult:
 
 
 class Skill:
-
     def __init__(
-            self,
-            skill_type: SkillType,
-            skill_category: str,
-            xp: float = 0.
-        ):
+        self, skill_type: SkillType, skill_category: str, xp: float = 0.0
+    ):
         self.skill_type: SkillType = skill_type
         self.skill_category: str = skill_category
 
-        self.xp: float = 0.
+        self.xp: float = 0.0
         self.level: int = 1
-        if xp > 0.:
+        if xp > 0.0:
             self.set_xp(xp)
 
     def add_xp(self, amount: float) -> ExpGainResult:
@@ -82,7 +78,9 @@ class Skill:
         return msg
 
     def __str__(self) -> str:
-        return color(self.skill_type, color_theme[f'skill_{self.skill_category}'])
+        return color(
+            self.skill_type, color_theme[f'skill_{self.skill_category}']
+        )
 
     def _adjust_level(self) -> ExpGainResult:
         current_lvl: int = self.level

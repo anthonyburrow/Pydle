@@ -1,20 +1,19 @@
 from abc import ABC, abstractmethod
 from typing import Generic, TypeVar, cast
 
-from .Activity import (
-    Activity,
-    ActivityMsgType,
-    ActivityCheckResult,
-    ActivityTickResult,
-)
-from .CommandRegistry import COMMAND_REGISTRY
-from .CommandType import CommandType
 from ..util.items.Item import Item
 from ..util.items.ItemInstance import ItemInstance
 from ..util.items.ItemParser import ITEM_PARSER
 from ..util.items.Produceable import Produceable
 from ..util.structures.LootTable import LootTable
-
+from .Activity import (
+    Activity,
+    ActivityCheckResult,
+    ActivityMsgType,
+    ActivityTickResult,
+)
+from .CommandRegistry import COMMAND_REGISTRY
+from .CommandType import CommandType
 
 T_Produceable = TypeVar('T_Produceable', bound=Produceable)
 
@@ -37,7 +36,9 @@ class ProductionActivity(Activity, Generic[T_Produceable], ABC):
     @property
     def produceable(self) -> T_Produceable:
         if self._produceable is None:
-            raise RuntimeError('produceable is not initialized; call check() before begin().')
+            raise RuntimeError(
+                'produceable is not initialized; call check() before begin().'
+            )
 
         return self._produceable
 
@@ -48,8 +49,7 @@ class ProductionActivity(Activity, Generic[T_Produceable], ABC):
 
         if not self.command.has_valid_item_argument():
             return ActivityCheckResult(
-                success=False,
-                msg='A valid item was not given.'
+                success=False, msg='A valid item was not given.'
             )
 
         base_item: Item = self.command.get_item_base()
@@ -57,7 +57,7 @@ class ProductionActivity(Activity, Generic[T_Produceable], ABC):
         if not isinstance(base_item, expected_type):
             return ActivityCheckResult(
                 success=False,
-                msg=f'{base_item} is not a valid {expected_type.__name__.lower()} item.'
+                msg=f'{base_item} is not a valid {expected_type.__name__.lower()} item.',
             )
 
         self._produceable = cast(T_Produceable, base_item)
@@ -73,7 +73,7 @@ class ProductionActivity(Activity, Generic[T_Produceable], ABC):
                 continue
             return ActivityCheckResult(
                 success=False,
-                msg=f'{self.player} does not have {item_instance.quantity}x {item_instance}.'
+                msg=f'{self.player} does not have {item_instance.quantity}x {item_instance}.',
             )
 
         return ActivityCheckResult(success=True)
@@ -90,7 +90,7 @@ class ProductionActivity(Activity, Generic[T_Produceable], ABC):
                 msg=self.standby_text,
                 msg_type=ActivityMsgType.WAITING,
             )
-        
+
         return self._perform_action()
 
     @abstractmethod

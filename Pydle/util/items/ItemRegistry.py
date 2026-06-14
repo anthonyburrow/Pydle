@@ -1,9 +1,24 @@
-from .Item import Item
+from ...lib.equipment import (
+    BODIES,
+    BOOTS,
+    GLOVES,
+    HELMS,
+    LEGS,
+    OFFHANDS,
+    WEAPONS,
+)
+from ...lib.misc_items import MISC_ITEMS
+from ...lib.skilling.cooking import COOKABLES
+from ...lib.skilling.crafting import CRAFTABLES
+from ...lib.skilling.fishing import FISH, FISHING_RODS
+from ...lib.skilling.foraging import COLLECTABLES, SECATEURS
+from ...lib.skilling.herblore import MIXABLES
+from ...lib.skilling.mining import ORES, PICKAXES
+from ...lib.skilling.smithing import SMELTABLES, SMITHABLES
+from ...lib.skilling.woodcutting import AXES, LOGS
 from ..player.BankKey import BankKey
-
 from .Armor import Armor
-from .Weapon import Weapon
-from .Tool import Tool
+from .Item import Item
 from .skilling import (
     Collectable,
     Cookable,
@@ -15,25 +30,8 @@ from .skilling import (
     Smeltable,
     Smithable,
 )
-
-from ...lib.misc_items import MISC_ITEMS
-from ...lib.equipment import (
-    HELMS,
-    BODIES,
-    LEGS,
-    BOOTS,
-    GLOVES,
-    WEAPONS,
-    OFFHANDS,
-)
-from ...lib.skilling.cooking import COOKABLES
-from ...lib.skilling.crafting import CRAFTABLES
-from ...lib.skilling.fishing import FISH, FISHING_RODS
-from ...lib.skilling.foraging import COLLECTABLES, SECATEURS
-from ...lib.skilling.herblore import MIXABLES
-from ...lib.skilling.mining import ORES, PICKAXES
-from ...lib.skilling.smithing import SMELTABLES, SMITHABLES
-from ...lib.skilling.woodcutting import LOGS, AXES
+from .Tool import Tool
+from .Weapon import Weapon
 
 
 class ItemRegistry(dict[str, Item]):

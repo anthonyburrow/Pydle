@@ -1,9 +1,3 @@
-from ...Activity import (
-    Activity,
-    ActivityCheckResult,
-    ActivityMsgType,
-    ActivityTickResult
-)
 from ....lib.areas import AREAS
 from ....util.monsters.Monster import Monster
 from ....util.monsters.MonsterInstance import MonsterInstance
@@ -11,10 +5,15 @@ from ....util.player.Bank import Bank
 from ....util.player.EquipmentSlot import EquipmentSlot
 from ....util.structures.Area import Area
 from ....util.structures.CombatEngine import CombatEngine
+from ...Activity import (
+    Activity,
+    ActivityCheckResult,
+    ActivityMsgType,
+    ActivityTickResult,
+)
 
 
 class KillingActivity(Activity):
-
     name: str = 'kill'
     help_info: str = 'Begin killing a monster.'
 
@@ -22,7 +21,9 @@ class KillingActivity(Activity):
         super().__init__(*args)
 
         self.monster: MonsterInstance = self.command.get_monster_instance()
-        self.combat_engine: CombatEngine = CombatEngine(self.player, self.monster)
+        self.combat_engine: CombatEngine = CombatEngine(
+            self.player, self.monster
+        )
 
     @classmethod
     def usage(cls) -> str:
@@ -47,27 +48,24 @@ class KillingActivity(Activity):
 
         if self.monster is None:
             return ActivityCheckResult(
-                success=False,
-                msg='A valid monster was not given.'
+                success=False, msg='A valid monster was not given.'
             )
 
         if not isinstance(self.monster.base, Monster):
             return ActivityCheckResult(
-                success=False,
-                msg=f'{self.monster} is not a valid monster.'
+                success=False, msg=f'{self.monster} is not a valid monster.'
             )
 
         area: Area = AREAS[self.player.area]
         if not area.contains_monster(self.monster):
             return ActivityCheckResult(
                 success=False,
-                msg=f'{area} does not have a {self.monster} anywhere.'
+                msg=f'{area} does not have a {self.monster} anywhere.',
             )
 
         if not self.player.equipment[EquipmentSlot.WEAPON]:
             return ActivityCheckResult(
-                success=False,
-                msg=f'{self.player} needs a weapon to fight!'
+                success=False, msg=f'{self.player} needs a weapon to fight!'
             )
 
         # Checks for:
@@ -94,14 +92,19 @@ class KillingActivity(Activity):
         result_combat = self.combat_engine.tick(self.tick_count)
         if not result_combat:
             return ActivityTickResult(
-                msg=self.standby_text,
-                msg_type=ActivityMsgType.WAITING
+                msg=self.standby_text, msg_type=ActivityMsgType.WAITING
             )
 
-        player_damage_str: str = \
-            f'-{result_combat.player_damage}' if result_combat.player_damage else ''
-        monster_damage_str: str = \
-            f'-{result_combat.monster_damage}' if result_combat.monster_damage else ''
+        player_damage_str: str = (
+            f'-{result_combat.player_damage}'
+            if result_combat.player_damage
+            else ''
+        )
+        monster_damage_str: str = (
+            f'-{result_combat.monster_damage}'
+            if result_combat.monster_damage
+            else ''
+        )
 
         msg = (
             f'{self.player} ({self.player.hitpoints}) {player_damage_str}  |  '

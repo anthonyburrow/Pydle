@@ -1,5 +1,3 @@
-
-
 MISC_ITEMS = {
     'coins': {
         'name': 'coins',

@@ -1,6 +1,5 @@
 from ...util.player.EquipmentSlot import EquipmentSlot
 
-
 OFFHANDS = {
     'copper kiteshield': {
         'name': 'copper kiteshield',

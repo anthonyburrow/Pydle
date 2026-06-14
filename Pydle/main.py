@@ -6,7 +6,6 @@ from .util.player.Player import Player
 from .util.structures.Controller import Controller
 from .util.structures.UserInterface import UserInterface
 
-
 APP_NAME = 'Pydle'
 
 
@@ -16,7 +15,7 @@ def main():
     parser.add_argument(
         '--new',
         action='store_true',
-        help='Delete save file and start new character'
+        help='Delete save file and start new character',
     )
 
     args = parser.parse_args()
@@ -26,10 +25,12 @@ def main():
 
     # Setup/load player
     if args.new and PLAYER_SAVE_FILE.exists():
-        print((
-            'Are you sure you want to make a new character? '
-            'This will delete your previous file. [y/N]'
-        ))
+        print(
+            (
+                'Are you sure you want to make a new character? '
+                'This will delete your previous file. [y/N]'
+            )
+        )
         answer: str = ui.get_input().lower()
 
         if not answer or answer in ('n', 'no'):

@@ -1,11 +1,11 @@
 from __future__ import annotations
-from typing import TYPE_CHECKING
+
 import importlib
 import pkgutil
+from typing import TYPE_CHECKING
 
-from .CommandType import CommandType
 from . import activities, operations
-
+from .CommandType import CommandType
 
 if TYPE_CHECKING:
     from .Action import Action
@@ -15,7 +15,6 @@ CMD_EXIT: str = 'exit'
 
 
 class CommandRegistry:
-
     def __init__(self):
         self.activities: dict[str, type[Action]] = {}
         self.operations: dict[str, type[Action]] = {}
@@ -24,10 +23,14 @@ class CommandRegistry:
 
     def load_commands(self) -> None:
         for package in (activities, operations):
-            for _, name, _ in pkgutil.walk_packages(package.__path__, f'{package.__name__}.'):
+            for _, name, _ in pkgutil.walk_packages(
+                package.__path__, f'{package.__name__}.'
+            ):
                 importlib.import_module(name)
 
-    def register(self, command_action: type[Action], command_type: CommandType) -> None:
+    def register(
+        self, command_action: type[Action], command_type: CommandType
+    ) -> None:
         if command_type == CommandType.ACTIVITY:
             self.activities[command_action.name] = command_action
         elif command_type == CommandType.OPERATION:
@@ -63,7 +66,7 @@ class CommandRegistry:
             return CommandType.ACTIVITY
         elif name in self.operations:
             return CommandType.OPERATION
-        
+
         raise KeyError(f"Unknown command: '{name}'")
 
 

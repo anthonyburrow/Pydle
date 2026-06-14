@@ -1,16 +1,15 @@
-from .Item import Item
-from .Quality import Quality
 from ..colors import color, color_theme
 from ..player.ToolSlot import ToolSlot
+from .Item import Item
+from .Quality import Quality
 
 
 class Tool(Item):
-
     def __init__(
         self,
         item_id: str,
         name: str,
-        tool_slot: ToolSlot, 
+        tool_slot: ToolSlot,
         level: int,
         power: float | None = None,
         ticks_per_action: int = 3,
@@ -24,8 +23,9 @@ class Tool(Item):
         self.power: float = self._default_power() if power is None else power
         self.ticks_per_action: int = ticks_per_action
 
-        self.supported_qualities: list[Quality] = \
-            supported_qualities or list(Quality)
+        self.supported_qualities: list[Quality] = supported_qualities or list(
+            Quality
+        )
 
     def _default_power(self) -> float:
         return 0.5 + float(self.level) * 0.5 * 0.01

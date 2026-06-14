@@ -1,15 +1,14 @@
+from ....lib.areas import AREAS
+from ....util.structures.Area import Area
 from ...Activity import (
     Activity,
     ActivityCheckResult,
     ActivityMsgType,
-    ActivityTickResult
+    ActivityTickResult,
 )
-from ....util.structures.Area import Area
-from ....lib.areas import AREAS
 
 
 class TravelingActivity(Activity):
-
     name: str = 'travel'
     help_info: str = 'Begin traveling to a different area.'
 
@@ -23,9 +22,7 @@ class TravelingActivity(Activity):
             return
 
         current_area = AREAS[self.player.area]
-        self.travel_ticks = self.area.travel_ticks(
-            current_area.coordinates
-        )
+        self.travel_ticks = self.area.travel_ticks(current_area.coordinates)
 
     @classmethod
     def usage(cls) -> str:
@@ -50,14 +47,12 @@ class TravelingActivity(Activity):
 
         if self.area is None:
             return ActivityCheckResult(
-                success=False,
-                msg='A valid area was not given.'
+                success=False, msg='A valid area was not given.'
             )
 
         if self.area_key == self.player.area:
             return ActivityCheckResult(
-                success=False,
-                msg=f'{self.player} is already at {self.area}.'
+                success=False, msg=f'{self.player} is already at {self.area}.'
             )
 
         for req in self.area.requirements:
@@ -66,7 +61,7 @@ class TravelingActivity(Activity):
 
             return ActivityCheckResult(
                 success=False,
-                msg=f'{self.player} is missing requirements to travel to {self.area}.'
+                msg=f'{self.player} is missing requirements to travel to {self.area}.',
             )
 
         return ActivityCheckResult(success=True)

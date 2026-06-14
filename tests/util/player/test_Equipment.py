@@ -1,13 +1,15 @@
 import pytest
 
-from Pydle.util.Result import Result
 from Pydle.util.items.ItemInstance import ItemInstance
 from Pydle.util.items.ItemParser import ITEM_PARSER
 from Pydle.util.player.EquipmentSlot import EquipmentSlot
+from Pydle.util.Result import Result
 
 
 def test_equip_success(test_player):
-    item_instance: ItemInstance = ITEM_PARSER.get_instance('poor copper longsword')
+    item_instance: ItemInstance = ITEM_PARSER.get_instance(
+        'poor copper longsword'
+    )
     test_player.give(item_instance)
     assert test_player.has(item_instance)
 
@@ -19,7 +21,9 @@ def test_equip_success(test_player):
 
 
 def test_equip_fail_no_item(test_player):
-    item_instance: ItemInstance = ITEM_PARSER.get_instance('poor copper longsword')
+    item_instance: ItemInstance = ITEM_PARSER.get_instance(
+        'poor copper longsword'
+    )
     result: Result = test_player.equip(item_instance)
 
     assert not result.success
@@ -27,7 +31,9 @@ def test_equip_fail_no_item(test_player):
 
 
 def test_equip_replaces_existing(test_player):
-    first_item: ItemInstance = ITEM_PARSER.get_instance('poor copper longsword')
+    first_item: ItemInstance = ITEM_PARSER.get_instance(
+        'poor copper longsword'
+    )
     second_item: ItemInstance = ITEM_PARSER.get_instance('poor iron longsword')
 
     test_player.give(first_item)
@@ -42,7 +48,9 @@ def test_equip_replaces_existing(test_player):
 
 
 def test_unequip_success(test_player):
-    item_instance: ItemInstance = ITEM_PARSER.get_instance('poor copper longsword')
+    item_instance: ItemInstance = ITEM_PARSER.get_instance(
+        'poor copper longsword'
+    )
 
     test_player.give(item_instance)
     test_player.equip(item_instance)
@@ -56,7 +64,9 @@ def test_unequip_success(test_player):
 
 
 def test_unequip_fail_not_equipped(test_player):
-    item_instance: ItemInstance = ITEM_PARSER.get_instance('poor copper longsword')
+    item_instance: ItemInstance = ITEM_PARSER.get_instance(
+        'poor copper longsword'
+    )
     result: Result = test_player.unequip(item_instance)
 
     assert not result.success
@@ -64,7 +74,9 @@ def test_unequip_fail_not_equipped(test_player):
 
 
 def test_unequip_fail_wrong_item(test_player):
-    first_item: ItemInstance = ITEM_PARSER.get_instance('poor copper longsword')
+    first_item: ItemInstance = ITEM_PARSER.get_instance(
+        'poor copper longsword'
+    )
     second_item: ItemInstance = ITEM_PARSER.get_instance('poor iron longsword')
 
     test_player.give(first_item)
@@ -79,7 +91,9 @@ def test_unequip_fail_wrong_item(test_player):
 
 
 def test_to_dict_and_load_from_dict(test_player):
-    item_instance: ItemInstance = ITEM_PARSER.get_instance('poor copper longsword')
+    item_instance: ItemInstance = ITEM_PARSER.get_instance(
+        'poor copper longsword'
+    )
     test_player.give(item_instance)
     test_player.equip(item_instance)
 
@@ -96,7 +110,9 @@ def test_to_dict_and_load_from_dict(test_player):
 
 
 def test_stats_update_on_equip_and_unequip(test_player):
-    item_instance: ItemInstance = ITEM_PARSER.get_instance('poor copper longsword')
+    item_instance: ItemInstance = ITEM_PARSER.get_instance(
+        'poor copper longsword'
+    )
     base_stats: dict = test_player.equipment.stats.copy()
 
     test_player.give(item_instance)

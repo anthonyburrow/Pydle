@@ -2,7 +2,6 @@ from ..colors import color
 
 
 class UpdatedEffects(dict):
-
     def __init__(self, effects_dict: dict[str, int] | None = None):
         self.load_from_dict(effects_dict or {})
 
@@ -41,11 +40,7 @@ class UpdatedEffects(dict):
         msg: list = []
         just_amount: int = max([len(s) for s in self])
         for effect_key, effect_ticks in self.items():
-            name = color(
-                effect_key.capitalize(),
-                '',
-                justify=just_amount
-            )
+            name = color(effect_key.capitalize(), '', justify=just_amount)
             msg.append(f'{name} : {effect_ticks}')
 
         return '\n'.join(msg)

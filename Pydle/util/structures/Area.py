@@ -3,15 +3,14 @@ from __future__ import annotations
 from collections.abc import Callable
 from typing import TYPE_CHECKING
 
-from ..colors import color, color_theme
-from ..ticks import Ticks
-from ..items.ItemInstance import ItemInstance
-from ..monsters.MonsterInstance import MonsterInstance
 from ...lib.skilling.fishing import FISH
 from ...lib.skilling.foraging import COLLECTABLES
 from ...lib.skilling.mining import ORES
 from ...lib.skilling.woodcutting import LOGS
-
+from ..colors import color, color_theme
+from ..items.ItemInstance import ItemInstance
+from ..monsters.MonsterInstance import MonsterInstance
+from ..ticks import Ticks
 
 if TYPE_CHECKING:
     from ..player.Player import Player
@@ -19,7 +18,6 @@ if TYPE_CHECKING:
 
 # Make dataclass
 class Area:
-
     def __init__(
         self,
         name: str,
@@ -48,7 +46,7 @@ class Area:
         x0, y0 = current_coordinates
         x, y = self.coordinates
 
-        time_sec = 60. * ((x - x0)**2 + (y - y0)**2)**0.5
+        time_sec = 60.0 * ((x - x0) ** 2 + (y - y0) ** 2) ** 0.5
         time_ticks = int(time_sec / Ticks()) + 1
 
         return time_ticks
@@ -77,23 +75,23 @@ class Area:
         msg.append('')
 
         if self.monsters:
-            msg.append(f'{color('Monsters', color_theme['skill_combat'])}:')
+            msg.append(f'{color("Monsters", color_theme["skill_combat"])}:')
             [msg.append(f'- {key.capitalize()}') for key in self.monsters]
             msg.append('')
 
         def append_gathering_block(
-            label: str,
-            items: set | dict,
-            data_source: dict
+            label: str, items: set | dict, data_source: dict
         ):
             if not items:
                 return
-            msg.append(f"{color(label, color_theme['skill_gathering'])}:")
+            msg.append(f'{color(label, color_theme["skill_gathering"])}:')
 
             just_amount: int = max([len(x) for x in self.collectables])
             for key in items:
                 level = data_source[key].level
-                msg.append(f'- {key.capitalize():<{just_amount}} | Lvl {level}')
+                msg.append(
+                    f'- {key.capitalize():<{just_amount}} | Lvl {level}'
+                )
 
         append_gathering_block('Foraging', self.collectables, COLLECTABLES)
         msg.append('')

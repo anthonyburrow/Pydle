@@ -1,5 +1,3 @@
-
-
 COOKABLES = {
     'shrimp': {
         'name': 'shrimp',
@@ -22,7 +20,7 @@ COOKABLES = {
     'trout': {
         'name': 'trout',
         'items_required': {'raw trout': 1},
-        'xp': 35.,
+        'xp': 35.0,
         'level': 15,
         'ticks_per_action': 3,
         'characteristic_level': 30,
@@ -31,7 +29,7 @@ COOKABLES = {
     'cod': {
         'name': 'cod',
         'items_required': {'raw cod': 1},
-        'xp': 50.,
+        'xp': 50.0,
         'level': 20,
         'ticks_per_action': 3,
         'characteristic_level': 40,
@@ -40,7 +38,7 @@ COOKABLES = {
     'catfish': {
         'name': 'catfish',
         'items_required': {'raw catfish': 1},
-        'xp': 65.,
+        'xp': 65.0,
         'level': 30,
         'ticks_per_action': 3,
         'characteristic_level': 50,
@@ -49,7 +47,7 @@ COOKABLES = {
     'bass': {
         'name': 'bass',
         'items_required': {'raw bass': 1},
-        'xp': 85.,
+        'xp': 85.0,
         'level': 40,
         'ticks_per_action': 3,
         'characteristic_level': 60,

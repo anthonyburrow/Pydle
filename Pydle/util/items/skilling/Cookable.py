@@ -4,7 +4,6 @@ from ..Produceable import Produceable
 
 
 class Cookable(Produceable):
-
     def __init__(
         self,
         # Burning quantities
@@ -13,7 +12,7 @@ class Cookable(Produceable):
         min_prob_factor: float = 0.1,
         growth_rate: float = 0.15,
         *args,
-        **kwargs
+        **kwargs,
     ):
         super().__init__(*args, **kwargs)
 
@@ -28,9 +27,9 @@ class Cookable(Produceable):
         k = self.growth_rate
 
         if level < self.level:
-            return 0.
+            return 0.0
 
-        prob = L / (1. + exp(-k * (level - self.characteristic_level)))
+        prob = L / (1.0 + exp(-k * (level - self.characteristic_level)))
 
         min_prob = self.min_prob_factor * self.produce_value
         if prob < min_prob:

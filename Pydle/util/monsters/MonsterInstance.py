@@ -3,7 +3,6 @@ from .MonsterRegistry import MONSTER_REGISTRY
 
 
 class MonsterInstance:
-
     def __init__(self, monster_id: str):
         MONSTER_REGISTRY.verify(monster_id)
 

@@ -1,11 +1,5 @@
 from typing import cast
 
-from ...Activity import (
-    ActivityCheckResult,
-    ActivityMsgType,
-    ActivityTickResult
-)
-from ...GatheringActivity import GatheringActivity
 from ....lib.areas import AREAS
 from ....lib.skilling.fishing import FISH
 from ....util.items.ItemInstance import ItemInstance
@@ -15,10 +9,15 @@ from ....util.player.Bank import Bank
 from ....util.player.SkillType import SkillType
 from ....util.player.ToolSlot import ToolSlot
 from ....util.structures.Area import Area
+from ...Activity import (
+    ActivityCheckResult,
+    ActivityMsgType,
+    ActivityTickResult,
+)
+from ...GatheringActivity import GatheringActivity
 
 
 class FishingActivity(GatheringActivity):
-
     name: str = 'fish'
     help_info: str = 'Begin fishing for fish.'
     gatherable_cls = Fish
@@ -39,9 +38,7 @@ class FishingActivity(GatheringActivity):
 
         msg.append('Available fish:')
         for item_id in FISH:
-            fish: Fish = cast(
-                Fish, ITEM_REGISTRY.get(item_id, Fish)
-            )
+            fish: Fish = cast(Fish, ITEM_REGISTRY.get(item_id, Fish))
             msg.append(f'- {fish}')
 
         return '\n'.join(msg)
@@ -51,17 +48,19 @@ class FishingActivity(GatheringActivity):
         if not result.success:
             return result
 
-        if not self._has_level_requirement(SkillType.FISHING, self.gatherable.level):
+        if not self._has_level_requirement(
+            SkillType.FISHING, self.gatherable.level
+        ):
             return ActivityCheckResult(
                 success=False,
-                msg=f'You must have Level {self.gatherable.level} Fishing to fish {self.gatherable}.'
+                msg=f'You must have Level {self.gatherable.level} Fishing to fish {self.gatherable}.',
             )
 
         area: Area = AREAS[self.player.area]
         if not area.contains_fish(self.gatherable):
             return ActivityCheckResult(
                 success=False,
-                msg=f'{area} does not have {self.gatherable} anywhere.'
+                msg=f'{area} does not have {self.gatherable} anywhere.',
             )
 
         return ActivityCheckResult(success=True)
@@ -118,9 +117,8 @@ class FishingActivity(GatheringActivity):
 
         self.gatherable.set_quantity(self.gatherable.n_per_gather)
 
-        self.loot_table = (
-            self.loot_table
-            .tertiary(self.gatherable, prob_success)
+        self.loot_table = self.loot_table.tertiary(
+            self.gatherable, prob_success
         )
 
         # Add more stuff (pets, etc)

@@ -1,24 +1,22 @@
 from typing import cast
 
-from ...Activity import (
-    ActivityCheckResult,
-    ActivityMsgType,
-    ActivityTickResult
-)
-from ...GatheringActivity import GatheringActivity
 from ....lib.areas import AREAS
 from ....lib.skilling.mining import ORES
-from ....util.items.ItemInstance import ItemInstance
 from ....util.items.ItemRegistry import ITEM_REGISTRY
 from ....util.items.skilling.Ore import Ore
 from ....util.player.Bank import Bank
 from ....util.player.SkillType import SkillType
 from ....util.player.ToolSlot import ToolSlot
 from ....util.structures.Area import Area
+from ...Activity import (
+    ActivityCheckResult,
+    ActivityMsgType,
+    ActivityTickResult,
+)
+from ...GatheringActivity import GatheringActivity
 
 
 class MiningActivity(GatheringActivity):
-
     name: str = 'mine'
     help_info: str = 'Begin mining for ores.'
     gatherable_cls = Ore
@@ -39,9 +37,7 @@ class MiningActivity(GatheringActivity):
 
         msg.append('Available ores:')
         for item_id in ORES:
-            ore: Ore = cast(
-                Ore, ITEM_REGISTRY.get(item_id, Ore)
-            )
+            ore: Ore = cast(Ore, ITEM_REGISTRY.get(item_id, Ore))
             msg.append(f'- {ore}')
 
         return '\n'.join(msg)
@@ -51,17 +47,19 @@ class MiningActivity(GatheringActivity):
         if not result.success:
             return result
 
-        if not self._has_level_requirement(SkillType.MINING, self.gatherable.level):
+        if not self._has_level_requirement(
+            SkillType.MINING, self.gatherable.level
+        ):
             return ActivityCheckResult(
                 success=False,
-                msg=f'You must have Level {self.gatherable.level} Mining to mine {self.gatherable}.'
+                msg=f'You must have Level {self.gatherable.level} Mining to mine {self.gatherable}.',
             )
 
         area: Area = AREAS[self.player.area]
         if not area.contains_ore(self.gatherable):
             return ActivityCheckResult(
                 success=False,
-                msg=f'{area} does not have {self.gatherable} anywhere.'
+                msg=f'{area} does not have {self.gatherable} anywhere.',
             )
 
         return ActivityCheckResult(success=True)
@@ -116,9 +114,8 @@ class MiningActivity(GatheringActivity):
 
         self.gatherable.set_quantity(self.gatherable.n_per_gather)
 
-        self.loot_table = (
-            self.loot_table
-            .tertiary(self.gatherable, prob_success)
+        self.loot_table = self.loot_table.tertiary(
+            self.gatherable, prob_success
         )
 
         # Add more stuff (pets, etc)

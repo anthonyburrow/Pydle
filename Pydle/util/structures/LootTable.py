@@ -1,12 +1,12 @@
-import numpy as np
 from typing import Self
+
+import numpy as np
 
 from ..items.ItemInstance import ItemInstance
 from ..player.Bank import Bank
 
 
 class LootTable:
-
     def __init__(self):
         self._weighted_items: list[ItemInstance | None] = []
         self._weighted_weights: list[float] = []
@@ -16,7 +16,7 @@ class LootTable:
         self._every_items: list[ItemInstance] = []
         self._tertiary_items: list[tuple[ItemInstance, float]] = []
 
-    def add(self, item_instance: ItemInstance, weight: float = 1.) -> Self:
+    def add(self, item_instance: ItemInstance, weight: float = 1.0) -> Self:
         self._weighted_items.append(item_instance)
         self._weighted_weights.append(weight)
 
@@ -24,7 +24,7 @@ class LootTable:
 
         return self
 
-    def add_empty(self, weight: float = 1.) -> Self:
+    def add_empty(self, weight: float = 1.0) -> Self:
         self._weighted_items.append(None)
         self._weighted_weights.append(weight)
 
@@ -32,7 +32,9 @@ class LootTable:
 
         return self
 
-    def tertiary(self, item_instance: ItemInstance, probability: float) -> Self:
+    def tertiary(
+        self, item_instance: ItemInstance, probability: float
+    ) -> Self:
         self._tertiary_items.append((item_instance, probability))
 
         return self
@@ -97,7 +99,9 @@ class LootTable:
                 continue
 
             new_quantity: int = n_rolls * item_instance.quantity
-            new_instance: ItemInstance = item_instance.copy(quantity=new_quantity)
+            new_instance: ItemInstance = item_instance.copy(
+                quantity=new_quantity
+            )
 
             loot.add(new_instance)
 
@@ -118,7 +122,9 @@ class LootTable:
                 continue
 
             new_quantity: int = n_successful * item_instance.quantity
-            new_instance: ItemInstance = item_instance.copy(quantity=new_quantity)
+            new_instance: ItemInstance = item_instance.copy(
+                quantity=new_quantity
+            )
 
             loot.add(new_instance)
 

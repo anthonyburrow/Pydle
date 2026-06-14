@@ -1,10 +1,5 @@
 from typing import cast
 
-from ...Activity import (
-    ActivityCheckResult,
-    ActivityTickResult
-)
-from ...ProductionActivity import ProductionActivity
 from ....lib.skilling.cooking import COOKABLES
 from ....lib.skilling.woodcutting import LOGS
 from ....util.items.ItemInstance import ItemInstance
@@ -13,13 +8,13 @@ from ....util.items.ItemRegistry import ITEM_REGISTRY
 from ....util.items.skilling.Cookable import Cookable
 from ....util.player.Bank import Bank
 from ....util.player.SkillType import SkillType
-
+from ...Activity import ActivityCheckResult, ActivityTickResult
+from ...ProductionActivity import ProductionActivity
 
 fire_effect = 'cooking fire'
 
 
 class CookingActivity(ProductionActivity[Cookable]):
-
     name: str = 'cook'
     help_info: str = 'Begin cooking food.'
     produceable_cls = Cookable
@@ -50,22 +45,25 @@ class CookingActivity(ProductionActivity[Cookable]):
         if not result.success:
             return result
 
-        if not self._has_level_requirement(SkillType.COOKING, self.produceable.level):
+        if not self._has_level_requirement(
+            SkillType.COOKING, self.produceable.level
+        ):
             return ActivityCheckResult(
                 success=False,
-                msg=f'{self.player} must have Level {self.produceable.level} Cooking to cook {self.produceable}.'
+                msg=f'{self.player} must have Level {self.produceable.level} Cooking to cook {self.produceable}.',
             )
 
         if not self.player.has_effect(fire_effect):
             for item_id in LOGS:
-                item_instance: ItemInstance | None = \
+                item_instance: ItemInstance | None = (
                     ITEM_PARSER.get_instance_by_id(item_id)
+                )
                 if self.player.has(item_instance):
                     break
             else:
                 return ActivityCheckResult(
                     success=False,
-                    msg=f'{self.player} has no logs to make a fire.'
+                    msg=f'{self.player} has no logs to make a fire.',
                 )
 
         return ActivityCheckResult(success=True)
@@ -78,7 +76,7 @@ class CookingActivity(ProductionActivity[Cookable]):
             self.player.remove(item_instance)
 
         items: Bank = self.loot_table.roll()
-        xp: float = self.produceable.xp if self.produceable else 0.
+        xp: float = self.produceable.xp if self.produceable else 0.0
 
         if not items:
             return ActivityTickResult(
@@ -103,11 +101,14 @@ class CookingActivity(ProductionActivity[Cookable]):
 
         if not self.player.has_effect(fire_effect):
             for item_id in LOGS:
-                item_instance: ItemInstance | None = \
+                item_instance: ItemInstance | None = (
                     ITEM_PARSER.get_instance_by_id(item_id)
+                )
                 if self.player.has(item_instance):
                     self.player.remove(item_instance)
-                    self.player.add_effect(fire_effect, item_instance.ticks_per_fire)
+                    self.player.add_effect(
+                        fire_effect, item_instance.ticks_per_fire
+                    )
                     break
             else:
                 return ActivityCheckResult(
@@ -145,9 +146,6 @@ class CookingActivity(ProductionActivity[Cookable]):
         }
         prob_success = self.produceable.prob_success(**cooking_args)
 
-        self.loot_table = (
-            self.loot_table
-            .tertiary(produced, prob_success)
-        )
+        self.loot_table = self.loot_table.tertiary(produced, prob_success)
 
         # Add more stuff (pets, etc)

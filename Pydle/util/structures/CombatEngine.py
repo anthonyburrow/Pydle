@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+
 from numpy import exp
 from numpy.random import rand, randint
 
@@ -21,11 +22,11 @@ class CombatEngine:
         self.player: Player = player
         self.monster: MonsterInstance = monster
 
-        self.player_hit_chance: float = 0.
+        self.player_hit_chance: float = 0.0
         self.player_max_hit_strength: int = 1
         self.player_max_hit_magical: int = 1
 
-        self.monster_hit_chance: float = 0.
+        self.monster_hit_chance: float = 0.0
         self.monster_max_hit: int = 1
 
         self.calculate_values()
@@ -34,7 +35,7 @@ class CombatEngine:
         # Player hit chance
         accuracy: int = self._calculate_effective_level(
             self.player.get_level(SkillType.ACCURACY),
-            self.player.get_stat('accuracy')
+            self.player.get_stat('accuracy'),
         )
 
         evasiveness: int = self.monster.get_stat('evasiveness')
@@ -48,7 +49,7 @@ class CombatEngine:
 
         evasiveness: int = self._calculate_effective_level(
             self.player.get_level(SkillType.EVASIVENESS),
-            self.player.get_stat('evasiveness')
+            self.player.get_stat('evasiveness'),
         )
 
         self.monster_hit_chance = self._calculate_hit_chance(
@@ -58,7 +59,7 @@ class CombatEngine:
         # Player max hit
         physical_strength: int = self._calculate_effective_level(
             self.player.get_level(SkillType.STRENGTH),
-            self.player.get_stat('physical_strength')
+            self.player.get_stat('physical_strength'),
         )
         physical_defense: int = self.monster.get_stat('physical_defense')
 
@@ -68,7 +69,7 @@ class CombatEngine:
 
         magical_power: int = self._calculate_effective_level(
             self.player.get_level(SkillType.MAGIC),
-            self.player.get_stat('magical_power')
+            self.player.get_stat('magical_power'),
         )
         magical_barrier: int = self.monster.get_stat('magical_barrier')
 
@@ -80,7 +81,7 @@ class CombatEngine:
         physical_strength: int = self.monster.get_stat('physical_strength')
         physical_defense: int = self._calculate_effective_level(
             self.player.get_level(SkillType.DEFENSE),
-            self.player.get_stat('physical_defense')
+            self.player.get_stat('physical_defense'),
         )
 
         self.monster_max_hit_strength = self._calculate_max_hit(
@@ -90,7 +91,7 @@ class CombatEngine:
         magical_power: int = self.monster.get_stat('magical_power')
         magical_barrier: int = self._calculate_effective_level(
             self.player.get_level(SkillType.BARRIER),
-            self.player.get_stat('magical_barrier')
+            self.player.get_stat('magical_barrier'),
         )
 
         self.monster_max_hit_magical = self._calculate_max_hit(
@@ -99,7 +100,9 @@ class CombatEngine:
 
     def tick(self, tick_count: int) -> CombatResult | None:
         monster_speed: int = self.monster.attack_speed
-        weapon: ItemInstance | None = self.player.equipment[EquipmentSlot.WEAPON]
+        weapon: ItemInstance | None = self.player.equipment[
+            EquipmentSlot.WEAPON
+        ]
 
         player_attacks: bool = False
         if weapon:
@@ -154,24 +157,22 @@ class CombatEngine:
             xp[SkillType.MAGIC] = float(xp_magical)
 
             xp_accuracy = monster_damage * xp_per_dmg
-            xp_accuracy *= 1. - self.player_hit_chance
+            xp_accuracy *= 1.0 - self.player_hit_chance
             xp[SkillType.ACCURACY] = float(xp_accuracy)
 
             xp_hitpoints = int(monster_damage * xp_per_dmg * 0.5)
             xp[SkillType.HITPOINTS] = float(xp_hitpoints)
 
         return CombatResult(
-            player_damage=player_damage,
-            monster_damage=monster_damage,
-            xp=xp
+            player_damage=player_damage, monster_damage=monster_damage, xp=xp
         )
 
     def _calculate_damage(
-            self,
-            hit_chance: float,
-            max_hit_strength: int,
-            max_hit_magical: int,
-        ) -> tuple[int, int]:
+        self,
+        hit_chance: float,
+        max_hit_strength: int,
+        max_hit_magical: int,
+    ) -> tuple[int, int]:
         if rand() > hit_chance:
             return 0, 0
 
@@ -190,13 +191,13 @@ class CombatEngine:
         skill_level: int,
         equipment_stat: int,
     ) -> int:
-        max_level: float = 126.
-        target_max_equipment: float = 200.
+        max_level: float = 126.0
+        target_max_equipment: float = 200.0
 
         skill_scaled: float = skill_level / max_level
         equip_scaled: float = equipment_stat / target_max_equipment
 
-        effective_level: float = (skill_scaled * equip_scaled)**0.5
+        effective_level: float = (skill_scaled * equip_scaled) ** 0.5
         effective_level *= max_level + target_max_equipment
 
         return int(effective_level)
@@ -205,7 +206,7 @@ class CombatEngine:
         delta: float = float(accuracy - evasiveness)
 
         k: float = 0.1
-        prob: float = 1. / (1. + exp(-k * delta))
+        prob: float = 1.0 / (1.0 + exp(-k * delta))
         prob = min(0.99, prob)
         prob = max(0.01, prob)
 
@@ -215,7 +216,7 @@ class CombatEngine:
         delta: float = float(strength_qty - defense_qty)
 
         k: float = 0.01
-        factor: float = 1. / (1. + exp(-k * delta))
+        factor: float = 1.0 / (1.0 + exp(-k * delta))
 
         max_hit: int = int(factor * float(strength_qty)) * 5
 

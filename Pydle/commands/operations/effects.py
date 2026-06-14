@@ -2,7 +2,6 @@ from ..Operation import Operation
 
 
 class EffectsOperation(Operation):
-
     name: str = 'effects'
     aliases: list[str] = ['effect']
     subcommands: list[str] = []
@@ -22,4 +21,6 @@ class EffectsOperation(Operation):
 
     def execute(self):
         if not self.command.subcommand and not self.command.argument:
-            return self.ui.print(str(self.player.updated_effects), multiline=True)
+            return self.ui.print(
+                str(self.player.updated_effects), multiline=True
+            )

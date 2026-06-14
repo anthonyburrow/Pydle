@@ -1,17 +1,20 @@
 from prompt_toolkit.auto_suggest import AutoSuggest, Suggestion
 
-from ..items.ItemParser import ITEM_PARSER
-from ..monsters.MonsterParser import MONSTER_PARSER
 from ...commands.CommandRegistry import COMMAND_REGISTRY
 from ...lib.areas.areas import AREAS
+from ..items.ItemParser import ITEM_PARSER
+from ..monsters.MonsterParser import MONSTER_PARSER
 
 
 class CommandSuggestion(AutoSuggest):
-
     def __init__(self):
         self.commands: list[str] = []
-        self.commands.extend(a.name for a in COMMAND_REGISTRY.activities.values())
-        self.commands.extend(o.name for o in COMMAND_REGISTRY.operations.values())
+        self.commands.extend(
+            a.name for a in COMMAND_REGISTRY.activities.values()
+        )
+        self.commands.extend(
+            o.name for o in COMMAND_REGISTRY.operations.values()
+        )
 
         self.monster_commands: set[str] = {'kill'}
         self.area_commands: set[str] = {'area', 'travel'}
@@ -27,7 +30,7 @@ class CommandSuggestion(AutoSuggest):
             for command in self.commands:
                 if not command.startswith(text):
                     continue
-                remainder: str = command[len(tokens[0]):]
+                remainder: str = command[len(tokens[0]) :]
                 if remainder:
                     return Suggestion(remainder)
 
@@ -41,21 +44,21 @@ class CommandSuggestion(AutoSuggest):
                 for monster in MONSTER_PARSER.name_map:
                     if not monster.startswith(argument):
                         continue
-                    remainder: str = monster[len(argument):]
+                    remainder: str = monster[len(argument) :]
                     if remainder:
                         return Suggestion(remainder)
             elif command in self.area_commands:
                 for area in AREAS:
                     if not area.startswith(argument):
                         continue
-                    remainder: str = area[len(argument):]
+                    remainder: str = area[len(argument) :]
                     if remainder:
                         return Suggestion(remainder)
             else:
                 for item in ITEM_PARSER.name_map:
                     if not item.startswith(argument):
                         continue
-                    remainder: str = item[len(argument):]
+                    remainder: str = item[len(argument) :]
                     if remainder:
                         return Suggestion(remainder)
 

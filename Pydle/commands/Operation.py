@@ -6,7 +6,6 @@ from .CommandType import CommandType
 
 
 class Operation(Action):
-
     def __init_subclass__(cls, **kwargs):
         super().__init_subclass__(**kwargs)
 

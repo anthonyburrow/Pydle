@@ -1,6 +1,6 @@
-from colorama import Fore, Style
 from typing import Any
 
+from colorama import Fore, Style
 
 BLACK = Fore.BLACK
 RED = Fore.RED
@@ -13,7 +13,9 @@ WHITE = Fore.WHITE
 END = Style.RESET_ALL
 
 
-def color(text: Any, color: str, justify: int = 0, just_type: str = 'right') -> str:
+def color(
+    text: Any, color: str, justify: int = 0, just_type: str = 'right'
+) -> str:
     out_text = f'{color}{text}{END}'
 
     if not justify:

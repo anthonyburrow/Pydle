@@ -1,20 +1,16 @@
 from typing import cast
 
-from ...Activity import (
-    ActivityCheckResult,
-    ActivityTickResult
-)
-from ...ProductionActivity import ProductionActivity
 from ....lib.skilling.crafting import CRAFTABLES
 from ....util.items.ItemInstance import ItemInstance
 from ....util.items.ItemRegistry import ITEM_REGISTRY
 from ....util.items.skilling.Craftable import Craftable
 from ....util.player.Bank import Bank
 from ....util.player.SkillType import SkillType
+from ...Activity import ActivityCheckResult, ActivityTickResult
+from ...ProductionActivity import ProductionActivity
 
 
 class CraftingActivity(ProductionActivity[Craftable]):
-
     name: str = 'craft'
     help_info: str = 'Begin crafting an item.'
     produceable_cls = Craftable
@@ -45,10 +41,12 @@ class CraftingActivity(ProductionActivity[Craftable]):
         if not result.success:
             return result
 
-        if not self._has_level_requirement(SkillType.CRAFTING, self.produceable.level):
+        if not self._has_level_requirement(
+            SkillType.CRAFTING, self.produceable.level
+        ):
             return ActivityCheckResult(
                 success=False,
-                msg=f'{self.player} must have Level {self.produceable.level} Crafting to craft a {self.produceable}.'
+                msg=f'{self.player} must have Level {self.produceable.level} Crafting to craft a {self.produceable}.',
             )
 
         return ActivityCheckResult(success=True)
@@ -61,7 +59,7 @@ class CraftingActivity(ProductionActivity[Craftable]):
             self.player.remove(item_instance)
 
         items: Bank = self.loot_table.roll()
-        xp: float = self.produceable.xp if self.produceable else 0.
+        xp: float = self.produceable.xp if self.produceable else 0.0
 
         return ActivityTickResult(
             msg=f'Crafted a {self.produceable}!',
@@ -101,9 +99,6 @@ class CraftingActivity(ProductionActivity[Craftable]):
             quantity=self.produceable.n_per_produce,
         )
 
-        self.loot_table = (
-            self.loot_table
-            .every(produced)
-        )
+        self.loot_table = self.loot_table.every(produced)
 
         # Add more stuff (pets, etc)

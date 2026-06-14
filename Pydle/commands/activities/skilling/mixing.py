@@ -1,20 +1,16 @@
 from typing import cast
 
-from ...Activity import (
-    ActivityCheckResult,
-    ActivityTickResult
-)
-from ...ProductionActivity import ProductionActivity
 from ....lib.skilling.herblore import MIXABLES
 from ....util.items.ItemInstance import ItemInstance
 from ....util.items.ItemRegistry import ITEM_REGISTRY
 from ....util.items.skilling.Mixable import Mixable
 from ....util.player.Bank import Bank
 from ....util.player.SkillType import SkillType
+from ...Activity import ActivityCheckResult, ActivityTickResult
+from ...ProductionActivity import ProductionActivity
 
 
 class MixingActivity(ProductionActivity[Mixable]):
-
     name: str = 'mix'
     help_info: str = 'Begin mixing potions.'
     produceable_cls = Mixable
@@ -45,10 +41,12 @@ class MixingActivity(ProductionActivity[Mixable]):
         if not result.success:
             return result
 
-        if not self._has_level_requirement(SkillType.HERBLORE, self.produceable.level):
+        if not self._has_level_requirement(
+            SkillType.HERBLORE, self.produceable.level
+        ):
             return ActivityCheckResult(
                 success=False,
-                msg=f'{self.player} must have Level {self.produceable.level} Herblore to mix a {self.produceable}.'
+                msg=f'{self.player} must have Level {self.produceable.level} Herblore to mix a {self.produceable}.',
             )
 
         return ActivityCheckResult(success=True)
@@ -61,7 +59,7 @@ class MixingActivity(ProductionActivity[Mixable]):
             self.player.remove(item_instance)
 
         items: Bank = self.loot_table.roll()
-        xp: float = self.produceable.xp if self.produceable else 0.
+        xp: float = self.produceable.xp if self.produceable else 0.0
 
         return ActivityTickResult(
             msg=f'Mixed a {self.produceable}!',
@@ -101,10 +99,7 @@ class MixingActivity(ProductionActivity[Mixable]):
             quantity=self.produceable.n_per_produce,
         )
 
-        self.loot_table = (
-            self.loot_table
-            .every(produced)
-        )
+        self.loot_table = self.loot_table.every(produced)
 
         # % chance for number of doses
 

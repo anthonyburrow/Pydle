@@ -1,9 +1,8 @@
-from .Item import Item
 from ...util.colors import color, color_theme
+from .Item import Item
 
 
 class Produceable(Item):
-
     def __init__(
         self,
         item_id: str,

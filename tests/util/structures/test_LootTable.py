@@ -7,7 +7,7 @@ from Pydle.util.structures.LootTable import LootTable
 
 
 def is_likely(n_received: int, N: int, p: float, quantity: int = 1):
-    std = int(np.sqrt(N * p * (1. - p))) + 1
+    std = int(np.sqrt(N * p * (1.0 - p))) + 1
     mean = int(N * p)
     return mean - 5 * std < n_received / float(quantity) < mean + 5 * std
 
@@ -21,17 +21,23 @@ def test_null_roll():
 def test_weighted():
     table = (
         LootTable()
-        .add(ITEM_PARSER.get_instance('copper ore'), 1.)
-        .add(ITEM_PARSER.get_instance('silver ore', 2), 1.)
-        .add(ITEM_PARSER.get_instance('iron ore'), 2.)
+        .add(ITEM_PARSER.get_instance('copper ore'), 1.0)
+        .add(ITEM_PARSER.get_instance('silver ore', 2), 1.0)
+        .add(ITEM_PARSER.get_instance('iron ore'), 2.0)
     )
 
     N: int = 5000
     loot: Bank = table.roll(N)
 
-    n_copper: int = loot.quantity(BankKey(ITEM_PARSER.get_id_by_name('copper ore')))
-    n_silver: int = loot.quantity(BankKey(ITEM_PARSER.get_id_by_name('silver ore')))
-    n_iron: int = loot.quantity(BankKey(ITEM_PARSER.get_id_by_name('iron ore')))
+    n_copper: int = loot.quantity(
+        BankKey(ITEM_PARSER.get_id_by_name('copper ore'))
+    )
+    n_silver: int = loot.quantity(
+        BankKey(ITEM_PARSER.get_id_by_name('silver ore'))
+    )
+    n_iron: int = loot.quantity(
+        BankKey(ITEM_PARSER.get_id_by_name('iron ore'))
+    )
 
     assert is_likely(n_copper, N, 0.25)
     assert is_likely(n_silver, N, 0.25, 2)
@@ -43,16 +49,20 @@ def test_weighted():
 def test_empty_weight():
     table = (
         LootTable()
-        .add(ITEM_PARSER.get_instance('copper ore'), 1.)
-        .add(ITEM_PARSER.get_instance('silver ore', 2), 1.)
-        .add_empty(2.)
+        .add(ITEM_PARSER.get_instance('copper ore'), 1.0)
+        .add(ITEM_PARSER.get_instance('silver ore', 2), 1.0)
+        .add_empty(2.0)
     )
 
     N: int = 10000
     loot: Bank = table.roll(N)
 
-    n_copper: int = loot.quantity(BankKey(ITEM_PARSER.get_id_by_name('copper ore')))
-    n_silver: int = loot.quantity(BankKey(ITEM_PARSER.get_id_by_name('silver ore')))
+    n_copper: int = loot.quantity(
+        BankKey(ITEM_PARSER.get_id_by_name('copper ore'))
+    )
+    n_silver: int = loot.quantity(
+        BankKey(ITEM_PARSER.get_id_by_name('silver ore'))
+    )
 
     assert is_likely(n_copper, N, 0.25)
     assert is_likely(n_silver, N, 0.25, 2)
@@ -63,17 +73,21 @@ def test_tertiary():
     table = (
         LootTable()
         .tertiary(ITEM_PARSER.get_instance('copper ore'), 0.1)
-        .tertiary(ITEM_PARSER.get_instance('silver ore', 2), 1. / 300.)
+        .tertiary(ITEM_PARSER.get_instance('silver ore', 2), 1.0 / 300.0)
     )
 
     N: int = 10000
     loot: Bank = table.roll(N)
 
-    n_copper: int = loot.quantity(BankKey(ITEM_PARSER.get_id_by_name('copper ore')))
-    n_silver: int = loot.quantity(BankKey(ITEM_PARSER.get_id_by_name('silver ore')))
+    n_copper: int = loot.quantity(
+        BankKey(ITEM_PARSER.get_id_by_name('copper ore'))
+    )
+    n_silver: int = loot.quantity(
+        BankKey(ITEM_PARSER.get_id_by_name('silver ore'))
+    )
 
     assert is_likely(n_copper, N, 0.1)
-    assert is_likely(n_silver, N, 1. / 300., 2)
+    assert is_likely(n_silver, N, 1.0 / 300.0, 2)
     assert n_silver % 2 == 0
 
 
@@ -87,8 +101,12 @@ def test_every():
     N: int = 10000
     loot: Bank = table.roll(N)
 
-    n_copper: int = loot.quantity(BankKey(ITEM_PARSER.get_id_by_name('copper ore')))
-    n_silver: int = loot.quantity(BankKey(ITEM_PARSER.get_id_by_name('silver ore')))
+    n_copper: int = loot.quantity(
+        BankKey(ITEM_PARSER.get_id_by_name('copper ore'))
+    )
+    n_silver: int = loot.quantity(
+        BankKey(ITEM_PARSER.get_id_by_name('silver ore'))
+    )
 
     assert n_copper == N
     assert n_silver == N * 2

@@ -2,17 +2,16 @@ import threading
 import time
 from typing import cast
 
-from .UserInterface import UserInterface
-from ..ticks import Ticks
-from ..player.Player import Player
 from ...commands.Activity import Activity, ActivityCheckResult
 from ...commands.Command import Command, EmptyCommandError, InvalidCommandError
 from ...commands.CommandType import CommandType
 from ...commands.Operation import Operation
+from ..player.Player import Player
+from ..ticks import Ticks
+from .UserInterface import UserInterface
 
 
 class Controller:
-
     def __init__(self, player: Player, ui: UserInterface):
         self.player: Player = player
         self.ui: UserInterface = ui
@@ -46,9 +45,7 @@ class Controller:
 
     def control_activity(self, command: Command):
         activity_cls: type[Activity] = cast(type[Activity], command.action)
-        activity: Activity = activity_cls(
-            self.player, self.ui, command
-        )
+        activity: Activity = activity_cls(self.player, self.ui, command)
 
         result_check: ActivityCheckResult = activity.check()
         if not result_check.success:
@@ -72,7 +69,5 @@ class Controller:
 
     def control_operation(self, command: Command):
         operation_cls: type[Operation] = cast(type[Operation], command.action)
-        operation: Operation = operation_cls(
-            self.player, self.ui, command
-        )
+        operation: Operation = operation_cls(self.player, self.ui, command)
         operation.execute()

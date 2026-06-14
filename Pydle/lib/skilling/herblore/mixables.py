@@ -1,11 +1,9 @@
-
-
 MIXABLES = {
     'attack potion': {
         'name': 'attack potion',
         'n_doses': 3,
         'level': 1,
-        'xp': 25.,
+        'xp': 25.0,
         'items_required': {
             'vial': 3,
             'guam': 1,

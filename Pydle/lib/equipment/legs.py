@@ -1,6 +1,5 @@
 from ...util.player.EquipmentSlot import EquipmentSlot
 
-
 LEGS = {
     'copper platelegs': {
         'name': 'copper platelegs',

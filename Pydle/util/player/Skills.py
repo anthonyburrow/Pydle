@@ -1,8 +1,7 @@
-from .Skill import Skill, ExpGainResult
-from .SkillType import SkillType
 from ..colors import color, color_theme
 from ..visuals import centered_title
-
+from .Skill import ExpGainResult, Skill
+from .SkillType import SkillType
 
 SKILLS = {
     SkillType.HITPOINTS: 'combat',
@@ -22,8 +21,8 @@ SKILLS = {
     SkillType.SMITHING: 'artisan',
 }
 
-class Skills(dict):
 
+class Skills(dict):
     def __init__(self, skills_dict: dict[str, float] | None = None):
         self.load_from_dict(skills_dict or {})
 
@@ -47,7 +46,7 @@ class Skills(dict):
 
     def load_from_dict(self, skills_dict: dict[str, float]) -> None:
         for skill_type, skill_category in SKILLS.items():
-            xp: float = skills_dict.get(skill_type.name, 0.)
+            xp: float = skills_dict.get(skill_type.name, 0.0)
             self[skill_type] = Skill(skill_type, skill_category, xp=xp)
 
     def __str__(self) -> str:
@@ -56,7 +55,9 @@ class Skills(dict):
         max_skill_length: int = max([len(x.name) for x in self])
         max_level_length: int = max([len(str(x.level)) for x in self.values()])
         max_exp_length: int = max([len(f'{x.xp:,.0f}') for x in self.values()])
-        total_length = max_skill_length + max_level_length + max_exp_length + 14
+        total_length = (
+            max_skill_length + max_level_length + max_exp_length + 14
+        )
 
         msg.append(centered_title('SKILLS', total_length))
 

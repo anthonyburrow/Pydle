@@ -1,9 +1,7 @@
-
-
 SMELTABLES = {
     'copper bar': {
         'name': 'copper bar',
-        'xp': 2.,
+        'xp': 2.0,
         'level': 1,
         'ticks_per_action': 3,
         'items_required': {
@@ -12,7 +10,7 @@ SMELTABLES = {
     },
     'silver bar': {
         'name': 'silver bar',
-        'xp': 3.,
+        'xp': 3.0,
         'level': 5,
         'ticks_per_action': 3,
         'items_required': {
@@ -21,7 +19,7 @@ SMELTABLES = {
     },
     'iron bar': {
         'name': 'iron bar',
-        'xp': 5.,
+        'xp': 5.0,
         'level': 10,
         'ticks_per_action': 3,
         'items_required': {
@@ -30,7 +28,7 @@ SMELTABLES = {
     },
     'steel bar': {
         'name': 'steel bar',
-        'xp': 9.,
+        'xp': 9.0,
         'level': 15,
         'ticks_per_action': 3,
         'items_required': {
@@ -40,7 +38,7 @@ SMELTABLES = {
     },
     'gold bar': {
         'name': 'gold bar',
-        'xp': 14.,
+        'xp': 14.0,
         'level': 20,
         'ticks_per_action': 3,
         'items_required': {
@@ -49,7 +47,7 @@ SMELTABLES = {
     },
     'adamantite bar': {
         'name': 'adamantite bar',
-        'xp': 26.,
+        'xp': 26.0,
         'level': 30,
         'ticks_per_action': 3,
         'items_required': {
@@ -59,7 +57,7 @@ SMELTABLES = {
     },
     'hexrite bar': {
         'name': 'hexrite bar',
-        'xp': 30.,
+        'xp': 30.0,
         'level': 40,
         'ticks_per_action': 3,
         'items_required': {
@@ -69,7 +67,7 @@ SMELTABLES = {
     },
     'blackirn bar': {
         'name': 'blackirn bar',
-        'xp': 40.,
+        'xp': 40.0,
         'level': 50,
         'ticks_per_action': 3,
         'items_required': {
@@ -78,7 +76,7 @@ SMELTABLES = {
     },
     'witchsilver bar': {
         'name': 'witchsilver bar',
-        'xp': 50.,
+        'xp': 50.0,
         'level': 60,
         'ticks_per_action': 3,
         'items_required': {
@@ -87,7 +85,7 @@ SMELTABLES = {
     },
     'wyrmheart bar': {
         'name': 'wyrmheart bar',
-        'xp': 60.,
+        'xp': 60.0,
         'level': 70,
         'ticks_per_action': 3,
         'items_required': {
@@ -96,7 +94,7 @@ SMELTABLES = {
     },
     'veilsteel bar': {
         'name': 'veilsteel bar',
-        'xp': 80.,
+        'xp': 80.0,
         'level': 80,
         'ticks_per_action': 3,
         'items_required': {
@@ -105,7 +103,7 @@ SMELTABLES = {
     },
     'valnorite bar': {
         'name': 'valnorite bar',
-        'xp': 100.,
+        'xp': 100.0,
         'level': 90,
         'ticks_per_action': 3,
         'items_required': {
@@ -114,7 +112,7 @@ SMELTABLES = {
     },
     'cursebound bar': {
         'name': 'cursebound bar',
-        'xp': 130.,
+        'xp': 130.0,
         'level': 100,
         'ticks_per_action': 3,
         'items_required': {
@@ -123,7 +121,7 @@ SMELTABLES = {
     },
     'kharadant bar': {
         'name': 'kharadant bar',
-        'xp': 160.,
+        'xp': 160.0,
         'level': 110,
         'ticks_per_action': 3,
         'items_required': {

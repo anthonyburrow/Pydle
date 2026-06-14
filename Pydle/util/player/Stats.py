@@ -1,6 +1,5 @@
 from ..visuals import centered_title
 
-
 STATS = {
     'physical_strength': {
         'name': 'Physical Strength',
@@ -24,8 +23,9 @@ STATS = {
 
 
 class Stats(dict):
-
-    def __init__(self, stats_dict: dict[str, int] | None = None, *arg, **kwargs):
+    def __init__(
+        self, stats_dict: dict[str, int] | None = None, *arg, **kwargs
+    ):
         super().__init__(*arg, **kwargs)
 
         self.load_from_dict(stats_dict or {})
@@ -50,7 +50,9 @@ class Stats(dict):
         for stat_key, stat_info in STATS.items():
             stat_name = stat_info['name']
             value = self[stat_key]
-            msg.append(f'{stat_name:>{max_stat_length}} | {value:>{max_value_length}}')
+            msg.append(
+                f'{stat_name:>{max_stat_length}} | {value:>{max_value_length}}'
+            )
 
         return '\n'.join(msg)
 

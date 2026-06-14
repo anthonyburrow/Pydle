@@ -1,6 +1,5 @@
-from Pydle.util.player.Skill import Skill, ExpGainResult, MAX_XP, MAX_LEVEL
+from Pydle.util.player.Skill import MAX_LEVEL, MAX_XP, ExpGainResult, Skill
 from Pydle.util.player.SkillType import SkillType
-
 
 BIG_XP = 100_000_000_000
 

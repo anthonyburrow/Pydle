@@ -1,13 +1,15 @@
 import pytest
 
-from Pydle.util.Result import Result
 from Pydle.util.items.ItemInstance import ItemInstance
 from Pydle.util.items.ItemParser import ITEM_PARSER
 from Pydle.util.player.ToolSlot import ToolSlot
+from Pydle.util.Result import Result
 
 
 def test_equip_success(test_player):
-    item_instance: ItemInstance = ITEM_PARSER.get_instance('poor copper pickaxe')
+    item_instance: ItemInstance = ITEM_PARSER.get_instance(
+        'poor copper pickaxe'
+    )
 
     test_player.give(item_instance)
     assert test_player.has(item_instance)
@@ -20,7 +22,9 @@ def test_equip_success(test_player):
 
 
 def test_equip_fail_no_item(test_player):
-    item_instance: ItemInstance = ITEM_PARSER.get_instance('poor copper pickaxe')
+    item_instance: ItemInstance = ITEM_PARSER.get_instance(
+        'poor copper pickaxe'
+    )
 
     result: Result = test_player.equip_tool(item_instance)
 
@@ -44,7 +48,9 @@ def test_equip_replaces_existing(test_player):
 
 
 def test_unequip_success(test_player):
-    item_instance: ItemInstance = ITEM_PARSER.get_instance('poor copper pickaxe')
+    item_instance: ItemInstance = ITEM_PARSER.get_instance(
+        'poor copper pickaxe'
+    )
 
     test_player.give(item_instance)
     test_player.equip_tool(item_instance)
@@ -58,7 +64,9 @@ def test_unequip_success(test_player):
 
 
 def test_unequip_fail_not_equipped(test_player):
-    item_instance: ItemInstance = ITEM_PARSER.get_instance('poor copper pickaxe')
+    item_instance: ItemInstance = ITEM_PARSER.get_instance(
+        'poor copper pickaxe'
+    )
 
     result: Result = test_player.unequip_tool(item_instance)
 
@@ -82,7 +90,9 @@ def test_unequip_fail_wrong_item(test_player):
 
 
 def test_to_dict_and_load_from_dict(test_player):
-    item_instance: ItemInstance = ITEM_PARSER.get_instance('poor copper pickaxe')
+    item_instance: ItemInstance = ITEM_PARSER.get_instance(
+        'poor copper pickaxe'
+    )
 
     test_player.give(item_instance)
     test_player.equip_tool(item_instance)

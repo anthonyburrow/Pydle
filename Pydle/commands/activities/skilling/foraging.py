@@ -1,11 +1,5 @@
 from typing import cast
 
-from ...Activity import (
-    Activity,
-    ActivityCheckResult,
-    ActivityMsgType,
-    ActivityTickResult
-)
 from ....lib.areas import AREAS
 from ....util.items.Item import Item
 from ....util.items.ItemInstance import ItemInstance
@@ -17,10 +11,15 @@ from ....util.player.SkillType import SkillType
 from ....util.player.ToolSlot import ToolSlot
 from ....util.structures.Area import Area
 from ....util.structures.LootTable import LootTable
+from ...Activity import (
+    Activity,
+    ActivityCheckResult,
+    ActivityMsgType,
+    ActivityTickResult,
+)
 
 
 class ForagingActivity(Activity):
-
     name: str = 'collect'
     help_info: str = 'Begin collecting resources from the area.'
 
@@ -35,7 +34,9 @@ class ForagingActivity(Activity):
     @property
     def secateurs(self) -> ItemInstance:
         if self._secateurs is None:
-            raise RuntimeError('secateurs is not initialized; call check() before begin().')
+            raise RuntimeError(
+                'secateurs is not initialized; call check() before begin().'
+            )
 
         return self._secateurs
 
@@ -56,7 +57,7 @@ class ForagingActivity(Activity):
         if not self.area.collectables:
             return ActivityCheckResult(
                 success=False,
-                msg=f'There is nothing to be found in {self.area}.'
+                msg=f'There is nothing to be found in {self.area}.',
             )
 
         for collectable_name in self.area.collectables:
@@ -71,14 +72,16 @@ class ForagingActivity(Activity):
                 msg=(
                     f'{self.player} does not have a high enough Foraging level'
                     f'to find any items in this area.'
-                )
+                ),
             )
 
-        secateurs: ItemInstance | None = self.player.get_tool(ToolSlot.SECATEURS)
+        secateurs: ItemInstance | None = self.player.get_tool(
+            ToolSlot.SECATEURS
+        )
         if not secateurs:
             return ActivityCheckResult(
                 success=False,
-                msg=f'{self.player} does not have any secateurs.'
+                msg=f'{self.player} does not have any secateurs.',
             )
 
         self._secateurs = secateurs
@@ -97,7 +100,7 @@ class ForagingActivity(Activity):
                 msg=self.standby_text,
                 msg_type=ActivityMsgType.WAITING,
             )
-        
+
         return self._perform_action()
 
     def _perform_action(self) -> ActivityTickResult:
@@ -111,7 +114,7 @@ class ForagingActivity(Activity):
         # Loop needed in case of non-collectables (e.g. pets) in loot
         xp: float = 0
         for bank_key in items:
-            xp += self._xp_table.get(bank_key, 0.)
+            xp += self._xp_table.get(bank_key, 0.0)
 
         return ActivityTickResult(
             msg=f'Collected {items.list_concise()}!',
@@ -147,14 +150,18 @@ class ForagingActivity(Activity):
             'tool': self.secateurs,
         }
 
-        empty_weight: float = 1.
+        empty_weight: float = 1.0
         total_area_weight: int = sum(self.area.collectables.values())
 
         for collectable_name, area_weight in self.area.collectables.items():
-            item_instance: ItemInstance = ITEM_PARSER.get_instance(collectable_name)
+            item_instance: ItemInstance = ITEM_PARSER.get_instance(
+                collectable_name
+            )
             item_instance.set_quantity(item_instance.n_per_gather)
 
-            if not self._has_level_requirement(SkillType.FORAGING, item_instance.level):
+            if not self._has_level_requirement(
+                SkillType.FORAGING, item_instance.level
+            ):
                 continue
 
             prob_success = item_instance.prob_success(**foraging_args)
@@ -168,7 +175,7 @@ class ForagingActivity(Activity):
 
             self._xp_table[item_instance.get_key()] = item_instance.xp
 
-        empty_weight = max(0., empty_weight)
+        empty_weight = max(0.0, empty_weight)
         self.loot_table.add_empty(weight=empty_weight)
 
         # Add more stuff (pets, etc)

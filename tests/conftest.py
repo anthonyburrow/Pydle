@@ -1,4 +1,3 @@
-# conftest.py
 import pytest
 
 from Pydle.lib.item_sets import NEW_PLAYER_ITEMS

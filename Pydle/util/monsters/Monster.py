@@ -12,7 +12,6 @@ class MonsterTier(Enum):
 
 
 class Monster:
-
     def __init__(
         self,
         # Info

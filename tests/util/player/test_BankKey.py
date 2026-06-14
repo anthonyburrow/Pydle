@@ -1,6 +1,6 @@
 from Pydle.util.items.ItemParser import ITEM_PARSER
-from Pydle.util.player.Bank import BankKey
 from Pydle.util.items.Quality import Quality
+from Pydle.util.player.Bank import BankKey
 
 
 def test_equal():

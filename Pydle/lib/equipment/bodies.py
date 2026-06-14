@@ -1,6 +1,5 @@
 from ...util.player.EquipmentSlot import EquipmentSlot
 
-
 BODIES = {
     'copper chestplate': {
         'name': 'copper chestplate',

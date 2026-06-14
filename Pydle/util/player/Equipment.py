@@ -1,23 +1,23 @@
 from __future__ import annotations
+
 from typing import TYPE_CHECKING
 
-from .EquipmentSlot import EquipmentSlot
-from .Stats import Stats
+from ..items.ItemInstance import ItemInstance
 from ..Result import Result
 from ..visuals import centered_title
-from ..items.ItemInstance import ItemInstance
+from .EquipmentSlot import EquipmentSlot
+from .Stats import Stats
 
 if TYPE_CHECKING:
     from .Player import Player
 
 
 class Equipment(dict[EquipmentSlot, ItemInstance | None]):
-
     def __init__(
-            self,
-            player: Player,
-            equipment_dict: dict[EquipmentSlot, ItemInstance | None] | None = None
-        ):
+        self,
+        player: Player,
+        equipment_dict: dict[EquipmentSlot, ItemInstance | None] | None = None,
+    ):
         self._player: Player = player
 
         self._stats: Stats = Stats()
@@ -28,7 +28,7 @@ class Equipment(dict[EquipmentSlot, ItemInstance | None]):
         if not self._player.has(item_instance):
             return Result(
                 success=False,
-                msg=f'{self._player} does not have a {item_instance}.'
+                msg=f'{self._player} does not have a {item_instance}.',
             )
 
         equipment_slot: EquipmentSlot = item_instance.equipment_slot
@@ -42,10 +42,7 @@ class Equipment(dict[EquipmentSlot, ItemInstance | None]):
 
         self._calculate_stats()
 
-        return Result(
-            success=True,
-            msg=f'{item_instance} was equipped.'
-        )
+        return Result(success=True, msg=f'{item_instance} was equipped.')
 
     def unequip(self, item_instance: ItemInstance) -> Result:
         equipment_slot: EquipmentSlot = item_instance.equipment_slot
@@ -54,7 +51,7 @@ class Equipment(dict[EquipmentSlot, ItemInstance | None]):
         if not previous_instance or previous_instance != item_instance:
             return Result(
                 success=False,
-                msg=f'{self._player} does not have {item_instance} equipped.'
+                msg=f'{self._player} does not have {item_instance} equipped.',
             )
 
         self[equipment_slot] = None
@@ -62,10 +59,7 @@ class Equipment(dict[EquipmentSlot, ItemInstance | None]):
 
         self._calculate_stats()
 
-        return Result(
-            success=True,
-            msg=f'{previous_instance} was unequipped.'
-        )
+        return Result(success=True, msg=f'{previous_instance} was unequipped.')
 
     def to_dict(self) -> dict[str, dict | None]:
         equipment_dict: dict[str, dict | None] = {}
@@ -80,7 +74,9 @@ class Equipment(dict[EquipmentSlot, ItemInstance | None]):
 
     def load_from_dict(self, equipment_dict: dict) -> None:
         for equipment_slot in EquipmentSlot:
-            instance_dict: dict | None = equipment_dict.get(equipment_slot.name)
+            instance_dict: dict | None = equipment_dict.get(
+                equipment_slot.name
+            )
 
             if instance_dict is None:
                 self[equipment_slot] = None
@@ -121,10 +117,14 @@ class Equipment(dict[EquipmentSlot, ItemInstance | None]):
 
         for equippable_slot, item_instance in self.items():
             equippable_str = item_instance or '---'
-            msg.append(f'{equippable_slot:>{max_type_length}} | {equippable_str}')
+            msg.append(
+                f'{equippable_slot:>{max_type_length}} | {equippable_str}'
+            )
 
         weapon_instance: ItemInstance | None = self[EquipmentSlot.WEAPON]
-        attack_speed_str = weapon_instance.attack_speed if weapon_instance else 'N/A'
+        attack_speed_str = (
+            weapon_instance.attack_speed if weapon_instance else 'N/A'
+        )
         msg.append(f'\nWeapon tick speed: {attack_speed_str}')
 
         return '\n'.join(msg)

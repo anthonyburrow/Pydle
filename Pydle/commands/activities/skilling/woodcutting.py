@@ -1,11 +1,5 @@
 from typing import cast
 
-from ...Activity import (
-    ActivityCheckResult,
-    ActivityMsgType,
-    ActivityTickResult
-)
-from ...GatheringActivity import GatheringActivity
 from ....lib.areas import AREAS
 from ....lib.skilling.woodcutting import LOGS
 from ....util.items.ItemInstance import ItemInstance
@@ -15,10 +9,15 @@ from ....util.player.Bank import Bank
 from ....util.player.SkillType import SkillType
 from ....util.player.ToolSlot import ToolSlot
 from ....util.structures.Area import Area
+from ...Activity import (
+    ActivityCheckResult,
+    ActivityMsgType,
+    ActivityTickResult,
+)
+from ...GatheringActivity import GatheringActivity
 
 
 class WoodcuttingActivity(GatheringActivity):
-
     name: str = 'chop'
     help_info: str = 'Begin chopping wood.'
     gatherable_cls = Log
@@ -39,9 +38,7 @@ class WoodcuttingActivity(GatheringActivity):
 
         msg.append('Available logs:')
         for item_id in LOGS:
-            log: Log = cast(
-                Log, ITEM_REGISTRY.get(item_id, Log)
-            )
+            log: Log = cast(Log, ITEM_REGISTRY.get(item_id, Log))
             msg.append(f'- {log}')
 
         return '\n'.join(msg)
@@ -51,17 +48,19 @@ class WoodcuttingActivity(GatheringActivity):
         if not result.success:
             return result
 
-        if not self._has_level_requirement(SkillType.WOODCUTTING, self.gatherable.level):
+        if not self._has_level_requirement(
+            SkillType.WOODCUTTING, self.gatherable.level
+        ):
             return ActivityCheckResult(
                 success=False,
-                msg=f'You must have Level {self.gatherable.level} Woodcutting to chop {self.gatherable}.'
+                msg=f'You must have Level {self.gatherable.level} Woodcutting to chop {self.gatherable}.',
             )
 
         area: Area = AREAS[self.player.area]
         if not area.contains_log(self.gatherable):
             return ActivityCheckResult(
                 success=False,
-                msg=f'{area} does not have {self.gatherable} anywhere.'
+                msg=f'{area} does not have {self.gatherable} anywhere.',
             )
 
         return ActivityCheckResult(success=True)
@@ -116,9 +115,8 @@ class WoodcuttingActivity(GatheringActivity):
 
         self.gatherable.set_quantity(self.gatherable.n_per_gather)
 
-        self.loot_table = (
-            self.loot_table
-            .tertiary(self.gatherable, prob_success)
+        self.loot_table = self.loot_table.tertiary(
+            self.gatherable, prob_success
         )
 
         # Add more stuff (pets, etc)

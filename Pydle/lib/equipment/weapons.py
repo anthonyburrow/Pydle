@@ -1,6 +1,5 @@
 from ...util.player.EquipmentSlot import EquipmentSlot
 
-
 WEAPONS = {
     'copper longsword': {
         'name': 'copper longsword',

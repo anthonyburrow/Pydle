@@ -1,6 +1,5 @@
 from ....util.player.ToolSlot import ToolSlot
 
-
 PICKAXES = {
     'copper pickaxe': {
         'name': 'copper pickaxe',

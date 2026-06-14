@@ -1,7 +1,7 @@
 import pytest
 
 from Pydle.util.player.Skill import Skill
-from Pydle.util.player.Skills import Skills, SKILLS
+from Pydle.util.player.Skills import SKILLS, Skills
 from Pydle.util.player.SkillType import SkillType
 
 
@@ -12,19 +12,19 @@ def test_init_default_values():
 
     for skill in skills.values():
         assert isinstance(skill, Skill)
-        assert skill.xp == 0.
+        assert skill.xp == 0.0
 
 
 def test_init_with_values():
-    initial_xp: dict[str, float] = {'FISHING': 150., 'STRENGTH': 500.}
+    initial_xp: dict[str, float] = {'FISHING': 150.0, 'STRENGTH': 500.0}
     skills: Skills = Skills(initial_xp)
 
-    assert skills[SkillType.FISHING].xp == 150.
-    assert skills[SkillType.STRENGTH].xp == 500.
+    assert skills[SkillType.FISHING].xp == 150.0
+    assert skills[SkillType.STRENGTH].xp == 500.0
 
     for key in SKILLS:
         if key.name not in initial_xp:
-            assert skills[key].xp == 0.
+            assert skills[key].xp == 0.0
 
 
 def test_get_skill_returns_correct_instance():
@@ -38,7 +38,7 @@ def test_get_skill_returns_correct_instance():
 def test_add_xp_and_get_level():
     skills: Skills = Skills()
     starting_level: int = skills.get_level(SkillType.FISHING)
-    skills.add_xp(SkillType.FISHING, 5000.)
+    skills.add_xp(SkillType.FISHING, 5000.0)
 
     assert skills[SkillType.FISHING].level >= starting_level
 
@@ -58,12 +58,12 @@ def test_set_level_sets_correct_level():
 
 
 def test_to_dict_matches_xp_values():
-    initial_xp: dict[str, float] = {'FISHING': 200., 'STRENGTH': 300.}
+    initial_xp: dict[str, float] = {'FISHING': 200.0, 'STRENGTH': 300.0}
     skills: Skills = Skills(initial_xp)
     skills_dict: dict[str, float] = skills.to_dict()
 
-    assert skills_dict['FISHING'] == 200.
-    assert skills_dict['STRENGTH'] == 300.
+    assert skills_dict['FISHING'] == 200.0
+    assert skills_dict['STRENGTH'] == 300.0
 
 
 def test_setitem_invalid_key():

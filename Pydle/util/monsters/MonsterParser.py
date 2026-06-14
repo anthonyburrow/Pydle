@@ -1,9 +1,8 @@
 from .MonsterInstance import MonsterInstance
-from .MonsterRegistry import MonsterRegistry, MONSTER_REGISTRY
+from .MonsterRegistry import MONSTER_REGISTRY, MonsterRegistry
 
 
 class MonsterParser:
-
     def __init__(self, monster_registry: MonsterRegistry):
         self._monster_registry: MonsterRegistry = monster_registry
 
