@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from numpy import exp
+from numpy import exp, sqrt
 from numpy.random import rand, randint
 
 from ..items.ItemInstance import ItemInstance
@@ -27,9 +27,18 @@ class CombatEngine:
         self.player_max_hit_magical: int = 1
 
         self.monster_hit_chance: float = 0.0
-        self.monster_max_hit: int = 1
+        self.monster_max_hit_strength: int = 1
+        self.monster_max_hit_magical: int = 1
 
         self.calculate_values()
+
+    @property
+    def player_total_max_hit(self) -> int:
+        return self.player_max_hit_strength + self.player_max_hit_magical
+
+    @property
+    def monster_total_max_hit(self) -> int:
+        return self.monster_max_hit_strength + self.monster_max_hit_magical
 
     def calculate_values(self):
         # Player hit chance
@@ -192,13 +201,14 @@ class CombatEngine:
         equipment_stat: int,
     ) -> int:
         max_level: float = 126.0
-        target_max_equipment: float = 200.0
+        max_multiplier: float = 1.5
+        min_inate: float = 1.0
+        max_inate: float = 100.0
+        skill_ratio: float = float(skill_level) / max_level
 
-        skill_scaled: float = skill_level / max_level
-        equip_scaled: float = equipment_stat / target_max_equipment
-
-        effective_level: float = (skill_scaled * equip_scaled) ** 0.5
-        effective_level *= max_level + target_max_equipment
+        effective_level: float = float(equipment_stat)
+        effective_level *= 1.0 + (max_multiplier - 1.0) * sqrt(skill_ratio)
+        effective_level += min_inate + (max_inate - min_inate) * (skill_ratio)
 
         return int(effective_level)
 
@@ -213,12 +223,9 @@ class CombatEngine:
         return prob
 
     def _calculate_max_hit(self, strength_qty: int, defense_qty: int) -> int:
-        delta: float = float(strength_qty - defense_qty)
+        delta: int = strength_qty - defense_qty
 
-        k: float = 0.01
-        factor: float = 1.0 / (1.0 + exp(-k * delta))
-
-        max_hit: int = int(factor * float(strength_qty)) * 5
+        max_hit: int = max(0, delta + 1)
 
         return max_hit
 
